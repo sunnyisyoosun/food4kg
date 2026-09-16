@@ -120,7 +120,7 @@ cp food_nutrient_updated.csv food_nutrient.csv
 ### Step 2: 입력 파일 역설계
 
 ```bash
-python3 reconstruct_v2.py
+python3 reconstruct.py
 ```
 
 **하는 일:** 논문 GitHub에 누락된 3개 입력 파일을 `food_nutrient.csv` + `p5_foodname.txt` + `MENDA_Depression.jsonld`로 역설계.
@@ -133,7 +133,7 @@ python3 reconstruct_v2.py
 ### Step 3: Knowledge Inference
 
 ```bash
-python3 knowledge_inference_v3.py
+python3 knowledge_inference.py
 ```
 
 **하는 일:** 5가지 소스로 134개 compound 전체에 incidence (+1/-1/0) 부여 → `weight.csv` 재생성.
