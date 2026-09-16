@@ -68,8 +68,8 @@ food_recom_w_paper/              ← 작업 디렉토리 (Food4healthKG clone)
 │   ├── data_cleaning.py         ← 원 논문 전처리 (참고용, 입력 xlsx 없음)
 │   └── spy_kegg.py              ← KEGG 크롤러 (참고용)
 ├── add_fatty_acid_kegg.py       ← [우리 코드] fatty acid KEGG 매핑
-├── reconstruct_v2.py            ← [우리 코드] 입력 파일 역설계
-├── knowledge_inference_v3.py    ← [우리 코드] knowledge inference
+├── reconstruct.py            ← [우리 코드] 입력 파일 역설계
+├── knowledge_inference.py    ← [우리 코드] knowledge inference
 └── run_recommendation.py        ← [우리 코드] 추천 알고리즘 + 시각화
 
 MiKG-JAIMS/                      ← MiKG clone (별도 디렉토리)
