@@ -19,8 +19,8 @@ timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 
 steps = [
     ('step1_fatty_acid_kegg', 'add_fatty_acid_kegg.py'),
-    ('step2_reconstruct',     'reconstruct_v2.py'),
-    ('step3_inference',       'knowledge_inference_v3.py'),
+    ('step2_reconstruct',     'reconstruct.py'),
+    ('step3_inference',       'knowledge_inference.py'),
     ('step4_promenda',        'map_promenda.py'),
     ('step5_recommendation',  'run_recommendation.py'),
 ]
