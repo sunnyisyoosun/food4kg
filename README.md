@@ -89,8 +89,8 @@ Food4healthKG/                   ← 작업 디렉토리 (git clone)
 │   ├── YYYYMMDD_HHMMSS_step5_recommendation.txt
 │   └── YYYYMMDD_HHMMSS_summary.txt
 ├── add_fatty_acid_kegg.py       ← [우리 코드] Step 1
-├── reconstruct_v2.py            ← [우리 코드] Step 2
-├── knowledge_inference_v3.py    ← [우리 코드] Step 3
+├── reconstruct.py            ← [우리 코드] Step 2
+├── knowledge_inference.py    ← [우리 코드] Step 3
 ├── map_promenda.py              ← [우리 코드] Step 4
 ├── run_recommendation.py        ← [우리 코드] Step 5
 └── run_pipeline.py              ← [우리 코드] 전체 파이프라인 + 로그
