@@ -81,11 +81,19 @@ Food4healthKG/                   ← 작업 디렉토리 (git clone)
 ├── preprocess/
 │   ├── data_cleaning.py         ← 원 논문 전처리 (참고용, 입력 xlsx 없음)
 │   └── spy_kegg.py              ← KEGG 크롤러 (참고용)
+├── logs/                        ← [생성] 실행 로그
+│   ├── YYYYMMDD_HHMMSS_step1_fatty_acid_kegg.txt
+│   ├── YYYYMMDD_HHMMSS_step2_reconstruct.txt
+│   ├── YYYYMMDD_HHMMSS_step3_inference.txt
+│   ├── YYYYMMDD_HHMMSS_step4_promenda.txt
+│   ├── YYYYMMDD_HHMMSS_step5_recommendation.txt
+│   └── YYYYMMDD_HHMMSS_summary.txt
 ├── add_fatty_acid_kegg.py       ← [우리 코드] Step 1
 ├── reconstruct_v2.py            ← [우리 코드] Step 2
 ├── knowledge_inference_v3.py    ← [우리 코드] Step 3
 ├── map_promenda.py              ← [우리 코드] Step 4
-└── run_recommendation.py        ← [우리 코드] Step 5
+├── run_recommendation.py        ← [우리 코드] Step 5
+└── run_pipeline.py              ← [우리 코드] 전체 파이프라인 + 로그
 
 MiKG-JAIMS/                      ← MiKG (별도 git clone)
 └── MiKG_Schema_Data_20201007.ttl
@@ -101,12 +109,28 @@ pip install pandas numpy scikit-learn matplotlib openpyxl
 
 ---
 
-## 4. 실행 순서
+## 4. 실행 방법
+
+### 방법 A: 한 번에 실행 (권장)
 
 ```bash
 cd Food4healthKG
+unzip foodkg_triply.zip
+unzip food_nutrient.csv.zip
 
-# Step 0: 데이터 준비
+python3 run_pipeline.py
+```
+
+`run_pipeline.py`가 Step 1~5를 순서대로 실행하며:
+- Step 1 후 `food_nutrient_updated.csv → food_nutrient.csv` 자동 복사
+- 각 Step의 터미널 출력을 `logs/` 디렉토리에 타임스탬프 포함하여 저장
+- 전체 요약을 `logs/YYYYMMDD_HHMMSS_summary.txt`에 저장
+- 중간에 실패하면 해당 Step에서 중단
+
+### 방법 B: 개별 실행
+
+```bash
+cd Food4healthKG
 unzip foodkg_triply.zip
 unzip food_nutrient.csv.zip
 
@@ -279,7 +303,20 @@ ProMENDA (Pu et al., Translational Psychiatry, 2024)의 22,519 metabolite entrie
 
 ---
 
-## 9. 프로젝트 확장 방향 (제안)
+## 9. 코드 파일 목록
+
+| 파일 | 역할 | 입력 | 출력 |
+|------|------|------|------|
+| `run_pipeline.py` | 전체 파이프라인 실행 + 로그 저장 | 모든 아래 스크립트 | `logs/` 디렉토리 |
+| `add_fatty_acid_kegg.py` | Step 1: Fatty acid KEGG 매핑 | `food_nutrient.csv` | `food_nutrient_updated.csv` |
+| `reconstruct_v2.py` | Step 2: 입력 파일 역설계 | `food_nutrient.csv`, `p5_foodname.txt`, `MENDA_Depression.jsonld` | `foodname.csv`, `food.csv`, `weight.csv` |
+| `knowledge_inference_v3.py` | Step 3: 5-source inference | `MENDA_Depression.jsonld`, `MiKG TTL`, `KEGG_Compound_Bacteria.jsonld`, `Disease_Bacteria.jsonld`, `Bacteria_Ontology.trig` | `weight.csv` (업데이트) |
+| `map_promenda.py` | Step 4: ProMENDA 보강 | `41398_2024_2948_MOESM3_ESM.xlsx`, `weight.csv` | `weight.csv` (업데이트) |
+| `run_recommendation.py` | Step 5: 추천 + 시각화 | `food.csv`, `weight.csv`, `foodname.csv` | `acs04.csv`, `recommendation_results.png` |
+
+---
+
+## 10. 프로젝트 확장 방향 (제안)
 
 ### A. 알고리즘 개선 (추천시스템 수업 적합)
 현재 알고리즘의 구조적 한계(similarity S가 지배적)를 해결:
@@ -299,7 +336,7 @@ ProMENDA (Pu et al., Translational Psychiatry, 2024)의 22,519 metabolite entrie
 
 ---
 
-## 10. 참고문헌
+## 11. 참고문헌
 
 - Fu et al. (2023). Food4healthKG. *AIM*, 145, 102677.
 - Liu et al. (2021). MiKG. *Health Info Sci Syst*, 9(1), 1-9.
