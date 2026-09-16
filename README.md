@@ -13,21 +13,27 @@
 - **알고리즘:** Incidence matrix (compound↔disease) × Food-compound weight → Adjusted cosine similarity → Top-K 추천
 
 ### 재현 과정에서 발견한 문제
-원 논문의 GitHub repo에 **핵심 입력 파일 3개**(`food.csv`, `foodname.csv`, `weight.csv`)와 **전처리 원본 데이터**(`metabolite_bacteria.xlsx`)가 누락되어 있음. 이를 KG triple 데이터 + FDC fatty acid KEGG 매핑 + MiKG neurotransmitter inference로 역설계하여 재현.
+원 논문의 GitHub repo에 **핵심 입력 파일 3개**(`food.csv`, `foodname.csv`, `weight.csv`)와 **전처리 원본 데이터**(`metabolite_bacteria.xlsx`)가 누락되어 있음. 이를 아래 방법으로 역설계하여 재현:
+- KG triple 데이터 11개 파일 활용
+- FDC fatty acid → KEGG compound 수동 매핑 (46종)
+- MiKG neurotransmitter-precursor inference chain
+- ProMENDA (22,519 metabolite entries) 대규모 데이터 보강
 
-### 현재 상태 요약
+### 최종 재현 상태
 
 | 지표 | 우리 결과 | 논문 |
 |------|-----------|------|
 | Foods | 132/135 (97.8%) | 135 |
 | Compounds (KEGG) | 134 | 85 |
-| MENDA direct overlap | 47 | — |
-| Incidence assigned (≠0) | 88/134 (66%) | ~85/85 (100%) |
+| Compound-depression 매핑 | 73 (ProMENDA) | ~85 (MENDA) |
+| Incidence assigned (≠0) | 103/134 (77%) | ~85/85 (100%) |
 | 추천 패턴: 채소↑ 육류/설탕↓ | 부분 일치 | ✅ |
 
 ---
 
-## 2. 필요한 Repository
+## 2. 필요한 Repository & 데이터
+
+### Git Clone
 
 ```bash
 # 1. Food4healthKG 원본 (논문 데이터 + KG triple)
@@ -37,43 +43,52 @@ git clone https://github.com/ccszbd/Food4healthKG.git
 git clone https://github.com/tingcosmos/MiKG-JAIMS.git
 ```
 
+### 수동 다운로드
+
+| 파일 | 출처 | 다운로드 |
+|------|------|----------|
+| ProMENDA Metabolite Dataset | Nature Supplementary Data 2 | https://www.nature.com/articles/s41398-024-02948-2 → Supplementary Data 2 (`41398_2024_2948_MOESM3_ESM.xlsx`) |
+
+> ProMENDA 웹사이트(menda.cqmu.edu.cn)가 접속 불가할 수 있음. Nature 논문 페이지의 Supplementary Data 2로 다운로드.
+
 ### 디렉토리 구조 (실행 후)
 
 ```
-food_recom_w_paper/              ← 작업 디렉토리 (Food4healthKG clone)
+Food4healthKG/                   ← 작업 디렉토리 (git clone)
 ├── food_nutrient.csv            ← FDC 원본 (repo 제공, 1M+ rows)
-├── food_nutrient_updated.csv    ← fatty acid KEGG 매핑 추가된 버전
+├── food_nutrient_updated.csv    ← [생성] fatty acid KEGG 매핑 추가
+├── 41398_2024_2948_MOESM3_ESM.xlsx  ← [수동 다운] ProMENDA metabolite
 ├── foodkg_triply/               ← KG triple 데이터 (repo 제공, zip 해제)
-│   ├── MENDA_Depression.jsonld  ← compound↔depression 연관 (+/-)
-│   ├── KEGG_Compound.jsonld     ← KEGG compound ontology
-│   ├── KEGG_Compound_Bacteria.jsonld  ← compound↔bacteria 대사 관계
-│   ├── Disease_Bacteria.jsonld  ← bacteria↔disease 연관
-│   ├── Mental_health.jsonld     ← 질환 sameAs 매핑
-│   ├── Bacteria_Ontology.trig   ← bacteria 분류 체계 (156MB)
-│   ├── Food_Category.jsonld     ← 식품 카테고리
-│   ├── Food_Nutrient.trig       ← food-nutrient 관계 (132MB)
-│   ├── Food_Ontology.jsonld     ← 식품 온톨로지
-│   ├── Food_Chinese.jsonld      ← 중국 식품 온톨로지
-│   └── MESH_Disease.jsonld      ← MeSH 질환 온톨로지
-├── analyse/                     ← 분석 코드 + 생성된 입력 파일
-│   ├── final.py                 ← 원 논문 추천 알고리즘 코드
+│   ├── MENDA_Depression.jsonld
+│   ├── KEGG_Compound.jsonld
+│   ├── KEGG_Compound_Bacteria.jsonld
+│   ├── Disease_Bacteria.jsonld
+│   ├── Mental_health.jsonld
+│   ├── Bacteria_Ontology.trig   (156MB)
+│   ├── Food_Category.jsonld
+│   ├── Food_Nutrient.trig       (132MB)
+│   ├── Food_Ontology.jsonld
+│   ├── Food_Chinese.jsonld
+│   └── MESH_Disease.jsonld
+├── analyse/
+│   ├── final.py                 ← 원 논문 추천 알고리즘 (참고용)
 │   ├── p5_foodname.txt          ← 135개 음식 이름 목록 (repo 제공)
-│   ├── heatmap.xlsx             ← 히트맵 데이터 (repo 제공)
-│   ├── foodname.csv             ← [생성] food × compound 행렬 + 이름
-│   ├── food.csv                 ← [생성] food × compound 행렬 + type
-│   ├── weight.csv               ← [생성] 8 × compound incidence weight
-│   ├── acs04.csv                ← [생성] 추천 확률 결과
-│   └── recommendation_results.png  ← [생성] 시각화
+│   ├── foodname.csv             ← [생성] food × compound + 이름
+│   ├── food.csv                 ← [생성] food × compound + type
+│   ├── weight.csv               ← [생성] incidence weight
+│   ├── acs04.csv                ← [생성] 추천 확률
+│   └── recommendation_results.png ← [생성] 시각화
 ├── preprocess/
 │   ├── data_cleaning.py         ← 원 논문 전처리 (참고용, 입력 xlsx 없음)
 │   └── spy_kegg.py              ← KEGG 크롤러 (참고용)
-├── add_fatty_acid_kegg.py       ← [우리 코드] fatty acid KEGG 매핑
-├── reconstruct.py            ← [우리 코드] 입력 파일 역설계
-├── knowledge_inference.py    ← [우리 코드] knowledge inference
-└── run_recommendation.py        ← [우리 코드] 추천 알고리즘 + 시각화
+├── add_fatty_acid_kegg.py       ← [우리 코드] Step 1
+├── reconstruct_v2.py            ← [우리 코드] Step 2
+├── knowledge_inference_v3.py    ← [우리 코드] Step 3
+├── map_promenda.py              ← [우리 코드] Step 4
+└── run_recommendation.py        ← [우리 코드] Step 5
 
-MiKG-JAIMS/                      ← MiKG clone (별도 디렉토리)
-└── MiKG_Schema_Data_20201007.ttl ← bacteria–neurotransmitter–disease 관계
+MiKG-JAIMS/                      ← MiKG (별도 git clone)
+└── MiKG_Schema_Data_20201007.ttl
 ```
 
 ---
@@ -81,7 +96,6 @@ MiKG-JAIMS/                      ← MiKG clone (별도 디렉토리)
 ## 3. 환경 설정
 
 ```bash
-# Python 3.8+
 pip install pandas numpy scikit-learn matplotlib openpyxl
 ```
 
@@ -89,173 +103,208 @@ pip install pandas numpy scikit-learn matplotlib openpyxl
 
 ## 4. 실행 순서
 
-### Step 0: 데이터 준비
-
 ```bash
 cd Food4healthKG
 
-# KG triple 데이터 압축 해제
+# Step 0: 데이터 준비
 unzip foodkg_triply.zip
 unzip food_nutrient.csv.zip
-```
 
-### Step 1: Fatty acid KEGG 매핑 추가
-
-```bash
+# Step 1: Fatty acid KEGG 매핑 추가 (88 → 134 compounds)
 python3 add_fatty_acid_kegg.py
-```
-
-**하는 일:** `food_nutrient.csv`의 fatty acid nutrient 235K rows (DHA, EPA, SFA, MUFA 등)에 KEGG compound ID를 매핑. KEGG compound DB 기반 수동 매핑 테이블 사용.
-
-**결과:**
-- KEGG compounds: 88 → **134** (+46)
-- MENDA overlap: 24 → **47** (+23)
-- `food_nutrient_updated.csv` 생성
-
-**⚠️ 중요:** 실행 후 반드시 덮어쓰기:
-```bash
 cp food_nutrient_updated.csv food_nutrient.csv
-```
 
-### Step 2: 입력 파일 역설계
+# Step 2: 입력 파일 역설계 (foodname.csv, food.csv, weight.csv)
+python3 reconstruct_v2.py
 
-```bash
-python3 reconstruct.py
-```
+# Step 3: Knowledge inference (MENDA + MiKG + ontology + literature)
+python3 knowledge_inference_v3.py
 
-**하는 일:** 논문 GitHub에 누락된 3개 입력 파일을 `food_nutrient.csv` + `p5_foodname.txt` + `MENDA_Depression.jsonld`로 역설계.
+# Step 4: ProMENDA 보강 (22,519 entries → incidence 확장)
+python3 map_promenda.py
 
-**생성 파일:**
-- `analyse/foodname.csv` — 132 foods × 134 compounds + fdc_id, name, type
-- `analyse/food.csv` — 132 foods × 134 compounds + type (알고리즘 입력)
-- `analyse/weight.csv` — 8 × 134 (4 source × pos/neg, 초기 MENDA 기반)
-
-### Step 3: Knowledge Inference
-
-```bash
-python3 knowledge_inference.py
-```
-
-**하는 일:** 5가지 소스로 134개 compound 전체에 incidence (+1/-1/0) 부여 → `weight.csv` 재생성.
-
-**Inference 소스 (우선순위 순):**
-
-| # | Source | 방법 | 결과 |
-|---|--------|------|------|
-| 1 | MENDA direct | `MENDA_Depression.jsonld` 파싱, hasPositive/NegativeAssociation | 47개 (24 pos-only, neg-only, both) |
-| 2 | MiKG precursor | `MiKG_Schema_Data_20201007.ttl`에서 depression→neurotransmitter→precursor 체인 | +5 (Tryptophan, Tyrosine, Phenylalanine, Histidine, Vitamin B-12) |
-| 3 | Bacteria compound | `KEGG_Compound_Bacteria.jsonld` + `Disease_Bacteria.jsonld` + `Bacteria_Ontology.trig` name matching | +5 (Starch, Tocotrienol α/β/γ/δ) |
-| 4 | Ontology | KEGG subClassOf 체인 (Vitamin E family, Folate family, Sugar family, Carotenoids, Vitamin D) | +19 |
-| 5 | Literature | Nutritional psychiatry 문헌 기반 (Iron, Zinc, Mg, Se, Ca, K, Na, Caffeine 등) | +12 |
-
-**결과:** 88/134 assigned (66%), positive 75, negative 13, neutral 46
-
-### Step 4: 추천 알고리즘 + 시각화
-
-```bash
+# Step 5: 추천 알고리즘 + 시각화
 python3 run_recommendation.py
 ```
 
-**하는 일:** 논문 Algorithm 1 재현:
-1. Food compound matrix normalization (row-wise min-max)
-2. `D = weight × food^T` (incidence score)
-3. Adjusted cosine similarity (Eq.1)
-4. `P = D^T × S` (recommendation probability, Eq.2)
-5. Top-K=30 ranking
-6. PCA + T-SNE 시각화
+---
 
-**생성 파일:**
-- `analyse/acs04.csv` — 4 source별 추천 확률
-- `analyse/recommendation_results.png` — PCA + T-SNE + Pyramid 시각화
+## 5. 각 Step 상세
+
+### Step 1: `add_fatty_acid_kegg.py`
+
+`food_nutrient.csv`의 fatty acid nutrient 235K rows (DHA, EPA, SFA, MUFA 등)에 KEGG compound ID를 수동 매핑. 원본 repo에서는 이 fatty acid들의 `nutrient_kegg` 값이 전부 0이었음.
+
+| 지표 | 변경 전 | 변경 후 |
+|------|---------|---------|
+| KEGG compounds | 88 | **134** (+46) |
+| KEGG 매핑된 행 | 647,710 | **843,508** |
+| MENDA overlap | 24 | **47** (+23) |
+
+매핑 근거: KEGG Compound Database (https://www.genome.jp/kegg/compound/)
+
+### Step 2: `reconstruct_v2.py`
+
+논문 GitHub에 누락된 3개 입력 파일을 역설계:
+- `food_nutrient.csv` + `p5_foodname.txt` (135개 음식) → 132개 매칭
+- `MENDA_Depression.jsonld` → compound별 positive/negative association
+- `Food_Category.jsonld` + keyword 규칙 → food type 분류
+
+생성 파일:
+- `foodname.csv`: 132 foods × 134 compounds + fdc_id, name, type
+- `food.csv`: 132 foods × 134 compounds + type
+- `weight.csv`: 8 × 134 (초기 MENDA 기반, Step 3-4에서 업데이트됨)
+
+미매칭 3개: 밀가루 변형 (FLOUR, PASTRY / all-purpose / bread) — FDC 이름과 불일치
+
+### Step 3: `knowledge_inference_v3.py`
+
+논문 Section 3.3의 knowledge inference를 5가지 소스로 구현:
+
+| 우선순위 | Source | 방법 | 결과 |
+|---------|--------|------|------|
+| 1 | MENDA direct | `MENDA_Depression.jsonld`의 hasPositive/NegativeAssociation | 47개 compound |
+| 2 | MiKG precursor | `MiKG_Schema_Data_20201007.ttl`에서 depression → neurotransmitter → precursor 체인. Serotonin→Tryptophan, Dopamine→Tyrosine 등 | +5 |
+| 3 | Bacteria compound | `KEGG_Compound_Bacteria.jsonld` + `Disease_Bacteria.jsonld` + `Bacteria_Ontology.trig` name matching | +5 |
+| 4 | Ontology | KEGG subClassOf 체인 (Vitamin E/A/D family, Folate family, Sugar family, Carotenoids) | +19 |
+| 5 | Literature | Nutritional psychiatry 문헌 기반. Iron[PMID:22578925], Zinc[PMID:23567517], Mg[PMID:28654669] 등 | +12 |
+
+### Step 4: `map_promenda.py`
+
+ProMENDA (Pu et al., Translational Psychiatry, 2024)의 22,519 metabolite entries로 incidence 보강:
+- KEGG ID 기반 매핑: 1,412 compounds, 17,653 entries
+- Regulation 방향: **Up in depression → negative(-1)**, **Down in depression → positive(+1)**
+- Study ≥ 2 필터 적용 (신뢰도)
+- 기존 weight=0인 compound만 채움 (기존 inference 유지)
+
+| 지표 | Step 3까지 | Step 4 후 |
+|------|-----------|-----------|
+| ProMENDA overlap | — | 73 |
+| Incidence assigned | 88/134 | **103/134 (77%)** |
+| New compounds | — | +15 |
+
+주요 ProMENDA 결과 (study 수 기반 consensus):
+- DHA (C06429): pos:28, neg:18 → **positive** ✅
+- EPA (C06428): pos:12, neg:10 → **positive** ✅
+- Palmitic acid (C00249): pos:46, neg:49 → **negative** ✅
+- Sucrose (C00089): pos:5, neg:12 → **negative** ✅
+
+### Step 5: `run_recommendation.py`
+
+논문 Algorithm 1 재현:
+1. Food compound matrix normalization (row-wise min-max)
+2. `u = X × weight` (4 source별 food score)
+3. Adjusted cosine similarity `S` (Eq.1)
+4. `P = u^T × S` (recommendation probability, Eq.2)
+5. Top-K=30 ranking + T-SNE/PCA 시각화
 
 ---
 
-## 5. 현재 추천 결과
+## 6. 최종 추천 결과
 
-### Top 30 추천 (inference 기준)
+### Top 30 추천
 
-| 순위 | 음식 | 카테고리 |
-|------|------|----------|
-| 1 | Pupusas, Bean | 채소 |
-| 2-4 | MILK (Whole/2%/1%) | 유제품 |
-| 5-6 | Mustard | 소스 |
-| 7-9 | Rice flour | 곡물 |
-| 10 | Egg | 유제품 |
-| 19 | Hummus | 두류 |
-| 20-21 | Chicken breast/drumstick | 가금류 |
-| 23 | Tomatoes, diced | 채소 |
-| 25 | Soybean oil | 채소 |
-| 26 | Beans, snap | 채소 |
+| 순위 | 음식 | 카테고리 | Score |
+|------|------|----------|-------|
+| 1 | Pupusas, Bean | 채소 | 1.42 |
+| 2-4 | MILK (Whole/2%/1%) | 유제품 | 1.24 |
+| 10 | Egg | 유제품 | 0.73 |
+| 19 | Hummus | 두류 | 0.60 |
+| 20-21 | Chicken breast/drumstick | 가금류 | 0.58 |
+| 23 | Tomatoes, diced | 채소 | 0.53 |
+| 25 | Soybean oil | 유지 | 0.49 |
+| 26 | Beans, snap | 채소 | 0.48 |
 
 ### Bottom 30 비추천
 
-| 순위 | 음식 | 카테고리 |
-|------|------|----------|
-| 113 | Beef T-bone Steak | 육류 |
-| 114 | Sugar, Granulated | 스위트 |
-| 115 | Beef Eye of Round | 육류 |
-| 117 | Chinese Fried Rice | 곡물 |
-| 123 | White bread | 곡물 |
-| 124 | Coconut oil | 유지 |
-| 125 | Whole wheat bread | 곡물 |
-| 129 | Greek yogurt (non-fat) | 유제품 |
+| 순위 | 음식 | 카테고리 | Score |
+|------|------|----------|-------|
+| 113 | Beef T-bone Steak | 육류 | -0.01 |
+| 114 | Sugar, Granulated | 스위트 | -0.01 |
+| 115 | Beef Eye of Round | 육류 | -0.01 |
+| 123 | White bread | 곡물 | -0.17 |
+| 124 | Coconut oil | 유지 | -0.20 |
+| 127-128 | Ground turkey | 육류 | -1.27 |
 
 ### 카테고리 분포
 
-| 카테고리 | 추천 Top 30 | 비추천 Bottom 30 | 논문 패턴 |
-|----------|------------|-----------------|----------|
-| 채소 | 5 | 1 | 추천 ✅ |
-| 유제품 | 8 | 5 | 중간 |
+| 카테고리 | 추천 Top 30 | 비추천 Bottom 30 | 논문 패턴 일치 |
+|----------|------------|-----------------|-----------|
+| 채소 | 5 | 1 | ✅ 추천 |
 | 가금류 | 6 | 4 | — |
-| Beef | 2 | 5 | 비추천 ✅ |
-| 곡물 | 4 | 5 | 비추천 ✅ |
-| Sweets | 0 | 1 | 비추천 ✅ |
-| 과일 | 0 | 3 | 논문과 다름 ❌ |
+| 유제품 | 8 | 5 | — |
+| Beef | 2 | **5** | ✅ 비추천 |
+| 곡물/빵 | 4 | **5** | ✅ 비추천 |
+| Sweets | 0 | **1** | ✅ 비추천 |
+| Fats/Oils (coconut) | 0 | **1** | ✅ 비추천 |
+| 과일 | 0 | 3 | ❌ 논문과 다름 |
 
 ---
 
-## 6. 논문과의 차이 및 원인
+## 7. 논문과의 차이 및 원인
 
-### 일치하는 점
-- Beef steak, Sugar, Coconut oil(SFA 높음)이 비추천 → ✅
-- 채소(Beans, Tomatoes), Hummus가 추천 → ✅
-- Source 간 RMSE ≠ 0 (차등 가중치 작동) → ✅
+### 일치
+- Beef steak, Sugar, Coconut oil(SFA), White bread → 비추천 ✅
+- 채소(Beans, Tomatoes), Hummus, Soybean oil → 추천 ✅
+- Source 간 RMSE ≠ 0 (차등 가중치 작동) ✅
+- ProMENDA 22,519 entries 기반으로 DHA/EPA positive, SFA/Sugar negative 확인 ✅
 
-### 불일치 및 원인
+### 불일치
 
-| 차이 | 원인 |
-|------|------|
-| 추천 Top에 우유/치즈 과다 | `metabolite_bacteria.xlsx` 원본 없이 역설계하여 dairy의 compound profile이 과대평가됨 |
-| 과일이 추천에 없음 | Pears 등의 주요 compound (fructose, sucrose)가 MENDA에서 both(+/-)로 tie-break가 positive로 처리되나, 과일 특유의 antioxidant가 적게 반영됨 |
-| 생선이 추천 상위가 아님 | 논문은 DHA/EPA를 강하게 positive로 처리했을 것이나, MENDA에서 EPA는 negative, DHA는 both로 되어 있음 |
-| 알고리즘: similarity가 지배적 | `P = D^T × S`에서 S(food compound profile 기반)가 incidence weight보다 결과를 지배하여, weight 변화의 효과가 희석됨 |
+| 차이점 | 원인 |
+|--------|------|
+| 추천 Top에 우유/치즈 과다 | `metabolite_bacteria.xlsx` 원본 없이 역설계하여 dairy compound profile이 과대평가됨 |
+| 과일이 추천 안 됨 | 과일 주요 compound(fructose, sucrose)가 MENDA/ProMENDA에서 negative 또는 tie |
+| 생선이 추천 상위 아님 | Tuna만 1종 포함. 논문은 더 많은 생선 포함 가능 |
+| **알고리즘 구조적 한계** | `P = u^T × S`에서 similarity S(compound amount 기반)가 incidence weight보다 결과를 지배. weight 변화 효과가 희석됨 |
 
 ### 근본 원인
-논문 저자가 수동 큐레이션한 `metabolite_bacteria.xlsx` (54 bacteria × metabolite 행렬)이 GitHub에 없음. 이 파일이 85개 compound의 incidence를 결정하는 핵심 데이터이며, KG triple 파일에는 그 일부만 반영됨.
+논문 저자의 `metabolite_bacteria.xlsx` (54 bacteria × metabolite 수동 큐레이션 행렬)이 GitHub에 없음. `data_cleaning.py`가 이 파일을 읽는 코드이나, 입력 파일이 미공개.
 
 ---
 
-## 7. 프로젝트 확장 방향 (제안)
+## 8. 데이터 소스 요약
+
+| Source | 용도 | 크기 | 비고 |
+|--------|------|------|------|
+| FDC `food_nutrient.csv` | 음식-영양소 | 80K foods, 211 nutrients | repo 제공 |
+| `MENDA_Depression.jsonld` | compound-depression +/- | 5,675 entries | repo KG |
+| ProMENDA (MOESM3) | compound-depression 보강 | 22,519 entries | Nature Suppl. |
+| `KEGG_Compound_Bacteria.jsonld` | compound-bacteria 대사 | 201 bacteria | repo KG |
+| `Disease_Bacteria.jsonld` | bacteria-disease 연관 | 741 bacteria | repo KG |
+| `Bacteria_Ontology.trig` | bacteria ID-name 매핑 | 322K bacteria | repo KG |
+| MiKG TTL | bacteria-neurotransmitter-disease | 48 bacteria, 6 NTM | GitHub |
+| `KEGG_Compound.jsonld` | compound ontology (subClassOf) | 867 pairs | repo KG |
+| `MESH_Disease.jsonld` | disease 분류 | 235K labels | repo KG |
+
+---
+
+## 9. 프로젝트 확장 방향 (제안)
 
 ### A. 알고리즘 개선 (추천시스템 수업 적합)
-- 현재 cosine similarity 기반 → KG embedding (TransE, RotatE) 또는 GNN (R-GCN) 대체
-- Incidence를 similarity 계산 전에 food matrix에 곱하는 방식으로 수정
-- Ablation: 미생물 경로 유무 (Model A vs B) 비교
+현재 알고리즘의 구조적 한계(similarity S가 지배적)를 해결:
+- **방법 1:** Incidence를 similarity 계산 전에 food matrix에 곱하여 "depression에 좋은 compound만 높은 값"으로 변환 후 similarity 계산
+- **방법 2:** KG embedding (TransE, RotatE) → food-disease link prediction
+- **방법 3:** GNN (R-GCN, CompGCN) → food node embedding으로 추천
+- **방법 4:** Content-based neural → 영양소 벡터 feature + depression label로 분류
 
-### B. 데이터 확장
-- ProMENDA (2024, 22,519 entries) 다운로드하여 MENDA 대체
-- 저자 메일 (xpjiang@mail.ccnu.edu.cn)로 `metabolite_bacteria.xlsx` 요청
+### B. Ablation Study
+- Model A: Food → Nutrient → Disease (직접 경로만)
+- Model B: Food → Nutrient → Microbiota → Disease (미생물 포함)
+- 비교 지표: Precision@K, NDCG@K, 문헌 기반 validation
 
 ### C. 평가 강화
-- SMILES trial (Jacka et al., 2017) ModiMedDiet 권장 식품을 ground truth로 활용
+- SMILES trial (Jacka et al., BMC Medicine, 2017) ModiMedDiet 권장 식품을 ground truth
 - 논문 Table 5 방식 literature-based validation 확장
 
 ---
 
-## 8. 참고문헌
+## 10. 참고문헌
 
-- Fu et al. (2023). Food4healthKG. *AIM*, 145, 102677. https://doi.org/10.1016/j.artmed.2023.102677
+- Fu et al. (2023). Food4healthKG. *AIM*, 145, 102677.
 - Liu et al. (2021). MiKG. *Health Info Sci Syst*, 9(1), 1-9.
+- Pu et al. (2024). ProMENDA. *Translational Psychiatry*, 14, 229.
+- Pu et al. (2020). MENDA. *Briefings in Bioinformatics*, 21(4), 1455-1464.
 - Jacka et al. (2017). SMILES trial. *BMC Medicine*, 15(1), 23.
 - Marx et al. (2021). Diet and depression. *Molecular Psychiatry*, 26(1), 134-150.
-- Pu et al. (2020). MENDA. *Briefings in Bioinformatics*, 21(4), 1455-1464.
+- Parker & Brotchie (2011). Tryptophan and tyrosine. *Acta Psychiatrica Scand*, 124(6), 417-426.
