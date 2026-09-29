@@ -58,21 +58,34 @@ g 환산으로 추천 쪽(Top30)은 우연을 넘었으나, **비추천 쪽(Bot3
 `E` 는 compound 가 우울증을 완화(+1)하는지 악화(−1)하는지를 담은 벡터다.
 추천 점수 `u = Xn · E` 의 유일한 방향 입력이다.
 
-```
-E 근거 분포 (85종)                E 부호
-  unknown           20  근거 없음   +50
-  MENDA_both+orig   16  MENDA 원본  -17
-  ontology          14               0=18
-  MENDA_neg          9
-  MENDA_both         7  미확정
-  MENDA_pos          6
-  MiKG               5
-  MENDA_both+Q2      5
-  group_prior        2
-  Q2_bacteria_path   1
-```
+**step2 가 부여한 근거** (`analyse/knowledge_query_results.csv` 의 `source`)
 
-**85종 중 27종(32%)이 방향을 정할 근거가 없다.**
+| 근거 | 개수 | 비고 |
+|---|---:|---|
+| `unknown` | 20 | 근거 없음 (미네랄 10종 포함) |
+| `MENDA_both+orig` | 16 | KG 에선 양방향, MENDA 원본 study 수로 결정 |
+| `ontology` | 14 | Sugar 5, Vitamin E 4, Carotenoid 4, Vitamin D 1 |
+| `MENDA_neg` | 9 | |
+| `MENDA_both→unresolved` | 7 | 원본으로도 동률 → 미확정 |
+| `MENDA_pos` | 6 | |
+| `MiKG` | 5 | 신경전달물질 전구체 5종 |
+| `MENDA_both+Q2_bacteria` | 5 | 양방향을 미생물 경로로 결정 |
+| `group_prior` | 2 | §4.2.3 Vitamins 그룹 |
+| `Q2_bacteria_path` | 1 | |
+| **합계** | **85** | |
+
+**최종 E 부호** (step3 ProMENDA 보강 후)
+
+| 부호 | 개수 |
+|---|---:|
+| + | 50 |
+| − | 17 |
+| 0 | 18 |
+
+step2 에서 근거가 없던 27종(`unknown` 20 + 미확정 7) 중 9종을 step3 가
+ProMENDA 로 채워 최종 0 은 18종이다.
+
+**85종 중 27종(32%)이 KG 에서 방향을 정할 근거가 없고, ProMENDA 를 더해도 18종(21%)이 남는다.**
 `unknown` 20종은 어떤 소스에도 없고(미네랄 10종 포함), `MENDA_both` 7종은
 MENDA 원본에서도 동률이다(Oleic 10:11, Serine 17:18, Valine 26:23 등).
 
