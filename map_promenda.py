@@ -9,7 +9,7 @@ ProMENDA → Food Compound 매핑
 
 3. 결과: weight.csv 업데이트 (incidence 확장)
 
-의존: add_fatty_acid_kegg.py → reconstruct_v2.py 가 먼저 실행되어
+의존: add_fatty_acid_kegg.py → reconstruct.py 가 먼저 실행되어
        food_nutrient.csv (134 compounds), food.csv, foodname.csv 생성되어야 함
 """
 
