@@ -13,8 +13,14 @@ based on gut microbiota and mental health*, Artificial Intelligence In Medicine
 
 ## 1. 핵심 결론
 
-> **재현 실패다.** 데이터 재구성은 논문에 근접하나, 논문의 핵심 결과인
-> **추천 순위는 우연 수준**이다. 원인은 코드가 아니라 공개 자료에 있다.
+> **부분 재현이다 (2026-09-29 갱신, §16).** 논문 F 의 단위 규약(g 환산)을
+> 역산해 적용하자 F 가 논문과 사실상 일치했고(행 코사인 0.295 → 0.981),
+> 추천 순위가 처음으로 우연 수준을 넘었다(Top30 5 → 15/30). 남은 병목은
+> `E` 하나이며, 논문 순위가 함의하는 `E` 와 공개 소스 `E` 의 부호 일치는
+> 30/55 로 우연 수준이다.
+>
+> 이전 판 결론: "재현 실패다. 추천 순위는 우연 수준이다." — 순위 실패의
+> 상당 부분이 `E` 가 아니라 **단위 미환산**이었다.
 
 ### 무엇이 되고 무엇이 안 되는가
 
@@ -24,7 +30,12 @@ based on gut microbiota and mental health*, Artificial Intelligence In Medicine
 | 데이터 재구성 | ✅ 85 compound / 135 food / `foodname.csv` (135, 88) / 밀도 28 vs 33 |
 | 핵심 입력 `E` 방향 확보 | ⚠️ 67/85 (79%) |
 | 논문 명시 부호 일치 (gold 9종) | ✅ 8/9 |
-| **추천 순위** | ❌ **Top30 겹침 5/30 — 우연 기대값 6.7. Spearman −0.071** |
+| F (성분 행렬) vs 논문 heatmap | ✅ 행 코사인 0.981 (g 환산 후, §16.1) |
+| 논문 §4.2.1 PCA 5성분 | ✅ `Xn⊙E` 80% 도달 5개 |
+| **추천 순위** | ⚠️ **Top30 15/30 (우연 6.7), Bot30 3/30, Spearman +0.108** |
+| 논문 주장 6개 (§16.2) | ❌ 1/6 (논문 순위 자신은 4/6) |
+| 개선판 V1 (재현 아님, §16.4) | Spearman +0.466, Top30 16, Bot30 9, gold 8/9 |
+| `weight.csv` 네 소스 | ✅ 독립 집계로 수정 (§7). ⚠️ 극성 규약 불일치 발견, 결정 대기 |
 | 논문 §5.1 방법2 (Table 5 추론) | ✅ 11/15 |
 | 논문 §5.1 방법1 (전문가 20문항) | — 설계상 재현 불가 |
 
@@ -275,7 +286,7 @@ ProMENDA(`41398_2024_2948_MOESM3_ESM.xlsx`)에 **문자 그대로 실재**한다
 ### Type1~Type5 의 의미 (역추론)
 
 논문은 `type1`/`type2`가 무엇인지 적지 않았다. ProMENDA 의 `M_Groups`
-컬럼에서 역추론했다 (`tools/diag_promenda_types.py`).
+컬럼에서 역추론했다 (`tools/diag.py promenda_types`).
 
 | Type | 대표 비교 | 행 수 | `up` 의 의미 |
 |---|---|---|---|
@@ -326,6 +337,45 @@ faecal+type2 +0.182   12/30   11/30   <- 조합 최고
 다만 **12개 조합 중 최선을 사후에 고르는 것은 순환 논증**이므로 채택하지 않았다.
 `tools/sweep.py sources` 로 확인할 수 있다.
 
+### 2026-09-29 — 네 소스가 사실은 복사본이었다
+
+위 표는 **독립 소스가 아니었다.** step2(`knowledge_query.py`)가 infer 의 `E` 를
+근거 없는 배율(MENDA 1.0/0.8/0.9/1.1 등)로 네 행에 복사했고, step3 도 같은 표로
+네 행을 다시 채웠다. step3 의 ProMENDA 부분집합 집계는 빈 자리만 채웠기 때문에,
+네 소스의 부호가 85종 전부 같았다(infer 와 부호가 다른 compound 0개).
+
+고쳤다. step2·3 은 infer 행만 쓰고(`kegg_alias.INFER_SCALE`),
+faecal / type1 / type2 는 ProMENDA 의 Faece / Type1 / Type2 부분집합으로
+독립 집계한다. **infer 행은 수정 전과 바이트 단위로 같다. 보고 수치는 불변이다.**
+
+독립 집계 후 (g 환산 F, 공식 점수식):
+
+```
+                 E 부호          Spearman  Top30  Bot30  gold(E≠0 중)
+infer           +50/-17/0=18      +0.108    15      3     8/9
+faecal          +8/-14/0=63       +0.517     8      8     2/6
+type1           +27/-8/0=50       −0.782     0      0     1/5
+type1 (반전)                       +0.782    21     14     4/5
+type2           +13/-21/0=51      +0.681    12     15     4/5
+```
+
+**극성 불일치가 드러났다.** step2 는 논문 §4.2.1 을 따라 MENDA 의 Up
+(hasPositiveAssociation)을 +1 로 둔다(`MENDA_POS_MEANS_RELIEF=1`).
+그런데 step3 의 `parse_regulation()` 은 ProMENDA 의 up 을 −1 로 둔다.
+두 단계가 서로 반대 규약을 쓴다.
+
+- 논문 규약(Up=+1)을 Type1(우울증 vs 대조군)에 적용하면 type1 반전이 된다.
+  gold 4/5, Spearman +0.782 다.
+- Type2(치료 vs 질병)는 up 의 의미가 반대이므로, 논문 규약에서는 up=−1 이 된다.
+  이는 현재 파싱 그대로이며 gold 4/5, Spearman +0.681 이다.
+- 즉 **논문 규약을 Type 의미에 맞게 일관 적용하면 두 소스 모두 독립 기준(gold)과
+  논문 순위를 동시에 지지한다.**
+- infer 행에도 ProMENDA 로 채운 compound 가 15종 있고, 이들은 반대 규약으로
+  들어가 있다.
+
+기본값은 아직 바꾸지 않았다. gold 가 독립 근거이긴 하지만, 소스를 순위로 비교하는
+것은 순환 위험이 있어 별도 판단이 필요하다.
+
 ---
 
 ## 8. 독립 정답셋
@@ -373,7 +423,7 @@ step4가 step3의 임의 기본값을 뒤집을 때 요구하는 최소 마진 `
 어긋났다. **gold 기준으로 골랐으므로 카테고리 결과에 대한 순환 논증이 아니다.**
 대가로 `top30_rec`이 16 -> 15로 1 감소한다.
 
-튜닝 도구: `tools/tune_margin.py`
+튜닝 도구: `tools/ab.py margin`
 
 ---
 
@@ -476,17 +526,18 @@ eval/           논문 §5.1 평가 재현
   paper_table1.py     전문가 20문항 (Supplementary Table 1)
   paper_table5.py     문헌 검증 15건 (Table 5)
   run_paper_eval.py   실행기
-  paper_ranking.py    논문 순위(p5) 대조   ★ 핵심 지표
 
 tools/          진단용. 모두 core.py 를 공유
   core.py         로드·정규화·유사도·채점·지표
-  scorecard.py    재현 집계
-  ab.py           rules | fallback | menda_both | study_type | merge
-  sweep.py        formula | sign | sources | promenda | ceiling
-  diag.py         kg | signs | lipids | unassigned | data | food
-  diag_promenda_types.py  ProMENDA Type1~5 의미 역추론
-  tune_margin.py  ProMENDA 다수결 마진 튜닝
-  read_supplements.py  Supplements.docx 본문 추출
+  scorecard.py    재현 집계 (논문 순위 p5 대조, NDCG@30 포함)
+  paper.py        units | claims | invert | improve   (§16)
+  ab.py           rules | fallback | menda_both | menda_tiebreak | study_type |
+                  merge | margin | units   (끝나면 기본값 복원)
+  sweep.py        formula | sign | sources | menda | promenda | ceiling
+  diag.py         kg | signs | lipids | unassigned | data | food |
+                  menda_jsonld | menda_orig | menda_rule | promenda_types | supplements
+  repo_only.py    repo 배포본만으로 돌린 기준선
+  unused.py       미사용 파일 분류
 
 setup/          1회성. FDC 원본 교체 시에만
   rebuild_food_nutrient.py  fdc_raw/ -> food_nutrient.csv 재조립
@@ -516,6 +567,14 @@ setup/          1회성. FDC 원본 교체 시에만
 
 2026-09-29 기준 `tools/` 는 25개 2,195줄에서 8개 1,100여 줄로 통합했다.
 14개 파일이 같은 채점 블록을 복사하고 있어 `core.py` 로 뽑았다.
+
+같은 날 §16 작업 뒤 다시 늘어난 18개를 8개로 통합했다(파일 대응표는
+README.md "변경 이력"). 이때 두 가지를 함께 고쳤다.
+
+- `tools/ab.py` 가 끝나도 기본 설정으로 복원하지 않아, 마지막 케이스의
+  `weight.csv` 가 남았다. 이제 끝나면 파이프라인을 기본 설정으로 다시 돌린다.
+- `tools/scorecard.py` 의 요약이 "Spearman 은 음수다" 같은 고정 문구였다.
+  이제 수치에서 만든다.
 
 ---
 
@@ -940,7 +999,7 @@ Fructose 는 MENDA 에 없는데 PMID(33984318)까지 달려 있다.
 
 KG 목록은 `both` 가 267/498(70%)이라 방향이 모호하다. 논문이 Table 3/4/Fig. 5
 에서 부호를 명시했으니, MENDA 원본의 study 단위 데이터에 어떤 집계 규칙을
-적용해야 그 부호가 나오는지 16개 규칙을 역산했다 (`tools/diag_menda_rule.py`).
+적용해야 그 부호가 나오는지 16개 규칙을 역산했다 (`tools/diag.py menda_rule`).
 
 ```
 규칙                       일치    판정가능
@@ -1127,13 +1186,13 @@ git 히스토리에도 구버전 ttl 외에 없다.
 1. **`E == 0`이 15/85** — §10 참조. 논문 §4.2.1은 85개 전부가 depression에
    연결되어 있다고 하나 공개 데이터로는 불가능함을 확인했다. 미네랄 10종은
    어떤 KG 소스에도 없다. **논문의 재현 불가능 지점이며 우리 코드의 결함이 아니다.**
-2. **추천 순위가 우연 수준** — §12. Top30 겹침 6/30 (우연 기대값 6.7),
-   Spearman −0.303. 카테고리 지표(3/3, 2/4)는 상위 30개에 각 1개만 있어도
+2. **추천 순위** — §16. g 환산 후 Top30 15/30 (우연 기대값 6.7), Bot30 3/30,
+   Spearman +0.108. (환산 전 §12: Top30 6/30, Spearman −0.303) 카테고리 지표(3/3, 2/4)는 상위 30개에 각 1개만 있어도
    만점이 나와 실패를 가린다.
 3. **E_MODE 선택** — `'paper'`(§4.2.1 정의)를 쓴다. 공식 `final.py`의 단일 행
    방식과는 다르며, 공식 `weight.csv`가 없어 어느 쪽이 저자의 실제 계산인지
    확정할 수 없다. 다만 §4.2.1 정의는 논문에 명시되어 있다.
-4. **임의 상수가 남아 있음** — step3의 소스별 배율, step4의
+4. **임의 상수가 남아 있음** — infer 행의 근거별 크기(`kegg_alias.INFER_SCALE`), step4의
    `confidence = total/10`, `total >= 2` 임계. 논문에 근거 없음.
    (`MARGIN`은 §8의 독립 정답셋으로 튜닝했으므로 제외)
 5. **구조적 한계** — `p[i]`는 자기 점수가 아니라 이웃 `u`의 가중평균이다
@@ -1153,3 +1212,143 @@ git 히스토리에도 구버전 ttl 외에 없다.
 10. **ProMENDA Type 의미 혼합** — §7. Type1 과 Type2 의 `up`/`down` 이 의미가
    반대인데 같은 해석으로 합산된다. 보정하면 gold·Top30 이 나빠져 기본값은
    OFF 다. 의미론과 실측이 엇갈리는 미해결 지점이다.
+
+---
+
+## 16. 논문 기준 개선 (2026-09-29)
+
+네 단계로 진행했다. 모든 판정 기준은 논문에서 가져왔고, 실행 전에 고정했다.
+
+### 16.1 단위 규약 — 가장 큰 원인이었다 (`tools/paper.py units`)
+
+FDC 원값은 compound 마다 단위가 다르다 (G 52 / MG 24 / UG 8 / IU 1).
+`food.csv` 는 이를 환산하지 않은 채 행별 min-max 정규화에 넣고 있었다.
+그 결과 mg 단위 미네랄(나트륨·칼륨 수백)이 행 최댓값을 차지해 나머지 성분을
+0 근처로 눌렀다.
+
+논문은 §3.1 에서 "nutrients ... quantified in weight, enabling effective calculation
+and comparison" 이라고만 적었다. 그래서 논문 heatmap 에서 환산 계수를 직접 역산했다.
+
+1. G 열만으로 논문 행과 우리 food 를 매칭한다. G 열끼리의 비율은 어떤 규약에서도
+   같으므로, 매칭이 단위 규약에 의존하지 않는다. cos>0.95 인 쌍이 70개 나왔다.
+2. 매칭된 쌍에서 `(B_j/B_k)/(X_j/X_k)` 를 구한다. 행 min-max 는 행 스케일만 바꾸므로
+   이 값이 곧 논문이 쓴 환산 계수다.
+
+```
+MG  log10 계수 중앙 −3.00  IQR [−3.08, −2.95]   n=12,838
+UG  log10 계수 중앙 −6.00  IQR [−6.11, −5.99]   n=1,787
+IU  log10 계수 중앙 −6.05                         n=304   ← IU 를 µg 처럼 취급
+
+                         매칭쌍 평균 cos   전체 헝가리안 평균
+원단위 (이전)                  0.295            0.369
+g 환산 (현재 기본값)            0.981            0.824
+```
+
+**저자는 모든 성분을 g 으로 환산했다.** IU 는 영양학적으로 틀린 환산이지만
+(비타민 A 1 IU = 0.3 µg) 논문 기준이므로 그대로 따른다.
+`reconstruct.py` 의 `UNIT_MODE=grams`(기본)가 피벗 **전에** 행 단위로 환산한다.
+Retinol·Vitamin E 는 한 compound 에 IU 행과 µg/mg 행이 섞여 있어, 피벗 후에
+환산하면 서로 다른 단위가 평균된다(이전 동작의 숨은 버그).
+이전 동작은 `UNIT_MODE=raw` 로 재현할 수 있다.
+
+효과 (E 는 그대로 두고 F 만 바꿈):
+
+```
+             Spearman   Top30   Bot30   PCA(Xn⊙E) 80%
+원단위        −0.071     5/30    4/30        8
+g 환산        +0.108    15/30    3/30        5    ← 논문 §4.2.1 "five principal components"
+```
+
+§11 에서 "밀도 격차의 원인"으로 본 것과 별개로, **정규화 스케일**이 논문과 달랐던
+것이 순위 실패의 큰 몫이었다.
+
+### 16.2 논문 주장 단위 검증 (`tools/paper.py claims`)
+
+p5 순위 일치는 1비트로 거의 설명되므로(§12), 논문이 **본문·그림으로 주장한 것**을
+명제로 옮겨 검정했다. 판정은 단측 p<0.05 로 고정했다.
+
+```
+                              paper(p5)   ours(g환산)   1bit    random 통과율
+C1a §4.2.3 추천=어류·과일·채소    PASS        fail        PASS      5.4%
+C1b §4.2.3 비추천=소시지·빵·과자  PASS        fail        PASS      4.7%
+C2  Fig.5 피라미드 3층 순서      PASS        fail        PASS      4.6%
+C3  Fig.4(c) 그룹 성분 차이 6항   3/6         4/6         2/6       0.0%
+C5  Fig.4(b) 성분 공간 분리       PASS        PASS        PASS      0.0%
+C6  §4.2.3 양파가 상위 30         3/4         3/4         3/4       0.2%
+통과                             4/6         1/6         4/6
+C4  §4.2.1 PCA 5성분              —          PASS (5)
+```
+
+**논문 내부 불일치 — 본문과 논문 자신의 데이터가 어긋난다.** 논문 heatmap 의
+상위/하위 30행으로 C3 을 재면 다음과 같다.
+
+- 탄수화물은 본문대로 추천 음식 쪽이 높다.
+- 비타민 차이는 유의하지 않다 (p=0.57).
+- 본문은 "비추천 음식이 미량원소·다량영양소가 높다"고 하지만, 데이터에서는
+  오히려 **추천 음식 쪽이 높다** (p=0.014, 0.004).
+
+본문의 C3 서술은 Fig. 4(c) 의 시각적 인상을 적은 것으로 보인다.
+C6 은 논문 순위 자신도 양파 4항목 중 1개를 상위 30 에 넣지 않는다.
+
+### 16.3 E 역추정 — held-out 검증 (`tools/paper.py invert`)
+
+§12 의 'ref부호 상한 0.687' 은 같은 음식으로 맞추고 잰 순환 값이었다.
+이번에는 음식을 50/50 으로 200회 나누고, 학습하지 않은 반쪽에서 Spearman 을 쟀다.
+설정은 다음과 같다.
+
+- gold 9종은 부호를 제약으로 건다.
+- λ 는 학습 반쪽 안의 5-fold 로만 고른다.
+
+```
+                                   held-out Spearman 중앙 [5%, 95%]    1비트
+ours  재구성 F(g환산) + p5            +0.752 [+0.606, +0.834]         +0.686  (분할의 78% 에서 1비트 초과)
+ours  재구성 F(원단위) + p5           +0.650 [+0.447, +0.752]         +0.686
+paper heatmap F + 행 순서             +0.912 [+0.855, +0.953]          —
+```
+
+1. **논문 순위는 논문 자신의 F 에 대한 선형 `E` 모델로 설명된다 (0.91).**
+   Algorithm 1 의 구조는 일관적이다.
+2. **g 환산 후에는 우리 F 로도 `E` 가 식별된다.** 1비트를 넘는다.
+3. 그런데 논문 순위가 함의하는 `E` 와 **현재 `E`(MENDA 등)는 부호 일치가 30/55**
+   로 우연 수준이다. 남은 병목은 `E` 하나라는 것이 정량적으로 확인됐다.
+4. gold 제약 없이 역추정해도, 안정적으로 추정된 gold 8종 중 6종이 논문 부호와
+   일치한다. 논문 순위와 논문이 명시한 부호는 대체로 서로 정합적이다.
+   예외는 Nicotinic acid(C00253) 로, 두 데이터 조합 모두에서 `−` 로 안정 추정된다.
+
+### 16.4 논문 기반 개선판 — 재현과 분리 (`tools/paper.py improve`)
+
+§4.2.1 의 `E ∈ {−1, 0, +1}` 정의를 벗어나므로 **재현 결과에 넣지 않는다.**
+변형은 실행 전에 고정했다.
+
+```
+                  Spearman  Top30  Bot30  gold  claims  (보조)AFS
+R  재현 기준        +0.108    15      3    8/9    1/6     −0.130
+V1 근거 가중 E      +0.466    16      9    8/9    2/6     −0.049
+V2 미생물 경로      −0.553     0      3    3/9    1/6     −0.022
+V3 유사도 제거      +0.067    13      6    8/9    1/6     +0.061
+V4 V1+V2           −0.474     0      3    3/9    1/6     −0.054
+```
+
+- **V1** — 논문이 인용한 MENDA 원본(§3.1, 5,675 entries)의 study 수로 `|E|` 를
+  정한다. `conf = |pos−neg|/(pos+neg+2)` 이고, 방향은 R 그대로 둔다.
+  튜닝한 값 없이 Spearman 이 +0.108 에서 +0.466 으로 오른다.
+  ±1 은 study 1개짜리 근거와 50개짜리 근거를 같게 취급한다.
+- **V2** — 논문 제목의 전제(gut microbiota 경유)를 강제했다. compound→bacteria→
+  depression 경로(Query 2)가 있는 compound 는 **85개 중 8개**뿐이다.
+  **공개 KG 로는 논문의 gut-brain 경로가 추천 입력의 9% 만 뒷받침한다.**
+- **V3** — Algorithm 1 의 유사도 단계를 빼면 Spearman 은 조금 떨어지고 Bot30 은
+  오른다. 기여가 뚜렷하지 않다(§16.3 의 held-out 결과와 같은 결론).
+- **AFS** — 논문 밖 독립 기준(LaChance & Ramsey 2018 을 85 compound 로 근사)이다.
+  논문 순위(p5) 자신의 AFS Spearman 도 +0.067 로, 어떤 순위도 AFS 와 상관이 없다.
+  참고로만 둔다.
+
+### 16.5 남은 일
+
+- `E` 에 V1 방식 신뢰도 가중을 넣는 것은 논문 정의 밖이다. 재현 기본값은 R 로 둔다.
+- Nicotinic acid 는 논문 Table 5 에서 `+` 인데, 논문 순위에서 역추정하면 안정적으로
+  `−` 다. 논문 내부 불일치 후보다.
+- ProMENDA 극성 규약이 step2(MENDA Up=+1, 논문 규약)와 step3(up=−1)에서
+  반대다 (§7, PROBLEMS §7). 논문 규약을 Type 의미에 맞게 적용하면 type1·type2 가
+  gold 4/5 와 논문 순위를 동시에 지지한다. 기본값 반영 여부는 결정 대기다.
+- 저자에게 `weight.csv` 를 요청하는 것은 여전히 유일하게 `E` 를 확정할 수 있는
+  경로다.
