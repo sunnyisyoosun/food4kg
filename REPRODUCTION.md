@@ -568,8 +568,22 @@ setup/          1회성. FDC 원본 교체 시에만
 2026-09-29 기준 `tools/` 는 25개 2,195줄에서 8개 1,100여 줄로 통합했다.
 14개 파일이 같은 채점 블록을 복사하고 있어 `core.py` 로 뽑았다.
 
-같은 날 §16 작업 뒤 다시 늘어난 18개를 8개로 통합했다(파일 대응표는
-README.md "변경 이력"). 이때 두 가지를 함께 고쳤다.
+같은 날 §16 작업 뒤 다시 늘어난 18개를 8개로 통합했다.
+
+| 이전 | 이후 |
+|---|---|
+| `tools/units.py` `claims.py` `invert_e.py` `improve.py` | `tools/paper.py units` / `claims` / `invert` / `improve` |
+| `tools/diag_menda_jsonld.py` | `tools/diag.py menda_jsonld` |
+| `tools/diag_menda_orig.py` | `tools/diag.py menda_orig` |
+| `tools/diag_menda_rule.py` | `tools/diag.py menda_rule` |
+| `tools/diag_promenda_types.py` | `tools/diag.py promenda_types` |
+| `tools/read_supplements.py` | `tools/diag.py supplements [검색어]` |
+| `tools/tune_margin.py` | `tools/ab.py margin` |
+| `eval/paper_ranking.py` | `tools/scorecard.py` |
+
+공통 헬퍼(`one_bit`, `rowminmax`, `cos_matrix`, `gold_of_E`)는 `tools/core.py` 로,
+weight.csv 배율 표는 `kegg_alias.INFER_SCALE` 한 곳으로 모았다(이전엔 step2·3 에
+복사되어 있었다). 이때 두 가지를 함께 고쳤다.
 
 - `tools/ab.py` 가 끝나도 기본 설정으로 복원하지 않아, 마지막 케이스의
   `weight.csv` 가 남았다. 이제 끝나면 파이프라인을 기본 설정으로 다시 돌린다.
