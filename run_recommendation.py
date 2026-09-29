@@ -1,16 +1,30 @@
 """
-Food4healthKG 재현 Step 2: 추천 알고리즘 실행 + 시각화
+Food4healthKG 추천 알고리즘 — 공식 final.py 충실 이식
 ======================================================
-final.py의 score() + cal_results() + tsne() 재현
+공식 repo(Food4healthKG/analyse/final.py)의 실행 경로를 그대로 재현한다.
 
-Pipeline:
-  1. Normalization
-  2. D = weight × food^T (incidence score)
-  3. Adjusted cosine similarity between foods
-  4. P = D^T × S (recommendation probability)
-  5. Top-K ranking
-  6. T-SNE visualization
-  7. PCA variance plot
+공식 경로 (final.py __main__ 439-447행, 주석 처리되어 있던 부분):
+    data = pd.read_csv('food.csv')
+    X    = data.values[:, :-1]        # 마지막 열(type) 제외
+    data = normalization(X)           # 행별 min-max, range==0인 행은 버림
+    score(data)
+
+공식 score() (final.py 43-110행):
+    we1 = infer.T  @ [0,1]   -> weight.csv 1행
+    we2 = feacal.T @ [0,1]   -> weight.csv 3행
+    we3 = type1.T  @ [0,1]   -> weight.csv 5행
+    we4 = type2.T  @ [1,0]   -> weight.csv 6행   (유일하게 pos)
+    u   = X @ we
+    S[i,j] = user_similarity_on_modified_cosine(X.T[:,i], X.T[:,j]),  S[i,i]=0
+    p   = u.T @ S
+    p[i] = p[i] / sum(S[:,i])
+
+v2와의 차이 (v2는 논문 본문 해석, 이쪽은 공식 구현):
+  - PCA 없음. similarity를 compound 원공간에서 계산.
+  - E = pos - neg 가 아니라 weight.csv의 단일 행을 그대로 사용.
+  - similarity의 common 조건이 != 0 이 아니라 > 0.
+
+실행: python3 run_recommendation.py
 """
 
 import pandas as pd
@@ -21,335 +35,279 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
+from collections import Counter
 import math
 import os
-import warnings
-warnings.filterwarnings('ignore')
 
-OUT_DIR = '/home/yoosun/food_recom_w_paper/analyse'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+OUT_DIR = os.path.join(BASE_DIR, 'analyse')
+
+# E 정의. 논문 §4.2.1:
+#   "We create an incidence matrix, denoted as E, in which a value of 1
+#    indicates a positive relationship between a compound and depression
+#    (relieving the disease), and a value of -1 indicates a negative
+#    relationship (causing the disease)."
+# 즉 E는 하나의 행렬에 +1과 -1이 함께 들어간다 -> E = pos - neg.
+#
+# 공식 final.py는 weight.csv의 '한 행'만 고르므로(weightpos/weightneg),
+# 어느 행이 pos인지 알아야 하는데 공식 weight.csv가 배포되지 않아 확정 불가였다
+# (구 FLIP_SIGN 모호성). 논문 정의를 쓰면 pos/neg를 둘 다 쓰므로 모호성이 없다.
+# 우리 weight.csv의 행 규약은 reconstruct.py:334-336에서 우리가 직접 정한다
+# (짝수 행 = pos, 홀수 행 = neg).
+#
+# 부수 효과: 한 행만 쓰면 negative 연관이 점수에 전혀 반영되지 않아
+# '나쁜 성분이 많은' 음식이 감점되지 않는다.
+#
+#   'paper'    : E = pos - neg          (논문 §4.2.1, 기본값)
+#   'official' : E = 단일 행            (공식 final.py 재현용)
+E_MODE = os.environ.get('E_MODE', 'paper')
+
+K = 30
 
 # ============================================================
-# 데이터 로드
+# 공식 final.py 378-406행 이식
 # ============================================================
-print("[1/7] 데이터 로드...")
+def normalization(X):
+    """행별 min-max. range==0인 행은 결과에서 제외."""
+    n1, n2 = X.shape
+    out, kept = [], []
+    for x in range(n1):
+        rows = X[x].astype(float).copy()
+        minVals, maxVals = rows.min(), rows.max()
+        ranges = maxVals - minVals
+        if ranges == 0:
+            continue
+        out.append((rows - minVals) / ranges)
+        kept.append(x)
+    return np.array(out), kept
+
+
+# ============================================================
+# 공식 final.py 112-128행 이식
+# ============================================================
+def user_similarity_on_modified_cosine(x, y):
+    common = [i for i in range(len(x)) if x[i] > 0 and y[i] > 0]
+    if len(common) == 0:
+        return 0
+    average1 = float(sum(x)) / len(x)
+    average2 = float(sum(y)) / len(y)
+    multiply_sum = sum((x[j] - average1) * (y[j] - average2) for j in common)
+    pow_sum_1 = sum(math.pow(x[m] - average1, 2) for m in range(len(x)))
+    pow_sum_2 = sum(math.pow(y[n] - average2, 2) for n in range(len(y)))
+    denom = math.sqrt(pow_sum_1 * pow_sum_2)
+    if denom == 0:
+        return 0
+    return float(multiply_sum) / denom
+
+
+# ============================================================
+# 데이터 로드 — 공식 __main__ 경로
+# ============================================================
+print("[1/6] 데이터 로드 (공식 경로)...")
 
 food = pd.read_csv(os.path.join(OUT_DIR, 'food.csv'))
 weight = pd.read_csv(os.path.join(OUT_DIR, 'weight.csv'))
 foodname = pd.read_csv(os.path.join(OUT_DIR, 'foodname.csv'))
 
-X_raw = food.values[:, :-1].astype(float)  # (132, 88) compound amounts
-Y = food['type'].values                     # food category
-we = weight.values                          # (8, 88) source weights
-fnames = foodname['foodname'].tolist()
-fdc_ids = foodname['fdc_id'].tolist()
+# 공식: array = data.values; X = array[:, :-1]  (마지막 열 type 제외)
+array = food.values
+X_raw = array[:, :-1].astype(float)
+Y_all = food['type'].values
+we = weight.values
+fnames_all = foodname['foodname'].tolist()
 
 n_foods, n_compounds = X_raw.shape
-print(f"  Foods: {n_foods}, Compounds: {n_compounds}")
+print(f"  food.csv: {n_foods} foods × {n_compounds} compounds")
+print(f"  weight.csv: {we.shape}")
+assert n_compounds == we.shape[1], \
+    f"food.csv 열({n_compounds})과 weight.csv 열({we.shape[1]}) 불일치"
 
 # ============================================================
-# Normalization (final.py의 normalization 함수)
+# 정규화 — 공식과 동일
 # ============================================================
-print("[2/7] Normalization...")
+print("\n[2/6] normalization (행별 min-max)...")
 
-def normalization(X):
-    """각 행(food)별 min-max normalization"""
-    result = []
-    for i in range(X.shape[0]):
-        row = X[i].copy()
-        mn, mx = row.min(), row.max()
-        rng = mx - mn
-        if rng == 0:
-            continue
-        row = (row - mn) / rng
-        result.append(row)
-    return np.array(result)
-
-X = normalization(X_raw)
-print(f"  Normalized shape: {X.shape}")
-# normalization에서 range=0인 행이 제거될 수 있으므로 인덱스 매핑
-valid_idx = []
-for i in range(X_raw.shape[0]):
-    rng = X_raw[i].max() - X_raw[i].min()
-    if rng > 0:
-        valid_idx.append(i)
-
-Y_valid = Y[valid_idx]
-fnames_valid = [fnames[i] for i in valid_idx]
-n1 = X.shape[0]
-print(f"  Valid foods after norm: {n1} (dropped {n_foods - n1})")
+Xn, kept = normalization(X_raw)
+Y = Y_all[kept]
+fnames = [fnames_all[i] for i in kept]
+n1 = Xn.shape[0]
+print(f"  유효 food: {n1} (range==0으로 제외: {n_foods - n1})")
 
 # ============================================================
-# Score 계산 (final.py의 score 함수 재현)
+# 가중치 벡터 — 공식 score() 57-66행
 # ============================================================
-print("[3/7] Recommendation score 계산...")
+print("\n[3/6] 가중치 벡터 (공식 score() 이식)...")
 
-# Weight decomposition: 4 sources × 2 (pos, neg)
-infer = we[0:2, :]   # inference
-feacal = we[2:4, :]   # fecal
-type1 = we[4:6, :]    # MENDA type1
-type2 = we[6:8, :]    # MENDA type2
+if E_MODE == 'paper':
+    # 논문 §4.2.1: 각 소스의 (pos, neg) 쌍에서 E = pos - neg
+    we1, we2, we3, we4 = (we[k] - we[k + 1] for k in (0, 2, 4, 6))
+else:
+    # 공식 final.py score(): 각 소스에서 단일 행만 사용
+    weightpos, weightneg = np.array([1, 0]), np.array([0, 1])
+    we1 = np.dot(we[0:2, ].T, weightneg)
+    we2 = np.dot(we[2:4, ].T, weightneg)
+    we3 = np.dot(we[4:6, ].T, weightneg)
+    we4 = np.dot(we[6:8, ].T, weightpos)
 
-weightpos = np.array([1, 0])
-weightneg = np.array([0, 1])
+for nm, w in [('we1(infer)', we1), ('we2(faecal)', we2),
+              ('we3(type1)', we3), ('we4(type2)', we4)]:
+    print(f"  {nm:14s} +{int((w > 0).sum()):3d} / -{int((w < 0).sum()):3d} / "
+          f"0={int((w == 0).sum()):3d}")
 
-# D = weight^T × weight_direction → compound별 score
-# 논문: we1 = infer^T × weightneg → negative weight 사용
-we1 = np.dot(infer.T, weightneg)   # (88,)
-we2 = np.dot(feacal.T, weightneg)
-we3 = np.dot(type1.T, weightneg)
-we4 = np.dot(type2.T, weightpos)   # type2는 positive
-
-# u = X × we → food별 score
-u1 = np.dot(X, we1)  # (n1,)
-u2 = np.dot(X, we2)
-u3 = np.dot(X, we3)
-u4 = np.dot(X, we4)
-
-print(f"  Score ranges:")
-print(f"    u1 (infer):  [{u1.min():.3f}, {u1.max():.3f}]")
-print(f"    u2 (fecal):  [{u2.min():.3f}, {u2.max():.3f}]")
-print(f"    u3 (type1):  [{u3.min():.3f}, {u3.max():.3f}]")
-print(f"    u4 (type2):  [{u4.min():.3f}, {u4.max():.3f}]")
+u1 = np.dot(Xn, we1)
+u2 = np.dot(Xn, we2)
+u3 = np.dot(Xn, we3)
+u4 = np.dot(Xn, we4)
 
 # ============================================================
-# Adjusted Cosine Similarity (논문 Eq.1)
+# similarity — compound 원공간, 공식과 동일
 # ============================================================
-print("[4/7] Adjusted cosine similarity 계산...")
+print("\n[4/6] modified cosine similarity (compound 원공간)...")
 
-def adjusted_cosine(x, y):
-    """final.py의 user_similarity_on_modified_cosine 재현"""
-    common = [i for i in range(len(x)) if x[i] > 0 and y[i] > 0]
-    if len(common) == 0:
-        return 0.0
-    avg_x = float(sum(x)) / len(x)
-    avg_y = float(sum(y)) / len(y)
-    
-    numer = sum((x[j] - avg_x) * (y[j] - avg_y) for j in common)
-    denom1 = sum((x[m] - avg_x) ** 2 for m in range(len(x)))
-    denom2 = sum((y[n] - avg_y) ** 2 for n in range(len(y)))
-    
-    denom = math.sqrt(denom1 * denom2)
-    if denom == 0:
-        return 0.0
-    return float(numer) / denom
-
-Xt = X.T  # (88, n1) — column = food
+Xt = np.transpose(Xn)
 S = np.zeros((n1, n1))
-
 for i in range(n1):
+    S[i, i] = 0
     for j in range(i + 1, n1):
-        sim = adjusted_cosine(Xt[:, i], Xt[:, j])
-        S[i, j] = sim
-        S[j, i] = sim
+        s = user_similarity_on_modified_cosine(Xt[:, i], Xt[:, j])
+        S[i, j] = s
+        S[j, i] = s
     if i % 20 == 0:
-        print(f"    similarity: {i}/{n1}...")
+        print(f"    i = {i}/{n1}")
 
-print(f"  Similarity matrix: {S.shape}")
-print(f"  Non-zero: {(S != 0).sum()}, Mean: {S[S != 0].mean():.4f}")
+nz = S[S != 0]
+print(f"  S: {S.shape}, non-zero={len(nz)}, mean={nz.mean():.4f}")
 
 # ============================================================
-# Recommendation probability P (논문 Eq.2)
+# 추천 점수 — 공식 score() 95-101행
 # ============================================================
-print("[5/7] Recommendation probability 계산...")
+print("\n[5/6] 추천 점수...")
 
-# P = u^T × S, normalized by column sum
-def calc_prob(u, S):
-    p = np.dot(u.T, S)
-    col_sums = np.sum(S, axis=0)
-    col_sums[col_sums == 0] = 1  # div by zero 방지
-    p = p / col_sums
+col_sums = np.sum(S, axis=0)
+
+def to_prob(u):
+    p = np.dot(u.T, S).astype(float)
+    for i in range(len(p)):
+        cs = col_sums[i]
+        p[i] = p[i] / cs if cs != 0 else 0.0
     return p
 
-p1 = calc_prob(u1, S)  # inference-based
-p2 = calc_prob(u2, S)  # fecal-based
-p3 = calc_prob(u3, S)  # type1-based
-p4 = calc_prob(u4, S)  # type2-based
+p1, p2, p3, p4 = to_prob(u1), to_prob(u2), to_prob(u3), to_prob(u4)
 
-# 결과 저장
-df_result = pd.DataFrame({
-    'infer': p1, 'faecal': p2, 'type1': p3, 'type4': p4
-})
-df_result.to_csv(os.path.join(OUT_DIR, 'acs04.csv'), index=False)
-print(f"  acs04.csv 저장 완료")
+pd.DataFrame({'infer': p1, 'faecal': p2,
+              'type1': p3, 'type4': p4}
+             ).to_csv(os.path.join(OUT_DIR, 'acs04.csv'), index=False)
 
-# Ranking (infer 기준)
-rank_idx = np.argsort(-p1)  # 내림차순
-K = 30
+rank_idx = np.argsort(-p1)
 
-print(f"\n  === Top {K} 추천 음식 (inference 기준) ===")
+target_map = {
+    1.0: 'Dairy and Egg', 15.0: 'Fish/Shellfish', 9.0: 'Fruits/Juices',
+    11.0: 'Vegetables', 12.0: 'Nuts/Seeds', 16.0: 'Legumes',
+    20.0: 'Cereal/Pasta', 4.0: 'Fats/Oils', 5.0: 'Poultry',
+    6.0: 'Soups/Sauces', 7.0: 'Sausages', 10.0: 'Pork',
+    13.0: 'Beef', 18.0: 'Baked', 19.0: 'Sweets', 25.0: 'Restaurant',
+}
+
+print(f"\n  === Top {K} 추천 음식 ===")
 for i, idx in enumerate(rank_idx[:K]):
-    print(f"    {i+1:2d}. {fnames_valid[idx]:<55s} score={p1[idx]:.4f}  type={Y_valid[idx]}")
+    print(f"    {i+1:2d}. {fnames[idx]:<55s} score={p1[idx]:.4f}  "
+          f"{target_map.get(Y[idx], Y[idx])}")
 
 print(f"\n  === 비추천 음식 (하위 {K}개) ===")
 for i, idx in enumerate(rank_idx[-K:]):
-    print(f"    {n1-K+i+1:2d}. {fnames_valid[idx]:<55s} score={p1[idx]:.4f}  type={Y_valid[idx]}")
+    print(f"    {n1-K+i+1:2d}. {fnames[idx]:<55s} score={p1[idx]:.4f}  "
+          f"{target_map.get(Y[idx], Y[idx])}")
+
+def RMSE(a, b): return math.sqrt(np.mean((a - b) ** 2))
+def MAE(a, b):  return np.mean(np.abs(a - b))
+
+print(f"\n  Evaluation (논문에 없는 부가 지표):")
+print(f"    Inference vs Fecal:  RMSE={RMSE(p1,p2):.4f}, MAE={MAE(p1,p2):.4f}")
+print(f"    Inference vs Type1:  RMSE={RMSE(p1,p3):.4f}, MAE={MAE(p1,p3):.4f}")
+print(f"    Inference vs Type2:  RMSE={RMSE(p1,p4):.4f}, MAE={MAE(p1,p4):.4f}")
 
 # ============================================================
-# RMSE / MAE (sources 간 비교)
+# 시각화
 # ============================================================
-print("\n[6/7] Evaluation metrics...")
-
-def RMSE(a, b):
-    return math.sqrt(np.mean((a - b) ** 2))
-
-def MAE(a, b):
-    return np.mean(np.abs(a - b))
-
-print(f"  Inference vs Fecal:  RMSE={RMSE(p1,p2):.4f}, MAE={MAE(p1,p2):.4f}")
-print(f"  Inference vs Type1:  RMSE={RMSE(p1,p3):.4f}, MAE={MAE(p1,p3):.4f}")
-print(f"  Inference vs Type2:  RMSE={RMSE(p1,p4):.4f}, MAE={MAE(p1,p4):.4f}")
-
-# ============================================================
-# Visualization
-# ============================================================
-print("\n[7/7] 시각화...")
-
-# --- (a) PCA variance plot (논문 Fig.4a) ---
-pca = PCA()
-pca.fit(X)
-cum_var = np.cumsum(pca.explained_variance_ratio_)
+print("\n[6/6] 시각화...")
 
 fig, axes = plt.subplots(1, 3, figsize=(24, 7))
 
+# (a) PCA — 논문 Fig.4(a). 점수 계산 경로에는 쓰이지 않고 진단용.
+pca = PCA()
+pca.fit(Xn)
+cum_var = np.cumsum(pca.explained_variance_ratio_)
+n80 = int(np.argmax(cum_var >= 0.8) + 1)
+m = min(20, len(cum_var))
 ax = axes[0]
-ax.bar(range(1, len(cum_var)+1), pca.explained_variance_ratio_, 
-       alpha=0.6, label='individual explained variance')
-ax.plot(range(1, len(cum_var)+1), cum_var, 'r-o', label='cumulative explained variance')
-ax.set_xlabel('Principal components', fontsize=14)
-ax.set_ylabel('Explained variance ratio', fontsize=14)
-ax.set_title('(a) PCA Result', fontsize=16, fontweight='bold')
-ax.legend(fontsize=11)
-ax.set_xlim(0, min(20, len(cum_var)+1))
+ax.bar(range(1, m+1), pca.explained_variance_ratio_[:m], alpha=0.6, label='individual')
+ax.plot(range(1, m+1), cum_var[:m], 'r-o', label='cumulative')
+ax.axhline(0.8, color='k', ls='--', alpha=0.5)
+ax.axvline(n80, color='g', ls='--', alpha=0.5, label=f'80% @ {n80} comp')
+ax.set_xlabel('Principal components'); ax.set_ylabel('Explained variance ratio')
+ax.set_title('(a) PCA (diagnostic only, not used in scoring)', fontweight='bold')
+ax.legend()
+print(f"  PCA 80% 도달: {n80} components (논문: 5)")
 
-# PCA 5차원으로 축소 (논문: 80% variance 기준)
-n_pca = np.argmax(cum_var >= 0.8) + 1
-print(f"  PCA: {n_pca} components for 80% variance (cum={cum_var[n_pca-1]:.3f})")
-
-X_pca = PCA(n_components=max(n_pca, 5)).fit_transform(X)
-
-# --- (b) T-SNE visualization (논문 Fig.4b) ---
-# Top K를 recommended(circle), 나머지를 not-recommended(triangle)로 표시
-top_set = set(rank_idx[:K])
-
-tsne = TSNE(n_components=2, learning_rate=100, init='pca', random_state=42)
-X_tsne = tsne.fit_transform(X_pca)
-
-target_map = {
-    1.0: 'Dairy and Egg Products',
-    15.0: 'Finfish and Shellfish Products',
-    9.0: 'Fruits and Fruit Juices',
-    11.0: 'Vegetables and Vegetable Products',
-    12.0: 'Nut and Seed Products',
-    16.0: 'Legumes and Legume Products',
-    20.0: 'Cereal Grains and Pasta',
-    2.0: 'Spices and Herbs',
-    4.0: 'Fats and Oils',
-    5.0: 'Poultry Products',
-    6.0: 'Soups, Sauces, and Gravies',
-    7.0: 'Sausages and Luncheon Meats',
-    10.0: 'Pork Products',
-    13.0: 'Beef Products',
-    18.0: 'Baked Products',
-    19.0: 'Sweets',
-    25.0: 'Restaurant Foods',
-}
-
+# (b) T-SNE — 공식 tsne(): init='pca', learning_rate=100
 ax = axes[1]
-unique_types = sorted(set(Y_valid))
-colors = {t: cm.rainbow(int(255 / max(len(unique_types), 1)) * i) 
-          for i, t in enumerate(unique_types)}
-
-for t in unique_types:
+X_tsne = TSNE(n_components=2, learning_rate=100, init='pca',
+              random_state=42).fit_transform(Xn)
+top_set = set(rank_idx[:K].tolist())
+uniq = sorted(set(Y))
+for t in uniq:
+    color = cm.rainbow(int(255 / max(len(uniq), 1)) * uniq.index(t))
     label = target_map.get(t, f'Type {t}')
-    # recommended (circles)
-    mask_rec = [(Y_valid[j] == t and j in top_set) for j in range(n1)]
-    mask_not = [(Y_valid[j] == t and j not in top_set) for j in range(n1)]
-    
-    rec_pts = X_tsne[mask_rec]
-    not_pts = X_tsne[mask_not]
-    
-    if len(rec_pts) > 0:
-        ax.scatter(rec_pts[:, 0], rec_pts[:, 1], c=[colors[t]], 
-                  marker='o', s=80, label=label)
-    if len(not_pts) > 0:
-        ax.scatter(not_pts[:, 0], not_pts[:, 1], c=[colors[t]], 
-                  marker='^', s=50, alpha=0.5)
-        if len(rec_pts) == 0:
-            ax.scatter([], [], c=[colors[t]], marker='^', label=label)
+    rec = [j for j in range(n1) if Y[j] == t and j in top_set]
+    nrec = [j for j in range(n1) if Y[j] == t and j not in top_set]
+    if rec:
+        ax.scatter(X_tsne[rec, 0], X_tsne[rec, 1], c=[color], marker='o', s=80, label=label)
+    if nrec:
+        ax.scatter(X_tsne[nrec, 0], X_tsne[nrec, 1], c=[color], marker='^', s=50, alpha=0.4)
+        if not rec:
+            ax.scatter([], [], c=[color], marker='^', label=label)
+ax.set_title('(b) T-SNE (raw compound space)', fontweight='bold')
+ax.legend(bbox_to_anchor=(1.05, 0), loc='lower left', fontsize=7)
 
-ax.set_title('(b) T-SNE: Categories of food on nutrition recommendation', 
-             fontsize=14, fontweight='bold')
-ax.legend(bbox_to_anchor=(1.05, 0), loc='lower left', fontsize=8)
-
-# --- (c) Depression Nutrition Pyramid ---
+# (c) 카테고리 분포
 ax = axes[2]
-
-# 3단계 피라미드
-rec_foods = [fnames_valid[i] for i in rank_idx[:K]]
-mid_foods = [fnames_valid[i] for i in rank_idx[K:K*2]]
-not_foods = [fnames_valid[i] for i in rank_idx[-K:]]
-
-rec_types = [Y_valid[i] for i in rank_idx[:K]]
-mid_types = [Y_valid[i] for i in rank_idx[K:K*2]]
-not_types = [Y_valid[i] for i in rank_idx[-K:]]
-
-from collections import Counter
-rec_cat = Counter(rec_types)
-mid_cat = Counter(mid_types)
-not_cat = Counter(not_types)
-
-# 피라미드 시각화
-pyramid_data = [
-    ('Not Recommended\n(Top tier)', not_cat, '#ff6b6b'),
-    ('General Foods\n(Middle tier)', mid_cat, '#ffd93d'),
-    ('Recommended\n(Bottom tier)', rec_cat, '#6bcb77'),
-]
-
-y_pos = 0
-for label, cat_counter, color in pyramid_data:
-    cats = [target_map.get(t, f'Type {t}') for t in cat_counter.keys()]
-    counts = list(cat_counter.values())
-    total = sum(counts)
-    
-    width = total / K * 0.8
-    ax.barh(y_pos, width, height=0.8, color=color, edgecolor='white')
-    
-    cat_str = ', '.join([f"{target_map.get(t, '?')}({c})" 
-                         for t, c in sorted(cat_counter.items(), key=lambda x: -x[1])[:3]])
-    ax.text(width + 0.02, y_pos, cat_str, va='center', fontsize=7)
-    ax.text(-0.05, y_pos, label, va='center', ha='right', fontsize=9, fontweight='bold')
-    y_pos += 1
-
-ax.set_xlim(-0.1, 1.5)
-ax.set_title('(c) Depression Nutrition Pyramid', fontsize=14, fontweight='bold')
-ax.axis('off')
+rec_c = Counter(Y[i] for i in rank_idx[:K])
+not_c = Counter(Y[i] for i in rank_idx[-K:])
+cats = sorted(set(rec_c) | set(not_c))
+xp = np.arange(len(cats))
+ax.barh(xp + 0.2, [rec_c.get(c, 0) for c in cats], 0.4, color='#6bcb77', label='Recommended')
+ax.barh(xp - 0.2, [not_c.get(c, 0) for c in cats], 0.4, color='#ff6b6b', label='Not recommended')
+ax.set_yticks(xp)
+ax.set_yticklabels([target_map.get(c, '?')[:12] for c in cats], fontsize=8)
+ax.set_title('(c) Category Distribution', fontweight='bold')
+ax.legend()
 
 plt.tight_layout()
-fig_path = os.path.join(OUT_DIR, 'recommendation_results.png')
+fig_path = os.path.join(OUT_DIR, 'recommendation_results_official.png')
 plt.savefig(fig_path, dpi=150, bbox_inches='tight')
 print(f"  저장: {fig_path}")
 
 # ============================================================
 # 요약
 # ============================================================
-print("\n" + "=" * 60)
-print("✅ Step 2 완료: 추천 결과")
-print("=" * 60)
+print(f"\n{'='*60}")
+print(f"✅ 완료 (E_MODE={E_MODE})")
+print(f"{'='*60}")
 
-rec_type_names = [target_map.get(Y_valid[i], '?') for i in rank_idx[:K]]
-not_type_names = [target_map.get(Y_valid[i], '?') for i in rank_idx[-K:]]
+rec_names = Counter(target_map.get(Y[i], '?') for i in rank_idx[:K])
+not_names = Counter(target_map.get(Y[i], '?') for i in rank_idx[-K:])
 
 print(f"\n  추천 식품 카테고리 분포 (Top {K}):")
-for cat, cnt in Counter(rec_type_names).most_common():
-    print(f"    {cat}: {cnt}")
-
+for c, n in rec_names.most_common():
+    print(f"    {c}: {n}")
 print(f"\n  비추천 식품 카테고리 분포 (Bottom {K}):")
-for cat, cnt in Counter(not_type_names).most_common():
-    print(f"    {cat}: {cnt}")
+for c, n in not_names.most_common():
+    print(f"    {c}: {n}")
 
-print(f"""
-  논문 기대 결과 vs 재현:
-  ─────────────────────────────────────────
-  추천:  과일/채소/주스가 상위 → {'✅' if 'Fruit' in str(rec_type_names) or 'Vegetable' in str(rec_type_names) else '❌'}
-  비추천: 소시지/베이커리/스위트 상위 → {'✅' if 'Sausage' in str(not_type_names) or 'Beef' in str(not_type_names) else '❌'}
-""")
+paper_rec = {'Vegetables', 'Fruits/Juices', 'Fish/Shellfish'}
+paper_not = {'Sausages', 'Baked', 'Sweets', 'Beef'}
+print(f"\n  논문 대비:")
+print(f"    추천 일치:   {paper_rec & set(rec_names)}")
+print(f"    추천 누락:   {paper_rec - set(rec_names)}")
+print(f"    비추천 일치: {paper_not & set(not_names)}")
+print(f"    비추천 누락: {paper_not - set(not_names)}")
