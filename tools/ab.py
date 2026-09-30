@@ -13,6 +13,8 @@
     python3 tools/ab.py merge       라벨 병합 on-off  (reconstruct 부터 재실행)
     python3 tools/ab.py margin      ProMENDA 다수결 마진 (구 tune_margin.py)
     python3 tools/ab.py units       단위 환산 g vs 원단위 (reconstruct 부터 재실행)
+    python3 tools/ab.py polarity    ProMENDA 극성 규약 legacy vs paper (PROBLEMS §7)
+                                    소스별(infer/faecal/type1/type2) 결과도 함께 출력
     python3 tools/ab.py all
 
 끝나면 기본 설정으로 파이프라인을 다시 돌려 analyse/ 를 원상태로 돌린다.
@@ -24,10 +26,14 @@ margin 은 gold(독립 기준)로 고른다. p5 순위나 카테고리로 고르
     top30_rec / cat_rec       카테고리 지표. 상위30에 과일 1개만 있어도 만점이라
                               약하다. 과거 보고가 이 지표에 기대 과대평가되었다.
     gold                      논문이 부호를 명시한 9종 (독립 기준)
+    claims                    논문 주장 C1~C6 통과 수 (tools/paper.py claims)
 """
 import sys
 
+import numpy as np
+
 import core
+import paper
 
 RECON = ('reconstruct.py', 'knowledge_query.py', 'map_promenda.py')
 
@@ -67,7 +73,12 @@ CASES = {
         ('g 환산 (현재)', dict(UNIT_MODE='grams')),
         ('원단위',        dict(UNIT_MODE='raw')),
     ],
+    'polarity': [
+        ('paper (현재)', dict(PROMENDA_POLARITY='paper')),
+        ('legacy',       dict(PROMENDA_POLARITY='legacy')),
+    ],
 }
+SOURCES = ('infer', 'faecal', 'type1', 'type2')
 RESTART_FROM_RECON = {'merge', 'units'}
 
 
@@ -77,11 +88,34 @@ def run(kind):
     for label, env in CASES[kind]:
         core.run_steps(env, steps) if steps else core.run_steps(env)
         d = core.Data.load()
-        m = core.metrics(d, d.score())
-        extra = (f'top30_rec={m["top30_rec"]:2d}  '
-                 f'cat={m["cat_rec"]},{m["cat_not"]}')
-        print(f'  {core.fmt(m, label, 24)}  {extra}')
+        p = d.score()
+        m = core.metrics(d, p)
+        nc = sum(v[1] for v in
+                 paper.evaluate_claims(p, d, paper._groups(d.cols)).values())
+        print(f'  {core.fmt(m, label, 24)}  claims={nc}/6')
+        if kind == 'polarity':
+            _per_source(d)
     print()
+
+
+def _per_source(d):
+    """weight.csv 4소스를 각각 E 로 썼을 때. 순위 비교는 참고, gold 가 독립 기준."""
+    idx, rank, _, ptop, pbot = core.paper_ranking(d.names)
+    for i, name in enumerate(SOURCES):
+        E = d.w.values[2 * i] - d.w.values[2 * i + 1]
+        p = d.score(E)
+        rho = core.stats.spearmanr(-p[idx], rank).statistic
+        order = np.argsort(-p)
+        t = len({d.names[j] for j in order[:core.K]} & ptop)
+        b = len({d.names[j] for j in order[-core.K:]} & pbot)
+        ok = n = 0
+        for j, c in enumerate(d.cols):
+            if c in core.gold.GOLD and E[j] != 0:
+                n += 1
+                ok += np.sign(E[j]) == (1 if core.gold.GOLD[c][0] == '+' else -1)
+        print(f'      {name:7s} Spearman={rho:+.3f}  Top30={t:2d}  Bot30={b:2d}  '
+              f'gold(E≠0 중)={ok}/{n}  '
+              f'+{int((E > 0).sum())}/-{int((E < 0).sum())}/0={int((E == 0).sum())}')
 
 
 if __name__ == '__main__':

@@ -85,6 +85,6 @@ print(f'  추천 순위: {"우연 수준을 넘는다" if beats else "우연 수
       f'(Top30 {m["top_overlap"]}/30, Bot30 {m["bot_overlap"]}/30, '
       f'Spearman {m["spearman"]:+.3f})')
 print(f'  논문 주장: {n_claims}/{len(cl)} 통과')
-print('  남은 병목: E. 논문 순위가 함의하는 E 와 공개 소스 E 의 부호 일치가')
-print('             우연 수준이다 (REPRODUCTION.md §16.3). 논문의 weight.csv 는')
-print('             배포되지 않았다.')
+print('  남은 격차: 논문의 E 는 weight.csv 가 배포되지 않아 확정할 수 없다.')
+print('             순위의 상당 부분은 식물/동물 1비트(+0.695)로도 설명된다')
+print('             (REPRODUCTION.md §16.6).')

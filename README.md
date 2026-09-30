@@ -27,6 +27,8 @@
 - **성분 단위:** 저자는 모든 성분을 g 으로 환산했다(heatmap 에서 계수 MG 10^-3, UG 10^-6 역산).
   이것을 빠뜨리면 F 가 논문과 전혀 다르다 (REPRODUCTION §16.1).
 - **85 compound 목록:** `heatmap.xlsx` 의 열에서 추출했다.
+- **ProMENDA 극성:** 논문 §4.2.1 규약("우울증에서 높으면 +1")을 연구 설계에 맞게 적용한다.
+  이전에는 step2 와 step3 가 서로 반대 규약을 썼다 (PROBLEMS §7).
 
 ### 최종 재현 상태 (2026-09-29, `python3 tools/scorecard.py`)
 
@@ -37,18 +39,22 @@
 | 성분 행렬 F vs 논문 heatmap | 행 코사인 0.981 | — | ✅ |
 | 측정 밀도 (compound 수 중앙값) | 28 | 33 | ⚠️ FDC 판 차이 |
 | PCA 80% 도달 성분 수 (§4.2.1) | 5 | 5 | ✅ |
-| E 방향 확보 | 67 / 85 | 85 | ⚠️ |
+| E 방향 확보 | 69 / 85 | 85 | ⚠️ |
 | 논문이 부호를 명시한 compound (gold) | 8 / 9 | 9 | ✅ |
-| **추천 순위 Top30 겹침** (우연 6.7) | **15 / 30** | 30 | ⚠️ |
-| **추천 순위 Bottom30 겹침** (우연 6.7) | **3 / 30** | 30 | ❌ |
-| 순위 Spearman | +0.108 | 1.0 | ⚠️ |
-| 논문 주장 6개 (§4.2.3, Fig. 4·5) | 1 / 6 | 논문 순위 자신 4 / 6 | ❌ |
+| **추천 순위 Top30 겹침** (우연 6.7) | **18 / 30** | 30 | ✅ |
+| **추천 순위 Bottom30 겹침** (우연 6.7) | **15 / 30** | 30 | ✅ |
+| 순위 Spearman | **+0.786** | 1.0 | ✅ |
+| 논문 주장 6개 (§4.2.3, Fig. 4·5) | 3 / 6 | 논문 순위 자신 4 / 6 | ⚠️ |
 | §5.1 문헌 검증 (Table 5) | 11 / 15 | 11 / 15 | ✅ |
 | §5.1 전문가 20문항 | — | — | 설계상 재현 불가 |
 
-**부분 재현이다.** 데이터와 알고리즘 구조는 재현됐다. 논문 자신의 F 로는 선형 E 모델이
-논문 순위를 held-out Spearman 0.91 로 설명한다. 남은 격차는 E 하나다. 논문 순위가
-함의하는 E 와 공개 소스로 만든 E 의 부호 일치가 우연 수준(30/55)이다.
+**대체로 재현됐다.** 데이터와 알고리즘 구조가 재현됐고, 추천 순위는 Spearman +0.786
+으로 추천·비추천 양쪽 모두 우연 수준을 크게 넘는다. 우리 Top30 과 논문 Bottom30 이
+겹치는 음식은 0개다. 남은 격차는 E 다. 논문의 `weight.csv` 가 없어 E 를 확정할 수 없고,
+논문 순위가 함의하는 E 와의 부호 일치는 38/57 이다.
+
+> 주의: 이 순위는 식물/동물 1비트 규칙(Spearman +0.695)으로도 상당 부분 설명된다.
+> 85 compound 모델이 그 위에 더하는 정보는 +0.09 정도다.
 
 ---
 
@@ -130,8 +136,12 @@ pip install pandas numpy scipy scikit-learn matplotlib openpyxl
 
 ```bash
 cd Food4healthKG && unzip foodkg_triply.zip -d ../foodkg_triply && cd ..
+cp Food4healthKG/analyse/p5_foodname.txt analyse/  # 논문 순위. 라이선스가 없어 이 repo 에는 넣지 않았다
 python3 setup/rebuild_food_nutrient.py fdc_raw    # → food_nutrient.csv
 ```
+
+`analyse/` 에 들어 있는 csv·png 는 2026-09-29 기본 설정으로 파이프라인을 돌린 산출물이다.
+다시 돌리면 덮어쓴다.
 
 ### 방법 A: 한 번에 실행 (권장)
 
@@ -200,6 +210,8 @@ weight.csv 의 infer 행만 쓴다. 근거별 크기는 `kegg_alias.INFER_SCALE`
 
 ### Step 3: `map_promenda.py`
 ProMENDA 로 E 를 보강하고 weight.csv 의 4소스를 만든다.
+- **극성:** 논문 §4.2.1 규약. Type1(우울증 vs 대조군)의 up 을 +1, Type2~5(치료·반응 비교)의
+  up 을 −1 로 본다 (`PROMENDA_POLARITY=paper`, 기본). `legacy` 는 모든 Type 에서 up = −1.
 - **infer 행:** step2 가 비워 둔 자리와 근거가 약한 자리만 ProMENDA 전체 다수결로 채운다
   (마진 0.10, study ≥ 2).
 - **faecal / type1 / type2 행:** ProMENDA 의 Faece / Type1 / Type2 부분집합에서 각각
@@ -222,51 +234,59 @@ ProMENDA 로 E 를 보강하고 weight.csv 의 4소스를 만든다.
 
 ### Top 10 추천 (전체 30개는 `logs/*_step4_recommendation.txt`)
 
-| 순위 | 음식 | 카테고리 |
-|------|------|----------|
-| 1 | Pollock, raw | 어류 |
-| 2 | Ketchup | 소스 |
-| 3 | Greek yogurt, non-fat | 유제품 |
-| 4 | Apples, red delicious | 과일 |
-| 5 | Mission Figs, Dried | 과일 |
-| 6 | Beans, snap, canned | 채소 |
-| 7 | Melons, cantaloupe | 과일 |
-| 8 | Onions, white | 채소 |
-| 9 | Bananas, overripe | 과일 |
-| 10 | Beef, top round roast | 소고기 |
+| 순위 | 음식 | 카테고리 | 논문 순위 |
+|------|------|----------|-----------|
+| 1–3 | Flour (bread / all-purpose / corn), enriched | 곡물 | 46 / 43 / 25 — ⚠️ 점수 발산 (아래) |
+| 4 | Ketchup | 소스 | |
+| 5 | Melons, cantaloupe | 과일 | |
+| 6 | Apples, red delicious | 과일 | |
+| 7 | Mission Figs, Dried | 과일 | |
+| 8 | Beans, snap, canned | 채소 | |
+| 9 | Onions, white | 채소 | |
+| 10 | Bananas, overripe | 과일 | |
 
 ### Bottom 10 비추천
 
 | 순위 | 음식 | 카테고리 |
 |------|------|----------|
-| 125 | Peaches | 과일 |
-| 126 | Beef, porterhouse steak | 소고기 |
-| 127–131 | Flour (pastry / rice ×3 / whole wheat) | 곡물 |
-| 132–134 | Flour (corn / all-purpose / bread) | 곡물 — 점수가 −20 ~ −43 으로 튄다 (원인 미조사) |
+| 125 | Beef, Porterhouse Steak | 소고기 |
+| 126–131 | Cheddar / Swiss cheese (6종) | 유제품 |
+| 132 | Tuna, canned in water | 어류 |
+| 133 | Butter, unsalted | 유제품 |
+| 134 | Coconut oil | 유지 |
 
 ### 카테고리 분포
 
 | 카테고리 | Top 30 | Bottom 30 | 논문 (Fig. 5) |
 |----------|--------|-----------|---------------|
-| 채소 | 5 | 3 | 추천 |
-| 과일 | 4 | **8** | 추천 ❌ |
+| 채소 | 8 | 0 | 추천 ✅ |
+| 과일 | 4 | 0 | 추천 ✅ |
 | 소스 | 5 | 0 | 중간 |
-| 유제품·계란 | 4 | 5 | 중간 |
-| 가금류 | 5 | 2 | — |
-| 어류 | 1 | 1 | 중간 (§4.2.3 본문은 추천) |
-| 소고기 | 2 | 1 | 비추천 ❌ |
+| 유제품·계란 | 5 | 12 | 중간 |
+| 소고기 | 0 | 6 | 비추천 ✅ |
+| 소시지 | 0 | 4 | 비추천 ✅ |
+| 가금류 | 0 | 4 | — |
+| 유지 | 0 | 3 | 중간 |
+| 어류 | 0 | 1 | 중간 (§4.2.3 본문은 추천) |
 | 설탕 | 2 | 0 | 비추천 ❌ |
-| 곡물 | 0 | 8 | — |
+| 빵류 | 2 | 0 | 비추천 ❌ |
+| 곡물 | 3 | 0 | — (점수 발산 3종) |
 
 ### 논문 순위(p5)와의 대조
 
 | 지표 | 값 | 우연 기대값 |
 |------|-----|------------|
-| Top30 겹침 | 15 / 30 | 6.7 |
-| Bottom30 겹침 | 3 / 30 | 6.7 |
-| Spearman | +0.108 | 0 |
-| NDCG@30 | 0.745 | — |
+| Top30 겹침 | 18 / 30 | 6.7 |
+| Bottom30 겹침 | 15 / 30 | 6.7 |
+| Spearman | +0.786 | 0 |
+| NDCG@30 | 0.875 | — |
+| 우리 Top30 ∩ 논문 Bottom30 | 0 | — |
+| 우리 Bottom30 ∩ 논문 Top30 | 0 | — |
 
+> **점수 발산 3종.** 밀가루 3종은 측정 성분이 3개뿐이라 유사도 열 합 `colsum(S)` 가
+> 0.03 수준이다(전체 중앙값 22). 공식 `final.py` 의 `p = u·S / colsum(S)` 에서 분모가 0 에
+> 가까워 점수가 103, 99, 50 으로 튄다. 공식 코드의 성질이라 재현에서는 그대로 둔다.
+>
 > **카테고리 분포로 판정하지 말 것.** "상위 30 에 과일이 있는가" 같은 지표는 과일이
 > 1개만 있어도 만점이라 실패를 가린다. p5 순위 겹침과 논문 주장 검정으로 본다.
 
@@ -277,34 +297,33 @@ ProMENDA 로 E 를 보강하고 weight.csv 의 4소스를 만든다.
 ### 일치
 - 성분 행렬 F: 논문 heatmap 과 행 코사인 0.981 (g 환산 후)
 - PCA 5성분 (§4.2.1), gold 8/9, Table 5 문헌 검증 11/15
-- 추천 쪽 순위: Top30 15/30 (우연의 2배 이상), 양파·사과·멜론·바나나 상위
+- 추천 순위: Spearman +0.786, Top30 18/30, Bottom30 15/30. 양쪽 끝이 뒤바뀐 음식 0개
+- 채소·과일 추천, 소고기·소시지 비추천 (Fig. 5)
+- 논문 주장: 추천 카테고리(C1a), 피라미드 순서(C2), 성분 공간 분리(C5)
 
 ### 불일치
 
 | 차이점 | 원인 |
 |--------|------|
-| 비추천 쪽 순위가 우연 수준 (Bot30 3/30) | E 가 논문과 다르다. 논문 순위가 함의하는 E 와 부호 일치 30/55 (REPRODUCTION §16.3) |
-| 과일이 비추천에 8개 | 위와 같음. 과일 주요 성분의 방향이 논문과 다르다 |
-| 소고기·설탕이 추천 상위 | 위와 같음 |
-| 논문 주장 1/6 | 위와 같음. 논문 순위 자신은 4/6 이다 |
-| E 방향 18종 미확보 | 미네랄 10종은 대사체 DB 가 원소를 측정하지 않는다. 논문이 어디서 얻었는지 기술이 없다 |
+| 밀가루 3종이 1~3위 | 공식 점수식의 분모 발산 (§6) |
+| 설탕·흰빵이 추천 30 에 | E 가 논문과 다르다. 당류는 논문 Fig. 5 가 `+` 로 명시했다 |
+| 유제품이 비추천에 12개 | Fig. 5 는 중간층. 지질(치즈·버터)의 − 가 강하게 작용 |
+| 논문 주장 C1b·C3·C6 실패 | C1b 는 설탕·빵이 비추천이 아니어서. C3·C6 은 논문 순위 자신도 실패 |
+| gold 1개 불일치 | Pantothenic acid(Table 4, 복숭아) 가 `−`. ProMENDA Type1 이 `−` 를 지지 |
+| E 방향 16종 미확보 | 미네랄 10종은 대사체 DB 가 원소를 측정하지 않는다. 논문이 어디서 얻었는지 기술이 없다 |
 
 ### 근본 원인
-**논문의 E 는 공개 자료에서 나오지 않는다.** MENDA 원본에 16개 집계 규칙을 적용해도
-논문이 부호를 명시한 12종 중 최고 8종만 맞는다 (REPRODUCTION §14). 논문에 기술되지 않은
-별도 큐레이션으로 보이며, `final.py` 가 읽는 `weight.csv` 가 배포되지 않았다.
+**논문의 E 는 공개 자료에서 그대로 나오지 않는다.** MENDA 원본에 16개 집계 규칙을 적용해도
+논문이 부호를 명시한 12종 중 최고 8종만 맞는다 (REPRODUCTION §14). `final.py` 가 읽는
+`weight.csv` 가 배포되지 않았다.
 
 ### 논문 자체의 결함 (재현 중 확인)
 - §4.2 수식(Eq. 1 분모, Eq. 2 첨자)이 조판 오류. 그대로 구현하면 16조합 중 꼴찌
-- 단위 환산을 적지 않음
+- 단위 환산과 ProMENDA 극성 처리를 적지 않음
 - Table 3/4 의 Glutamic acid·L-Threonine·Choline 이 Fig. 4(c) 85종 목록에 없음
 - §4.2.3 본문과 Fig. 5 가 어류 위치에서 모순
 - §4.2.3 의 성분 차이 서술이 논문 자신의 heatmap 과 어긋남 (미량원소·다량영양소)
 - `final.py` 입력 4개와 `metabolite_bacteria.xlsx` 누락, `food_nutrient.csv` 절단
-
-### 결정 대기
-ProMENDA 극성 규약이 step2(Up = +1)와 step3(up = −1)에서 반대다. 논문 규약을 연구 유형에
-맞게 적용하면 type1·type2 소스가 gold 4/5 와 논문 순위를 동시에 지지한다 (PROBLEMS §7).
 
 ---
 
@@ -364,7 +383,7 @@ ProMENDA 극성 규약이 step2(Up = +1)와 step3(up = −1)에서 반대다. �
 |------|-----------|
 | `scorecard.py` | 재현 집계 — 먼저 볼 것 |
 | `paper.py` | `units` 단위 역산 · `claims` 논문 주장 검정 · `invert` E 역추정 · `improve` 개선판 |
-| `ab.py` | 설정 A/B: `rules` `fallback` `menda_both` `menda_tiebreak` `study_type` `merge` `margin` `units` |
+| `ab.py` | 설정 A/B: `rules` `fallback` `menda_both` `menda_tiebreak` `study_type` `merge` `margin` `units` `polarity` |
 | `sweep.py` | 수식·부호 스윕: `formula` `sign` `sources` `menda` `promenda` `ceiling` |
 | `diag.py` | 진단: `kg` `signs` `lipids` `unassigned` `data` `food` `menda_jsonld` `menda_orig` `menda_rule` `promenda_types` `supplements` |
 | `repo_only.py` | 논문 repo 배포본만으로 돌린 기준선 |
@@ -382,6 +401,7 @@ ProMENDA 극성 규약이 step2(Up = +1)와 step3(up = −1)에서 반대다. �
 | `knowledge_query.py` `USE_LITERATURE` | `0` | 수동 문헌값 21개 (출처 불명) |
 | `map_promenda.py` `PROMENDA_MARGIN` | `0.10` | gold 로 튜닝 (`tools/ab.py margin`) |
 | `map_promenda.py` `FIX_STUDY_TYPE` | `0` | ProMENDA Type2/4 방향 보정 |
+| `map_promenda.py` `PROMENDA_POLARITY` | `paper` | ProMENDA 극성. 논문 §4.2.1 규약. `legacy` 는 이전 동작 (PROBLEMS §7) |
 | `run_recommendation.py` `E_MODE` | `paper` | `E = pos − neg`. `official` 은 final.py 단일 행 |
 
 ---
@@ -396,7 +416,7 @@ ProMENDA 극성 규약이 step2(Up = +1)와 step3(up = −1)에서 반대다. �
 
 | | 논문 순위 | 우리 | 식물/동물 1비트 |
 |---|---|---|---|
-| 통과 | 4 / 6 | 1 / 6 | 4 / 6 |
+| 통과 | 4 / 6 | 3 / 6 | 4 / 6 |
 
 식물/동물만 보는 1비트 규칙이 논문 순위와 같은 수의 주장을 통과한다.
 논문 순위 자체가 대부분 식물/동물 구분으로 설명된다는 뜻이다.
@@ -408,20 +428,25 @@ ProMENDA 극성 규약이 step2(Up = +1)와 step3(up = −1)에서 반대다. �
 | 논문 F (heatmap) | 0.91 | — |
 | 우리 F | 0.75 | 0.69 |
 
+학습 없이 공개 소스로 만든 현재 E(+0.786)가 논문 순위로 학습한 E(0.75)보다 높다.
+
 **Ablation (`improve`)**
 
-| 변형 | Spearman | Top30 | Bot30 | gold |
-|---|---|---|---|---|
-| R 재현 기준 | +0.108 | 15 | 3 | 8/9 |
-| **V1 E 에 MENDA study 수로 신뢰도 가중** | **+0.466** | 16 | **9** | 8/9 |
-| V2 미생물 경로 있는 compound 만 (Food → Nutrient → Microbiota → Disease) | −0.553 | 0 | 3 | 3/9 |
-| V3 similarity 단계 제거 | +0.067 | 13 | 6 | 8/9 |
+| 변형 | Spearman | Top30 | Bot30 | gold | 주장 |
+|---|---|---|---|---|---|
+| **R 재현 기준** | **+0.786** | 18 | **15** | 8/9 | 3/6 |
+| V1 E 에 MENDA study 수로 신뢰도 가중 | +0.651 | 16 | 12 | 8/9 | 3/6 |
+| V2 미생물 경로 있는 compound 만 (Food → Nutrient → Microbiota → Disease) | +0.683 | 12 | 15 | 2/9 | 3/6 |
+| V3 similarity 단계 제거 | +0.761 | **19** | 12 | 8/9 | **4/6** |
 
-V2 가 무너지는 이유: 공개 KG 에서 미생물 경로가 있는 compound 는 85종 중 8종뿐이다.
-논문이 내세운 gut-brain 경로는 공개 데이터로는 추천 입력의 약 9% 만 뒷받침된다.
+- 극성 규약을 고친 뒤로는 어떤 변형도 재현 기준을 넘지 못한다. V1 은 극성을 고치기 전
+  (+0.108 → +0.466) 에만 효과가 있었다. 신뢰도 가중이 틀린 부호의 영향을 줄여 준 것으로 보인다.
+- V2: 공개 KG 에서 미생물 경로가 있는 compound 는 85종 중 8종뿐이다. 그 8종만으로도
+  Spearman +0.683 이지만 gold 가 2/9 로 무너진다.
+- V3: similarity 단계를 빼도 순위가 거의 같다 (+0.761). Algorithm 1 의 S 단계 기여가 작다.
 
 **외부 기준 (보조)** — Antidepressant Food Score (LaChance & Ramsey 2018) 를 85 compound 로
-근사했다. 논문 순위를 포함해 어떤 순위도 AFS 와 상관이 없다 (|ρ| ≤ 0.13).
+근사했다. 논문 순위를 포함해 어떤 순위도 AFS 와 상관이 없다 (|ρ| ≤ 0.11).
 
 ### 남은 방향
 - **KG embedding** (TransE, RotatE) → food–depression link prediction
@@ -448,8 +473,8 @@ V2 가 무너지는 이유: 공개 KG 에서 미생물 경로가 있는 compound
 
 ## 변경 이력
 
-- **2026-09-29** — 성분 g 환산(Top30 5 → 15), weight.csv 4소스 독립 집계, 논문 기준 검증·개선
-  (`tools/paper.py`), 도구 통합(`tools/` 18 → 8개). 상세와 이전/이후 파일 대응은
-  REPRODUCTION §16 과 §9.
+- **2026-09-29** — 성분 g 환산(Top30 5 → 15), weight.csv 4소스 독립 집계, ProMENDA 극성
+  규약 통일(Spearman +0.108 → +0.786, Bot30 3 → 15), 논문 기준 검증·개선(`tools/paper.py`),
+  도구 통합(`tools/` 18 → 8개). 상세와 이전/이후 파일 대응은 REPRODUCTION §16·§9.
 - 그 이전 — 라벨 병합, FDC 원본 재조립, MENDA 원본 확보, 평가 지표 교체 등.
   REPRODUCTION 각 절에 날짜와 함께 기록.

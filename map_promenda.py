@@ -9,7 +9,7 @@ ProMENDA → Food Compound 매핑
 
 3. 결과: weight.csv 업데이트 (incidence 확장)
 
-의존: add_fatty_acid_kegg.py → reconstruct.py 가 먼저 실행되어
+의존: add_fatty_acid_kegg.py → reconstruct_v2.py 가 먼저 실행되어
        food_nutrient.csv (134 compounds), food.csv, foodname.csv 생성되어야 함
 """
 
@@ -183,8 +183,33 @@ STYPE_SIGN = {'Type1': +1, 'Type2': -1, 'Type3': 0, 'Type4': -1, 'Type5': 0}
 # 진단·비교용으로 FIX_STUDY_TYPE=1 로 켤 수 있다 (tools/ab.py study_type).
 FIX_STUDY_TYPE = os.environ.get('FIX_STUDY_TYPE', '0') == '1'
 
+# ------------------------------------------------------------------
+# 극성 규약 (PROBLEMS.md §7)
+# ------------------------------------------------------------------
+# step2(knowledge_query.py)는 논문 §4.2.1 을 따라 MENDA 의 Up(우울증에서
+# 증가, hasPositiveAssociation)을 +1 로 둔다. 위 parse_regulation() 은 반대로
+# up = -1 이다. 두 단계가 서로 반대 규약을 쓴다.
+#
+#   paper (기본)   논문 규약 "우울증에서 높으면 +1" 을 연구 설계에 맞게 적용한다.
+#                  Type1(우울증 vs 대조군)만 up = +1 로 뒤집는다.
+#                  Type2~5 는 치료·반응 비교라 up 이 '치료로 증가 = 질병에서
+#                  낮음' 이므로 현재 해석(-1)이 이미 논문 규약과 같다.
+#   legacy         모든 Type 에서 up = -1. 2026-09-29 이전 동작.
+#
+# 2026-09-29 기본값을 paper 로 바꿨다. Spearman +0.108 -> +0.786, Bot30 3 -> 15,
+# gold 8/9 유지. 발견 계기가 소스별 순위 비교였다는 점은 PROBLEMS §7 에 기록.
+# 비교: python3 tools/ab.py polarity
+PROMENDA_POLARITY = os.environ.get('PROMENDA_POLARITY', 'paper')
+assert PROMENDA_POLARITY in ('legacy', 'paper'), PROMENDA_POLARITY
+
 if reg_col:
     df_kegg['incidence'] = df_kegg[reg_col].apply(parse_regulation)
+    if PROMENDA_POLARITY == 'paper' and STYPE_COL in df_kegg.columns:
+        is_t1 = df_kegg[STYPE_COL].astype(str) == 'Type1'
+        df_kegg.loc[is_t1, 'incidence'] *= -1
+        print(f"  극성 규약 paper: Type1 {int(is_t1.sum()):,}행 반전 (up = +1)")
+    else:
+        print("  극성 규약 legacy: 모든 Type 에서 up = -1")
     if FIX_STUDY_TYPE and STYPE_COL in df_kegg.columns:
         mult = df_kegg[STYPE_COL].astype(str).map(STYPE_SIGN).fillna(0)
         before = int((df_kegg['incidence'] != 0).sum())
