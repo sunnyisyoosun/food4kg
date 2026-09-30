@@ -1,0 +1,213 @@
+nutrient_id,nutrient_name,nutrient_unit,nutrient_kegg
+2048,Energy (Atwater Specific Factors),KCAL,0
+2047,Energy (Atwater General Factors),KCAL,0
+1003,Protein,G,0
+1007,Ash,G,0
+1062,Energy,kJ,0
+1079,"Fiber, total dietary",G,0
+1089,"Iron, Fe",MG,C00023
+1093,"Sodium, Na",MG,C01330
+1253,Cholesterol,MG,C00187
+1257,"Fatty acids, total trans",G,0
+1258,"Fatty acids, total saturated",G,0
+1004,Total lipid (fat),G,0
+1005,"Carbohydrate, by difference",G,0
+1008,Energy,KCAL,0
+1051,Water,G,0
+2000,"Sugars, total including NLEA",G,0
+1104,"Vitamin A, IU",IU,C00473
+1106,"Vitamin A, RAE",UG,C00473
+1162,"Vitamin C, total ascorbic acid",MG,C00072
+1087,"Calcium, Ca",MG,C00076
+1105,Retinol,UG,C00473
+1177,"Folate, total",UG,C00504
+1265,SFA 16:0,G,C00249
+1268,MUFA 18:1,G,C00712
+1269,PUFA 18:2,G,C01595
+1270,PUFA 18:3,G,C06427
+1292,"Fatty acids, total monounsaturated",G,0
+1293,"Fatty acids, total polyunsaturated",G,0
+1190,"Folate, DFE",UG,C00504
+1166,Riboflavin,MG,C00255
+1178,Vitamin B-12,UG,C05776
+1184,Vitamin K (Dihydrophylloquinone),UG,C01628
+1185,Vitamin K (phylloquinone),UG,C02059
+1187,"Folate, food",UG,C00504
+1210,Tryptophan,G,C00806
+1211,Threonine,G,C00188
+1215,Methionine,G,C01733
+1217,Phenylalanine,G,C02057
+1107,"Carotene, beta",UG,C02094
+1108,"Carotene, alpha",UG,C05433
+1120,"Cryptoxanthin, beta",UG,C08591
+1122,Lycopene,UG,C05432
+1127,"Tocopherol, delta",MG,C14151
+1130,"Tocotrienol, gamma",MG,C14155
+1131,"Tocotrienol, delta",MG,C14156
+1165,Thiamin,MG,C00378
+1009,Starch,G,C00369
+1012,Fructose,G,C01496
+1013,Lactose,G,C00243
+1018,"Alcohol, ethyl",G,C00469
+1075,Galactose,G,C01582
+1090,"Magnesium, Mg",MG,C00305
+1091,"Phosphorus, P",MG,C06262
+1098,"Copper, Cu",MG,C00070
+1101,"Manganese, Mn",MG,C00034
+1261,SFA 8:0,G,C06423
+1263,SFA 12:0,G,C02679
+1264,SFA 14:0,G,C06424
+1272,PUFA 22:6 n-3 (DHA),G,C06429
+1273,SFA 22:0,G,C08281
+1274,MUFA 14:1,G,C08322
+1275,MUFA 16:1,G,C08362
+1278,PUFA 2:5 n-3 (EPA),G,C06428
+1280,PUFA 22:5 n-3 (DPA),G,C16513
+1300,SFA 17:0,G,C16535
+1323,MUFA 17:1,G,C16534
+1333,MUFA 15:1,G,C16536
+1218,Tyrosine,G,C01536
+1222,Alanine,G,C01401
+1224,Glutamic acid,G,C00025
+1225,Glycine,G,C00037
+1226,Proline,G,C16435
+1246,"Vitamin B-12, added",UG,C05776
+1299,SFA 15:0,G,C16537
+1313,"PUFA 20:2 n-6 c,c",G,C16525
+1321,"PUFA 18:3 n-6 c,c,c",G,C06426
+1325,PUFA 20:3,G,C03242
+1219,Valine,G,C16436
+1220,Arginine,G,C02385
+1221,Histidine,G,C00768
+1223,Aspartic acid,G,C16433
+1227,Serine,G,C00716
+1242,"Vitamin E, added",MG,C02477
+1259,SFA 4:0,G,C00246
+1260,SFA 6:0,G,C01585
+1262,SFA 10:0,G,C01571
+1266,SFA 18:0,G,C01530
+1267,SFA 20:0,G,C06425
+1271,PUFA 20:4,G,C00219
+1276,PUFA 18:4,G,C16300
+1277,MUFA 20:1,G,C16526
+1279,MUFA 22:1,G,C08316
+1010,Sucrose,G,C00089
+1011,Glucose,G,C00031
+1014,Maltose,G,C00208
+1057,Caffeine,MG,C07481
+1058,Theobromine,MG,C07480
+1092,"Potassium, K",MG,C00238
+1095,"Zinc, Zn",MG,C00038
+1103,"Selenium, Se",UG,C01529
+1109,Vitamin E (alpha-tocopherol),MG,C02477
+1123,Lutein + zeaxanthin,UG,C06098
+1125,"Tocopherol, beta",MG,C14152
+1126,"Tocopherol, gamma",MG,C02483
+1128,"Tocotrienol, alpha",MG,C14153
+1129,"Tocotrienol, beta",MG,C14154
+1167,Niacin,MG,C00253
+1170,Pantothenic acid,MG,C00864
+1175,Vitamin B-6,MG,0
+1186,Folic acid,UG,C00504
+1212,Isoleucine,G,C16434
+1213,Leucine,G,C16439
+1214,Lysine,G,C00047
+1216,Cystine,G,C01420
+1110,"Vitamin D (D2 + D3), International Units",IU,0
+1180,"Choline, total",MG,C00114
+1114,Vitamin D (D2 + D3),UG,0
+1198,Betaine,MG,C00719
+1314,MUFA 16:1 c,G,C08362
+1183,Vitamin K (Menaquinone-4),UG,C00828
+1411,PUFA 22:4,G,C16527
+1301,SFA 24:0,G,C08320
+1312,MUFA 24:1 c,G,C08323
+1410,PUFA 21:5,G,C16513
+1228,Hydroxyproline,G,C01157
+1404,"PUFA 18:3 n-3 c,c,c (ALA)",G,C06427
+1329,"Fatty acids, total trans-monoenoic",G,0
+1304,TFA 18:1 t,G,C01712
+1310,"TFA 18:2 t,t",G,C01595
+1331,"Fatty acids, total trans-polyenoic",G,0
+1406,PUFA 20:3 n-6,G,C03242
+1305,TFA 22:1 t,G,C08316
+1306,TFA 18:2 t not further defined,G,C01595
+1311,PUFA 18:2 CLAs,G,C04056
+1303,TFA 16:1 t,G,0
+1315,MUFA 18:1 c,G,C00712
+1316,"PUFA 18:2 n-6 c,c",G,C01595
+1317,MUFA 22:1 c,G,C08316
+1405,PUFA 20:3 n-3,G,C03242
+1099,"Fluoride, F",UG,C00742
+1112,Vitamin D3 (cholecalciferol),UG,C05443
+1288,Beta-sitosterol,MG,C01753
+1286,Campesterol,MG,C01789
+1409,PUFA 18:3i,G,C06427
+1285,Stigmasterol,MG,C05442
+1307,PUFA 18:2 i,G,C01595
+1332,SFA 13:0,G,C17716
+1283,Phytosterols,MG,0
+1408,PUFA 2:4 n-6,G,C00219
+1111,Vitamin D2 (ergocalciferol),UG,C05441
+1412,MUFA 18:1-11 t (18:1t n-7),G,C01712
+1002,Nitrogen,G,0
+2009,MUFA 14:1 c,G,C08322
+2012,MUFA 20:1 c,G,C16526
+2014,MUFA 22:1 n-9,G,C08316
+1334,PUFA 22:2,G,C16533
+1335,SFA 11:0,G,C17715
+2019,TFA 18:3 t,G,C06427
+1414,PUFA 20:3 n-9,G,C16512
+1197,"Choline, from glycerophosphocholine",MG,C00670
+1199,"Choline, from sphingomyelin",MG,C00114
+1194,"Choline, free",MG,C00114
+1196,"Choline, from phosphotidyl choline",MG,C00588
+1195,"Choline, from phosphocholine",MG,C00588
+1113,25-hydroxycholecalciferol,UG,0
+1100,"Iodine, I",UG,C01382
+2008,MUFA 12:1,G,C16150
+1281,TFA 14:1 t,G,0
+2013,TFA 20:1 t,G,C16526
+2006,SFA 21:0,G,C16161
+2015,MUFA 22:1 n-11,G,C08323
+2021,PUFA 22:3,G,C16532
+2007,SFA 23:0,G,C16162
+2003,SFA 5:0,G,C00803
+2004,SFA 7:0,G,C17714
+2005,SFA 9:0,G,C01601
+1232,Cysteine,G,C00736
+2032,"Cryptoxanthin, alpha",UG,C15981
+1159,cis-beta-Carotene,UG,C20484
+1161,cis-Lutein/Zeaxanthin,UG,C06098
+1160,cis-Lycopene,UG,C15858
+1121,Lutein,UG,C08601
+2028,trans-beta-Carotene,UG,C02094
+2029,trans-Lycopene,UG,C05432
+1119,Zeaxanthin,UG,C06098
+1063,"Sugars, Total NLEA",G,0
+1050,"Carbohydrate, by summation",G,0
+1330,"Fatty acids, total trans-dienoic",G,0
+2010,MUFA 17:1 c,G,C16534
+2016,PUFA 18:2 c,G,C01595
+2018,PUFA 18:3 c,G,C06427
+2020,PUFA 20:3 c,G,C03242
+2022,PUFA 2:4 c,G,C00219
+2023,PUFA 2:5 c,G,C06428
+2024,PUFA 22:5 c,G,C16513
+2025,PUFA 22:6 c,G,C06429
+2026,PUFA 20:2 c,G,C16525
+1085,Total fat (NLEA),G,0
+1116,Phytoene,UG,C05421
+1117,Phytofluene,UG,C05414
+1084,"Fiber, insoluble",G,0
+1082,"Fiber, soluble",G,0
+1024,Specific Gravity,SP_GR,0
+1191,10-Formyl folic acid (10HCOFA),UG,C03479
+1192,5-Formyltetrahydrofolic acid (5-HCOH4,UG,C03479
+1188,5-methyl tetrahydrofolate (5-MTHF),UG,C00440
+1137,"Boron, B",UG,C06266
+1097,"Cobalt, Co",UG,C00175
+1102,"Molybdenum, Mo",UG,C00150
+1146,"Nickel, Ni",UG,C00291
+1094,"Sulfur, S",MG,C00087
+1124,Vitamin E (label entry primarily),IU,C02477

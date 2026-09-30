@@ -1,0 +1,86 @@
+compound,name,incidence,source,in_Q2,in_MENDA_pos,in_MENDA_neg
+C00255,Riboflavin,-1,MENDA_neg,True,False,True
+C00253,Niacin,1,MENDA_both+orig,False,True,True
+C02823,Vitamin B-12,1,MiKG(GABA→Vitamin B-12),False,False,False
+C00219,PUFA 20:4,-1,MENDA_both+orig,False,True,True
+C06424,SFA 14:0,1,MENDA_both+orig,False,True,True
+C06429,PUFA 22:6 n-3 (DHA),-1,MENDA_both+orig,False,True,True
+C16513,PUFA 22:5 n-3 (DPA),0,unknown,False,False,False
+C08320,SFA 24:0,0,unknown,False,False,False
+C06427,PUFA 18:3,0,MENDA_both→unresolved,False,True,True
+C01571,SFA 10:0,-1,MENDA_neg,False,False,True
+C04056,PUFA 18:2 CLAs,0,unknown,False,False,False
+C01712,TFA 18:1 t,1,MENDA_both+orig,False,True,True
+C02679,SFA 12:0,-1,MENDA_neg,True,False,True
+C16537,SFA 15:0,0,unknown,False,False,False
+C00249,SFA 16:0,1,MENDA_both+Q2_bacteria,True,True,True
+C08362,MUFA 16:1,-1,MENDA_both+orig,False,True,True
+C00712,MUFA 18:1,0,MENDA_both→unresolved,False,True,True
+C01530,SFA 18:0,1,MENDA_both+orig,False,True,True
+C16536,MUFA 15:1,0,unknown,False,False,False
+C06425,SFA 20:0,-1,MENDA_neg,False,False,True
+C16526,MUFA 20:1,-1,MENDA_both+orig,False,True,True
+C00187,Cholesterol,-1,MENDA_both+orig,False,True,True
+C08281,SFA 22:0,0,MENDA_both→unresolved,False,True,True
+C00246,SFA 4:0,-1,MENDA_neg,False,False,True
+C16527,PUFA 22:4,0,unknown,False,False,False
+C06426,"PUFA 18:3 n-6 c,c,c",0,unknown,False,False,False
+C08322,MUFA 14:1,0,unknown,False,False,False
+C16522,PUFA 20:3,0,unknown,False,False,False
+C08323,MUFA 24:1 c,1,MENDA_pos,False,True,False
+C02483,"Tocopherol, gamma",-1,MENDA_neg,False,False,True
+C02477,Vitamin E (alpha-tocopherol),1,MENDA_both+orig,False,True,True
+C00031,Glucose,1,ontology(Sugar),False,True,True
+C00864,Pantothenic acid,1,MENDA_both+Q2_bacteria,True,True,True
+C00208,Maltose,1,ontology(Sugar),False,False,False
+C08319,?,0,unknown,False,False,False
+C06262,"Phosphorus, P",0,unknown,False,False,False
+C00070,"Copper, Cu",0,unknown,False,False,False
+C01330,"Sodium, Na",0,unknown,False,False,False
+C00305,"Magnesium, Mg",0,unknown,False,False,False
+C00023,"Iron, Fe",0,unknown,False,False,False
+C00076,"Calcium, Ca",0,unknown,False,False,False
+C00038,"Zinc, Zn",0,unknown,False,False,False
+C00238,"Potassium, K",0,unknown,False,False,False
+C00034,"Manganese, Mn",0,unknown,False,False,False
+C00378,Thiamin,-1,MENDA_neg,False,False,True
+C00473,"Vitamin A, IU",1,group_prior(Vitamins and cofactors),False,False,False
+C00089,Sucrose,1,MENDA_pos,False,True,False
+C01496,Fructose,1,ontology(Sugar),False,False,False
+C14152,"Tocopherol, beta",1,MENDA_pos,False,True,False
+C14154,"Tocotrienol, beta",1,ontology(Vitamin E),False,False,False
+C14156,"Tocotrienol, delta",1,ontology(Vitamin E),False,False,False
+C05432,Lycopene,1,ontology(Carotenoid),False,False,False
+C02094,"Carotene, beta",1,ontology(Carotenoid),False,False,False
+C02059,Vitamin K (phylloquinone),1,group_prior(Vitamins and cofactors),False,False,False
+C00072,"Vitamin C, total ascorbic acid",1,MENDA_both+Q2_bacteria,True,True,True
+C01733,Methionine,-1,MENDA_both+orig,False,False,False
+C16436,Valine,0,MENDA_both→unresolved,False,False,False
+C00037,Glycine,1,MENDA_both+Q2_bacteria,True,True,True
+C16435,Proline,-1,MENDA_both+orig,False,False,False
+C02385,Arginine,1,MENDA_both+orig,False,False,False
+C16434,Isoleucine,1,MENDA_both+orig,False,False,False
+C00716,Serine,0,MENDA_both→unresolved,False,False,False
+C01536,Tyrosine,1,MiKG(Norepinephrine→Tyrosine),False,False,False
+C02057,Phenylalanine,1,MiKG(Dopamine→Phenylalanine),False,False,False
+C00806,Tryptophan,1,MiKG(Serotonin→Tryptophan),False,False,False
+C01401,Alanine,-1,MENDA_both+orig,False,False,False
+C01157,Hydroxyproline,0,MENDA_both→unresolved,False,True,True
+C00736,Cysteine,0,MENDA_both→unresolved,False,False,False
+C16439,Leucine,1,MENDA_pos,False,True,False
+C00768,Histidine,1,MiKG(Histamine→Histidine),False,False,False
+C16433,Aspartic acid,-1,MENDA_both+orig,False,False,False
+C00719,Betaine,1,MENDA_both+Q2_bacteria,True,True,True
+C01529,"Selenium, Se",0,unknown,False,False,False
+C00369,Starch,1,Q2_bacteria_path,True,False,False
+C00243,Lactose,1,ontology(Sugar),False,False,False
+C01585,SFA 6:0,-1,MENDA_neg,False,False,True
+C14151,"Tocopherol, delta",1,MENDA_pos,False,True,False
+C14153,"Tocotrienol, alpha",1,ontology(Vitamin E),False,False,False
+C01582,Galactose,1,ontology(Sugar),False,False,False
+C01420,Cystine,-1,MENDA_neg,False,False,True
+C00504,Folic acid,1,MENDA_pos,False,True,False
+C08591,"Cryptoxanthin, beta",1,ontology(Carotenoid),False,False,False
+C05433,"Carotene, alpha",1,ontology(Carotenoid),False,False,False
+C14155,"Tocotrienol, gamma",1,ontology(Vitamin E),False,False,False
+C05443,Vitamin D3 (cholecalciferol),1,ontology(Vitamin D),False,False,False

@@ -1,0 +1,16 @@
+no,attribute,question,evidence,paper,reproduced,detail
+0,Complication,Autistic disorder and depression,Bifidobacterium longum,1,True,"KG에 세균 있음, 연결된 질병 15건"
+1,Complication,Parkinson disorder and depression,Streptococcus mutans,1,True,"KG에 세균 있음, 연결된 질병 8건"
+2,Complication,Learning disabilities and autism,Escherichia coli,1,True,"KG에 세균 있음, 연결된 질병 27건"
+3,Complication,Anxiety and depression,Escherichia coli,1,True,"KG에 세균 있음, 연결된 질병 27건"
+4,Complication,Bipolar disorder and depression,Lactobacillus plantarum,1,True,"KG에 세균 있음, 연결된 질병 3건"
+5,Complication,Learning disabilities and depression,Bacillus cereus,0,False,"KG에 세균 있음, 연결된 질병 0건"
+6,Complication,Parkinson disorder and autism,Lactobacillus reuteri,0,True,"KG에 세균 있음, 연결된 질병 2건"
+7,Complication,Alzheimer Disease and autism,Bacteroides fragilis,1,True,"KG에 세균 있음, 연결된 질병 22건"
+8,Diet recommendation,Garlic and Alzheimer Disease,Threonine,1,False,C00188 — 85 목록 밖 (논문 내부 불일치)
+9,Diet recommendation,Milk and Learning disabilities,alpha-Tocopherol,0,True,C02477 incidence=-
+10,Diet recommendation,Egg products and depression,Cystine,-1,True,C01420 incidence=-
+11,Diet recommendation,Coffee and parkinson disorder,Threonine,1,False,C00188 — 85 목록 밖 (논문 내부 불일치)
+12,Diet recommendation,Lettuce and anxiety,Nicotinic acid,1,True,C00253 incidence=+
+13,Diet recommendation,Sweets and depression,L-Threonine,1,False,C00188 — 85 목록 밖 (논문 내부 불일치)
+14,Diet recommendation,Onion and depression,Ascorbate,1,True,C00072 incidence=+

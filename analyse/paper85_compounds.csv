@@ -1,0 +1,86 @@
+orig_idx,kegg,name,group
+0,C00255,Riboflavin,Vitamins and cofactors
+1,C00253,Nicotinate,Vitamins and cofactors
+2,C02823,Vitamin B12,Vitamins and cofactors
+3,C00219,Arachidonic acid,Lipids
+4,C06424,Tetradecanoic acid,Lipids
+5,C06429,Docosahexaenoic acid,Lipids
+6,C16513,Docosapentaenoic  acid,Lipids
+7,C08320,Tetracosanoic acid,Lipids
+8,C06427,alpha-Linolenic acid,Lipids
+9,C01571,Decanoic acid,Lipids
+10,C04056,Rumenic acid,Lipids
+11,C01712,Oleic acid,Lipids
+12,C02679,Dodecanoic acid,Lipids
+13,C16537,Pentadecanoic acid,Lipids
+14,C00249,Hexadecanoic acid,Lipids
+15,C08362,Palmitoleic acid,Lipids
+16,C00712,Oleic acid,Lipids
+17,C01530,Octadecanoic acid,Lipids
+18,C16536,Heptadecenoic acid,Lipids
+19,C06425,Icosanoic acid,Lipids
+20,C16526,Icosenoic acid,Lipids
+21,C00187,Cholesterol,Lipids
+22,C08281,Docosanoic acid,Lipids
+23,C00246,Butanoic acid,Lipids
+24,C16527,Docosatetraenoic,Lipids
+25,C06426,gamma Linolecic,Lipids
+26,C08322,Myristoleic,Lipids
+27,C16522,Eicosatrienoic acid,Lipids
+28,C08323,Nervonic,Lipids
+29,C02483,gamma-Tocopherol,Lipids
+30,C02477,alpha-Tocopherol,Vitamins and cofactors
+31,C00031,D-Glucose,Carbohydrates
+32,C00864,Pantothenate,Vitamins and cofactors
+33,C00208,Maltose,Carbohydrates
+34,C08319,alpha-Licanic acid,Lipids
+35,C06262,Phosphorus,Macronutrient
+36,C00070,Copper,Trace Elements
+37,C01330,Sodium cation,Macronutrient
+38,C00305,Magnesium cation,Macronutrient
+39,C00023,Iron,Trace Elements
+40,C00076,Calcium cation,Macronutrient
+41,C00038,Zinc cation,Trace Elements
+42,C00238,Potassium cation,Macronutrient
+43,C00034,Manganese,Trace Elements
+44,C00378,Thiamine,Vitamins and cofactors
+45,C00473,Retinol,Vitamins and cofactors
+46,C00089,Sucrose,Carbohydrates
+47,C01496,Fructose,Carbohydrates
+48,C14152,Beta_tocopherol,Lipids
+49,C14154,Beta_tocotrienol,Lipids
+50,C14156,Delta_tocotrienol,Lipids
+51,C05432,Lycopene,Lipids
+52,C02094,beta-Carotene,Lipids
+53,C02059,Phylloquinone,Vitamins and cofactors
+54,C00072,Ascorbate,Vitamins and cofactors
+55,C01733,Methionine,Amino acid
+56,C16436,Valine,Amino acid
+57,C00037,Glycine,Amino acid
+58,C16435,Proline,Amino acid
+59,C02385,Arginine,Amino acid
+60,C16434,Isoleucine,Amino acid
+61,C00716,Serine,Amino acid
+62,C01536,Tyrosine,Amino acid
+63,C02057,Phenylalanine,Amino acid
+64,C00806,Tryptophan,Amino acid
+65,C01401,Alanine,Amino acid
+66,C01157,Hydroxyproline,Amino acid
+67,C00736,CYSTEINE,Amino acid
+68,C16439,Leucine,Amino acid
+69,C00768,Histidine,Amino acid
+70,C16433,Aspartate,Amino acid
+71,C00719,Betaine,Amino acid
+72,C01529,Selenium,Trace Elements
+73,C00369,Starch,Carbohydrates
+74,C00243,Lactose,Carbohydrates
+75,C01585,Caproic acid,Lipids
+76,C14151,Delta_tocopherol,Lipids
+77,C14153,alpha-Tocotrienol,Lipids
+78,C01582,Galactose,Carbohydrates
+79,C01420,Cystine,Amino acid
+80,C00504,Folate,Vitamins and cofactors
+81,C08591,beta-Cryptoxanthin,Lipids
+82,C05433,alpha-Carotene,Lipids
+83,C14155,gamma-Tocotrienol,Lipids
+84,C05443,Vitamin D3,Vitamins and cofactors
