@@ -45,8 +45,11 @@
 | **추천 순위 Bottom30 겹침** (우연 6.7) | **15 / 30** | 30 | ✅ |
 | 순위 Spearman | **+0.786** | 1.0 | ✅ |
 | 논문 주장 6개 (§4.2.3, Fig. 4·5) | 3 / 6 | 논문 순위 자신 4 / 6 | ⚠️ |
-| §5.1 문헌 검증 (Table 5) | 11 / 15 | 11 / 15 | ✅ |
-| §5.1 전문가 20문항 | — | — | 설계상 재현 불가 |
+| Query 2 → Table 3 | 8 / 8 | 8행 | ✅ |
+| Query 3 → Table 4 | 5 / 5 (MiKG 로 SNOMED 이름 복원) | 5행 | ✅ |
+| Query 1 → Table 2 | 6 / 8 값 재현 | 8행 | ⚠️ 논문 값이 쿼리 결함으로 틀림 |
+| §5.1 문헌 검증 (Table 5) | Complication 7 / 8, Diet 2 / 7 (엄격) | 문헌 확인 11 / 15 | ⚠️ |
+| §5.1 전문가 20문항 | 공개 KG 로 답 재현 18 / 20 | 전문가 정확도 0.95 / 0.90 / 0.95 | ⚠️ 재현되고 타당한 답은 13 / 20 |
 
 **대체로 재현됐다.** 데이터와 알고리즘 구조가 재현됐고, 추천 순위는 Spearman +0.786
 으로 추천·비추천 양쪽 모두 우연 수준을 크게 넘는다. 우리 Top30 과 논문 Bottom30 이
@@ -126,6 +129,7 @@ food_recom_w_paper/
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install pandas numpy scipy scikit-learn matplotlib openpyxl
+pip install pyoxigraph        # eval/paper_sparql.py 에만 필요
 ```
 
 ---
@@ -167,7 +171,8 @@ python3 run_recommendation.py    # step4: 추천 + 시각화
 ### 평가·검증
 
 ```bash
-python3 eval/run_paper_eval.py   # 논문 §5.1 평가 (Table 5 문헌 검증, 전문가 문항 전사)
+python3 eval/run_paper_eval.py   # 논문 §5.1 평가 (전문가 20문항을 KG 에 질의, Table 5)
+python3 eval/paper_sparql.py     # 보충자료 SPARQL 을 공개 KG 에 실행 (Table 2~5, 약 3분)
 python3 tools/paper.py all       # 논문 기준 검증·개선 (REPRODUCTION §16)
 python3 tools/ab.py <항목>        # 설정 A/B 비교 (끝나면 기본값 복원)
 ```
@@ -268,8 +273,8 @@ ProMENDA 로 E 를 보강하고 weight.csv 의 4소스를 만든다.
 | 가금류 | 0 | 4 | — |
 | 유지 | 0 | 3 | 중간 |
 | 어류 | 0 | 1 | 중간 (§4.2.3 본문은 추천) |
-| 설탕 | 2 | 0 | 비추천 ❌ |
-| 빵류 | 2 | 0 | 비추천 ❌ |
+| 설탕 | 2 | 0 | Fig. 5 에 없음. 논문 순위 31·32위 |
+| 빵류 | 2 | 0 | Fig. 5 는 비추천, §4.2.3 본문은 언급 없음. 논문 순위 33·35·37위 |
 | 곡물 | 3 | 0 | — (점수 발산 3종) |
 
 ### 논문 순위(p5)와의 대조
@@ -292,6 +297,59 @@ ProMENDA 로 E 를 보강하고 weight.csv 의 4소스를 만든다.
 
 ---
 
+### 논문의 쿼리·평가를 공개 KG 로 재현 (`eval/`)
+
+`foodkg_triply/` 11개 파일을 SPARQL 저장소에 올리고 보충자료의 쿼리를 원문대로 실행했다
+(`eval/paper_sparql.py`, 약 3분, `pyoxigraph` 필요). 공개 KG 에는 SNOMED CT 가 없어,
+질병 이름과 "mental disorder" 분류는 논문이 출처로 든 MiKG 에서 가져왔다.
+
+**KG 규모.** 공개 KG 는 431만 트리플이다. 논문 Table 1 의 9개 소스 중 7개가 트리플 수까지
+일치한다. SNOMED CT(429만)와 추론 트리플(474만)은 없고, MENDA 는 2,633 / 5,675 다.
+
+**쿼리 → 논문 표**
+
+| 논문 | 재현 | 비고 |
+|---|---|---|
+| Query 2 → Table 3 | **8 / 8** | 5행은 쿼리 원문, 3행은 세균 조건만 neg 로 |
+| Query 3 → Table 4 | **5 / 5** | SNOMED 이름을 MiKG 에서. 음식–성분을 제대로 묶으면 4 / 5 |
+| Query 1 → Table 2 | 6 / 8 | **값이 틀렸다.** 올바른 합의 30~70배 (아래) |
+
+**§5.1 방법 1 — 전문가 20문항** (`eval/run_paper_eval.py`). 전문가 3인의 수작업 대조는
+재현할 수 없어, KG 에 20문항을 직접 질의했다. 재현 = 논문이 보고한 답이 KG 에서 나오는가,
+타당 = 그 답이 질문에 맞는가.
+
+| | O | △ | X | 판정 제외 |
+|---|---|---|---|---|
+| 재현 | 18 | 1 | 1 | — |
+| 타당 | 13 | 3 | 3 | 1 |
+
+재현되고 타당한 문항은 13 / 20 이다. 재현되지만 틀린 답이 3건(#5, #9, #10) 있다.
+
+**§5.1 방법 2 — 문헌 검증 15건 (Table 5).** PubMed 재검색은 하지 않고, 논문이 든 근거가
+KG 에서 성립하는지를 엄격하게 봤다.
+
+| | 엄격 기준 | 기준 |
+|---|---|---|
+| Complication 8건 | **7 / 8** | 그 세균이 두 질병 모두에 연결되는가 |
+| Diet recommendation 7건 | 2 / 7 | 그 음식에 그 성분 기록이 있고, 성분→세균→질병 경로가 있는가 |
+
+Diet 는 음식과 성분을 묶지 않으면 5 / 7 이다. 마늘·커피·과자류의 Threonine 3건은 KG 에서
+그 음식에 Threonine 기록이 없다.
+
+**찾은 쿼리 결함 (보충자료 원문 기준)**
+
+1. Query 1: `?milkunit` 이 `?milk` 에 묶여 있지 않다. Table 2 의 "달걀 프라이 + 우유 =
+   B6 6.591" 은 달걀 0.151 + Kellogg's Special K 6.44 다. 실제 우유는 0.05~0.08.
+2. Query 3: `?food pq:hasNutrients ?nutrient` 의 `?nutrient` 가 `?nutrition` 과 다른 변수라
+   음식이 성분과 묶이지 않는다. Table 4 의 "Hot dogs, beef — L-Threonine" 은 KG 에서 그
+   음식에 Threonine 기록이 없다.
+3. 음식을 라벨 부분 문자열로 찾는다. "milk" 가 "Ricotta cheese, whole milk" 에 걸린다.
+
+우울증–세균의 방향 있는 연관(pos 14종, neg 23종)은 `MENDA_Depression.jsonld` 에 있다.
+다만 Table 3 의 compound (+)/(−) 표기는 쿼리에서 나오지 않아 `E` 의 방향은 정해지지 않는다.
+
+---
+
 ## 7. 논문과의 차이 및 원인
 
 ### 일치
@@ -306,11 +364,26 @@ ProMENDA 로 E 를 보강하고 weight.csv 의 4소스를 만든다.
 | 차이점 | 원인 |
 |--------|------|
 | 밀가루 3종이 1~3위 | 공식 점수식의 분모 발산 (§6) |
-| 설탕·흰빵이 추천 30 에 | E 가 논문과 다르다. 당류는 논문 Fig. 5 가 `+` 로 명시했다 |
 | 유제품이 비추천에 12개 | Fig. 5 는 중간층. 지질(치즈·버터)의 − 가 강하게 작용 |
-| 논문 주장 C1b·C3·C6 실패 | C1b 는 설탕·빵이 비추천이 아니어서. C3·C6 은 논문 순위 자신도 실패 |
+| 논문 주장 C1b·C3·C6 실패 | C1b 는 설탕·빵이 비추천이 아니어서인데, 논문 순위도 이들을 31~37위에 둔다(아래). C3·C6 은 논문 순위 자신도 실패 |
 | gold 1개 불일치 | Pantothenic acid(Table 4, 복숭아) 가 `−`. ProMENDA Type1 이 `−` 를 지지 |
 | E 방향 16종 미확보 | 미네랄 10종은 대사체 DB 가 원소를 측정하지 않는다. 논문이 어디서 얻었는지 기술이 없다 |
+
+### 피라미드 상단: 본문은 고기류, 그림은 빵류
+§4.2.3 본문은 상단 층을 "barbecue products, beef products, sausages, and luncheon meats" 로,
+Fig. 5 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" 로 적는다.
+**논문 순위(p5)는 본문 쪽이다.** 빵·과자 3종이 33·35·37위, 설탕이 31·32위로 비추천이
+아니라 상위권 끝에 있다. 평가 기준은 Fig. 5 그대로 두고, 본문 기준을 민감도 검사로 함께 본다
+(`tools/paper.py claims`).
+
+| | 논문 순위 | 우리 |
+|---|---|---|
+| C1b 비추천 = 소시지·빵·과자 (§4.2.3 앞 문장) | PASS | fail |
+| C1b′ 비추천 = 본문 피라미드 상단 (소고기·소시지) | PASS | **PASS** |
+| C2 피라미드 순서, Fig. 5 그림 기준 | ρ +0.75 | ρ +0.52 |
+| C2′ 피라미드 순서, 본문 기준 | **ρ +0.89** | **ρ +0.65** |
+
+논문 순위 자신이 그림(+0.75)보다 본문(+0.89)에 더 잘 맞는다.
 
 ### 근본 원인
 **논문의 E 는 공개 자료에서 그대로 나오지 않는다.** MENDA 원본에 16개 집계 규칙을 적용해도
@@ -321,9 +394,16 @@ ProMENDA 로 E 를 보강하고 weight.csv 의 4소스를 만든다.
 - §4.2 수식(Eq. 1 분모, Eq. 2 첨자)이 조판 오류. 그대로 구현하면 16조합 중 꼴찌
 - 단위 환산과 ProMENDA 극성 처리를 적지 않음
 - Table 3/4 의 Glutamic acid·L-Threonine·Choline 이 Fig. 4(c) 85종 목록에 없음
-- §4.2.3 본문과 Fig. 5 가 어류 위치에서 모순
+- §4.2.3 본문과 Fig. 5 가 피라미드에서 두 군데 모순: 어류 위치, 상단 층(본문 "barbecue products", 그림 "Baked Products")
 - §4.2.3 의 성분 차이 서술이 논문 자신의 heatmap 과 어긋남 (미량원소·다량영양소)
 - `final.py` 입력 4개와 `metabolite_bacteria.xlsx` 누락, `food_nutrient.csv` 절단
+- **Supplementary Query 1 의 결함으로 Table 2 값이 틀렸다.** `?milkunit` 이 `?milk` 에 묶여 있지
+  않아 두 번째 음식의 성분량이 다른 음식 값으로 들어간다. Table 2 의 "달걀 프라이 + 우유 =
+  비타민 B6 6.591" 은 달걀 0.151 + Kellogg's Special K 시리얼 6.44 다. 실제 우유는 0.061
+- 음식을 라벨 부분 문자열로 찾아, "milk" 가 "Ricotta cheese, whole milk" 에 걸린다 (Table 1 #5)
+- 공개 KG 에 SNOMED CT 계층(논문 Table 1 의 429만 트리플)이 없다. 이름과 mental disorder
+  분류는 MiKG 로 복원할 수 있다
+- Query 3 도 음식과 성분이 묶여 있지 않다 (Table 4 의 핫도그 행, Table 5 의 Threonine 3건)
 
 ---
 
@@ -372,7 +452,8 @@ ProMENDA 로 E 를 보강하고 weight.csv 의 4소스를 만든다.
 
 | 파일 | 역할 |
 |------|------|
-| `run_paper_eval.py` | 실행기 |
+| `run_paper_eval.py` | §5.1 방법 1(20문항을 KG 에 질의)·방법 2(근거 존재) |
+| `paper_sparql.py` | 공개 KG 에 보충자료 SPARQL 을 실행해 Table 2~5 대조 (`pyoxigraph`) |
 | `paper_table1.py` | 전문가 20문항 (Supplementary Table 1) 전사 |
 | `paper_table5.py` | 문헌 검증 15건 (Table 5) |
 | `gold.py` | 논문이 부호를 명시한 compound 9종 — 파라미터를 고르는 독립 기준 |

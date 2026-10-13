@@ -100,7 +100,7 @@ MENDA 원본에서도 동률이다(Oleic 10:11, Serine 17:18, Valine 26:23 등).
 | 공개 KG 의 pos/neg 목록 | 논문이 부호를 명시한 14건 중 13건이 `both` |
 | **MENDA 원본 5,675 entries** | 16개 집계 규칙 역산 → **최고 8/12**. 다만 `both` tie-break 로는 유효 (아래) |
 | ProMENDA 22,519 entries | 12개 구성 전부 더 나쁨 (Spearman 최대 −0.25) |
-| Supplementary SPARQL Query 2 | `Disease_Bacteria.jsonld` 에 pos/neg 구분 없어 실행 불가 |
+| Supplementary SPARQL Query 2 | ~~실행 불가~~ **정정(2026-10-13):** 실행된다. 우울증–세균의 pos/neg 연관은 `Disease_Bacteria.jsonld` 가 아니라 `MENDA_Depression.jsonld` 에 있다(pos 14종, neg 23종). 다만 E 의 방향을 주지는 않는다 — compound 는 pos·neg 양쪽 쿼리에 거의 똑같이 나온다 (REPRODUCTION §16.9) |
 | KEGG BRITE 계층 전파 | 15종 중 2종. 당류를 `−` 로 뒤집어 논문 Fig. 5 와 충돌 |
 | `metabolite_bacteria.xlsx` | repo git 히스토리 전수 확인 — 한 번도 커밋된 적 없음 |
 
@@ -309,8 +309,13 @@ DHA 에서 Pantothenic acid 로 바뀌었다.
 4. **§4.2.1 의 `E` 정의와 실제 데이터 의미가 반대** —
    `hasPositiveAssociation` 목록은 MENDA 의 `Up`(우울증에서 증가)과
    Jaccard 0.981 로 일치하는데, 논문은 이를 "relieving" 이라 적는다.
-5. **§4.2.3 본문과 Fig. 5 가 모순** — 본문은 어류를 추천이라 하고
-   Fig. 5 는 중간층에 둔다.
+5. **§4.2.3 본문과 Fig. 5 가 모순** — 두 군데다.
+   - 어류: 본문 앞부분은 추천이라 하고 Fig. 5 는 중간층에 둔다.
+   - 피라미드 상단: 본문은 "barbecue products, beef products, sausages, and luncheon
+     meats", 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork".
+     논문 순위(p5)는 빵·과자를 33·35·37위, 설탕을 31·32위에 둬 **본문 쪽**이다.
+     피라미드 순서 검정(C2)도 논문 순위가 그림 기준 ρ +0.75, 본문 기준 ρ +0.89 다
+     (REPRODUCTION §16.7).
 6. **Table 3/4 의 compound 가 Fig. 4(c) 85종 목록에 없음** —
    Glutamic acid, L-Threonine, Choline 등.
 7. **`final.py` 가 읽는 입력 4개가 repo 에 없음** —
@@ -320,6 +325,20 @@ DHA 에서 Pantothenic acid 로 바뀌었다.
 9. **§4.2.3 의 성분 차이 서술이 논문 자신의 데이터와 어긋남** — 본문은
    비추천 음식에 미량원소·다량영양소가 많다고 하나, heatmap 상·하위 30행에서는
    추천 쪽이 높다 (p=0.014, 0.004. REPRODUCTION §16.2).
+
+10. **Supplementary Query 1 의 결함 — Table 2 의 값이 틀렸다.** `?milkunit` 이 `?milk` 에
+    묶여 있지 않아 두 번째 음식의 성분량이 '그 성분의 아무 음식 값' 이 된다.
+    "달걀 프라이 + Milk, whole = B6 6.591" 은 달걀 0.151 + Kellogg's Special K 6.44 다
+    (실제 Milk, whole 은 0.061). Table 1 #9 의 B12 0.072 도 오렌지 0 + 말린 문어 0.07203 이다.
+11. **음식을 라벨 부분 문자열로 찾는다** — `regex(?milkname, "Milk", "i")`. Table 1 #5 의
+    "milk 0.127" 은 Ricotta cheese, whole milk, "yogurt 0.702" 는 Special K Fruit & Yogurt 시리얼이다.
+12. **공개 KG 에 SNOMED CT 계층이 없다** — 논문 Table 1 은 4,291,226 트리플이라 하나
+    공개본은 SCT ID 와 sameAs 뿐이다. Query 3 은 원문대로면 0행이다.
+    **MiKG 로 복원된다:** 질병 이름과 "mental disorder" 분류를 MiKG 에서 가져오면
+    Table 4 가 5/5 나온다. 상위 분류(Mood disorder 등)는 복원되지 않는다 (20문항 #12).
+13. **Query 3 도 음식과 성분이 묶여 있지 않다** — `?food pq:hasNutrients ?nutrient` 의
+    `?nutrient` 가 `?nutrition` 과 다른 변수다. Table 4 의 "Hot dogs, beef — L-Threonine",
+    Table 5 의 마늘·커피·과자류 Threonine 3건은 KG 에서 그 음식에 Threonine 기록이 없다.
 
 우리 쪽 결함도 있었다. 단위 미환산(§16.1), IU·µg 혼합 평균, 네 소스를 배율로
 복사한 `weight.csv`, step2·3 의 극성 규약 불일치 (REPRODUCTION §7) 는 모두

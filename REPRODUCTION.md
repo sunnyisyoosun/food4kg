@@ -38,8 +38,9 @@ based on gut microbiota and mental health*, Artificial Intelligence In Medicine
 | 논문 주장 6개 (§16.2) | ⚠️ 3/6 (논문 순위 자신은 4/6) |
 | 개선판 V1~V3 (재현 아님, §16.4) | 모두 재현 기준 이하 |
 | `weight.csv` 네 소스 | ✅ 독립 집계, 극성 규약 통일 (§7) |
-| 논문 §5.1 방법2 (Table 5 추론) | ✅ 11/15 |
-| 논문 §5.1 방법1 (전문가 20문항) | — 설계상 재현 불가 |
+| 논문 §5.1 방법2 (Table 5 추론) | ⚠️ 엄격 기준 Complication 7/8, Diet 2/7 (§16.10). 근거 존재만 보면 11/15 |
+| 논문 쿼리 → Table 3 / Table 4 | ✅ 8/8, 5/5 (§16.9, §16.10) |
+| 논문 §5.1 방법1 (전문가 20문항) | ⚠️ 공개 KG 로 답 재현 18/20, 재현되고 타당 13/20 (§16.8, §16.10). 전문가 대조 자체는 재현 불가 |
 
 집계: `python3 tools/scorecard.py`
 
@@ -53,7 +54,7 @@ based on gut microbiota and mental health*, Artificial Intelligence In Medicine
 | 공개 KG 의 pos/neg 목록 | 논문이 부호를 명시한 14건 중 13건이 `both` |
 | **MENDA 원본 5,675 entries** | 16개 집계 규칙 역산 → 최고 8/12 (§14) |
 | ProMENDA 22,519 entries | 12개 구성 전부 더 나쁨 (§12) |
-| Supplementary SPARQL Query 2 | `Disease_Bacteria.jsonld` 에 pos/neg 구분 없음 (§7) |
+| Supplementary SPARQL Query 2 | ~~pos/neg 구분 없음~~ 정정: 실행된다. 방향 있는 세균 연관은 `MENDA_Depression.jsonld` 에 있다 (§16.9) |
 | `metabolite_bacteria.xlsx` | repo git 히스토리에 한 번도 없음 (§14) |
 
 MENDA 원본까지 확보하고도 한계다. **논문의 `E` 는 MENDA 집계가 아니라
@@ -1019,6 +1020,10 @@ Fructose 는 MENDA 에 없는데 PMID(33984318)까지 달려 있다.
 
 `tools/core.py` 의 `PAPER_REC` / `PAPER_NOT` 에 근거와 함께 반영했다.
 
+> 2026-10-01 추가: 상단 층도 본문과 그림이 다르다. 본문은 "barbecue products", 그림은
+> "Baked Products" 이고, 논문 순위는 본문 쪽이다. 기준은 그림으로 두고 본문 기준을
+> 민감도 검사로 함께 본다 (§16.7).
+
 ---
 
 ## 14. `E` 의 출처 — MENDA 집계 규칙 역산과 `metabolite_bacteria.xlsx`
@@ -1424,3 +1429,289 @@ V3 유사도 제거      +0.761    19     12    8/9    4/6
 `sweep.py ceiling` 에서 현재(+0.786)가 순위 역산 'ref부호'(+0.729)와 1비트(+0.695)를
 넘는다. 다만 Top30/Bot30 겹침은 1비트(27/28)가 더 높다. 논문 순위 자체가 식물/동물
 구분에 크게 기대고 있다는 §12 의 관찰은 그대로 유효하다.
+
+### 16.7 피라미드 상단 — 본문(고기류)과 그림(빵류)의 모순 (2026-10-01)
+
+§13b 는 Fig. 5 그림을 기준으로 삼았다. 그런데 §4.2.3 본문의 피라미드 서술은 상단 층을
+다르게 적는다.
+
+> "In the top tier, we find foods such as **barbecue products**, beef products, sausages,
+> and luncheon meats, which are not recommended for individuals with depression."
+
+그림은 같은 자리를 "**Baked Products** / Beef Products / Sausages and Luncheon Meats /
+Pork Products" 로 적는다. barbecue 는 USDA 식품군이 아니다(구운 스테이크는 Beef 에 있다).
+"烤" 가 bake 와 barbecue 를 모두 뜻해 번역에서 섞였을 가능성이 있으나 추측이다.
+
+**논문 순위(p5)는 본문 쪽이다.**
+
+```
+Sweets    31, 32
+Baked     33, 35, 37        (오트밀 쿠키, 흰빵, 통밀빵)
+Pork      35, 84, 101
+Sausages  79 ~ 134
+Beef      103 ~ 129         (구운 T-bone 125, 130)
+```
+
+평가 기준은 바꾸지 않았다(사후 변경은 순환 위험). 대신 본문 기준을 민감도 검사로
+`tools/paper.py claims` 에 추가했다.
+
+- `TIER_TEXT` — 하단 채소·과일 / 중간 유제품·계란·어류 / 상단 소고기·소시지
+- `NOT_PYR_TEXT` — 본문 피라미드 상단 = 소고기·소시지
+
+```
+                                          논문 순위     우리       1비트
+C1b   비추천 = 소시지·빵·과자 (§4.2.3 앞)    PASS        fail       PASS
+C1b'  비추천 = 본문 피라미드 상단             PASS        PASS       PASS
+C2    피라미드 순서, 그림 기준               ρ +0.75     ρ +0.52    ρ +0.79
+C2'   피라미드 순서, 본문 기준               ρ +0.89     ρ +0.65    ρ +0.92
+```
+
+논문 순위 자신이 그림보다 본문에 더 잘 맞는다. 우리 결과의 C1b 실패(설탕·빵이 비추천이
+아님)는 논문 순위와 같은 거동이므로, README 의 "불일치" 서술에서 뺐다.
+C1b 의 근거 문장("not recommended foods are mainly sausage products, baked products,
+and sweets")도 논문 순위와 맞지 않는 서술이 된다.
+
+### 16.8 논문 §5.1 방법 1 — 전문가 20문항을 공개 KG 에 질의 (2026-10-13)
+
+지금까지 방법 1 은 표를 옮겨 적고 평균이 논문 수치와 같은지만 확인했다. 전문가 3인의
+수작업 대조는 재현할 수 없지만, **공개 KG 가 논문이 보고한 답을 내놓는가**는 확인할 수
+있다. `eval/run_paper_eval.py` 의 `KG` 클래스가 `foodkg_triply/` 를 읽어 20문항에 답한다.
+
+판정 두 가지.
+- **재현** — 논문이 보고한 답이 공개 KG 에서 나오는가
+- **타당** — 그 답이 질문에 실제로 맞는가
+
+```
+        O    △    X    판정 제외
+재현    17    1    2      —
+타당    12    3    3      2
+재현되고 타당: 12 / 20
+```
+
+| # | 질문 | 재현 | 타당 | 근거 |
+|---|---|---|---|---|
+| 0 | Lysine 을 가진 과일 | O | △ | melons·oranges 는 Lysine>0. strawberries 는 기록 4건이 전부 0 |
+| 1 | 콜라의 카테고리 | O | O | Soft drinks / Beverages |
+| 2 | 두유의 카테고리 | O | △ | Milk substitutes 6개. 상표 제품 2,222개는 Legumes |
+| 3 | 이유식 목록 | O | O | baby food 225종, Carrots·Plums 포함 |
+| 4 | 복숭아 파이의 엽산 | O | O | Pie, peach, two crust 의 Folate DFE = 0.046 |
+| 5 | 우유와 요거트의 retinol | O | **X** | 0.127 = Ricotta cheese, whole milk / 0.702 = Special K Fruit & Yogurt 시리얼 |
+| 6 | 포도주스의 구연산 | O | O | 309, Adlercreutzia equolifaciens 대사 경로 있음 |
+| 7 | 상추의 비타민 C | O | O | Lettuce, arugula = 15, Bifidobacterium longum 대사 경로 있음 |
+| 8 | 칼륨 함량 순위 | △ | △ | 범위가 문항에 없다. KG 전체 1위는 인스턴트 차 |
+| 9 | 오렌지+소시지의 B12 | O | **X** | 0.072 = 오렌지 0 + 말린 문어 0.07203. 실제 합 ≈ 0.001 |
+| 10 | 달걀+우유의 B6 | O | **X** | 6.591 = 달걀 0.151 + Special K 6.44. 실제 합 ≈ 0.211 |
+| 11 | 미생물 연관 정신질환 | O | O | Autism 78, Pervasive developmental disorder 30 |
+| 12 | 우울증과 자폐의 분류 차이 | X | — | 공개 KG 에 SNOMED CT 계층 없음 |
+| 13 | 정신질환 목록 | X | — | 위와 같음 |
+| 14 | 우울증에 영향을 주는 비타민 | O | O | MENDA 연관: B1, B3, B5, B6, B9, C, E |
+| 15 | 음식의 알칼로이드 | O | O | Caffeine, Theobromine (+Nicotinic acid) |
+| 16 | 화합물 분류 | O | O | KEGG 클래스에 Peptides, Alkaloids |
+| 17 | 우울증에 영향을 주는 Bacteroides | O | O | MENDA 화합물을 대사하는 것: fragilis, ovatus, vulgatus |
+| 18 | 대장균 분류 계통 | O | O | Escherichia → Enterobacteriaceae → … |
+| 19 | 질병 연관 상위 3개 속 | O | O | Streptococcus 155, Bacteroides 120, Prevotella 111 |
+
+**Supplementary Query 1 의 결함 두 가지를 찾았다.**
+
+1. **부분 문자열 매칭.** `filter regex(?milkname, "Milk", "i")` 는 라벨에 milk 가 들어간
+   모든 음식을 잡는다. #5 의 "milk" 는 리코타 치즈였다. 이 검사를 구현하면서 같은 함정을
+   그대로 밟았다 — `cola` 가 `Chocolate` 에 걸렸다.
+2. **묶이지 않은 변수.** 쿼리에서 `?eggunit` 은 `?egg pq:hasNutrientWeights ?eggunit` 로
+   달걀에 묶이지만, `?milkunit` 은 `?nutrient pq:hasNutrientWeights ?milkunit` 뿐이라
+   `?milk` 와 연결되지 않는다. 그래서 "우유의 성분량" 자리에 그 성분의 아무 음식 값이
+   들어간다. **논문 Table 2 의 값이 이렇게 만들어졌다.** 4행 "Egg, whole, fried with
+   butter + Milk, whole = Vitamin B-6 6.591" 은 0.151 + 6.44(Kellogg's Special K)이고,
+   실제 Milk, whole 의 B6 는 0.061 이다. B12 의 0.07~0.08 도 간(liver)·말린 문어 값이다.
+
+논문은 Table 2 를 근거로 "혼합 식단이 WHO 권장 B12 섭취량을 충족한다"고 결론짓는다
+(§4.1.2). 그 수치는 질문의 음식에서 나온 것이 아니다.
+
+전문가 3인이 이 답들을 정답으로 판정했다는 점(#5·#9·#10 모두 V0=V1=V2=1)도 기록해 둔다.
+
+### 16.9 공개 KG 로 논문 방식 그대로 평가할 수 있는가 (2026-10-13)
+
+`foodkg_triply/` 11개 파일을 SPARQL 저장소(pyoxigraph)에 올리고, 보충자료의 Query 1·2·3 을
+원문 그대로 실행했다. HTML 엔티티만 풀었고, 접두사는 Fig. 1 과 데이터의 실제 IRI 에 맞췄다
+(`pq:` = `http://nutrition.vu.nl/pop/qualifier#`, `npq:` = `http://nlp_microbe.ccnu.edu.cn/pop/qualifier#`).
+
+**공개 KG 의 규모 — 논문 Table 1 과 대조**
+
+| 소스 | 논문 Table 1 | 공개 KG | |
+|---|---|---|---|
+| FoodData Central | 2,332,603 | 2,332,603 | 일치 |
+| FoodOn | 79,769 | 79,769 | 일치 |
+| Chinese Food Ontology | 215,863 | 215,863 | 일치 |
+| KEGG | 74,286 | 24,116 + 50,170 = 74,286 | 일치 |
+| NCBI taxonomy | 1,306,152 | 1,306,152 | 일치 |
+| MiKG | 1,234 | 1,234 | 일치 |
+| MeSH | 261,556 | 261,556 | 일치 |
+| MENDA | 5,675 | 2,633 | 절반 이하 |
+| **SNOMED CT** | **4,291,226** | **0** | 없음 |
+| 추론 트리플 | 4,741,023 | 0 | 없음 |
+| 합계 | 13,346,991 | 4,314,742 | 32% |
+
+9개 소스 중 7개가 트리플 수까지 같다. 빠진 것은 SNOMED CT 와 추론 결과다.
+
+**쿼리별 실행 결과**
+
+| 쿼리 | 원문 실행 | 논문 표 재현 |
+|---|---|---|
+| Query 1 (Table 2) | 실행은 되나 조인이 너무 커서 끝나지 않는다. 등가 분해로 확인 | 8행 중 6행의 값이 나온다 — 단, 틀린 값이다 (아래) |
+| Query 2 (Table 3) | 실행된다. 106,336행, 146초 | **8행 전부** (5행은 원문, 3행은 세균 조건만 neg 로) |
+| Query 3 (Table 4) | 실행되나 **0행** | SNOMED 절을 빼면 음식·성분·세균 경로 5행 중 4행, 질병까지는 1행 |
+
+**Query 1 — Table 2 는 쿼리 결함의 산물이다** (§16.8 에서 발견, 여기서 8행 전부 확인)
+
+```
+#  음식 조합 [성분]                              논문     올바른 합    논문 값이 나오는 조합
+0  Potato salad with egg + MILK, 1% [B12]       0.082    0.0006~8    (정확한 조합 없음)
+1  Egg omelet + Milk, skim [B12]                0.071    0.0010~12   달걀 0.00072 + Beef liver, braised 0.06999
+2  Goose egg + Milk, skim [B12]                 0.074    0.0043~45   달걀 0.00381 + Beef liver, braised 0.06999
+3  Roll, egg bread + Soy milk, light [B12]      0.082    0.0011      (정확한 조합 없음)
+4  Egg, fried with butter + Milk, whole [B6]    6.591    0.204~207   달걀 0.151 + Special K 6.44
+5  Shrimp-egg patty + Chocolate milk [B6]       6.766    0.337~342   달걀 0.326 + Special K 6.44
+6  Shrimp-egg patty + Almond milk [B6]          2.656    0.326       달걀 0.326 + Special K Cinnamon 2.33
+7  Egg, boiled + Yogurt, coconut milk [B6]      6.602    0.165       달걀 0.162 + Special K 6.44
+```
+
+`?milkunit` 이 `?milk` 에 묶여 있지 않아 두 번째 항이 다른 음식의 값이다. 논문 값은 올바른
+합의 약 30~70배다. 0·3행의 0.082 는 Beef liver, fried(0.08244)와의 합 0.0825 로 보이나
+반올림이 맞지 않아 확정하지 못했다. 원문은 select 절이 `?Eggname`, where 절이 `?eggname` 으로
+대소문자도 다르다 (SPARQL 변수는 대소문자를 구분한다).
+
+논문 §4.1.2 는 이 표로 "혼합 식단이 WHO 권장 B12 섭취량(0.0024 mg)을 충족한다"고 한다.
+올바른 합으로는 2행(거위알)만 충족한다.
+
+**Query 2 — 이전 판의 "실행 불가"는 틀렸다**
+
+`MENDA_Depression.jsonld` 의 우울증 노드는 compound 뿐 아니라 **세균**에도
+`hasPositiveAssociation`(14종) / `hasNegativeAssociation`(23종)으로 연결되어 있다.
+이전 판은 `Disease_Bacteria.jsonld` 만 보고 방향 정보가 없다고 적었다.
+
+- 원문 쿼리(compound neg, 세균 pos)의 세균은 4종: Bifidobacterium longum, Bacteroides
+  ovatus / fragilis / vulgatus. Table 3 의 3~7행이 여기서 나온다
+  (Kiwi 84, Lettuce Romaine 7.5, Beef sausage 500 ×2, Whole wheat bread 27.2).
+- 0~2행의 Enterococcus faecalis, Adlercreutzia equolifaciens 는 우울증과 **neg** 연관이다.
+  세균 조건만 neg 로 바꾸면 세 행이 나온다 (Soy flour 8,870, Broccoli 89, Grape juice 216.7).
+- **Table 3 의 (+)/(−) 표기는 쿼리에서 나오지 않는다.** compound 조건을 pos 로 바꿔도
+  결과 compound 집합이 거의 같다(neg 에만 있는 것은 Biotin, Riboflavin 뿐). MENDA 의 compound
+  대부분이 pos·neg 양쪽에 있기 때문이다(§12). 따라서 Query 2 는 여전히 `E` 의 방향을 주지 않는다.
+
+**Query 3 — 공개 KG 로는 돌릴 수 없다**
+
+`?dissnomed owl:sameAs ?disease; wasp:hasEnglishLabel ?disname; rdfs:subClassOf ?disclass` 를
+만족하는 트리플이 0건이다. `wasp:hasEnglishLabel` 은 공개 KG 에서 Chinese Food Ontology 에만
+있다(15,081건). SNOMED 절을 빼면 Table 4 의 5행 중 음식·성분·세균 경로는 4행이 나오고
+(Hot dogs / Fusobacterium varium 은 없음), 질병까지 맞는 것은 1행이다
+(Peaches / Pantothenic acid / Bacteroides vulgatus / Autism). "Bipolar disorder",
+"Intellectual disability" 는 SNOMED 라벨이라 공개 KG 에 없다.
+
+**결론**
+
+| 논문 평가·결과 | 공개 KG 로 동일하게 가능한가 |
+|---|---|
+| Table 1 통계 | 7/9 소스 일치. SNOMED·추론 없음 |
+| Query 1 / Table 2 | 가능. 다만 쿼리 결함으로 값이 틀림을 확인 |
+| Query 2 / Table 3 | **가능.** 8/8 행 |
+| Query 3 / Table 4 | 불가 (SNOMED 없음) |
+| §5.1 방법 1 (20문항) | 17/20 재현 (§16.8). #12·#13 은 SNOMED 필요 |
+| §5.1 방법 2 (Table 5) | Complication 8건은 추론(SNOMED) 결과라 원형 불가. 근거 존재 여부만 11/15 |
+| §4.2 추천 | 불가. KG 만으로는 `E` 의 방향이 정해지지 않고 `weight.csv` 가 없다 |
+
+실행에는 `pyoxigraph` 가 필요하다 (`uv pip install pyoxigraph`).
+
+> 이 절의 "불가" 판정 중 Query 3 / Table 4 와 Table 5 는 §16.10 에서 뒤집혔다.
+
+### 16.10 안 되던 것들을 다시 봤다 — MiKG 로 SNOMED 를 복원 (2026-10-13)
+
+§16.9 는 Query 3 / Table 4 와 Table 5 를 "SNOMED 가 없어 불가"로 판정했다. 다시 보니
+**논문이 출처로 든 MiKG 파일에 필요한 정보가 있었다.**
+
+**SNOMED 가 정말 없는가.** 논문 repo 의 이력을 전부 확인했다. `foodkg_triply.zip` 은
+2022-09-30 에 한 번 올라왔고 내용은 지금의 11개 파일과 같다. SNOMED CT 는 처음부터 없다
+(재배포가 제한된 용어집이다).
+
+**그런데 구조는 남아 있다.**
+
+- `Mental_health.jsonld` 에 SNOMED → MeSH 방향의 `owl:sameAs` 가 정확히 10건 있다.
+  세균의 질병 연관(`hasAssociation`)은 그 MeSH ID 로 되어 있다.
+- `MiKG_Schema_Data_20201007.ttl` 의 질병 노드는 `owl:sameAs <SCT_…>`, `rdfs:label`,
+  `rdfs:subClassOf mikg:mentalDisorder` 를 갖는다. Query 3 의 `?dissnomed` 조건과 같은 모양이다.
+
+```
+SNOMED       MeSH      MiKG 이름               연결된 세균
+1855002      D007859   Learning disorder          32
+13746004     D001714   Bipolar disorder           41
+408856003    D001321   Autistic disorder         114
+197480006    D001008   Anxiety disorders          36
+39898005     D020919   Sleep disorders            40
+35489007     D003866   Depressive disorder        41
+33449004     D010554   Personality disorder       36
+443265004    D003072   Cognition disorders        23
+72366004     D001068   Eating disorders           23
+231532002    D020018   (MiKG 이름 없음)            23
+```
+
+Query 3 에서 바꾼 것은 SNOMED 절 하나다. `wasp:hasEnglishLabel` 을 `rdfs:label` 로,
+SNOMED 노드의 이름·분류를 MiKG 노드(`?mikg owl:sameAs ?dissnomed`)에서 읽는다.
+
+**Table 4 — 5/5**
+
+```
+음식            성분            세균                     질병(논문 표기)            원문대로  음식–성분을 묶으면
+Peaches         Pantothenic     Bacteroides vulgatus     Autistic disorder            O        O
+Peaches         Pantothenic     Bacteroides fragilis     Bipolar disorder             O        O
+MILK, 2%        Lysine          Escherichia coli         Intellectual disability      O        O
+MILK, 2%        L-Glutamate     Lactobacillus plantarum  Intellectual disability      O        O
+Hot dogs, beef  L-Threonine     Fusobacterium varium     Bipolar disorder             O        X
+```
+
+- "Intellectual disability" 는 SNOMED 1855002 / MeSH D007859 로, MiKG 이름은
+  "Learning disorder" 다. 같은 개념이고 표기만 다르다 (Table 5 는 "Learning disabilities").
+- **5행은 쿼리 결함의 산물이다.** Query 3 의 `?food pq:hasNutrients ?nutrient` 는
+  `?nutrition owl:sameAs ?compound` 와 변수가 달라 음식이 성분과 묶이지 않는다.
+  KG 에서 "Hot dogs, beef" 는 성분 58종을 갖지만 Threonine 은 없다.
+
+**Table 5 — 엄격 기준** (이전 11/15 는 "근거가 KG 에 있는가"만 본 것이다)
+
+- Complication 8건: 그 세균이 **두 질병 모두에** 연결되는가 → **7/8**.
+  실패는 #1 (Streptococcus mutans 가 Parkinson 에는 연결, 우울증에는 아님).
+- Diet recommendation 7건: 그 음식에 그 성분 기록(>0)이 있고, 성분→세균→질병 경로가
+  있는가 → **2/7** (#9 Milk–alpha-Tocopherol, #14 Onion–Ascorbate).
+
+```
+#8  Garlic – Threonine – Alzheimer      음식에 기록 0   경로 1    X (묶지 않으면 O)
+#10 Egg – Cystine – depression          음식에 기록 0   경로 0    X
+#11 Coffee – Threonine – Parkinson      음식에 기록 0   경로 8    X (묶지 않으면 O)
+#12 Lettuce – Nicotinic acid – anxiety  음식에 기록 61  경로 0    X
+#13 Sweets – L-Threonine – depression   음식에 기록 0   경로 15   X (묶지 않으면 O)
+```
+
+Threonine 3건은 Table 4 의 5행과 같은 패턴이다. 음식과 성분을 묶지 않으면 5/7 이 된다.
+KG 에서 Threonine 기록이 있는 음식은 255종이고 마늘·커피·과자류는 없다.
+
+**20문항 (§16.8 갱신)** — #13(정신질환 목록)은 MiKG 의 mentalDisorder 하위 10종으로 답이
+나온다. 재현 18/20, 재현되고 타당 13/20. #12 는 여전히 불가다 — "Mood disorder",
+"developmental disorder" 같은 상위 분류는 SNOMED 계층에만 있다.
+
+**여전히 안 되는 것**
+
+- Table 2 의 0.082 두 행 (Potato salad with egg, Roll egg bread). 가장 가까운 값은
+  Beef liver, fried 0.08244 이나 합이 0.0825 로, 반올림이 맞지 않는다.
+- 20문항 #12.
+- Table 3·4 의 compound (+)/(−) 표기. 쿼리에서 나오지 않는다.
+- §4.2 추천의 `E`.
+
+**정리**
+
+| 논문 결과 | §16.9 판정 | 다시 본 결과 |
+|---|---|---|
+| Query 2 → Table 3 | 8/8 | 8/8 |
+| Query 3 → Table 4 | 불가 | **5/5** (묶으면 4/5) |
+| Query 1 → Table 2 | 6/8, 값이 틀림 | 6/8, 값이 틀림 |
+| Table 5 Complication | 원형 불가 | **7/8** |
+| Table 5 Diet | — | 2/7 (묶지 않으면 5/7) |
+| 20문항 | 17/20 | **18/20** |
+
+재실행: `python3 eval/paper_sparql.py` (약 3분). 결과 `analyse/paper_sparql_table5.csv`.
+

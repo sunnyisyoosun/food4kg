@@ -170,6 +170,15 @@ REC_TEXT = {15.0, 9.0, 11.0}           # C1a: Fish, Fruits, Vegetables
 NOT_TEXT = {7.0, 18.0, 19.0}           # C1b: Sausages, Baked, Sweets
 TIER = {9.0: 2, 11.0: 2, 1.0: 1, 15.0: 1, 6.0: 1, 4.0: 1,
         18.0: 0, 13.0: 0, 7.0: 0, 10.0: 0}
+# 민감도 검사 — 피라미드를 Fig. 5 그림이 아니라 §4.2.3 본문 서술로 정의.
+#   "bottom ... vegetables, fruits, and juices"
+#   "middle section are dairy and egg products, as well as fish products"
+#   "top tier ... barbecue products, beef products, sausages, and luncheon meats"
+# 그림은 상단을 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" 로 적어
+# 본문과 다르다. 논문 순위(p5)는 Baked 3종을 33·35·37위, Sweets 를 31·32위에 둔다.
+# barbecue 는 USDA 식품군이 없다 — 구운 스테이크는 Beef 에 들어 있다.
+TIER_TEXT = {9.0: 2, 11.0: 2, 1.0: 1, 15.0: 1, 13.0: 0, 7.0: 0}
+NOT_PYR_TEXT = {13.0, 7.0}             # C1b': 본문 피라미드 상단 = Beef, Sausages
 C3_DIR = {'Carbohydrates': 'rec', 'Vitamins and cofactors': 'rec',
           'Trace Elements': 'not', 'Macronutrient': 'not',
           'Amino acid': 'ns', 'Lipids': 'ns'}
@@ -191,8 +200,9 @@ def _c1(s, Y, cats, want):
     return p, p < ALPHA
 
 
-def _c2(s, Y):
-    t = np.array([TIER.get(y, np.nan) for y in Y])
+def _c2(s, Y, tier=None):
+    tier = TIER if tier is None else tier
+    t = np.array([tier.get(y, np.nan) for y in Y])
     m = ~np.isnan(s) & ~np.isnan(t)
     r = stats.spearmanr(t[m], s[m])
     p = r.pvalue / 2 if r.statistic > 0 else 1 - r.pvalue / 2
@@ -293,6 +303,12 @@ def claims(n_random=2000, seed=0):
               + f'{passes[k] / n_random:>15.1%}')
     print(f'{"통과":6s}' + ''.join(
         f'{f"{sum(res[n][k][1] for k in CLAIMS)}/{len(CLAIMS)}":>20s}' for n in S))
+
+    # 민감도: 피라미드 상단을 Fig. 5 그림(Baked 포함)이 아니라 §4.2.3 본문(고기류)으로
+    print('\n[민감도] 피라미드를 §4.2.3 본문 서술로 정의 (상단 = 소고기·소시지, Baked 제외)')
+    for k, fn in (("C1b'", lambda sc: _c1(sc, d.Y, NOT_PYR_TEXT, 'low')),
+                  ("C2'", lambda sc: _c2(sc, d.Y, TIER_TEXT))):
+        print(f'{k:6s}' + ''.join(f'{_cell(k[:-1], fn(sc)):>20s}' for sc in S.values()))
 
     def show(rows):
         for g, (a, b, p, ok) in rows.items():

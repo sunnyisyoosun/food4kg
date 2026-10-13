@@ -1,0 +1,21 @@
+no,attribute,question,paper_answer,reproduced,valid,evidence
+0,food categories,Lists of fruits which contains Lysine,"Melons, oranges, strawberries, etc",O,△,Lysine>0 인 과일 10종에 melons·oranges 포함. strawberries 는 Lysine 기록 4건이 전부 0
+1,food categories,The food categories of the cola,"Soft drinks, beverages",O,O,"Beverages 아래 ""oft drinks"" 계열에 속하는 음식 9개"
+2,food categories,The food categories of the soy milk,"Milk substitutes, beverages",O,△,"Beverages 아래 ""Milk substitutes"" 계열에 속하는 음식 6개. 같은 이름의 다른 카테고리 음식도 있다: [('Legumes and Legume Products', 2222)]"
+3,food categories,The lists of baby food,"Carrots(baby food), plums(baby food), etc",O,O,"baby food 225종, Carrots·Plums 포함"
+4,compounds in food and gut,The weight of folate that peach pie can provides in gut,0.046mg/100g,O,O,"Pie, peach, two crust 의 Folate, DFE = 0.046"
+5,compounds in food and gut,The difference of retinol between milk and yogurt,"0.127mg/100g milk, 0.702mg/100g yogurt",O,X,"0.127 = ""Ricotta cheese, whole milk - NFY1216UY"", 0.702 = ""Cereal (Kellogg's Special K Fruit & Yogurt)"" — 라벨 부분 문자열 매칭. 실제 Milk, whole 0.020~0.059, Yogurt 0.000~0.205"
+6,compounds in food and gut,The weight of citric acid can Adlercreutzia equolifaciens taken from grape juice,309mg/100g,O,O,"""GRAPE JUICE, WHITE, FROM CONCENTRATE WITH "" = 309, Adlercreutzia equolifaciens 의 C00158 대사 경로 있음"
+7,compounds in food and gut,The weight of ascorbic acid can Bifidobacterium longum taken from lettuce,15mg/100g,O,O,"""Lettuce, arugula, raw"" = 15, Bifidobacterium longum 의 C00072 대사 경로 있음"
+8,weight calculation,The rank of Potassium weight in food,"Beans, Egg whites, Almonds, etc",△,△,"순위 범위가 문항에 없다. KG 전체 1~3위는 ['Tea, iced, instant, bl', 'Coffee, instant, 50% l', 'Coffee, instant, not r']. Beans 최대 1850, Egg whites 1070, Almonds 748"
+9,weight calculation,The weight of Vitamin B12 in mixed diet orange and sausage,0.072mg/200g,O,X,"0.072 = ""Orange juice, 100%,  fre"" 0 + ""Octopus, dried"" 0.07203 — 두 번째 값이 질문의 음식이 아니다(Query 1 결함). 실제 합 ≈ 0.001"
+10,weight calculation,The weight of Vitamin B6 in egg and whole milk,6.591mg/200g,O,X,"6.591 = ""Egg, whole, fried with b"" 0.151 + ""Cereal (Kellogg's Special K)"" 6.44 — 두 번째 값이 질문의 음식이 아니다(Query 1 결함). 실제 합 ≈ 0.211"
+11,disease classification,The microbial related mental disorders,"Autistic disorder, developmental disorder, etc",O,O,"세균 연관이 있는 질병: {'Autism': 78, 'Pervasive developmental disorder NOS': 30}"
+12,disease classification,The difference between depression and autistic disorder,Depression(Mood disorder) / Autistic disorder(developmental disorder),X,-,Mood disorder / developmental disorder 같은 상위 분류는 SNOMED CT 계층에만 있다. MiKG 는 mental disorder 한 단계뿐. 답할 수 없음
+13,disease classification,The list of diseases in mental disorders,"Eating disorder, bipolar disorder, etc",O,O,"MiKG 의 mentalDisorder 하위 10종: ['Anxiety disorders', 'Autistic disorder', 'Bipolar disorder', 'Cognition disorders', 'Depressive disorder', 'Eating disorders', 'Learning disorder', 'Personality disorder', 'Sexual dysfunction', 'Sleep disorders']"
+14,compounds categories,The vitamins may have effects on depression,"Vitamin B1-B5, VC, VE, etc",O,O,"MENDA 우울증 연관 비타민: ['Vitamin C', 'Vitamin B9', 'Vitamin B3', 'Vitamin B3', 'Vitamin B5', 'Vitamin B6', 'Vitamin B1', 'Vitamin E']"
+15,compounds categories,The alkaloids involved from food,"Caffeine, theobromine, etc",O,O,"음식 성분 중 alkaloid: ['Caffeine', 'Nicotinic acid (Vitamin B3)', 'Theobromine']"
+16,compounds categories,The categories of biological compounds,"Peptides, alkaloids, etc",O,O,KEGG 클래스 847개에 Peptides·Alkaloids 포함
+17,bacteria taxonomy,The Bacteroides may have effects on depression,"Bacteroides ovatus, vulgatus, fragilis",O,O,"MENDA 우울증 화합물을 대사하는 Bacteroides: ['fragilis', 'ovatus', 'vulgatus']"
+18,bacteria taxonomy,The taxonomy tree of Escherichia coli,"Escherichia, Enterobacteriaceae, etc",O,O,Escherichia → Enterobacteriaceae → Enterobacterales → Gammaproteobacteria → Proteobacteria → Bacteria
+19,bacteria taxonomy,The top 3 genus of bacteria related to disease,"Streptococcus, Bacteroides, Prevotella",O,O,"질병 연결 수 상위 속: [('Streptococcus', 155), ('Bacteroides', 120), ('Prevotella', 111)]"

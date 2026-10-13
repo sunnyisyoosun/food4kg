@@ -40,6 +40,9 @@ K = 30
 # 주의: §4.2.3 본문은 "recommended ... mainly fish and shellfish products,
 # as well as fruits and vegetables" 라고 적어 Fig. 5 와 모순된다. Fig. 5 가
 # 알고리즘 출력에서 직접 그려진 그림이므로 그쪽을 기준으로 삼는다.
+# 단, 상단 층은 본문("barbecue products, beef products, sausages, and luncheon meats")과
+# 그림("Baked Products / Beef / Sausages / Pork")이 다르고 논문 순위는 본문 쪽이다.
+# 본문 기준은 tools/paper.py 의 TIER_TEXT 로 민감도 검사한다 (REPRODUCTION §16.7).
 CAT = {1.0: 'Dairy', 4.0: 'Oils', 5.0: 'Poultry', 6.0: 'Sauces',
        7.0: 'Sausages', 9.0: 'Fruits', 10.0: 'Pork', 11.0: 'Vegetables',
        12.0: 'Nuts', 13.0: 'Beef', 15.0: 'Fish', 16.0: 'Legumes',
