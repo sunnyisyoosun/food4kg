@@ -304,8 +304,9 @@ DHA 에서 Pantothenic acid 로 바뀌었다.
    git 블롭에서 꺼내 확인. 자른 주체는 저자다.
 2. **그 파일이 논문 85종 중 57종만 커버** — 지방산 28종의 KEGG 매핑이 없다.
    데이터는 있는데 매핑만 빠졌다(미매핑 107종 중 SFA/PUFA/MUFA/TFA 77종).
-3. **§4.2 의 수식 서술로는 논문 결과가 재현되지 않음** — 16조합 비교에서
-   논문 조합이 꼴찌(Spearman −0.543), 공식 `final.py` 가 8위권.
+3. **§4.2 의 수식 서술이 공식 구현보다 논문 순위를 못 맞춘다** — 16조합 비교에서
+   논문 조합 6위(ρ +0.602, Top30 7/30), 공식 `final.py` 2위(ρ +0.786, Top30 18/30).
+   (2026-11-03 재측정. 극성 교정 이전 값인 "꼴찌 −0.543" 은 폐기 — REPRODUCTION §3)
 4. **§4.2.1 의 `E` 정의와 실제 데이터 의미가 반대** —
    `hasPositiveAssociation` 목록은 MENDA 의 `Up`(우울증에서 증가)과
    Jaccard 0.981 로 일치하는데, 논문은 이를 "relieving" 이라 적는다.
@@ -316,8 +317,8 @@ DHA 에서 Pantothenic acid 로 바뀌었다.
      논문 순위(p5)는 빵·과자를 33·35·37위, 설탕을 31·32위에 둬 **본문 쪽**이다.
      피라미드 순서 검정(C2)도 논문 순위가 그림 기준 ρ +0.75, 본문 기준 ρ +0.89 다
      (REPRODUCTION §16.7).
-6. **Table 3/4 의 compound 가 Fig. 4(c) 85종 목록에 없음** —
-   Glutamic acid, L-Threonine, Choline 등.
+6. **Table 3/4 의 compound 6종이 Fig. 4(c) 85종 목록에 없음** —
+   Glutamic acid, L-Threonine, Choline, Citric acid, Lysine, Cystine.
 7. **`final.py` 가 읽는 입력 4개가 repo 에 없음** —
    `food.csv`, `foodname.csv`, `weight.csv`, `acs04.csv`.
 8. **단위 환산을 적지 않음** — §3.1 은 "quantified in weight" 라고만 한다.
