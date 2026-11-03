@@ -34,6 +34,14 @@
 
 | 층위 | 우리 결과 | 논문 | 판정 |
 |------|-----------|------|------|
+| §3.1 Table 1 Relation 열 | 8 / 8 소스 일치 (합 정의) | 열 합 156 / Total 140 | ✅ |
+| §3.2 Entity linking 5수치 | **5 / 5 항목 일치** | — | ✅ 합계 1,637,915 만 미해결 |
+| §3.3 관계 어휘 | 6 / 6 존재 | 6 | ✅ |
+| §3.3 hasAssociation 관계 계층 | 선언 0건, 방향 무시해도 공통 쌍 0건 | 본문은 묶인다고 적음 | ❌ 한 번도 작동 안 함 |
+| §3.3 하위관계의 방향 특정 | pos∩neg 267쌍 | §3.3 은 "more specific" 이라 적음 | ⚠️ KG 가 방향을 못 정한다 |
+| §3.3 추론 statements | 0 | 4,741,023 | ⚠️ 배포본에서 제외 (논문 오류 아님) |
+| §3.1 Table 1 Entity 열 | 8 / 8 소스 일치 | 열 합 4,995,950 / Total 1,637,915 | ✅ |
+| §3.1 본문 FDC food samples | 34,250 | 34,250 | ✅ |
 | Foods | 135 / 135 | 135 | ✅ |
 | Compounds | 85 / 85 | 85 | ✅ |
 | 성분 행렬 F vs 논문 heatmap | 행 코사인 0.981 | — | ✅ |
@@ -129,7 +137,7 @@ food_recom_w_paper/
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install pandas numpy scipy scikit-learn matplotlib openpyxl
-pip install pyoxigraph        # eval/paper_sparql.py 에만 필요
+pip install pyoxigraph        # eval/paper_sparql.py, eval/paper_kg_stats.py 에 필요
 ```
 
 ---
@@ -171,6 +179,7 @@ python3 run_recommendation.py    # step4: 추천 + 시각화
 ### 평가·검증
 
 ```bash
+python3 eval/paper_kg_stats.py   # 논문 §3 검증 (Table 1 Relation·Entity, 링킹, 관계) 약 1분
 python3 eval/run_paper_eval.py   # 논문 §5.1 평가 (전문가 20문항을 KG 에 질의, Table 5)
 python3 eval/paper_sparql.py     # 보충자료 SPARQL 을 공개 KG 에 실행 (Table 2~5, 약 3분)
 python3 tools/paper.py all       # 논문 기준 검증·개선 (REPRODUCTION §16)
@@ -304,7 +313,13 @@ ProMENDA 로 E 를 보강하고 weight.csv 의 4소스를 만든다.
 질병 이름과 "mental disorder" 분류는 논문이 출처로 든 MiKG 에서 가져왔다.
 
 **KG 규모.** 공개 KG 는 431만 트리플이다. 논문 Table 1 의 9개 소스 중 7개가 트리플 수까지
-일치한다. SNOMED CT(429만)와 추론 트리플(474만)은 없고, MENDA 는 2,633 / 5,675 다.
+일치한다. SNOMED CT(429만)와 추론 트리플(474만)은 없고, MENDA 는 2,633 / 5,675 다
+(누락이 아니라 집계 형태의 차이다. 논문은 원본 xlsx 의 행 수를, KG 는 compound 510종으로
+집계한 트리플 수를 적었다 — REPRODUCTION §17.4).
+
+**배포본 = 논문 KG − 추론 − SNOMED.** `13,346,991 − 4,741,023 − 4,291,226 = 4,314,742` 로
+공개 KG 실측과 정확히 같다. 배포본은 논문 KG 의 32.3% 이고, 빠진 68% 가 논문이 기여로
+내세운 두 가지다 (REPRODUCTION §17).
 
 **쿼리 → 논문 표**
 
@@ -401,6 +416,34 @@ Fig. 5 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" �
   않아 두 번째 음식의 성분량이 다른 음식 값으로 들어간다. Table 2 의 "달걀 프라이 + 우유 =
   비타민 B6 6.591" 은 달걀 0.151 + Kellogg's Special K 시리얼 6.44 다. 실제 우유는 0.061
 - 음식을 라벨 부분 문자열로 찾아, "milk" 가 "Ricotta cheese, whole milk" 에 걸린다 (Table 1 #5)
+- **§3.3 의 관계 계층이 선언돼 있지 않고, 데이터에서 한 번도 작동하지 않는다.**
+  `hasAssociation`(세균→질병) 2,743 쌍과 하위관계(질병→compound·세균) 556 쌍 사이에 방향을
+  무시해도 공통 쌍이 0 이다. 우울증 한정으로 보면 일반관계 1 종 vs 하위관계 45 종, 공통 0 종.
+  "categorized under" 는 이름 짓기 규약일 뿐이다 (REPRODUCTION §17.13)
+- **우울증의 `hasAssociation` 미생물 연결이 1 종뿐이다.** §3.3 의 "공통 미생물 → complication"
+  추론을 일반관계만으로는 세울 수 없다 (REPRODUCTION §17.13)
+- **`hasPositiveAssociation` 과 `hasNegativeAssociation` 이 배타적이지 않다.** 같은
+  (우울증, compound) 쌍 267 개가 양쪽에 달려 있다 — compound 방향이 KG 만으로 정해지지 않는
+  근본 원인이다 (REPRODUCTION §17.13)
+- **Table 1 의 Relation 열과 Triples 열이 다른 파일을 센다.** FDC 의 relation 9 는
+  `Food_Nutrient`(5)+`Food_Category`(4) 인데, triples 2,332,603 은 `Food_Nutrient` 단독이다.
+  `Food_Category` 의 34,574 트리플은 어느 행에도 없다 (REPRODUCTION §17.9)
+- **Table 1 의 Relation Total 140 이 자기 열의 합(156)과 다르다.** Total 만 중복을 제거한 값이다
+- **Table 1 의 Total 행이 자기 소스 열 합보다 37,604 많다.** Table 1 이 소스로 적지 않은
+  `Food_Category.jsonld`·`Disease_Bacteria.jsonld` 가 그 자리다 (REPRODUCTION §17.1)
+- **§3.2 가 "normalized entities" 라고 부른 수치가 정규화 결과가 아니다.** food 1,220,480 ·
+  compounds 23,212 · microbiota 984,031 은 Table 1 Entity 열의 값 그대로이고, 그 정의는
+  "주어+URI목적어+리터럴목적어" 라는 RDF 노드 수다. 라벨 정규화를 하면 오히려 줄어든다
+  (compound 6,685 → 6,643). 서술과 수치가 맞지 않는다 (REPRODUCTION §17.10)
+- **Table 1 의 Entity Total 1,637,915 가 자기 열의 합(4,995,950)이 아니다.** §3.2 의 네 수치
+  합(1,010,876)도 아니다
+- **§3.2 의 "128 distinct food categories" 의 실제 카테고리 수는 64 다.** 128 은 Entity 열과
+  같은 이중 계수 결과다 (REPRODUCTION §17.12)
+- **§3.2 의 "3,505 mental disorders" 는 MeSH·SNOMED 가 아니라 MENDA(2,367)+MiKG(1,138) 이다.**
+  논문은 "link ... to the MeSH and SNOMED CT databases" 라고 적었다 (REPRODUCTION §17.12)
+- **§3.2 의 합계 1,637,915 가 자기 문장대로 더해지지 않는다.** 네 수치 합은 1,010,876 이다
+- §3.1 본문의 "230 metabolites" 가 공개 KG 에서 나오지 않는다. KEGG compound 전체는 6,685,
+  세균 대사로 연결된 부분집합은 702 다. 반면 "34,250 food samples" 는 정확히 일치한다
 - 공개 KG 에 SNOMED CT 계층(논문 Table 1 의 429만 트리플)이 없다. 이름과 mental disorder
   분류는 MiKG 로 복원할 수 있다
 - Query 3 도 음식과 성분이 묶여 있지 않다 (Table 4 의 핫도그 행, Table 5 의 Threonine 3건)
@@ -454,7 +497,10 @@ Fig. 5 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" �
 |------|------|
 | `run_paper_eval.py` | §5.1 방법 1(20문항을 KG 에 질의)·방법 2(근거 존재) |
 | `paper_sparql.py` | 공개 KG 에 보충자료 SPARQL 을 실행해 Table 2~5 대조 (`pyoxigraph`) |
-| `paper_table1.py` | 전문가 20문항 (Supplementary Table 1) 전사 |
+| `m1.py` | §5.1 방법 1 — (질문, 논문 정답, 검증쿼리) 20삼중항 + 전문가 전원동의 분리 |
+| `kgload.py` | 공개 KG 공통 파서 (m1 · run_paper_eval 공유) |
+| `paper_kg_stats.py` | §3 전체 검증 — §3.1 Table 1 Relation·Entity 열·본문 수치, §3.2 Entity linking, §3.3 관계 표현 |
+| `paper_table1.py` | 전문가 20문항 (**부록** Table 1) 전사. 본문 Table 1 은 `paper_kg_stats.py` |
 | `paper_table5.py` | 문헌 검증 15건 (Table 5) |
 | `gold.py` | 논문이 부호를 명시한 compound 9종 — 파라미터를 고르는 독립 기준 |
 
@@ -529,12 +575,24 @@ Fig. 5 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" �
 **외부 기준 (보조)** — Antidepressant Food Score (LaChance & Ramsey 2018) 를 85 compound 로
 근사했다. 논문 순위를 포함해 어떤 순위도 AFS 와 상관이 없다 (|ρ| ≤ 0.11).
 
-### 남은 방향
-- **KG embedding** (TransE, RotatE) → food–depression link prediction
-- **GNN** (R-GCN, CompGCN) → food node embedding
-- **SMILES trial** (Jacka et al. 2017) ModiMedDiet 권장 식품을 ground truth 로 평가
-- Table 5 방식 문헌 검증 확장
-- 저자에게 `weight.csv` 요청 — E 를 확정할 수 있는 유일한 경로
+### 남은 방향 (상세는 REPRODUCTION §18, 우선순위대로)
+
+논문 지표를 움직이는 크기 / 비용으로 매겼다. 판정은 §5.1 방법 1·2 와 §3·§4 수치로만 한다.
+
+| | 항목 | 논문 근거 | 성공 기준 |
+|---|---|---|---|
+| ~~1~~ | ~~§3.2 Entity linking 검증~~ | §3.2 수치 4개 | **완료 — 0/5 일치 (§17.7)** |
+| 2 | §3.3 추론 재구현 (474만) | §3.3 규칙 (a) 전이 (b) 공통 세균 | Table 5 Complication 8/8, 생성 수 대조 |
+| 3 | **E 보강 69 → 85/85** | §4.2.1 | gold 8/9·Spearman +0.786 유지 이상 |
+| 4 | 방법 2 PubMed 재검색 | §5.1 | 11/15 재현 |
+| 5 | 방법 1 문항 확장 | §5.1 "further evaluations ... necessary" | 확장 문항 재현율이 18/20 수준 유지 |
+| 6 | SNOMED 284 개념 | — | Query 3 원문 실행 (수치는 거의 불변, §17.6) |
+
+논문 범위 밖(§5.2 가 든 한계를 따라가는 확장, 재현 수치와 분리): KG embedding
+(TransE/RotatE), 미생물 없이 성립하는 nutrient→neurotransmitter 경로, 개인화.
+외부 ground truth 로는 SMILES trial (Jacka et al. 2017) ModiMedDiet.
+
+여전히 유효한 지름길: 저자에게 `weight.csv` 요청 — E 를 확정할 수 있는 유일한 경로다.
 
 ---
 
