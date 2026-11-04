@@ -61,60 +61,61 @@ PREFIX ent:  <http://nutrition.vu.nl/entity#>
         }} limit {limit}"""
         return [(r[0], str(r[1])) for r in g.query(q)]
 
-    def values(var, uris):
-        return 'values ?%s { %s }' % (var, ' '.join(f'<{u}>' for u in uris))
-
     res = {}
 
     # --- Q1 (§4.1.1) 혼합 식단의 영양소 흡수량 (Table 2 대응)
+    # rdflib 는 VALUES 를 BGP 아래로 밀어 넣지 않아, 음식을 묶지 않으면 중량 노드
+    # 76만 개와 조인한다. 음식 URI 를 쿼리 문자열에 직접 넣어 subject 를 묶는다.
     eggs = find_foods('^Egg, whole')
     milks = find_foods('^Milk, whole|^Milk, reduced fat')
+    print(f'\n  --- Q1 (Table 2 대응)  음식 {len(eggs)} x {len(milks)}', flush=True)
     t0 = time.time()
-    q1 = PREFIX + f"""select ?eggname ?milkname ?cname (?ew + ?mw as ?total) where {{
-      {values('egg', [u for u, _ in eggs])}
-      {values('milk', [u for u, _ in milks])}
-      ?egg rdfs:label ?eggname ; npq:hasNutrientWeights ?eu .
-      ?eu npq:ofCompound ?c ; rdf:value ?ew .
-      ?milk rdfs:label ?milkname ; npq:hasNutrientWeights ?mu .
-      ?mu npq:ofCompound ?c ; rdf:value ?mw .
-      ?c rdfs:label ?cname .
-      filter regex(?cname, "Riboflavin|Thiamin|Niacin", "i")
-    }} order by desc(?total) limit 8"""
-    rows = [[str(x) for x in r] for r in g.query(q1)]
-    res['Q1'] = rows
-    print(f'\n  --- Q1 (Table 2 대응)  음식 {len(eggs)}x{len(milks)}  '
-          f'{len(rows)}행  {time.time()-t0:.1f}s', flush=True)
-    for r in rows:
-        print('     ', ' | '.join(v[:40] for v in r), flush=True)
+    rows = []
+    for eu, el in eggs:
+        for mu, ml in milks:
+            q = PREFIX + f"""select ?cname ?ew ?mw where {{
+              <{eu}> npq:hasNutrientWeights ?e . ?e npq:ofCompound ?c ; rdf:value ?ew .
+              <{mu}> npq:hasNutrientWeights ?m . ?m npq:ofCompound ?c ; rdf:value ?mw .
+              ?c rdfs:label ?cname .
+              filter regex(?cname, "Riboflavin|Thiamin|Niacin", "i")
+            }}"""
+            for r in g.query(q):
+                rows.append([el, ml, str(r[0]), float(r[1]), float(r[2]),
+                             float(r[1]) + float(r[2])])
+    rows.sort(key=lambda r: -r[-1])
+    res['Q1'] = rows[:8]
+    print(f'      {len(rows)}행  {time.time()-t0:.1f}s', flush=True)
+    for r in rows[:8]:
+        print(f'      {r[0][:28]:28s} {r[1][:30]:30s} {r[2][:14]:14s} {r[5]:10.6f}',
+              flush=True)
 
-    # --- Q2 (§4.1.1) 음식 → 성분 → 장내세균 → 우울증 (Table 3 대응)
+    # --- Q2 (§4.1.1) 성분 → 장내세균 → 우울증 (Table 3 대응)
     t0 = time.time()
-    q2 = PREFIX + """select ?cname ?microbe ?rel (count(?f) as ?nfood) where {
-      ?c rdfs:label ?cname ; ?rel <http://id.nlm.nih.gov/mesh/D003865> .
+    q2 = PREFIX + """select ?cname ?microbe ?rel where {
+      ?c ?rel <http://id.nlm.nih.gov/mesh/D003865> ; rdfs:label ?cname .
       filter(?rel in (npq:hasPositiveAssociation, npq:hasNegativeAssociation))
       ?m mpq:hasMetabolites ?c ; rdfs:label ?microbe .
-      ?f npq:hasNutrients ?c .
-    } group by ?cname ?microbe ?rel order by desc(?nfood) limit 10"""
-    rows = [[str(x) for x in r] for r in g.query(q2)]
-    res['Q2'] = rows
+    } limit 200"""
+    rows = sorted({(str(a), str(b), str(c).split('#')[-1]) for a, b, c in g.query(q2)})
+    res['Q2'] = [list(r) for r in rows]
     print(f'\n  --- Q2 (Table 3 대응)  {len(rows)}행  {time.time()-t0:.1f}s', flush=True)
-    for r in rows:
-        print('     ', ' | '.join(v.split("#")[-1][:40] for v in r), flush=True)
+    for r in rows[:10]:
+        print(f'      {r[0][:26]:26s} {r[1][:34]:34s} {r[2]}', flush=True)
 
-    # --- Q3 (§4.1.1) 우울증과 그 합병증에 동시에 작용하는 성분 (Table 4 대응)
+    # --- Q3 (§4.1.1) 우울증 + 합병증에 동시에 작용하는 성분 (Table 4 대응)
     t0 = time.time()
     q3 = PREFIX + """select distinct ?cname ?microbe ?disease where {
-      ?c rdfs:label ?cname ; ?rel <http://id.nlm.nih.gov/mesh/D003865> .
+      ?c ?rel <http://id.nlm.nih.gov/mesh/D003865> ; rdfs:label ?cname .
       filter(?rel in (npq:hasPositiveAssociation, npq:hasNegativeAssociation))
       ?m mpq:hasMetabolites ?c ; rdfs:label ?microbe ; mpq:hasAssociation ?d .
       ?d rdfs:subClassOf ent:MentalDisorder ; rdfs:label ?disease .
       filter(?d != <http://id.nlm.nih.gov/mesh/D003865>)
-    } limit 20"""
-    rows = [[str(x) for x in r] for r in g.query(q3)]
-    res['Q3'] = rows
+    } limit 100"""
+    rows = sorted({(str(a), str(b), str(c)) for a, b, c in g.query(q3)})
+    res['Q3'] = [list(r) for r in rows]
     print(f'\n  --- Q3 (Table 4 대응)  {len(rows)}행  {time.time()-t0:.1f}s', flush=True)
-    for r in rows[:10]:
-        print('     ', ' | '.join(v[:40] for v in r), flush=True)
+    for r in rows[:12]:
+        print(f'      {r[0][:26]:26s} {r[1][:34]:34s} {r[2]}', flush=True)
 
     json.dump(res, open(os.path.join(OUT, 'eval_sparql.json'), 'w'),
               ensure_ascii=False, indent=1)

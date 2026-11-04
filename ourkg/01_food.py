@@ -34,6 +34,26 @@ food['category'] = cat_num.map(FDC_CATEGORY)
 food.loc[food['category'].isna(), 'category'] = food['food_category_id'].where(
     cat_num.isna(), None)
 food['category'] = food['category'].fillna('Unknown')
+
+# FNDDS(survey_fndds_food)는 food.csv 에 food_category_id 가 없다. 카테고리는
+# survey_fndds_food.csv 의 wweia_category_number 에 있다 (FDC survey 배포본).
+# 이것을 붙이지 않으면 FNDDS 음식 545종이 전부 Unclassified 가 되고, 그 안에
+# 칵테일류가 몰려 있어 추천 카테고리 분포가 왜곡된다.
+_sf = os.path.join(FDC_RAW, 'survey_fndds_food.csv')
+_wc = os.path.join(FDC_RAW, 'wweia_food_category.csv')
+if os.path.exists(_sf) and os.path.exists(_wc):
+    sf = pd.read_csv(_sf, usecols=['fdc_id', 'wweia_category_number'])
+    wc = pd.read_csv(_wc)
+    wmap = dict(zip(wc['wweia_food_category'], wc['wweia_food_category_description']))
+    sf['wweia'] = sf['wweia_category_number'].map(wmap)
+    food = food.merge(sf[['fdc_id', 'wweia']], on='fdc_id', how='left')
+    hit = food['wweia'].notna() & (food['category'] == 'Unknown')
+    food.loc[hit, 'category'] = food.loc[hit, 'wweia']
+    print(f'  FNDDS WWEIA 카테고리 적용: {int(hit.sum()):,} 항목')
+else:
+    print('  ⚠ survey_fndds_food.csv / wweia_food_category.csv 없음 — '
+          'FNDDS 음식은 이름 규칙으로만 분류된다')
+
 food = food.rename(columns={'description': 'food_name'})
 
 print(f'[3/5] food_nutrient.csv 스트리밍 (KEGG 매핑 행만, 단위 g 환산)')

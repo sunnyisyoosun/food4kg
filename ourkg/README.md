@@ -25,8 +25,14 @@ python3 ourkg/run_all.py          # 01 → 06
 python3 ourkg/run_all.py 05 06    # 일부만
 ```
 
-필요 입력: `fdc_raw/` (FDC Full Download), `41398_2024_2948_MOESM3_ESM.xlsx` (ProMENDA),
-`foodkg_triply/`, `MiKG-JAIMS/` — 받는 법은 루트 `README.md` §2.
+필요 입력:
+
+| 경로 | 내용 |
+|---|---|
+| `fdc_raw/food.csv`, `food_nutrient.csv`, `nutrient.csv` | FDC Full Download (CSV) |
+| `fdc_raw/survey_fndds_food.csv`, `wweia_food_category.csv` | FDC survey 배포본. FNDDS 음식의 카테고리에 필요하다 — 없으면 FNDDS 545종이 Unclassified 가 된다 ([survey zip](https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_survey_food_csv_2024-10-31.zip)) |
+| `41398_2024_2948_MOESM3_ESM.xlsx` | ProMENDA (Pu et al. 2024 supplementary) |
+| `foodkg_triply/`, `MiKG-JAIMS/` | 논문 배포본·MiKG — 루트 `README.md` §2 |
 KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐시한다.
 
 ## 단계
@@ -73,13 +79,14 @@ compound 130종, 우울증 극성이 확정된 compound 66종 (논문 E 는 85�
 
 | | ourkg Top 30 | 논문 §4.2.3 |
 |---|---|---|
-| | Beverages 6, Fruits and Fruit Juices 4, Sweets 3, Vegetables 2, Finfish and Shellfish 1, 기타 | "mainly fish and shellfish products, as well as fruits and vegetables" |
+| | Alcoholic Beverages 12, Beverages 6, Fruits and Fruit Juices 4, Sweets 3, Vegetables 2, Finfish and Shellfish 1 | "mainly fish and shellfish products, as well as fruits and vegetables" |
 
 Top 10: Sugar substitute (sucralose) / Honey / Cream of tartar / Lettuce, romaine /
 Pears (canned) / Energy drink (sugar free) / Applesauce / Pears (light syrup) /
 Energy drink (HFCS) / Butternut squash.
 
-당류가 상위를 차지하는 것은 버그가 아니라 논문의 기전 그대로다. 논문 Fig.4(c) 의
+상위를 칵테일·당류가 차지하는 것은 논문의 기전이 큐레이션된 목록에 의존한다는 뜻이다.
+당류가 위로 오는 것 자체는 논문 기전 그대로다. 논문 Fig.4(c) 의
 추천 음식군도 탄수화물(D-glucose, maltose, sucrose, fructose, starch)이 가장 진하고,
 §4.2.3 은 양파의 D-glucose 를 추천 근거로 든다. 음식 모집단이 135종으로 큐레이션되지
 않으면 같은 기전이 설탕·주스·에너지드링크를 끌어올린다.
