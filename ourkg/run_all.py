@@ -1,24 +1,34 @@
 """ourkg 파이프라인 일괄 실행.
 
-    python3 ourkg/run_all.py            # 01 → 06
-    python3 ourkg/run_all.py 05 06      # 지정 단계만
+    python3 ourkg/run_all.py                  # 구축 4단계 → 분석 2단계
+    python3 ourkg/run_all.py kg recommend     # 지정 단계만
 
-환경변수는 각 단계 파일 주석 참조 (MIN_COV, E_MODE, NORM, SIM_NORM, DATA_TYPES, PART).
+단계 이름은 build.py 의 food/promenda/microbe/kg,
+analyze.py 의 recommend/evaluate 다. 각 파일을 직접 돌려도 같다.
+
+환경변수: MIN_COV, E_MODE, SHRINK_K, NORM, SIM_NORM, DATA_TYPES, TOP_K, PART
+          — 해당 함수의 docstring·주석 참조.
 """
 import os
 import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-STEPS = ['01_food.py', '02_promenda.py', '03_microbe.py',
-         '04_kg.py', '05_recommend.py', '06_eval.py']
+BUILD = ['food', 'promenda', 'microbe', 'kg']
+ANALYZE = ['recommend', 'evaluate']
 
 want = sys.argv[1:]
-for s in STEPS:
-    if want and not any(s.startswith(w) for w in want):
+plan = [('build.py', [s for s in BUILD if not want or s in want]),
+        ('analyze.py', [s for s in ANALYZE if not want or s in want])]
+
+unknown = [w for w in want if w not in BUILD + ANALYZE]
+if unknown:
+    sys.exit(f'알 수 없는 단계 {unknown}. 가능: {BUILD + ANALYZE}')
+
+for script, steps in plan:
+    if not steps:
         continue
-    print(f'\n{"=" * 70}\n== {s}\n{"=" * 70}')
-    r = subprocess.run([sys.executable, os.path.join(HERE, s)])
+    r = subprocess.run([sys.executable, os.path.join(HERE, script), *steps])
     if r.returncode:
-        sys.exit(f'{s} 실패 (exit {r.returncode})')
+        sys.exit(f'{script} {steps} 실패 (exit {r.returncode})')
 print('\n완료. 산출물: ourkg/out/')

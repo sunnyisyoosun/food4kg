@@ -21,8 +21,11 @@
 ## 실행
 
 ```bash
-python3 ourkg/run_all.py          # 01 → 06
-python3 ourkg/run_all.py 05 06    # 일부만
+python3 ourkg/run_all.py                    # 구축 4단계 → 분석 2단계
+python3 ourkg/run_all.py kg recommend       # 일부만
+
+python3 ourkg/build.py                      # 구축만 (food promenda microbe kg)
+python3 ourkg/analyze.py recommend          # 분석 한 단계만
 ```
 
 필요 입력:
@@ -37,14 +40,19 @@ KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐�
 
 ## 단계
 
-| | 파일 | 하는 일 | 주요 산출물 |
+구축 4단계는 `build.py`, 분석 2단계는 `analyze.py` 에 함수로 들어 있다.
+각 단계는 앞 단계의 CSV 만 읽으므로 따로 돌려도 된다.
+
+| 파일 | 단계 | 하는 일 | 주요 산출물 |
 |---|---|---|---|
-| 01 | `01_food.py` | FDC 원본 2,700만 행 스트리밍 → 단위 g 환산 → 논문 §3.2 라벨 병합 → 카테고리 정규화 | `food_compound_long.csv`, `foods.csv` |
-| 02 | `02_promenda.py` | ProMENDA → compound별 우울증 극성 E | `compound_depression.csv` |
-| 03 | `03_microbe.py` | MeSH tree / NCBI taxonomy / KEGG 로 미생물 축 | `microbes.csv`, `compound_microbe.csv`, `microbe_disease*.csv` |
-| 04 | `04_kg.py` | 논문 §3.3 표현 규약대로 RDF 출력 | `ourkg.nt`, `kg_stats.csv` |
-| 05 | `05_recommend.py` | 논문 Algorithm 1 (식 1·2) | `recommendation.csv`, `recommendation.png` |
-| 06 | `06_eval.py` | §4.1 SPARQL Q1~Q3, §5.1 방법 1·2 | `eval_*.csv/json` |
+| `build.py` | `food` | FDC 원본 2,700만 행 스트리밍 → 단위 g 환산 → 논문 §3.2 라벨 병합 → 카테고리 정규화 | `food_compound_long.csv`, `foods.csv` |
+| | `promenda` | ProMENDA → compound별 우울증 극성 E | `compound_depression.csv` |
+| | `microbe` | MeSH tree / NCBI taxonomy / KEGG 로 미생물 축 | `microbes.csv`, `compound_microbe.csv`, `microbe_disease*.csv` |
+| | `kg` | 논문 §3.3 표현 규약대로 RDF 출력 | `ourkg.nt`, `kg_stats.csv` |
+| `analyze.py` | `recommend` | 논문 Algorithm 1 (식 1·2) | `recommendation.csv`, `recommendation.png` |
+| | `evaluate` | §4.1 SPARQL Q1~Q3, §5.1 방법 1·2 | `eval_*.csv/json` |
+| `common.py` | — | 경로·단위 환산·라벨/카테고리 정규화 공유 | |
+| `run_all.py` | — | 위 둘을 순서대로 호출 | |
 
 ## 결과
 

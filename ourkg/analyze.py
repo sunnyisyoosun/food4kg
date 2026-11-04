@@ -1,0 +1,440 @@
+"""ourkg 분석 — 논문 §4 (추천) · §5.1 (평가).
+
+    python3 ourkg/analyze.py            # 둘 다
+    python3 ourkg/analyze.py recommend
+    python3 ourkg/analyze.py evaluate
+
+  recommend  논문 Algorithm 1 (식 1·2) 을 우리 KG 에 적용 (depression)
+  evaluate   §4.1 SPARQL Q1~Q3, §5.1 방법 1·2
+             PART 환경변수로 일부만 실행 가능 (기본 ABC)
+
+ourkg/build.py 의 산출물을 읽는다.
+"""
+
+import os
+import numpy as np
+import pandas as pd
+import matplotlib
+import re
+import json
+import time
+import random
+import itertools
+import collections
+import requests
+
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'eval'))
+from common import OUT, BASE
+
+
+def recommend():
+    """05 — 논문 Algorithm 1 을 우리 KG 에 적용 (depression).
+
+    §4.2.1  D = E x F^T
+    §4.2.2  S = adjusted cosine similarity (식 1), P = D x S (식 2), Threshold·Top K
+    공식 구현(final.py) 경로를 따른다: PCA 없음, 행별 min-max, S 의 대각 0,
+    p 를 S 열합으로 나눔. 다만 음식이 14,000 규모라 식 (1) 을 벡터화했다
+    (공식 이중 루프와 같은 값, tools 로 소규모 대조 가능).
+
+    출력
+      out/recommendation.csv   rank, food_key, food_name, food_group, score, n_compound
+      out/recommendation.png   Fig.4(b) 대응 t-SNE
+    """
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from sklearn.manifold import TSNE
+
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from common import OUT
+
+    K = int(os.environ.get('TOP_K', '30'))
+    PCA_N = int(os.environ.get('PCA_COMPONENTS', '0'))   # 0 = 공식 경로(PCA 없음)
+
+    print('[1/5] 행렬 구성')
+    long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    foods = pd.read_csv(os.path.join(OUT, 'foods.csv')).set_index('food_key')
+    E_df = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+
+    # 추천 대상 음식 범위.
+    # 논문 §4.2 의 135개 음식은 전부 분석 측정 기반(Foundation / SR Legacy / FNDDS)이다.
+    # branded_food 는 라벨 신고값이라 대부분의 성분이 결측(0)이고, 성분이 거의 없는
+    # 탄산수·단백질파우더 같은 항목이 유사도 단계에서 상위를 차지한다.
+    # KG 자체(04)는 FDC 전체를 담고, 추천 코호트만 여기서 제한한다.
+    # DATA_TYPES=all 로 branded 포함 실행 가능.
+    CURATED = ('foundation_food', 'sr_legacy_food', 'survey_fndds_food')
+    if os.environ.get('DATA_TYPES', 'curated') != 'all':
+        foods = foods[foods['data_type'].isin(CURATED)]
+        long = long[long['food_key'].isin(set(foods.index))]
+        print(f'  분석 측정 기반 음식만: {len(foods):,}')
+
+    F = long.pivot_table(index='food_key', columns='kegg', values='amount_g', fill_value=0.0)
+    F = F.reindex(foods.index).fillna(0.0)
+    compounds = list(F.columns)
+    # §4.2.1 E: +1 완화 / -1 악화. 방향이 확정되지 않은 compound 는 0.
+    #   E_MODE=binary  논문 그대로의 +1/-1/0
+    #   E_MODE=shrunk  근거량으로 축소한 연속값 (기본, 02 단계 참조)
+    #   E_MODE=sig     BH q<0.05 인 compound 만 ±1
+    E_MODE = os.environ.get('E_MODE', 'shrunk')
+    if E_MODE == 'binary':
+        col = E_df['e_binary']
+    elif E_MODE == 'sig':
+        col = E_df['e_binary'].where(E_df['q'] < 0.05, 0.0)
+    else:
+        col = E_df['e_shrunk']
+    e = np.array([col.get(c, 0.0) for c in compounds], dtype=float)
+    print(f'  E_MODE={E_MODE}')
+    print(f'  F {F.shape[0]:,} x {F.shape[1]}  /  E 비영 {int((e != 0).sum())} '
+          f'(+{int((e > 0).sum())} / -{int((e < 0).sum())})')
+
+    # 정규화 — NORM=compound(기본) | row_minmax(공식 final.py)
+    #
+    # 공식 final.py 는 행별 min-max 를 쓴다. 음식 135개·성분 85개에서는 동작하지만
+    # 음식이 14,000 규모가 되면 무너진다: 음식마다 '그 음식의 최대 성분'이 1.0 이
+    # 되므로, 최대 성분이 우연히 E=+1 인 음식(칵테일의 ethanol, 음료의 sucrose)이
+    # 전부 상위로 올라온다. 음식 간 비교가 불가능해진다.
+    #
+    # 기본값은 compound(열)별 max 스케일링이다. 논문 §4.2.1 "Each element in this
+    # matrix represents the weight of a compound in the corresponding food sample"
+    # 와 Fig.4(c) "we normalize the compounds in the two groups of foods separately"
+    # 가 성분 축 정규화를 가리킨다. 공식 경로는 NORM=row_minmax 로 그대로 돌릴 수 있다.
+    NORM = os.environ.get('NORM', 'compound')
+    print(f'[2/5] 정규화 (NORM={NORM})')
+    X = F.values.astype(float)
+    if NORM == 'row_minmax':
+        rng = X.max(axis=1) - X.min(axis=1)
+        keep = rng > 0
+        X = (X[keep] - X[keep].min(axis=1, keepdims=True)) / rng[keep][:, None]
+    else:
+        colmax = X.max(axis=0)
+        X = np.divide(X, colmax, out=np.zeros_like(X), where=colmax > 0)
+        keep = X.sum(axis=1) > 0
+        X = X[keep]
+    names = F.index[keep]
+    print(f'  유지된 음식 {X.shape[0]:,} (전부 0 인 행 제외 {int((~keep).sum())})')
+
+    if PCA_N:
+        from sklearn.decomposition import PCA
+        p = PCA(n_components=PCA_N)
+        Xs = p.fit_transform(X)
+        print(f'  PCA {PCA_N} 성분, 설명분산 {p.explained_variance_ratio_.sum():.3f}')
+    else:
+        Xs = X
+
+    print('[3/5] D = E x F^T')
+    D = X @ e
+
+    print('[4/5] S = adjusted cosine (식 1) — 벡터화')
+    Xc = Xs - Xs.mean(axis=1, keepdims=True)
+    M = (Xs > 0).astype(float)                 # 공식 구현의 common 조건 (>0)
+    num = (Xc * M) @ (Xc * M).T                # 공통 성분만 더한 분자
+    nrm = np.sqrt((Xc ** 2).sum(axis=1))       # 분모는 전체 성분 (식 1 그대로)
+    den = np.outer(nrm, nrm)
+    S = np.divide(num, den, out=np.zeros_like(num), where=den > 0)
+    np.fill_diagonal(S, 0.0)
+    print(f'  S {S.shape}  비영 비율 {float((S != 0).mean()):.3f}')
+
+    print('[5/5] P = D x S, Top K')
+    # 식 (2) P_{i,j} = sum(D_i x S_j) 에는 정규화가 없다.
+    # 공식 final.py 는 여기에 p[i] /= sum(S[:,i]) 를 덧붙인다. adjusted cosine 은
+    # 음수를 가지므로 이 열합은 0 근처나 음수가 될 수 있다. 음식 135개에서는 드물었지만
+    # 14,000개에서는 성분이 적은 음식(칵테일류)의 열합이 ~15 까지 떨어져(중앙값 3,894)
+    # 나눗셈이 점수를 폭발시킨다. 기본값은 논문 식 (2) 그대로다.
+    SIM_NORM = os.environ.get('SIM_NORM', 'none')   # none(논문 식2) | colsum(공식 코드)
+    P = D @ S
+    if SIM_NORM == 'colsum':
+        colsum = S.sum(axis=0)
+        P = np.divide(P, colsum, out=np.zeros_like(P), where=colsum != 0)
+    print(f'  SIM_NORM={SIM_NORM}')
+
+    res = pd.DataFrame({'food_key': names, 'score': P})
+    res = res.join(foods[['food_name', 'food_group', 'n_compound', 'data_type']],
+                   on='food_key')
+    res = res.sort_values('score', ascending=False).reset_index(drop=True)
+    res.insert(0, 'rank', res.index + 1)
+    res.to_csv(os.path.join(OUT, 'recommendation.csv'), index=False)
+
+    print(f'\n=== Top {K} (추천) ===')
+    print(res.head(K)[['rank', 'food_name', 'food_group', 'score']].to_string(index=False))
+    print(f'\n=== Bottom {K} (비추천) ===')
+    print(res.tail(K)[['rank', 'food_name', 'food_group', 'score']].to_string(index=False))
+
+    print('\n=== 카테고리 분포 (논문 §4.2.3) ===')
+    top = res.head(K)['food_group'].value_counts()
+    bot = res.tail(K)['food_group'].value_counts()
+    cmp = pd.DataFrame({'Top': top, 'Bottom': bot}).fillna(0).astype(int)
+    print(cmp.sort_values('Top', ascending=False).to_string())
+
+    # Fig.4(b) 대응
+    idx = np.r_[res.index[:K], res.index[-K:]]
+    sub = res.loc[idx]
+    pos = {k: i for i, k in enumerate(names)}
+    emb = TSNE(n_components=2, random_state=0,
+               perplexity=min(30, len(idx) - 1)).fit_transform(
+        X[[pos[k] for k in sub['food_key']]])
+    plt.figure(figsize=(9, 7))
+    groups = sub['food_group'].unique()
+    cmap = plt.get_cmap('tab20')
+    for i, gname in enumerate(groups):
+        m = (sub['food_group'] == gname).values
+        rec = (sub['rank'] <= K).values
+        plt.scatter(emb[m & rec, 0], emb[m & rec, 1], marker='o', s=70,
+                    color=cmap(i % 20), label=gname)
+        plt.scatter(emb[m & ~rec, 0], emb[m & ~rec, 1], marker='^', s=70,
+                    color=cmap(i % 20))
+    plt.title(f'ourkg food recommendation for depression (o=Top{K}, ^=Bottom{K})')
+    plt.legend(fontsize=7, loc='best', ncol=2)
+    plt.tight_layout()
+    plt.savefig(os.path.join(OUT, 'recommendation.png'), dpi=140)
+    print(f'\n저장: {os.path.join(OUT, "recommendation.csv")}, recommendation.png')
+
+
+def evaluate():
+    """06 — 논문 §4.1 쿼리와 §5.1 두 평가법을 우리 KG 에 적용.
+
+    A. §4.1 Query 1·2·3 을 ourkg.nt 위에서 SPARQL 로 실행 (Table 2·3·4 대응)
+    B. §5.1 방법 1 — Supplement Table 1 의 20문항을 우리 KG 가 답할 수 있는지
+       측면(aspect)별로 집계. 전문가 3인이 없으므로 정확도 0.95/0.90/0.95 자체는
+       재현 대상이 아니다(eval/m1.py 서두와 같은 이유). 답변 가능성만 본다.
+    C. §5.1 방법 2 — 우리 KG 가 만든 추론 15건을 PubMed 로 검증.
+       논문은 수작업 검색이었다. 여기서는 E-utilities 로 같은 판정(1/-1/0)을 자동화한다.
+       1 = 두 엔티티가 함께 나오는 논문이 있음, 0 = 없음.
+       (논문의 -1 '반대 증거' 는 초록 읽기가 필요해 자동 판정하지 않는다.)
+
+    출력  out/eval_*.json / out/eval_*.csv
+    """
+    PART = os.environ.get('PART', 'ABC')
+    S = requests.Session()
+    S.headers['User-Agent'] = 'ourkg/1.0'
+
+    # ======================================================================
+    if 'A' in PART:
+        from rdflib import Graph, URIRef, Literal
+
+        print('[A] ourkg.nt 적재 (3M triple, 수 분 소요)', flush=True)
+        t0 = time.time()
+        g = Graph()
+        g.parse(os.path.join(OUT, 'ourkg.nt'), format='nt')
+        print(f'  triple {len(g):,}  {time.time()-t0:.0f}s', flush=True)
+
+        PREFIX = """
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX npq:  <http://nutrition.vu.nl/pop/qualifier#>
+    PREFIX mpq:  <http://nlp_microbe.ccnu.edu.cn/pop/qualifier#>
+    PREFIX our:  <http://nutrition.vu.nl/ourkg/>
+    PREFIX ent:  <http://nutrition.vu.nl/entity#>
+    """
+
+        # 논문 Supplementary Query 1 을 그대로 쓰면 음식 라벨 regex 가 중량 노드 76만 개와
+        # 조인되어 끝나지 않는다(논문 자신도 Q1 이 폭발한다 — eval/paper_sparql.py 참조).
+        # 먼저 라벨로 음식 URI 를 싸게 찾고, 그 결과를 VALUES 로 주입해 본 쿼리를 돌린다.
+        # 질문의 의미는 같고, 바뀐 것은 조인 순서뿐이다.
+        def find_foods(pattern, limit=6):
+            q = PREFIX + f"""select ?f ?l where {{
+              ?f rdf:type ent:Food ; rdfs:label ?l .
+              filter regex(?l, "{pattern}", "i")
+            }} limit {limit}"""
+            return [(r[0], str(r[1])) for r in g.query(q)]
+
+        res = {}
+
+        # --- Q1 (§4.1.1) 혼합 식단의 영양소 흡수량 (Table 2 대응)
+        # rdflib 는 VALUES 를 BGP 아래로 밀어 넣지 않아, 음식을 묶지 않으면 중량 노드
+        # 76만 개와 조인한다. 음식 URI 를 쿼리 문자열에 직접 넣어 subject 를 묶는다.
+        eggs = find_foods('^Egg, whole')
+        milks = find_foods('^Milk, whole|^Milk, reduced fat')
+        print(f'\n  --- Q1 (Table 2 대응)  음식 {len(eggs)} x {len(milks)}', flush=True)
+        t0 = time.time()
+        rows = []
+        for eu, el in eggs:
+            for mu, ml in milks:
+                q = PREFIX + f"""select ?cname ?ew ?mw where {{
+                  <{eu}> npq:hasNutrientWeights ?e . ?e npq:ofCompound ?c ; rdf:value ?ew .
+                  <{mu}> npq:hasNutrientWeights ?m . ?m npq:ofCompound ?c ; rdf:value ?mw .
+                  ?c rdfs:label ?cname .
+                  filter regex(?cname, "Riboflavin|Thiamin|Niacin", "i")
+                }}"""
+                for r in g.query(q):
+                    rows.append([el, ml, str(r[0]), float(r[1]), float(r[2]),
+                                 float(r[1]) + float(r[2])])
+        rows.sort(key=lambda r: -r[-1])
+        res['Q1'] = rows[:8]
+        print(f'      {len(rows)}행  {time.time()-t0:.1f}s', flush=True)
+        for r in rows[:8]:
+            print(f'      {r[0][:28]:28s} {r[1][:30]:30s} {r[2][:14]:14s} {r[5]:10.6f}',
+                  flush=True)
+
+        # --- Q2 (§4.1.1) 성분 → 장내세균 → 우울증 (Table 3 대응)
+        t0 = time.time()
+        q2 = PREFIX + """select ?cname ?microbe ?rel where {
+          ?c ?rel <http://id.nlm.nih.gov/mesh/D003865> ; rdfs:label ?cname .
+          filter(?rel in (npq:hasPositiveAssociation, npq:hasNegativeAssociation))
+          ?m mpq:hasMetabolites ?c ; rdfs:label ?microbe .
+        } limit 200"""
+        rows = sorted({(str(a), str(b), str(c).split('#')[-1]) for a, b, c in g.query(q2)})
+        res['Q2'] = [list(r) for r in rows]
+        print(f'\n  --- Q2 (Table 3 대응)  {len(rows)}행  {time.time()-t0:.1f}s', flush=True)
+        for r in rows[:10]:
+            print(f'      {r[0][:26]:26s} {r[1][:34]:34s} {r[2]}', flush=True)
+
+        # --- Q3 (§4.1.1) 우울증 + 합병증에 동시에 작용하는 성분 (Table 4 대응)
+        t0 = time.time()
+        q3 = PREFIX + """select distinct ?cname ?microbe ?disease where {
+          ?c ?rel <http://id.nlm.nih.gov/mesh/D003865> ; rdfs:label ?cname .
+          filter(?rel in (npq:hasPositiveAssociation, npq:hasNegativeAssociation))
+          ?m mpq:hasMetabolites ?c ; rdfs:label ?microbe ; mpq:hasAssociation ?d .
+          ?d rdfs:subClassOf ent:MentalDisorder ; rdfs:label ?disease .
+          filter(?d != <http://id.nlm.nih.gov/mesh/D003865>)
+        } limit 100"""
+        rows = sorted({(str(a), str(b), str(c)) for a, b, c in g.query(q3)})
+        res['Q3'] = [list(r) for r in rows]
+        print(f'\n  --- Q3 (Table 4 대응)  {len(rows)}행  {time.time()-t0:.1f}s', flush=True)
+        for r in rows[:12]:
+            print(f'      {r[0][:26]:26s} {r[1][:34]:34s} {r[2]}', flush=True)
+
+        json.dump(res, open(os.path.join(OUT, 'eval_sparql.json'), 'w'),
+                  ensure_ascii=False, indent=1)
+
+    # ======================================================================
+    if 'B' in PART:
+        import paper_data
+
+        print('\n[B] §5.1 방법 1 — 20문항 답변 가능성')
+        foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
+        long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+        E = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
+        mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str})
+        md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
+
+        # 측면별로 우리 KG 가 그 질문 유형을 답하는 데 필요한 축을 갖고 있는가
+        # 논문의 여섯 측면별로, 우리 KG 가 그 질문 유형을 답할 축을 갖췄는가.
+        # 온톨로지 축(FoodOn·중국 식품 온톨로지·SNOMED CT)은 통합하지 않았으므로
+        # 분류 계층을 요구하는 두 측면은 부분 답변(△)이다.
+        HAVE = {
+            'food categories': ('△', f'FDC {len(foods):,} 음식 / SR 27군. '
+                                     'FoodOn·Chinese Food Ontology 미통합이라 '
+                                     '온톨로지 계층 질문은 답하지 못한다'),
+            'weight calculation': ('O', f'성분 중량 {len(long):,} 건 (g/100g)'),
+            'compounds categories': ('O', f'KEGG compound {long["kegg"].nunique()}'),
+            'compounds in food and gut': ('O', 'FDC 성분 + KEGG compound-미생물 경로'),
+            'bacteria taxonomy': ('O', f'NCBI taxonomy {len(mic)} 종 (학명·계통·rank 갱신)'),
+            'disease classification': ('△', f'MeSH tree number {md.mesh_id.nunique()} 질환. '
+                                            'SNOMED CT 미통합'),
+        }
+        rows = []
+        for no, q, aspect, ans, v0, v1, v2 in paper_data.TABLE1:
+            key = next((k for k in HAVE if k == aspect.lower().strip()), None)
+            mark, why = HAVE.get(key, ('?', f'측면 미분류: {aspect}'))
+            rows.append({'no': no, 'aspect': aspect, 'question': q,
+                         'paper_answer': ans, 'ourkg': mark, 'basis': why,
+                         'expert_consensus': int(v0 + v1 + v2 == 3)})
+        b = pd.DataFrame(rows)
+        b.to_csv(os.path.join(OUT, 'eval_method1.csv'), index=False)
+        print(b.groupby(['aspect', 'ourkg']).size().to_string())
+        print(f"  답변 가능 {int((b.ourkg == 'O').sum())}/20, 부분 {int((b.ourkg == '△').sum())}, "
+              f"불가 {int((b.ourkg == 'X').sum())}")
+
+    # ======================================================================
+    if 'C' in PART:
+        print('\n[C] §5.1 방법 2 — 추론 15건 PubMed 검증')
+        md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
+        mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str}
+                          ).set_index('taxid')['name'].to_dict()
+        mdis = pd.read_csv(os.path.join(OUT, 'microbe_disease_mikg.csv'))
+        rec = pd.read_csv(os.path.join(OUT, 'recommendation.csv'))
+        E = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+        long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+        foods = pd.read_csv(os.path.join(OUT, 'foods.csv')).set_index('food_key')
+
+        random.seed(0)
+        infs = []
+
+        # 추론 (a) Complication — 같은 미생물을 공유하는 두 정신질환 (논문 §3.3)
+        by_mic = collections.defaultdict(set)
+        for _, r in mdis.iterrows():
+            by_mic[r['microbe']].add(r['disease'])
+        pairs = collections.Counter()
+        for m, ds in by_mic.items():
+            for a, b in itertools.combinations(sorted(ds), 2):
+                pairs[(a, b)] += 1
+        for (a, b), n in pairs.most_common(40):
+            shared = sorted(m for m, ds in by_mic.items() if a in ds and b in ds)
+            # 공유 미생물이 여럿이면 시드 고정 난수로 하나를 고른다. 문헌이 가장 잘
+            # 붙는 것을 고르면 검증이 아니라 확증 편향이 된다.
+            infs.append({'type': 'Complication', 'q': f'{a} and {b}',
+                         'evidence': random.choice(shared), 'n_shared_microbe': n,
+                         'terms': [a, b]})
+
+        # 추론 (b) Diet recommendation — 상·하위 음식과 그 근거 compound
+        def basis(fk):
+            sub = long[long.food_key == fk].copy()
+            sub['e'] = sub['kegg'].map(E['e_shrunk']).fillna(0)
+            sub['w'] = sub['amount_g'] * sub['e']
+            if sub.empty or sub['w'].abs().max() == 0:
+                return None
+            row = sub.loc[sub['w'].abs().idxmax()]
+            return str(E['name'].get(row['kegg'], row['kegg']))
+
+        for fk in list(rec.head(20)['food_key']) + list(rec.tail(20)['food_key']):
+            c = basis(fk)
+            if not c:
+                continue
+            nm = foods.loc[fk, 'food_name']
+            infs.append({'type': 'Diet recommendation',
+                         'q': f'{nm} and depression', 'evidence': c,
+                         'terms': [re.split(r'[,(]', str(nm))[0].strip(), 'depression']})
+
+        sample = random.sample(infs, 15)
+
+        def pubmed(terms, extra=None):
+            q = ' AND '.join(f'"{t}"' for t in terms if t)
+            if extra:
+                q += f' AND "{extra}"'
+            r = S.get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi',
+                      params={'db': 'pubmed', 'term': q, 'retmax': 3, 'retmode': 'json'},
+                      timeout=60)
+            time.sleep(0.4)
+            try:
+                d = r.json()['esearchresult']
+                return int(d['count']), d.get('idlist', [])
+            except Exception:
+                return 0, []
+
+        rows = []
+        for i, inf in enumerate(sample, 1):
+            # 판정은 '두 엔티티 + KG 가 댄 근거' 세 항이 모두 함께 나오는 논문이
+            # 있는가로 한다. 질환 이름 두 개만으로 검색하면 anxiety+depression 처럼
+            # 1만 건이 나와 아무것도 검증하지 못한다(그 수치는 참고용으로만 남긴다).
+            n, ids = pubmed(inf['terms'], inf['evidence'])
+            n_pair, _ = pubmed(inf['terms'])
+            rows.append({'no': i - 1, 'question': inf['q'], 'attributes': inf['type'],
+                         'ourkg': inf['evidence'], 'pubmed': ';'.join(ids[:2]),
+                         'n_hits_with_evidence': n, 'n_hits_pair_only': n_pair,
+                         'result': 1 if n else 0})
+            print(f"  {i:2d}. {inf['q'][:48]:50s} {inf['evidence'][:22]:24s} "
+                  f"근거포함={n:5d}  두항만={n_pair:6d}  -> {'1' if n else '0'}")
+        t5 = pd.DataFrame(rows)
+        t5.to_csv(os.path.join(OUT, 'eval_method2.csv'), index=False)
+        print(f"\n  확인됨(1) {int((t5.result == 1).sum())}/15, "
+              f"미확인(0) {int((t5.result == 0).sum())}/15   "
+              f"(논문 Table 5: 11 / 3 / 반대 1)")
+
+
+STEPS = {'recommend': recommend, 'evaluate': evaluate}
+
+
+def main(argv):
+    want = argv or list(STEPS)
+    unknown = [w for w in want if w not in STEPS]
+    if unknown:
+        sys.exit(f'알 수 없는 단계 {unknown}. 가능: {list(STEPS)}')
+    for name in want:
+        print(f'\n{"=" * 70}\n== {name}\n{"=" * 70}', flush=True)
+        STEPS[name]()
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
