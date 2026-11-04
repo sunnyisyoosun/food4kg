@@ -33,13 +33,13 @@ S.headers['User-Agent'] = 'ourkg/1.0'
 
 # ======================================================================
 if 'A' in PART:
-    from rdflib import Graph
+    from rdflib import Graph, URIRef, Literal
 
-    print('[A] ourkg.nt 적재 (3M triple, 수 분 소요)')
+    print('[A] ourkg.nt 적재 (3M triple, 수 분 소요)', flush=True)
     t0 = time.time()
     g = Graph()
     g.parse(os.path.join(OUT, 'ourkg.nt'), format='nt')
-    print(f'  triple {len(g):,}  {time.time()-t0:.0f}s')
+    print(f'  triple {len(g):,}  {time.time()-t0:.0f}s', flush=True)
 
     PREFIX = """
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -50,49 +50,72 @@ PREFIX our:  <http://nutrition.vu.nl/ourkg/>
 PREFIX ent:  <http://nutrition.vu.nl/entity#>
 """
 
-    # Q1 (§4.1.1) — 혼합 식단의 영양소 흡수량. 논문 Supplementary Query 1 은
-    # ?milkunit 이 ?milk 에 묶이지 않는 결함이 있다(eval/m1.py 서두).
-    # 여기서는 각 중량 노드를 해당 음식에 묶어 질문의 의도대로 쓴다.
-    Q1 = PREFIX + """
-select ?eggname ?milkname ?cname (?ew + ?mw as ?total) where {
-  ?egg rdfs:label ?eggname ; npq:hasNutrientWeights ?eu .
-  ?eu npq:ofCompound ?c ; rdf:value ?ew .
-  ?milk rdfs:label ?milkname ; npq:hasNutrientWeights ?mu .
-  ?mu npq:ofCompound ?c ; rdf:value ?mw .
-  ?c rdfs:label ?cname .
-  filter regex(?eggname, "^Egg,", "i")
-  filter regex(?milkname, "^Milk,", "i")
-  filter regex(?cname, "Riboflavin|Thiamin|Niacin|Folate", "i")
-} order by desc(?total) limit 8"""
+    # 논문 Supplementary Query 1 을 그대로 쓰면 음식 라벨 regex 가 중량 노드 76만 개와
+    # 조인되어 끝나지 않는다(논문 자신도 Q1 이 폭발한다 — eval/paper_sparql.py 참조).
+    # 먼저 라벨로 음식 URI 를 싸게 찾고, 그 결과를 VALUES 로 주입해 본 쿼리를 돌린다.
+    # 질문의 의미는 같고, 바뀐 것은 조인 순서뿐이다.
+    def find_foods(pattern, limit=6):
+        q = PREFIX + f"""select ?f ?l where {{
+          ?f rdf:type ent:Food ; rdfs:label ?l .
+          filter regex(?l, "{pattern}", "i")
+        }} limit {limit}"""
+        return [(r[0], str(r[1])) for r in g.query(q)]
 
-    # Q2 (§4.1.1) — 음식이 영양소·장내세균을 통해 우울증에 미치는 영향
-    Q2 = PREFIX + """
-select ?food ?cname ?w ?microbe ?rel where {
-  ?f rdfs:label ?food ; npq:hasNutrientWeights ?u .
-  ?u npq:ofCompound ?c ; rdf:value ?w .
-  ?c rdfs:label ?cname ; ?rel <http://id.nlm.nih.gov/mesh/D003865> .
-  ?m mpq:hasMetabolites ?c ; rdfs:label ?microbe .
-  filter(?rel in (npq:hasPositiveAssociation, npq:hasNegativeAssociation))
-} limit 10"""
-
-    # Q3 (§4.1.1) — 우울증과 그 합병증에 동시에 작용하는 음식 (추론 포함)
-    Q3 = PREFIX + """
-select distinct ?cname ?microbe ?disease where {
-  ?c rdfs:label ?cname ; ?rel <http://id.nlm.nih.gov/mesh/D003865> .
-  ?m mpq:hasMetabolites ?c ; rdfs:label ?microbe ; mpq:hasAssociation ?d .
-  ?d rdfs:subClassOf ent:MentalDisorder ; rdfs:label ?disease .
-  filter(?rel in (npq:hasPositiveAssociation, npq:hasNegativeAssociation))
-  filter(?d != <http://id.nlm.nih.gov/mesh/D003865>)
-} limit 20"""
+    def values(var, uris):
+        return 'values ?%s { %s }' % (var, ' '.join(f'<{u}>' for u in uris))
 
     res = {}
-    for name, q in (('Q1', Q1), ('Q2', Q2), ('Q3', Q3)):
-        t0 = time.time()
-        rows = [[str(x) for x in r] for r in g.query(q)]
-        res[name] = rows
-        print(f'\n  --- {name}  {len(rows)}행  {time.time()-t0:.1f}s')
-        for r in rows[:8]:
-            print('     ', ' | '.join(v[:38] for v in r))
+
+    # --- Q1 (§4.1.1) 혼합 식단의 영양소 흡수량 (Table 2 대응)
+    eggs = find_foods('^Egg, whole')
+    milks = find_foods('^Milk, whole|^Milk, reduced fat')
+    t0 = time.time()
+    q1 = PREFIX + f"""select ?eggname ?milkname ?cname (?ew + ?mw as ?total) where {{
+      {values('egg', [u for u, _ in eggs])}
+      {values('milk', [u for u, _ in milks])}
+      ?egg rdfs:label ?eggname ; npq:hasNutrientWeights ?eu .
+      ?eu npq:ofCompound ?c ; rdf:value ?ew .
+      ?milk rdfs:label ?milkname ; npq:hasNutrientWeights ?mu .
+      ?mu npq:ofCompound ?c ; rdf:value ?mw .
+      ?c rdfs:label ?cname .
+      filter regex(?cname, "Riboflavin|Thiamin|Niacin", "i")
+    }} order by desc(?total) limit 8"""
+    rows = [[str(x) for x in r] for r in g.query(q1)]
+    res['Q1'] = rows
+    print(f'\n  --- Q1 (Table 2 대응)  음식 {len(eggs)}x{len(milks)}  '
+          f'{len(rows)}행  {time.time()-t0:.1f}s', flush=True)
+    for r in rows:
+        print('     ', ' | '.join(v[:40] for v in r), flush=True)
+
+    # --- Q2 (§4.1.1) 음식 → 성분 → 장내세균 → 우울증 (Table 3 대응)
+    t0 = time.time()
+    q2 = PREFIX + """select ?cname ?microbe ?rel (count(?f) as ?nfood) where {
+      ?c rdfs:label ?cname ; ?rel <http://id.nlm.nih.gov/mesh/D003865> .
+      filter(?rel in (npq:hasPositiveAssociation, npq:hasNegativeAssociation))
+      ?m mpq:hasMetabolites ?c ; rdfs:label ?microbe .
+      ?f npq:hasNutrients ?c .
+    } group by ?cname ?microbe ?rel order by desc(?nfood) limit 10"""
+    rows = [[str(x) for x in r] for r in g.query(q2)]
+    res['Q2'] = rows
+    print(f'\n  --- Q2 (Table 3 대응)  {len(rows)}행  {time.time()-t0:.1f}s', flush=True)
+    for r in rows:
+        print('     ', ' | '.join(v.split("#")[-1][:40] for v in r), flush=True)
+
+    # --- Q3 (§4.1.1) 우울증과 그 합병증에 동시에 작용하는 성분 (Table 4 대응)
+    t0 = time.time()
+    q3 = PREFIX + """select distinct ?cname ?microbe ?disease where {
+      ?c rdfs:label ?cname ; ?rel <http://id.nlm.nih.gov/mesh/D003865> .
+      filter(?rel in (npq:hasPositiveAssociation, npq:hasNegativeAssociation))
+      ?m mpq:hasMetabolites ?c ; rdfs:label ?microbe ; mpq:hasAssociation ?d .
+      ?d rdfs:subClassOf ent:MentalDisorder ; rdfs:label ?disease .
+      filter(?d != <http://id.nlm.nih.gov/mesh/D003865>)
+    } limit 20"""
+    rows = [[str(x) for x in r] for r in g.query(q3)]
+    res['Q3'] = rows
+    print(f'\n  --- Q3 (Table 4 대응)  {len(rows)}행  {time.time()-t0:.1f}s', flush=True)
+    for r in rows[:10]:
+        print('     ', ' | '.join(v[:40] for v in r), flush=True)
+
     json.dump(res, open(os.path.join(OUT, 'eval_sparql.json'), 'w'),
               ensure_ascii=False, indent=1)
 
