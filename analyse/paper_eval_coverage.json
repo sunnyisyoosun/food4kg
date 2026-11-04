@@ -1,0 +1,45 @@
+{
+ "per_compound": {
+  "Threonine": {
+   "kegg": "C00188",
+   "kind": "amino",
+   "n_food": 255
+  },
+  "Cystine": {
+   "kegg": "C01420",
+   "kind": "amino",
+   "n_food": 95
+  },
+  "Lysine": {
+   "kegg": "C00047",
+   "kind": "amino",
+   "n_food": 254
+  },
+  "Glutamate": {
+   "kegg": "C00025",
+   "kind": "amino",
+   "n_food": 261
+  },
+  "alpha-Tocopherol": {
+   "kegg": "C02477",
+   "kind": "vitamin",
+   "n_food": 7114
+  },
+  "Niacin": {
+   "kegg": "C00253",
+   "kind": "vitamin",
+   "n_food": 8007
+  },
+  "Ascorbate": {
+   "kegg": "C00072",
+   "kind": "vitamin",
+   "n_food": 5085
+  }
+ },
+ "amino_max": 261,
+ "vitamin_min": 5085,
+ "ratio": 19.5,
+ "n_metabolism": 201,
+ "n_association": 764,
+ "n_both": 72
+}

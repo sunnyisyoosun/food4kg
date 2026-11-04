@@ -1,0 +1,15 @@
+{
+ "kg_total": 4314742,
+ "table1_match": 7,
+ "table1_n": 9,
+ "table2": 6,
+ "table3": 8,
+ "table3_verbatim": 5,
+ "table3_both_sided": 8,
+ "table4_raw": 5,
+ "table4_joined": 4,
+ "table4_badname": 2,
+ "t5_complication": 7,
+ "t5_diet": 2,
+ "t5_diet_loose": 5
+}

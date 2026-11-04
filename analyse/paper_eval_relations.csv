@@ -1,0 +1,7 @@
+category,relation,count,present,files
+self-defined,hasAssociation,2748,True,Disease_Bacteria.jsonld;Mental_health.jsonld
+self-defined,hasPositiveAssociation,396,True,MENDA_Depression.jsonld
+self-defined,hasNegativeAssociation,427,True,MENDA_Depression.jsonld
+predefined,subClassOf,82282,True,Bacteria_Ontology.trig;Disease_Bacteria.jsonld;Food_Category.jsonld
+predefined,type,41363,True,Disease_Bacteria.jsonld;Food_Category.jsonld;KEGG_Compound.jsonld
+predefined,sameAs,421,True,Food_Category.jsonld;Food_Nutrient.trig;Mental_health.jsonld

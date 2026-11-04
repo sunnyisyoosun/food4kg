@@ -396,6 +396,40 @@ if os.path.exists(_fdc_food):
 else:
     print("  ⚠ fdc_raw/food.csv 없음 — guess_type() 추정만 사용")
 
+# 논문 §3.2 의 카테고리 병합 — WWEIA 세분류를 FDC legacy 상위로 올린다.
+#   "both 'soft drinks' and 'diet soft drinks' are classified as subclasses of
+#    'beverages'" / "'rolls and buns' ... categorized under 'baked products'"
+# 이 매핑은 Food_Category.jsonld 에 rdfs:subClassOf 로 들어 있다(REPRODUCTION §17.16).
+# 적용하면 카테고리가 185 -> 64 로 줄고, 135개 음식 기준으로는 18 -> 17 종이 되어
+# 논문 Fig. 4(b) 의 범례 17종과 일치한다.
+CATEGORY_PARENT = {}
+_fc = os.path.join(BASE_DIR, 'Food4healthKG/foodkg_triply/Food_Category.jsonld')
+if not os.path.exists(_fc):
+    _fc = os.path.join(BASE_DIR, 'foodkg_triply/Food_Category.jsonld')
+if os.path.exists(_fc):
+    import json as _json
+    for _e in _json.load(open(_fc)):
+        for _n in _e.get('@graph', []):
+            _nid = _n.get('@id', '')
+            if 'food_category_id' not in _nid:
+                continue
+            for _k, _vs in _n.items():
+                if _k.endswith('subClassOf'):
+                    _par = _vs[0]['@id']
+                    if 'food_category_id' in _par:
+                        CATEGORY_PARENT[float(_nid.rsplit('/', 1)[-1])] = \
+                            float(_par.rsplit('/', 1)[-1])
+    print(f"  카테고리 병합 규칙(§3.2): {len(CATEGORY_PARENT)}건")
+
+
+def rollup_category(t):
+    """§3.2 의 self-defined mapping rules 로 상위 카테고리까지 올린다."""
+    seen = set()
+    while t in CATEGORY_PARENT and t not in seen:
+        seen.add(t)
+        t = CATEGORY_PARENT[t]
+    return t
+
 rows = []
 untyped = []
 guessed = []
@@ -417,7 +451,7 @@ for idx, name, base_lbl in matched_rows:
             untyped.append(name)
             t = 11.0   # fallback
         guessed.append(name)
-    row['type'] = float(t)
+    row['type'] = rollup_category(float(t))
     rows.append(row)
 
 if guessed:

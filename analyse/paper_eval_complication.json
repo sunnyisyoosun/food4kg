@@ -1,0 +1,2316 @@
+{
+ "n_disease": 250,
+ "n_pair_possible": 31125,
+ "n_mental": 10,
+ "n_pair_mental": 45,
+ "cond1": 3776,
+ "cond1_2": 45,
+ "triples": 90,
+ "triples_all": 7552,
+ "t5_total": 8,
+ "t5_cond1": 8,
+ "t5_cond1_2": 5,
+ "t5_evidence": 7,
+ "t4_total": 3,
+ "t4_cond1": 3,
+ "t4_cond1_2": 3,
+ "diseases": [
+  {
+   "label": "Diabetes Mellitus, Type 1",
+   "mental": false,
+   "n_bac": 115,
+   "ids": [
+    "D003922",
+    "SCT_46635009"
+   ]
+  },
+  {
+   "label": "Autistic disorder",
+   "mental": true,
+   "n_bac": 114,
+   "ids": [
+    "D001321",
+    "MiKG#Autistic-disorder",
+    "SCT_408856003"
+   ]
+  },
+  {
+   "label": "Periodontitis",
+   "mental": false,
+   "n_bac": 87,
+   "ids": [
+    "D010518",
+    "SCT_41565005"
+   ]
+  },
+  {
+   "label": "Depressive disorder",
+   "mental": true,
+   "n_bac": 85,
+   "ids": [
+    "D003865",
+    "D003866",
+    "MiKG#Depressive-disorder",
+    "SCT_268621008",
+    "SCT_35489007",
+    "SCT_36923009"
+   ]
+  },
+  {
+   "label": "Crohn Disease",
+   "mental": false,
+   "n_bac": 85,
+   "ids": [
+    "D003424",
+    "SCT_34000006"
+   ]
+  },
+  {
+   "label": "Obesity",
+   "mental": false,
+   "n_bac": 73,
+   "ids": [
+    "D009765",
+    "SCT_414916001"
+   ]
+  },
+  {
+   "label": "Diabetes Mellitus, Type 2",
+   "mental": false,
+   "n_bac": 73,
+   "ids": [
+    "D003924",
+    "SCT_44054006"
+   ]
+  },
+  {
+   "label": "Dental Caries",
+   "mental": false,
+   "n_bac": 65,
+   "ids": [
+    "D003731",
+    "SCT_80967001"
+   ]
+  },
+  {
+   "label": "Cystic Fibrosis",
+   "mental": false,
+   "n_bac": 60,
+   "ids": [
+    "D003550",
+    "SCT_190905008"
+   ]
+  },
+  {
+   "label": "Colorectal Neoplasms",
+   "mental": false,
+   "n_bac": 55,
+   "ids": [
+    "D015179",
+    "SCT_781382000"
+   ]
+  },
+  {
+   "label": "Parkinson Disease",
+   "mental": false,
+   "n_bac": 52,
+   "ids": [
+    "D010300",
+    "SCT_49049000"
+   ]
+  },
+  {
+   "label": "Tuberculosis",
+   "mental": false,
+   "n_bac": 45,
+   "ids": [
+    "D014376",
+    "SCT_373576009",
+    "SCT_56717001"
+   ]
+  },
+  {
+   "label": "Aggressive Periodontitis",
+   "mental": false,
+   "n_bac": 44,
+   "ids": [
+    "D010520",
+    "SCT_449908004"
+   ]
+  },
+  {
+   "label": "Colitis, Ulcerative",
+   "mental": false,
+   "n_bac": 42,
+   "ids": [
+    "D003093",
+    "SCT_64766004"
+   ]
+  },
+  {
+   "label": "Bipolar disorder",
+   "mental": true,
+   "n_bac": 41,
+   "ids": [
+    "D001714",
+    "MiKG#Bipolar-disorder",
+    "SCT_13746004"
+   ]
+  },
+  {
+   "label": "Sleep disorders",
+   "mental": true,
+   "n_bac": 40,
+   "ids": [
+    "D012893",
+    "D020919",
+    "MiKG#Sleep-disorders",
+    "SCT_39898005"
+   ]
+  },
+  {
+   "label": "Anxiety disorders",
+   "mental": true,
+   "n_bac": 36,
+   "ids": [
+    "D001008",
+    "MiKG#Anxiety-disorders",
+    "SCT_197480006"
+   ]
+  },
+  {
+   "label": "Personality disorder",
+   "mental": true,
+   "n_bac": 36,
+   "ids": [
+    "D010554",
+    "MiKG#Personality-disorder",
+    "SCT_33449004"
+   ]
+  },
+  {
+   "label": "Liver Cirrhosis",
+   "mental": false,
+   "n_bac": 34,
+   "ids": [
+    "D008103",
+    "SCT_19943007"
+   ]
+  },
+  {
+   "label": "Periodontal Diseases",
+   "mental": false,
+   "n_bac": 33,
+   "ids": [
+    "D010510",
+    "SCT_2556008"
+   ]
+  },
+  {
+   "label": "Celiac Disease",
+   "mental": false,
+   "n_bac": 33,
+   "ids": [
+    "D002446",
+    "SCT_396331005"
+   ]
+  },
+  {
+   "label": "Learning disorder",
+   "mental": true,
+   "n_bac": 32,
+   "ids": [
+    "D007859",
+    "MiKG#Learning-disorder",
+    "SCT_1855002"
+   ]
+  },
+  {
+   "label": "Vaginosis, Bacterial",
+   "mental": false,
+   "n_bac": 32,
+   "ids": [
+    "D016585",
+    "SCT_419760006"
+   ]
+  },
+  {
+   "label": "Lupus Erythematosus, Systemic",
+   "mental": false,
+   "n_bac": 30,
+   "ids": [
+    "D008180",
+    "SCT_200936003"
+   ]
+  },
+  {
+   "label": "Pervasive developmental disorder NOS",
+   "mental": false,
+   "n_bac": 30,
+   "ids": [
+    "D002659",
+    "SCT_35919005"
+   ]
+  },
+  {
+   "label": "Irritable Bowel Syndrome",
+   "mental": false,
+   "n_bac": 29,
+   "ids": [
+    "D043183",
+    "SCT_10743008"
+   ]
+  },
+  {
+   "label": "Mouth Neoplasms",
+   "mental": false,
+   "n_bac": 28,
+   "ids": [
+    "D009062",
+    "SCT_126797001"
+   ]
+  },
+  {
+   "label": "Behcet Syndrome",
+   "mental": false,
+   "n_bac": 27,
+   "ids": [
+    "D001528",
+    "SCT_310701003"
+   ]
+  },
+  {
+   "label": "Dermatitis, Atopic",
+   "mental": false,
+   "n_bac": 26,
+   "ids": [
+    "D003876",
+    "SCT_24079001"
+   ]
+  },
+  {
+   "label": "Sjogren's Syndrome",
+   "mental": false,
+   "n_bac": 24,
+   "ids": [
+    "D012859",
+    "SCT_83901003"
+   ]
+  },
+  {
+   "label": "Eating disorders",
+   "mental": true,
+   "n_bac": 23,
+   "ids": [
+    "D001068",
+    "MiKG#Eating-disorders",
+    "SCT_72366004"
+   ]
+  },
+  {
+   "label": "Cognition disorders",
+   "mental": true,
+   "n_bac": 23,
+   "ids": [
+    "D003072",
+    "MiKG#Cognition-disorders",
+    "SCT_443265004"
+   ]
+  },
+  {
+   "label": "D020018",
+   "mental": true,
+   "n_bac": 23,
+   "ids": [
+    "D020018",
+    "SCT_231532002"
+   ]
+  },
+  {
+   "label": "Polyendocrinopathies, Autoimmune",
+   "mental": false,
+   "n_bac": 23,
+   "ids": [
+    "D016884",
+    "SCT_41864002"
+   ]
+  },
+  {
+   "label": "Smoking",
+   "mental": false,
+   "n_bac": 23,
+   "ids": [
+    "D012907",
+    "SCT_77176002"
+   ]
+  },
+  {
+   "label": "HIV Infections",
+   "mental": false,
+   "n_bac": 22,
+   "ids": [
+    "D015658",
+    "SCT_86406008"
+   ]
+  },
+  {
+   "label": "Tonsillitis",
+   "mental": false,
+   "n_bac": 22,
+   "ids": [
+    "D014069",
+    "SCT_90176007"
+   ]
+  },
+  {
+   "label": "Opisthorchiasis",
+   "mental": false,
+   "n_bac": 21,
+   "ids": [
+    "D009889",
+    "SCT_1059007"
+   ]
+  },
+  {
+   "label": "Cholangitis, Sclerosing",
+   "mental": false,
+   "n_bac": 20,
+   "ids": [
+    "D015209",
+    "SCT_235917005"
+   ]
+  },
+  {
+   "label": "Pulmonary Disease, Chronic Obstructive",
+   "mental": false,
+   "n_bac": 18,
+   "ids": [
+    "D029424",
+    "SCT_13645005"
+   ]
+  },
+  {
+   "label": "Renal Insufficiency, Chronic",
+   "mental": false,
+   "n_bac": 17,
+   "ids": [
+    "D051436",
+    "SCT_723190009"
+   ]
+  },
+  {
+   "label": "Fibromyalgia",
+   "mental": false,
+   "n_bac": 16,
+   "ids": [
+    "D005356",
+    "SCT_203082005"
+   ]
+  },
+  {
+   "label": "Multiple Sclerosis",
+   "mental": false,
+   "n_bac": 16,
+   "ids": [
+    "D009103",
+    "SCT_24700007"
+   ]
+  },
+  {
+   "label": "Diaper Rash",
+   "mental": false,
+   "n_bac": 16,
+   "ids": [
+    "D003963",
+    "SCT_91487003"
+   ]
+  },
+  {
+   "label": "Stomach Neoplasms",
+   "mental": false,
+   "n_bac": 14,
+   "ids": [
+    "D013274",
+    "SCT_126824007"
+   ]
+  },
+  {
+   "label": "Colonic Polyps",
+   "mental": false,
+   "n_bac": 14,
+   "ids": [
+    "D003111",
+    "SCT_68496003"
+   ]
+  },
+  {
+   "label": "Arthritis, Rheumatoid",
+   "mental": false,
+   "n_bac": 14,
+   "ids": [
+    "D001172",
+    "SCT_69896004"
+   ]
+  },
+  {
+   "label": "Inflammatory Bowel Diseases",
+   "mental": false,
+   "n_bac": 13,
+   "ids": [
+    "D015212",
+    "SCT_24526004"
+   ]
+  },
+  {
+   "label": "Breast Neoplasms",
+   "mental": false,
+   "n_bac": 13,
+   "ids": [
+    "D001943",
+    "SCT_254837009"
+   ]
+  },
+  {
+   "label": "Premature Birth",
+   "mental": false,
+   "n_bac": 13,
+   "ids": [
+    "D047928",
+    "SCT_367494004"
+   ]
+  },
+  {
+   "label": "Pregnancy",
+   "mental": false,
+   "n_bac": 13,
+   "ids": [
+    "D011247",
+    "SCT_77386006"
+   ]
+  },
+  {
+   "label": "Urinary Incontinence",
+   "mental": false,
+   "n_bac": 11,
+   "ids": [
+    "D014549",
+    "SCT_165232002"
+   ]
+  },
+  {
+   "label": "Spotted Fever Group Rickettsiosis",
+   "mental": false,
+   "n_bac": 11,
+   "ids": [
+    "D000073605",
+    "SCT_186771002"
+   ]
+  },
+  {
+   "label": "Non-alcoholic Fatty Liver Disease",
+   "mental": false,
+   "n_bac": 11,
+   "ids": [
+    "D065626",
+    "SCT_197315008"
+   ]
+  },
+  {
+   "label": "Stomatitis, Aphthous",
+   "mental": false,
+   "n_bac": 11,
+   "ids": [
+    "D013281",
+    "SCT_426965005",
+    "SCT_427617000"
+   ]
+  },
+  {
+   "label": "Atherosclerosis",
+   "mental": false,
+   "n_bac": 10,
+   "ids": [
+    "D050197",
+    "SCT_38716007"
+   ]
+  },
+  {
+   "label": "Halitosis",
+   "mental": false,
+   "n_bac": 10,
+   "ids": [
+    "D006209",
+    "SCT_79879001"
+   ]
+  },
+  {
+   "label": "Psoriasis",
+   "mental": false,
+   "n_bac": 10,
+   "ids": [
+    "D011565",
+    "SCT_9014002"
+   ]
+  },
+  {
+   "label": "Asthma",
+   "mental": false,
+   "n_bac": 9,
+   "ids": [
+    "D001249",
+    "SCT_195967001"
+   ]
+  },
+  {
+   "label": "Pneumonia",
+   "mental": false,
+   "n_bac": 9,
+   "ids": [
+    "D011014",
+    "SCT_233604007"
+   ]
+  },
+  {
+   "label": "Enterocolitis, Necrotizing",
+   "mental": false,
+   "n_bac": 9,
+   "ids": [
+    "D020345",
+    "SCT_2707005"
+   ]
+  },
+  {
+   "label": "Hypertension",
+   "mental": false,
+   "n_bac": 9,
+   "ids": [
+    "D006973",
+    "SCT_38341003"
+   ]
+  },
+  {
+   "label": "Urinary Bladder Neoplasms",
+   "mental": false,
+   "n_bac": 8,
+   "ids": [
+    "D001749",
+    "SCT_126885006"
+   ]
+  },
+  {
+   "label": "Liver Cirrhosis, Biliary",
+   "mental": false,
+   "n_bac": 8,
+   "ids": [
+    "D008105",
+    "SCT_1761006"
+   ]
+  },
+  {
+   "label": "Papillomavirus Infections",
+   "mental": false,
+   "n_bac": 8,
+   "ids": [
+    "D030361",
+    "SCT_240532009"
+   ]
+  },
+  {
+   "label": "Down Syndrome",
+   "mental": false,
+   "n_bac": 8,
+   "ids": [
+    "D004314",
+    "SCT_41040004"
+   ]
+  },
+  {
+   "label": "Respiratory Tract Infections",
+   "mental": false,
+   "n_bac": 7,
+   "ids": [
+    "D012141",
+    "SCT_275498002"
+   ]
+  },
+  {
+   "label": "Uterine Cervical Neoplasms",
+   "mental": false,
+   "n_bac": 7,
+   "ids": [
+    "D002583",
+    "SCT_363354003"
+   ]
+  },
+  {
+   "label": "Leukoplakia, Oral",
+   "mental": false,
+   "n_bac": 7,
+   "ids": [
+    "D007972",
+    "SCT_414603003"
+   ]
+  },
+  {
+   "label": "Diarrhea",
+   "mental": false,
+   "n_bac": 7,
+   "ids": [
+    "D003967",
+    "SCT_62315008"
+   ]
+  },
+  {
+   "label": "Endocarditis",
+   "mental": false,
+   "n_bac": 7,
+   "ids": [
+    "D004696",
+    "SCT_56819008",
+    "SCT_91357005"
+   ]
+  },
+  {
+   "label": "Pancreatic Neoplasms",
+   "mental": false,
+   "n_bac": 6,
+   "ids": [
+    "D010190",
+    "SCT_126859007"
+   ]
+  },
+  {
+   "label": "Infertility",
+   "mental": false,
+   "n_bac": 6,
+   "ids": [
+    "D007246",
+    "SCT_15296000",
+    "SCT_8619003"
+   ]
+  },
+  {
+   "label": "Hemorrhagic Septicemia",
+   "mental": false,
+   "n_bac": 6,
+   "ids": [
+    "D006483",
+    "SCT_196111003"
+   ]
+  },
+  {
+   "label": "Metabolic Syndrome",
+   "mental": false,
+   "n_bac": 6,
+   "ids": [
+    "D024821",
+    "SCT_237602007"
+   ]
+  },
+  {
+   "label": "Gastroenteritis",
+   "mental": false,
+   "n_bac": 6,
+   "ids": [
+    "D005759",
+    "SCT_25374005"
+   ]
+  },
+  {
+   "label": "Graves Ophthalmopathy",
+   "mental": false,
+   "n_bac": 6,
+   "ids": [
+    "D049970",
+    "SCT_276177000"
+   ]
+  },
+  {
+   "label": "Acquired Immunodeficiency Syndrome",
+   "mental": false,
+   "n_bac": 6,
+   "ids": [
+    "D000163",
+    "SCT_62479008"
+   ]
+  },
+  {
+   "label": "Gastritis, Atrophic",
+   "mental": false,
+   "n_bac": 6,
+   "ids": [
+    "D005757",
+    "SCT_84568007"
+   ]
+  },
+  {
+   "label": "Acne Vulgaris",
+   "mental": false,
+   "n_bac": 5,
+   "ids": [
+    "D000152",
+    "SCT_11381005",
+    "SCT_201210008"
+   ]
+  },
+  {
+   "label": "Dyspepsia",
+   "mental": false,
+   "n_bac": 5,
+   "ids": [
+    "D004415",
+    "SCT_162031009"
+   ]
+  },
+  {
+   "label": "Lung Diseases",
+   "mental": false,
+   "n_bac": 5,
+   "ids": [
+    "D008171",
+    "SCT_19829001"
+   ]
+  },
+  {
+   "label": "Hashimoto Disease",
+   "mental": false,
+   "n_bac": 5,
+   "ids": [
+    "D050031",
+    "SCT_21983002"
+   ]
+  },
+  {
+   "label": "Graft vs Host Disease",
+   "mental": false,
+   "n_bac": 5,
+   "ids": [
+    "D006086",
+    "SCT_234646005"
+   ]
+  },
+  {
+   "label": "Neuromyelitis Optica",
+   "mental": false,
+   "n_bac": 5,
+   "ids": [
+    "D009471",
+    "SCT_25044007"
+   ]
+  },
+  {
+   "label": "Arthritis, Juvenile",
+   "mental": false,
+   "n_bac": 5,
+   "ids": [
+    "D001171",
+    "SCT_410796000",
+    "SCT_410797009"
+   ]
+  },
+  {
+   "label": "Coronary Artery Disease",
+   "mental": false,
+   "n_bac": 5,
+   "ids": [
+    "D003324",
+    "SCT_53741008"
+   ]
+  },
+  {
+   "label": "Keratitis",
+   "mental": false,
+   "n_bac": 5,
+   "ids": [
+    "D007634",
+    "SCT_5888003"
+   ]
+  },
+  {
+   "label": "Hepatitis B",
+   "mental": false,
+   "n_bac": 5,
+   "ids": [
+    "D006509",
+    "SCT_66071002"
+   ]
+  },
+  {
+   "label": "Appendicitis",
+   "mental": false,
+   "n_bac": 5,
+   "ids": [
+    "D001064",
+    "SCT_74400008"
+   ]
+  },
+  {
+   "label": "Tongue Neoplasms",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D014062",
+    "SCT_126778001",
+    "SCT_363375006"
+   ]
+  },
+  {
+   "label": "Uveitis",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D014605",
+    "D015829",
+    "SCT_128473001"
+   ]
+  },
+  {
+   "label": "Granulomatosis with Polyangiitis",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D014890",
+    "SCT_195353004"
+   ]
+  },
+  {
+   "label": "Polycystic Ovary Syndrome",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D011085",
+    "SCT_237055002"
+   ]
+  },
+  {
+   "label": "Carcinoma, Hepatocellular",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D006528",
+    "SCT_25370001"
+   ]
+  },
+  {
+   "label": "Barrett Esophagus",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D001471",
+    "SCT_302914006"
+   ]
+  },
+  {
+   "label": "Bronchitis",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D001991",
+    "SCT_32398004"
+   ]
+  },
+  {
+   "label": "Lyme Disease",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D008193",
+    "SCT_23502006",
+    "SCT_33937009"
+   ]
+  },
+  {
+   "label": "Thyroid Neoplasms",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D013964",
+    "SCT_127018007",
+    "SCT_363478007"
+   ]
+  },
+  {
+   "label": "Uterine Cervicitis",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D002575",
+    "SCT_37610005"
+   ]
+  },
+  {
+   "label": "Granulomatous Disease, Chronic",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D006105",
+    "SCT_387759001"
+   ]
+  },
+  {
+   "label": "Rosacea",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D012393",
+    "SCT_398909004"
+   ]
+  },
+  {
+   "label": "Dandruff",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D063807",
+    "SCT_400201008"
+   ]
+  },
+  {
+   "label": "Relapsing Fever",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D012061",
+    "SCT_420079008"
+   ]
+  },
+  {
+   "label": "Peritonitis",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D010538",
+    "SCT_48661000"
+   ]
+  },
+  {
+   "label": "Spondylarthritis",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D025241",
+    "SCT_53332000"
+   ]
+  },
+  {
+   "label": "Mucocutaneous Lymph Node Syndrome",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D009080",
+    "SCT_75053002"
+   ]
+  },
+  {
+   "label": "Spondylitis, Ankylosing",
+   "mental": false,
+   "n_bac": 4,
+   "ids": [
+    "D013167",
+    "SCT_9631008"
+   ]
+  },
+  {
+   "label": "Adenoma",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D000236",
+    "SCT_1187379001",
+    "SCT_443416007",
+    "SCT_79041005"
+   ]
+  },
+  {
+   "label": "Prostatic Neoplasms",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D011471",
+    "SCT_126906006"
+   ]
+  },
+  {
+   "label": "Brain Infarction",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D020520",
+    "SCT_230693009"
+   ]
+  },
+  {
+   "label": "Frailty",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D000073496",
+    "SCT_248279007"
+   ]
+  },
+  {
+   "label": "Macular Degeneration",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D008268",
+    "SCT_276436007",
+    "SCT_312999006"
+   ]
+  },
+  {
+   "label": "Esophageal Neoplasms",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D004938",
+    "SCT_363402007"
+   ]
+  },
+  {
+   "label": "Osteoarthritis",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D010003",
+    "SCT_396275006"
+   ]
+  },
+  {
+   "label": "Hypersensitivity",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D006967",
+    "SCT_419076005",
+    "SCT_421961002"
+   ]
+  },
+  {
+   "label": "Respiratory Tract Diseases",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D012140",
+    "SCT_50043002"
+   ]
+  },
+  {
+   "label": "Anorexia Nervosa",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D000856",
+    "SCT_56882008"
+   ]
+  },
+  {
+   "label": "Bacteremia",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D016470",
+    "SCT_5758002"
+   ]
+  },
+  {
+   "label": "Colitis",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D003092",
+    "SCT_64226004"
+   ]
+  },
+  {
+   "label": "Stomatitis, Denture",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D013282",
+    "SCT_69254008"
+   ]
+  },
+  {
+   "label": "Meningitis",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D008581",
+    "SCT_7180009"
+   ]
+  },
+  {
+   "label": "Leprosy",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D007918",
+    "SCT_81004002"
+   ]
+  },
+  {
+   "label": "Heart Failure",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D006333",
+    "SCT_84114007"
+   ]
+  },
+  {
+   "label": "Kidney Calculi",
+   "mental": false,
+   "n_bac": 3,
+   "ids": [
+    "D007669",
+    "SCT_95570007"
+   ]
+  },
+  {
+   "label": "Actinomycosis",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D000196",
+    "SCT_11817007"
+   ]
+  },
+  {
+   "label": "Laryngeal Neoplasms",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D007822",
+    "SCT_126692004"
+   ]
+  },
+  {
+   "label": "Conjunctivitis, Bacterial",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D003234",
+    "SCT_128350005",
+    "SCT_243321006"
+   ]
+  },
+  {
+   "label": "Endophthalmitis",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D009877",
+    "SCT_1847009"
+   ]
+  },
+  {
+   "label": "Meningitis, Meningococcal",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D008585",
+    "SCT_192644005"
+   ]
+  },
+  {
+   "label": "Lice Infestations",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D010373",
+    "SCT_20848007"
+   ]
+  },
+  {
+   "label": "Multiple System Atrophy",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D019578",
+    "SCT_230297002"
+   ]
+  },
+  {
+   "label": "Granulomatosis, Orofacial",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D051261",
+    "SCT_235048000"
+   ]
+  },
+  {
+   "label": "Gastroesophageal Reflux",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D005764",
+    "SCT_235595009"
+   ]
+  },
+  {
+   "label": "Progeria",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D011371",
+    "SCT_238870004"
+   ]
+  },
+  {
+   "label": "Ehrlichiosis",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D016873",
+    "SCT_240626005"
+   ]
+  },
+  {
+   "label": "Vaginal Diseases",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D014623",
+    "SCT_25658005"
+   ]
+  },
+  {
+   "label": "Spinal Cord Injuries",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D013119",
+    "SCT_262710003"
+   ]
+  },
+  {
+   "label": "Short Bowel Syndrome",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D012778",
+    "SCT_26629001"
+   ]
+  },
+  {
+   "label": "Mastitis",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D008413",
+    "SCT_266579006"
+   ]
+  },
+  {
+   "label": "Alzheimer Disease",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D000544",
+    "SCT_26929004"
+   ]
+  },
+  {
+   "label": "Neonatal Sepsis",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D000071074",
+    "SCT_276669000"
+   ]
+  },
+  {
+   "label": "Rhinitis, Atrophic",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D012222",
+    "SCT_28111002",
+    "SCT_69646003"
+   ]
+  },
+  {
+   "label": "Glycogen Storage Disease",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D006008",
+    "SCT_29633007"
+   ]
+  },
+  {
+   "label": "Vulvar Vestibulitis",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D054515",
+    "SCT_30833006"
+   ]
+  },
+  {
+   "label": "Mycobacterium avium-intracellulare Infection",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D015270",
+    "SCT_371686006"
+   ]
+  },
+  {
+   "label": "Rheumatoid Vasculitis",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D056653",
+    "SCT_400054000"
+   ]
+  },
+  {
+   "label": "Pharyngitis",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D010612",
+    "SCT_405737000"
+   ]
+  },
+  {
+   "label": "Eczema",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D004485",
+    "SCT_43116000"
+   ]
+  },
+  {
+   "label": "Pyelonephritis",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D011704",
+    "SCT_45816000"
+   ]
+  },
+  {
+   "label": "Respiratory Sounds",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D012135",
+    "SCT_52653008"
+   ]
+  },
+  {
+   "label": "Fatigue Syndrome, Chronic",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D015673",
+    "SCT_52702003"
+   ]
+  },
+  {
+   "label": "Neoplasms",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D009369",
+    "SCT_55342001"
+   ]
+  },
+  {
+   "label": "Hyperlipidemias",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D006949",
+    "SCT_55822004"
+   ]
+  },
+  {
+   "label": "Hidradenitis Suppurativa",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D017497",
+    "SCT_59393003"
+   ]
+  },
+  {
+   "label": "Alopecia Areata",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D000506",
+    "SCT_68225006"
+   ]
+  },
+  {
+   "label": "Gingivitis, Necrotizing Ulcerative",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D005892",
+    "SCT_171847006",
+    "SCT_707792000"
+   ]
+  },
+  {
+   "label": "Escherichia coli Infections",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D004927",
+    "SCT_71057007"
+   ]
+  },
+  {
+   "label": "Adenomatous Polyposis Coli",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D011125",
+    "SCT_72900001"
+   ]
+  },
+  {
+   "label": "Pancreatitis",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D010195",
+    "SCT_75694006"
+   ]
+  },
+  {
+   "label": "Wound Infection",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D014946",
+    "SCT_76844004"
+   ]
+  },
+  {
+   "label": "Periodontal Abscess",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D010508",
+    "SCT_83412009"
+   ]
+  },
+  {
+   "label": "Amyotrophic Lateral Sclerosis",
+   "mental": false,
+   "n_bac": 2,
+   "ids": [
+    "D000690",
+    "SCT_86044005"
+   ]
+  },
+  {
+   "label": "Schistosomiasis haematobia",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D012553",
+    "SCT_10087007",
+    "SCT_60979006"
+   ]
+  },
+  {
+   "label": "Tuberculosis, Lymph Node",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D014388",
+    "SCT_10893003",
+    "SCT_54084005"
+   ]
+  },
+  {
+   "label": "Liver Neoplasms",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D008113",
+    "SCT_126851005"
+   ]
+  },
+  {
+   "label": "Hepatitis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D006505",
+    "SCT_128241005"
+   ]
+  },
+  {
+   "label": "Abscess",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D000038",
+    "SCT_128477000"
+   ]
+  },
+  {
+   "label": "Gonorrhea",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D006069",
+    "SCT_15628003"
+   ]
+  },
+  {
+   "label": "Buruli Ulcer",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D054312",
+    "SCT_15845006"
+   ]
+  },
+  {
+   "label": "Liver transplant",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D016031",
+    "SCT_18027006"
+   ]
+  },
+  {
+   "label": "Boutonneuse Fever",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D001907",
+    "SCT_186774005"
+   ]
+  },
+  {
+   "label": "Q Fever",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D011778",
+    "SCT_186788009"
+   ]
+  },
+  {
+   "label": "Colitis, Collagenous",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D046729",
+    "SCT_19311003"
+   ]
+  },
+  {
+   "label": "Cataract",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D002386",
+    "SCT_193570009"
+   ]
+  },
+  {
+   "label": "Blindness",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D001766",
+    "SCT_193699007"
+   ]
+  },
+  {
+   "label": "Cystitis, Interstitial",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D018856",
+    "SCT_197834003"
+   ]
+  },
+  {
+   "label": "Pinta",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D010874",
+    "SCT_22064009"
+   ]
+  },
+  {
+   "label": "Trichomonas vaginalis infection",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D014246",
+    "SCT_22417000"
+   ]
+  },
+  {
+   "label": "Discitis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D015299",
+    "SCT_2304001"
+   ]
+  },
+  {
+   "label": "Colitis, Microscopic",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D046728",
+    "SCT_235753003"
+   ]
+  },
+  {
+   "label": "Granulomatous Mastitis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D058890",
+    "SCT_237444008"
+   ]
+  },
+  {
+   "label": "Dermatitis, Allergic Contact",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D017449",
+    "SCT_238575004"
+   ]
+  },
+  {
+   "label": "Legionnaires' Disease",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D007877",
+    "SCT_195889001",
+    "SCT_240447002"
+   ]
+  },
+  {
+   "label": "Head and Neck Neoplasms",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D006258",
+    "SCT_255055008"
+   ]
+  },
+  {
+   "label": "Inflammation",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D007249",
+    "SCT_257552002"
+   ]
+  },
+  {
+   "label": "Scrub Typhus",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D012612",
+    "SCT_271425001"
+   ]
+  },
+  {
+   "label": "Diphtheria",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D004165",
+    "SCT_276197005",
+    "SCT_397430003"
+   ]
+  },
+  {
+   "label": "Whooping Cough",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D014917",
+    "SCT_27836007"
+   ]
+  },
+  {
+   "label": "Granuloma Inguinale",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D006100",
+    "SCT_28867007"
+   ]
+  },
+  {
+   "label": "Scoliosis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D012600",
+    "SCT_298382003"
+   ]
+  },
+  {
+   "label": "Hepatitis, Alcoholic",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D006519",
+    "SCT_235875008",
+    "SCT_307757001"
+   ]
+  },
+  {
+   "label": "Vaginitis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D014627",
+    "SCT_30800001"
+   ]
+  },
+  {
+   "label": "Colonic Neoplasms",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D003110",
+    "SCT_126838000",
+    "SCT_363406005"
+   ]
+  },
+  {
+   "label": "Sinusitis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D012852",
+    "SCT_36971009"
+   ]
+  },
+  {
+   "label": "Arthritis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D001168",
+    "SCT_3723001"
+   ]
+  },
+  {
+   "label": "Fever",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D005334",
+    "SCT_386661006"
+   ]
+  },
+  {
+   "label": "Cystitis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D003556",
+    "SCT_38822007"
+   ]
+  },
+  {
+   "label": "Typhus, Endemic Flea-Borne",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D014437",
+    "SCT_25668000",
+    "SCT_39111003"
+   ]
+  },
+  {
+   "label": "Urinary Bladder, Neurogenic",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D001750",
+    "SCT_192972000",
+    "SCT_397732007"
+   ]
+  },
+  {
+   "label": "Stomach Ulcer",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D013276",
+    "SCT_397825006"
+   ]
+  },
+  {
+   "label": "Diverticular Diseases",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D000076385",
+    "SCT_397881000"
+   ]
+  },
+  {
+   "label": "Pneumonia, Mycoplasma",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D011019",
+    "SCT_35037009",
+    "SCT_406595002",
+    "SCT_46970008"
+   ]
+  },
+  {
+   "label": "Anthrax",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D000881",
+    "SCT_409498004"
+   ]
+  },
+  {
+   "label": "Spirochaetales Infections",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D013145",
+    "SCT_41116009"
+   ]
+  },
+  {
+   "label": "Bovine Virus Diarrhea-Mucosal Disease",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D001912",
+    "SCT_414021001"
+   ]
+  },
+  {
+   "label": "Blepharitis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D001762",
+    "SCT_41446000"
+   ]
+  },
+  {
+   "label": "REM Sleep Behavior Disorder",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D020187",
+    "SCT_415238003"
+   ]
+  },
+  {
+   "label": "Whipple Disease",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D008061",
+    "SCT_41545003"
+   ]
+  },
+  {
+   "label": "Melioidosis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D008554",
+    "SCT_428111003"
+   ]
+  },
+  {
+   "label": "Arthritis, Infectious",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D001170",
+    "SCT_372938004",
+    "SCT_428437005"
+   ]
+  },
+  {
+   "label": "Anemia, Hypochromic",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D000747",
+    "SCT_44452003"
+   ]
+  },
+  {
+   "label": "Pancreatitis, Alcoholic",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D019512",
+    "SCT_445507008"
+   ]
+  },
+  {
+   "label": "Glanders",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D005896",
+    "SCT_4639008"
+   ]
+  },
+  {
+   "label": "Tinea",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D014005",
+    "SCT_47382004"
+   ]
+  },
+  {
+   "label": "Dermatitis, Seborrheic",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D012628",
+    "SCT_50563003"
+   ]
+  },
+  {
+   "label": "Hepatitis C",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D006526",
+    "SCT_50711007"
+   ]
+  },
+  {
+   "label": "Duodenal Ulcer",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D004381",
+    "SCT_51868009"
+   ]
+  },
+  {
+   "label": "Chronic Periodontitis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D055113",
+    "SCT_5689008"
+   ]
+  },
+  {
+   "label": "Pneumonia of Calves, Enzootic",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D048089",
+    "SCT_57086000"
+   ]
+  },
+  {
+   "label": "Plague",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D010930",
+    "SCT_58750007"
+   ]
+  },
+  {
+   "label": "Cholera",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D002771",
+    "SCT_63650001"
+   ]
+  },
+  {
+   "label": "Lung Diseases, Fungal",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D008172",
+    "SCT_63741006"
+   ]
+  },
+  {
+   "label": "Pemphigus",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D010392",
+    "SCT_65172003"
+   ]
+  },
+  {
+   "label": "Necrosis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D009336",
+    "SCT_6574001"
+   ]
+  },
+  {
+   "label": "Gingivitis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D005891",
+    "SCT_66383009"
+   ]
+  },
+  {
+   "label": "Rett Syndrome",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D015518",
+    "SCT_68618008"
+   ]
+  },
+  {
+   "label": "Dermatitis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D003872",
+    "SCT_703938007"
+   ]
+  },
+  {
+   "label": "Foot Rot",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D005535",
+    "SCT_70413005"
+   ]
+  },
+  {
+   "label": "Yaws",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D015001",
+    "SCT_70647001"
+   ]
+  },
+  {
+   "label": "Prediabetic State",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D011236",
+    "SCT_714628002"
+   ]
+  },
+  {
+   "label": "Psittacosis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D009956",
+    "SCT_75116005"
+   ]
+  },
+  {
+   "label": "Syphilis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D013587",
+    "D014211",
+    "SCT_240686008",
+    "SCT_76272004"
+   ]
+  },
+  {
+   "label": "Hepatitis, Chronic",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D006521",
+    "SCT_197284004",
+    "SCT_76783007"
+   ]
+  },
+  {
+   "label": "Tetanus",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D013742",
+    "SCT_276202003",
+    "SCT_76902006"
+   ]
+  },
+  {
+   "label": "Biliary Atresia",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D001656",
+    "SCT_77480004"
+   ]
+  },
+  {
+   "label": "Sleep Apnea, Obstructive",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D020181",
+    "SCT_78275009"
+   ]
+  },
+  {
+   "label": "Gas Gangrene",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D005738",
+    "SCT_80466000"
+   ]
+  },
+  {
+   "label": "Silicosis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D012829",
+    "SCT_805002"
+   ]
+  },
+  {
+   "label": "Common Cold",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D003139",
+    "SCT_82272006"
+   ]
+  },
+  {
+   "label": "Pemphigoid, Bullous",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D010391",
+    "SCT_77090002",
+    "SCT_86142006"
+   ]
+  },
+  {
+   "label": "Campylobacter Infections",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D002169",
+    "SCT_86500004"
+   ]
+  },
+  {
+   "label": "Keratoconjunctivitis, Infectious",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D007639",
+    "SCT_88151007"
+   ]
+  },
+  {
+   "label": "Salpingitis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D012488",
+    "SCT_88157006"
+   ]
+  },
+  {
+   "label": "Pyometra",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D055112",
+    "SCT_88981003"
+   ]
+  },
+  {
+   "label": "Scleroderma, Systemic",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D012595",
+    "SCT_89155008"
+   ]
+  },
+  {
+   "label": "Arsenic Poisoning",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D020261",
+    "SCT_89738003"
+   ]
+  },
+  {
+   "label": "Sepsis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D018805",
+    "SCT_431193003",
+    "SCT_91302008"
+   ]
+  },
+  {
+   "label": "Myasthenia Gravis",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D009157",
+    "SCT_91637004"
+   ]
+  },
+  {
+   "label": "Colic",
+   "mental": false,
+   "n_bac": 1,
+   "ids": [
+    "D003085",
+    "SCT_9991008"
+   ]
+  }
+ ]
+}

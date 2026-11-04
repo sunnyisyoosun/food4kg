@@ -1,0 +1,23 @@
+item,paper,definition,value,match,confidence
+food entities,1220480,FDC 인스턴스(fdc_id),34250,False,확정
+food entities,1220480,Table 1 Entity 정의 (§17.10),1220480,True,확정
+food categories,128,§3.2 서술대로 병합 (subClassOf 롤업),64,False,확정
+food categories,128,  └ ×2 (Entity 열 계수 규약 적용 — 추정),128,True,추정
+food categories,128,병합 전 (라벨 보유 카테고리 전체),185,False,확정
+food categories,128,  └ §3.2 라벨 정규화 후,172,False,확정
+food categories,128,FDC 원본 legacy 카테고리 (KG 음식이 쓰는 것),18,False,확정
+food categories,128,FDC 원본 food_category_id 전체 (2026 판),645,False,확정
+compounds,23212,Table 1 Entity 정의 (§17.10),23212,True,확정
+compounds,23212,KEGG C* 노드,6685,False,확정
+compounds,23212,라벨 원문 고유,6682,False,확정
+compounds,23212,  └ §3.2 정규화 후,6643,False,확정
+gut microbiota,984031,Table 1 Entity 정의 (§17.10),984031,True,확정
+gut microbiota,984031,NCBI taxon 노드,326845,False,확정
+gut microbiota,984031,라벨 고유,326522,False,확정
+mental disorders,3505,Table 1 MENDA + MiKG entity,3505,True,확정
+mental disorders,3505,Table 1 MiKG entity 단독,1138,False,확정
+mental disorders,3505,Disease_Bacteria 주어∪목적어,3586,False,확정
+mental disorders,3505,Mental_health 노드,569,False,확정
+mental disorders,3505,SNOMED 개념 참조,284,False,확정
+mental disorders,3505,MeSH D* 참조,253,False,확정
+mental disorders,3505,SNOMED ∪ MeSH,537,False,확정

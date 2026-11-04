@@ -1,0 +1,17 @@
+{
+ "nodes": 369855,
+ "edges": 406438,
+ "multi_parent": 36526,
+ "inferred_hierarchy": 1749977,
+ "inferred_type": 686426,
+ "inferred_total": 2436403,
+ "paper_inferred": 4741023,
+ "by_source": {
+  "Bacteria_Ontology.trig": 1574035,
+  "Food_Chinese.jsonld": 137898,
+  "Food_Ontology.jsonld": 36139,
+  "KEGG_Compound.jsonld": 1858,
+  "Food_Category.jsonld": 45,
+  "Disease_Bacteria.jsonld": 2
+ }
+}

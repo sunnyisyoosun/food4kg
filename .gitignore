@@ -18,3 +18,7 @@ logs/
 # 원 논문 repo 파일 사본 — 라이선스 없음. 원 repo 에서 받는다.
 analyse/final.py
 analyse/p5_foodname.txt
+
+# ourkg 산출물 — 대용량. ourkg/run_all.py 로 재생성한다.
+ourkg/out/
+ourkg/cache/

@@ -1,0 +1,10 @@
+source,paper_relation,paper_entity,rel_sum,rel_uniq,entity,present
+FoodData Center,9,1220480,9.0,7.0,1220480.0,True
+FoodOn,56,56079,56.0,56.0,56079.0,True
+Chinese Food Ontology,7,160802,7.0,7.0,160802.0,True
+KEGG,5,23212,5.0,5.0,23212.0,True
+NCBI taxonomy,5,984031,5.0,5.0,984031.0,True
+MENDA,5,2367,5.0,5.0,2367.0,True
+MiKG,3,1138,3.0,3.0,1138.0,True
+SNOMED CT,63,2064178,,,,False
+MESH,3,483663,3.0,3.0,483663.0,True

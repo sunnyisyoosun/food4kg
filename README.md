@@ -34,6 +34,15 @@
 
 | 층위 | 우리 결과 | 논문 | 판정 |
 |------|-----------|------|------|
+| §3.1 Table 1 Relation 열 | 8 / 8 소스 일치 (합 정의) | 열 합 156 / Total 140 | ✅ |
+| §3.2 Entity linking 5수치 | 5 / 5 일치 (확정 4 · 추정 1) | — | ⚠️ 128 은 미해결, 합계도 미해결 |
+| §3.3 관계 어휘 | 6 / 6 존재 | 6 | ✅ |
+| §3.3 hasAssociation 관계 계층 | 선언 0건, 방향 무시해도 공통 쌍 0건 | 본문은 묶인다고 적음 | ❌ 한 번도 작동 안 함 |
+| §3.3 하위관계의 방향 특정 | pos∩neg 267쌍 | §3.3 은 "more specific" 이라 적음 | ⚠️ KG 가 방향을 못 정한다 |
+| §3.3 추론 statements | 배포본 0, **규칙(a) 재구현 2,436,403** | 4,741,023 | ⚠️ 51.4% 설명 (§17.20) |
+| §3.3 추론 규칙 (b) 구현 | 정신질환 45/45 쌍(트리플 90) · 질병 전체 7,552. Table 5 Complication **8/8**(근거 세균까지 7/8), Table 4 3/3 | 중간 분류 + 공통 미생물 | ⚠️ 규칙이 변별하지 못한다 (§17.24) |
+| §3.1 Table 1 Entity 열 | 8 / 8 소스 일치 | 열 합 4,995,950 / Total 1,637,915 | ✅ |
+| §3.1 본문 수치 3개 | FDC 34,250 ✅ · KEGG metabolites 230 ✅ · NCBI 326,533 | 34,250 / 230 / 322,917 | ⚠️ 2/3 일치 |
 | Foods | 135 / 135 | 135 | ✅ |
 | Compounds | 85 / 85 | 85 | ✅ |
 | 성분 행렬 F vs 논문 heatmap | 행 코사인 0.981 | — | ✅ |
@@ -41,9 +50,9 @@
 | PCA 80% 도달 성분 수 (§4.2.1) | 5 | 5 | ✅ |
 | E 방향 확보 | 69 / 85 | 85 | ⚠️ |
 | 논문이 부호를 명시한 compound (gold) | 8 / 9 | 9 | ✅ |
-| **추천 순위 Top30 겹침** (우연 6.7) | **18 / 30** | 30 | ✅ |
-| **추천 순위 Bottom30 겹침** (우연 6.7) | **15 / 30** | 30 | ✅ |
-| 순위 Spearman | **+0.786** | 1.0 | ✅ |
+| **추천 순위 Top30 겹침** (우연 6.7) ※ | **18 / 30** | 30 | ✅ |
+| **추천 순위 Bottom30 겹침** (우연 6.7) ※ | **15 / 30** | 30 | ✅ |
+| 순위 Spearman ※ | **+0.786** | 1.0 | ✅ |
 | 논문 주장 6개 (§4.2.3, Fig. 4·5) | 3 / 6 | 논문 순위 자신 4 / 6 | ⚠️ |
 | Query 2 → Table 3 | 8 / 8 | 8행 | ✅ |
 | Query 3 → Table 4 | 5 / 5 (MiKG 로 SNOMED 이름 복원) | 5행 | ✅ |
@@ -117,6 +126,8 @@ food_recom_w_paper/
 │   ├── foodname.csv / food.csv     ← food × 85 compound (g 환산)
 │   ├── food_rawunit.csv            ← 환산 전 원단위 사본 (진단용)
 │   ├── weight.csv                  ← 8 × 85 = 4소스(infer/faecal/type1/type2) × (pos, neg)
+│   │                                  ※ acs04.csv 로 낼 때 4번째 소스는 'type4' 로 이름만 바꾼다
+│   │                                    (공식 final.py 가 df['type4'] 를 읽는다)
 │   ├── knowledge_query_results.csv ← compound 별 E 와 근거
 │   └── acs04.csv, *.png            ← 추천 확률, 시각화
 └── logs/                           ← [생성] 실행 로그
@@ -129,7 +140,7 @@ food_recom_w_paper/
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install pandas numpy scipy scikit-learn matplotlib openpyxl
-pip install pyoxigraph        # eval/paper_sparql.py 에만 필요
+pip install pyoxigraph        # eval/paper_sparql.py, eval/paper_kg_stats.py 에 필요
 ```
 
 ---
@@ -152,11 +163,16 @@ python3 setup/rebuild_food_nutrient.py fdc_raw    # → food_nutrient.csv
 ```bash
 python3 run_pipeline.py          # step0~4, 약 9분. 로그는 logs/
 python3 tools/scorecard.py       # 재현 집계
+python3 tools/scorecard.py --check-docs   # 문서에 적힌 수치가 현재 값과 맞는가 (§17.19)
 ```
 
 `run_pipeline.py` 는 step0~4 를 순서대로 실행하고, 각 step 의 출력을
 `logs/YYYYMMDD_HHMMSS_<step>.txt` 에, 요약을 `..._summary.txt` 에 저장한다.
 중간에 실패하면 그 step 에서 멈춘다.
+
+> ⚠ `reconstruct.py` 를 단독으로 돌리면 `weight.csv` 가 step1 초기값으로 덮어써져
+> step2·3 의 `E` 가 사라진다. step1 을 건드렸으면 **반드시 `run_pipeline.py` 로 전체를
+> 다시 돌릴 것.**
 
 ### 방법 B: 개별 실행
 
@@ -171,8 +187,12 @@ python3 run_recommendation.py    # step4: 추천 + 시각화
 ### 평가·검증
 
 ```bash
+python3 eval/paper_data.py       # 논문 수치 29개 체크리스트 (상태·근거)
+python3 tools/paper.py hunt 230  # 수치 탐색 (판정 전 필수). --paper 로 전부
+python3 eval/paper_kg_stats.py   # 논문 §3 검증 (Table 1 Relation·Entity, 링킹, 관계) 약 1분
 python3 eval/run_paper_eval.py   # 논문 §5.1 평가 (전문가 20문항을 KG 에 질의, Table 5)
-python3 eval/paper_sparql.py     # 보충자료 SPARQL 을 공개 KG 에 실행 (Table 2~5, 약 3분)
+python3 eval/paper_sparql.py     # 보충자료 SPARQL 을 공개 KG 에 실행 (Table 2~5, 약 4분)
+python3 eval/paper_sparql.py replaceable   # §4.1 "엔티티 교체 가능" 주장 실증 (§17.21)
 python3 tools/paper.py all       # 논문 기준 검증·개선 (REPRODUCTION §16)
 python3 tools/ab.py <항목>        # 설정 A/B 비교 (끝나면 기본값 복원)
 ```
@@ -195,7 +215,10 @@ Carbohydrates 7, Trace Elements 5, Macronutrient 5)이 들어 있다.
   측정 밀도 중앙값이 15에서 28로 오른다.
 - **g 환산 (§3.1):** MG 10^-3, UG 10^-6, IU 10^-6. 피벗 **전에** 행 단위로 환산한다
   (Retinol·Vitamin E 는 IU 행과 µg 행이 섞여 있다). `UNIT_MODE=raw` 는 이전 동작.
-- **카테고리:** FDC 원본의 `food_category_id` 를 쓴다.
+- **카테고리:** FDC 원본의 `food_category_id` 를 쓰고, **§3.2 의 병합 규칙을 적용한다**
+  (`rollup_category()`). `Food_Category.jsonld` 의 `rdfs:subClassOf` 를 따라 WWEIA
+  세분류를 FDC legacy 상위로 올린다. 135개 음식 기준 18 → **17 종**이 되어 논문
+  Fig. 4(b) 범례와 일치한다 (REPRODUCTION §17.16).
 
 출력: `foodname.csv` (135, 88), `food.csv` (135, 86), `food_rawunit.csv`
 
@@ -222,6 +245,14 @@ ProMENDA 로 E 를 보강하고 weight.csv 의 4소스를 만든다.
 - **faecal / type1 / type2 행:** ProMENDA 의 Faece / Type1 / Type2 부분집합에서 각각
   독립 집계한다. 공식 `final.py:54-57` 의 소스 이름이 ProMENDA 컬럼에 그대로 있다.
 
+> **공식 `final.py` 가 읽는 입력은 4개다** — `food.csv` · `weight.csv` · `foodname.csv` ·
+> `acs04.csv`. 네 개 모두 배포본에 없어 step0~3 이 역설계한다.
+> `jaccard01.csv` 도 코드에 나오지만 **저자가 주석 처리한 죽은 줄**이다
+> (`# df = pd.read_csv('jaccard01.csv')` 바로 아래에서 `acs04.csv` 를 읽는다).
+> 짝이 되는 `jaccard_similarity()` 도 정의만 있고 호출 0건이고, 논문 §4.2.2 가 쓰는
+> 유사도는 adjusted cosine 하나다. **만들지 않는 것이 맞다.**
+> (AP·hit·precision·recall 도 같은 상태 — 정의만 있고 `cal_results()` 에서 전부 주석.)
+
 ### Step 4: `run_recommendation.py`
 논문 Algorithm 1 을 공식 `final.py` 에서 이식했다.
 1. F 행별 min-max 정규화
@@ -230,8 +261,8 @@ ProMENDA 로 E 를 보강하고 weight.csv 의 4소스를 만든다.
 4. `p = u · S / colsum(S)` (Eq. 2. 열 합 나누기는 final.py 에만 있다)
 5. Top-K = 30 + PCA / t-SNE 시각화
 
-논문 수식(§4.2)과 final.py 가 네 군데서 다르다. 16조합 비교에서 final.py 쪽이 논문 결과에
-더 가까워 그쪽을 따른다 (REPRODUCTION §3).
+논문 수식(§4.2)과 final.py 가 네 군데서 다르다. 16조합 비교에서 final.py 가 2위(+0.786),
+논문 수식이 6위(+0.602)로 final.py 쪽이 논문 결과에 더 가까워 그쪽을 따른다 (REPRODUCTION §3).
 
 ---
 
@@ -277,6 +308,12 @@ ProMENDA 로 E 를 보강하고 weight.csv 의 4소스를 만든다.
 | 빵류 | 2 | 0 | Fig. 5 는 비추천, §4.2.3 본문은 언급 없음. 논문 순위 33·35·37위 |
 | 곡물 | 3 | 0 | — (점수 발산 3종) |
 
+※ 이 세 줄은 **논문에 없는 지표**다. 논문 §5.1 의 두 평가 방법은 질의와 추론만 덮고
+추천 알고리즘에는 평가가 없다(REPRODUCTION §17.27 ⑦). 또 `p5_foodname.txt` 를 논문
+순위로 보는 것은 추정이다(`tools/core.paper_ranking` 주석). 논문이 추천 **결과에 대해**
+직접 적은 기준은 Fig. 5 의 카테고리 층(Fruits·Vegetables 상위 / Baked·Beef·Sausages·
+Pork 하위)뿐이며, 그쪽이 재현 판정의 1차 기준이다. 세 층 구분은 REPRODUCTION §18.9.
+
 ### 논문 순위(p5)와의 대조
 
 | 지표 | 값 | 우연 기대값 |
@@ -303,15 +340,21 @@ ProMENDA 로 E 를 보강하고 weight.csv 의 4소스를 만든다.
 (`eval/paper_sparql.py`, 약 3분, `pyoxigraph` 필요). 공개 KG 에는 SNOMED CT 가 없어,
 질병 이름과 "mental disorder" 분류는 논문이 출처로 든 MiKG 에서 가져왔다.
 
-**KG 규모.** 공개 KG 는 431만 트리플이다. 논문 Table 1 의 9개 소스 중 7개가 트리플 수까지
-일치한다. SNOMED CT(429만)와 추론 트리플(474만)은 없고, MENDA 는 2,633 / 5,675 다.
+**KG 규모.** 공개 KG 는 4,314,742 트리플이다. 논문 Table 1 의 9개 소스 중 7개가 트리플 수까지
+일치한다. SNOMED CT(429만)와 추론 트리플(474만)은 없고, MENDA 는 2,633 / 5,675 다
+(누락이 아니라 집계 형태의 차이다. 논문은 원본 xlsx 의 행 수를, KG 는 compound 510종으로
+집계한 트리플 수를 적었다 — REPRODUCTION §17.4).
+
+**배포본 = 논문 KG − 추론 − SNOMED.** `13,346,991 − 4,741,023 − 4,291,226 = 4,314,742` 로
+공개 KG 실측과 정확히 같다. 배포본은 논문 KG 의 32.3% 이고, 빠진 68% 가 논문이 기여로
+내세운 두 가지다 (REPRODUCTION §17).
 
 **쿼리 → 논문 표**
 
 | 논문 | 재현 | 비고 |
 |---|---|---|
-| Query 2 → Table 3 | **8 / 8** | 5행은 쿼리 원문, 3행은 세균 조건만 neg 로 |
-| Query 3 → Table 4 | **5 / 5** | SNOMED 이름을 MiKG 에서. 음식–성분을 제대로 묶으면 4 / 5 |
+| Query 2 → Table 3 | **8 / 8** | 원문 쿼리만으로는 **5/8**. (+)/(−) 부호는 8/8 이 KG pos·neg 양쪽이라 유도 불가 (§17.22) |
+| Query 3 → Table 4 | **5 / 5** | 원문 Query 3 는 **0행** — SNOMED 이름을 MiKG 에서 보충. 음식–성분을 제대로 묶으면 4 / 5. 질병명 **2/5 불일치** (§17.23) |
 | Query 1 → Table 2 | 6 / 8 | **값이 틀렸다.** 올바른 합의 30~70배 (아래) |
 
 **§5.1 방법 1 — 전문가 20문항** (`eval/run_paper_eval.py`). 전문가 3인의 수작업 대조는
@@ -391,9 +434,12 @@ Fig. 5 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" �
 `weight.csv` 가 배포되지 않았다.
 
 ### 논문 자체의 결함 (재현 중 확인)
-- §4.2 수식(Eq. 1 분모, Eq. 2 첨자)이 조판 오류. 그대로 구현하면 16조합 중 꼴찌
+- §4.2 수식(Eq. 1 분모, Eq. 2 첨자)이 조판 오류. 그대로는 구현 불가.
+  구현 가능한 형태로 읽어 16조합을 비교하면 논문 수식은 6위(ρ +0.602, Top30 7/30),
+  공식 `final.py` 는 2위(ρ +0.786, Top30 18/30)
 - 단위 환산과 ProMENDA 극성 처리를 적지 않음
-- Table 3/4 의 Glutamic acid·L-Threonine·Choline 이 Fig. 4(c) 85종 목록에 없음
+- Table 3/4 의 compound 6종(Glutamic acid·L-Threonine·Choline·Citric acid·Lysine·Cystine)이
+  Fig. 4(c) 85종 목록에 없음
 - §4.2.3 본문과 Fig. 5 가 피라미드에서 두 군데 모순: 어류 위치, 상단 층(본문 "barbecue products", 그림 "Baked Products")
 - §4.2.3 의 성분 차이 서술이 논문 자신의 heatmap 과 어긋남 (미량원소·다량영양소)
 - `final.py` 입력 4개와 `metabolite_bacteria.xlsx` 누락, `food_nutrient.csv` 절단
@@ -401,8 +447,88 @@ Fig. 5 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" �
   않아 두 번째 음식의 성분량이 다른 음식 값으로 들어간다. Table 2 의 "달걀 프라이 + 우유 =
   비타민 B6 6.591" 은 달걀 0.151 + Kellogg's Special K 시리얼 6.44 다. 실제 우유는 0.061
 - 음식을 라벨 부분 문자열로 찾아, "milk" 가 "Ricotta cheese, whole milk" 에 걸린다 (Table 1 #5)
-- 공개 KG 에 SNOMED CT 계층(논문 Table 1 의 429만 트리플)이 없다. 이름과 mental disorder
-  분류는 MiKG 로 복원할 수 있다
+- **§3.3 의 관계 계층이 선언돼 있지 않고, 데이터에서 한 번도 작동하지 않는다.**
+  `hasAssociation`(세균→질병) 2,743 쌍과 하위관계(질병→compound·세균) 556 쌍 사이에 방향을
+  무시해도 공통 쌍이 0 이다. 우울증 한정으로 보면 일반관계 1 종 vs 하위관계 45 종, 공통 0 종.
+  "categorized under" 는 이름 짓기 규약일 뿐이다 (REPRODUCTION §17.13)
+- **우울증의 `hasAssociation` 미생물 연결이 1 종뿐이다.** §3.3 의 "공통 미생물 → complication"
+  추론을 일반관계만으로는 세울 수 없다 (REPRODUCTION §17.13)
+- **`hasPositiveAssociation` 과 `hasNegativeAssociation` 이 배타적이지 않다.** 같은
+  (우울증, compound) 쌍 267 개가 양쪽에 달려 있다 — compound 방향이 KG 만으로 정해지지 않는
+  근본 원인이다 (REPRODUCTION §17.13)
+- **Table 1 의 Relation 열과 Triples 열이 다른 파일을 센다.** FDC 의 relation 9 는
+  `Food_Nutrient`(5)+`Food_Category`(4) 인데, triples 2,332,603 은 `Food_Nutrient` 단독이다.
+  `Food_Category` 의 34,574 트리플은 어느 행에도 없다 (REPRODUCTION §17.9)
+- **Table 1 의 Relation Total 140 이 자기 열의 합(156)과 다르다.** Total 만 중복을 제거한 값이다
+- **Table 1 의 Total 행이 자기 소스 열 합보다 37,604 많다.** 미등재 파일
+  `Food_Category`(34,759)+`Disease_Bacteria`(5,887)=+40,646 에서 MENDA 과대계상 −3,042 을 빼면
+  정확히 37,604 이다 (REPRODUCTION §17.14)
+- ⚠ **§3.2 의 "normalized entities" 서술이 모호하다.** food 1,220,480 · compounds 23,212 ·
+  microbiota 984,031 은 Table 1 Entity 열 그대로이고 정의는 RDF 노드 수다. 동의어 병합 규칙을
+  설명한 직후에 제시되어 병합 결과로 읽히지만, §3.2 서두가 normalization 을 "URI 부여 + 속성
+  보존" 으로 정의하므로 자기 정의로는 모순이 아니다 (REPRODUCTION §17.10·§17.14)
+- **Table 1 의 Entity Total 1,637,915 가 자기 열의 합(4,995,950)이 아니다.** §3.2 의 네 수치
+  합(1,010,876)도 아니다
+- **§3.2 의 "128 distinct food categories" 가 설명되지 않는다.** 논문이 서술한 병합
+  (`rdfs:subClassOf` 롤업, 예시까지 배포 파일과 일치)을 끝까지 적용하면 **64** 개가 남는다.
+  부분집합 6 × 라벨 정규화 12 = 72 조합 어디서도 128 이 나오지 않는다(범위 18~185).
+  128 = 64×2 는 우리 재구성이다 (REPRODUCTION §17.16)
+- **§3.2 의 "3,505 mental disorders" 는 MENDA(2,367)+MiKG(1,138) 로 정확히 맞는다** — 논문은
+  "link ... to the MeSH and SNOMED CT databases" 라고 적었다. 일치는 정확하지만 인과는 추정이다
+  (REPRODUCTION §17.12·§17.14)
+- **§3.2 의 합계 1,637,915 가 자기 문장대로 더해지지 않는다.** 네 수치 합은 1,010,876 이다
+- **Table 3 의 (+)/(−) 부호가 쿼리에서 유도되지 않는다.** Query 2 는 neg 목록만 뽑는데
+  Table 3 의 compound 8/8 이 KG 에서 pos·neg 양쪽에 있다. "L-threonine 이 우울증을
+  악화시킨다" 는 인과 방향은 배포 KG 로 뒷받침되지 않는다 (REPRODUCTION §17.22)
+- **§3.3 의 합병증 추론 규칙이 아무것도 걸러내지 못한다.** 세균 연결이 있는 정신질환
+  10종의 **가능한 45쌍이 전부 세균을 공유**해서 조건 (1) 은 완전그래프를 만든다. 조건
+  (2)("both mood disorders")도 MiKG 계층이 `mentalDisorder` → 리프 10개로 평평해
+  중간 분류가 없다. 게다가 **논문 Table 5 의 Complication 3행(Parkinson ×2,
+  Alzheimer ×1)은 정신질환이 아니어서 논문이 적은 조건 (2) 를 스스로 위반**한다 —
+  규칙 서술보다 넓은 규칙으로 표를 만든 것이다 (REPRODUCTION §17.24)
+- **Table 4 의 질병명이 논문 자신의 Table 5 와 어긋난다.** Table 4·Fig 3 은 2·3 행을
+  "Intellectual disability" 로 적지만, Table 5 No 9 는 같은 사례를 "Milk and **Learning
+  disabilities**" 로 적는다. 배포 KG 에서 `D008607`(Intellectual Disability) 은 `sameAs`
+  0건·세균 연결 0건의 고립 노드이고, E. coli·L. plantarum 에 붙는 것은
+  `D007859`(Learning Disabilities) 다. Table 5 쪽이 KG 와 일관된다 (REPRODUCTION §17.23)
+- **§5.1 의 0.95/0.9/0.95 는 정확도가 아니라 전문가별 동의율이다.** Supplement Table 1
+  의 V0/V1/V2 열 합(19/18/19)이 그 수치를 정확히 재현한다. 논문은 "accuracy against the
+  **gold standard** answers" 라 적었으나 단일 gold 가 없고 전문가 판정이 4문항에서
+  갈린다 (REPRODUCTION §17.27)
+- **그 20문항 테스트는 포화되어 변별력이 거의 없다.** 3인 만장일치 16/20 이고 **2인
+  이상이 "KG 가 틀렸다" 고 본 문항은 0개**다. 전문가 간 일치도(IAA)도 보고되지 않는다
+  (REPRODUCTION §17.27)
+- **"15 inferred results" 중 7건은 추론 산출물이 아니다.** Table 5 의 Attributes 는
+  Complication 8 + **Diet recommendation 7** 인데 후자는 §4.1 쿼리 결과다. "randomly
+  select" 의 모집단도 명시되지 않는다 (REPRODUCTION §17.27)
+- **"11 confirmed" 의 분모가 불명확하다.** confirmed 11 / unknown 3 / contradicted 1 로
+  확인율은 **0.73** 이다(unknown 제외 시 0.92). 레이블링은 저자 본인이 했고 블라인드도
+  음성 대조군도 없다 (REPRODUCTION §17.27)
+- **추천 알고리즘(§4.2)에는 평가가 아예 없다.** 방법 1 은 질의를, 방법 2 는 추론을
+  덮는다. 논문이 내세운 주 응용인 food recommendation 은 어느 쪽에서도 채점되지 않고,
+  `K=30` 근거도 정답 정의도 없다. 따라서 우리 §16 의 Spearman·Top/Bottom-K 는
+  **논문에 없는 지표를 우리가 도입한 것**이며 재현 점수와 분리한다 (REPRODUCTION §17.27)
+- **Table 5 Diet 7행 중 5행이 배포 KG 에서 성립하지 않는다.** 음식도 성분 노드도 다
+  있는데, ① 아미노산 측정이 비타민의 **1/20**(Cystine 95 · Threonine 255 vs Niacin
+  8,007)이라 Garlic·Coffee·Sweets·Egg products 에 기록이 0건이고(논문도 §4.2.3 에서
+  "missing values" 로 인정), ② 대사 세균 201종과 질병연관 세균 764종의 **교집합이
+  72종**뿐이라 Lettuce–anxiety 경로가 끊긴다 (REPRODUCTION §17.25)
+- **Table 5 #1 의 근거 세균이 KG 와 맞지 않는다.** 논문은 Parkinson–depression 합병증의
+  근거로 *Streptococcus mutans* 를 들지만, taxon 1309 가 붙는 질병 8개에 우울증이 없다.
+  두 질병을 실제로 잇는 세균은 4종이고 S. mutans 는 거기 없다 (REPRODUCTION §17.26)
+- **§4.1 의 "질환을 바꿀 수 있다" 가 사실이 아니다.** Q2·Q3 는 `hasPositive/Negative
+  Association` 을 가진 질환에서만 돌아가는데 배포 KG 에서 그런 질환은 `Major depressive
+  disorder` **하나뿐**이다. MiKG 의 mental disorder 10종 중 1종. 반면 Q1 의 영양소·음식
+  교체는 사실이다 (REPRODUCTION §17.21)
+- **Query 1 은 변수 미결합 때문에 계산적으로도 실행 불가능하다.** `count(*)` 가 20분에도
+  끝나지 않는다. 값이 틀린 것에 더해 쿼리 자체가 폭발한다 (REPRODUCTION §17.21)
+- **§3.3 이 추론 예시로 든 것(KEGG compound 계층)이 실제 생성량의 0.1% 다.** 규칙 (a) 를
+  재구현하면 2,436,403 건이 나오는데 그 **90%가 NCBI 계통수**의 조상 닫힘이고 KEGG 는
+  1,858 건뿐이다. 서술과 실제 기여원이 다르다 (REPRODUCTION §17.20)
+- **공개 KG 에 질병 계층이 전혀 없다.** SNOMED CT 는 0 트리플, MeSH 는 라벨 23만 개를 담고도
+  연관에 쓰인 253개 질병 중 트리번호 보유 **0개**다. MiKG 가 `mentalDisorder` 단층 10종을 줘
+  Query 3 의 "mental disorder" 분류는 복원되지만(Table 4 5/5), §3.3 이 추론 근거로 든
+  **"mood disorder" 같은 중간 분류는 어떤 배포 자료에도 없다** (REPRODUCTION §17.17)
 - Query 3 도 음식과 성분이 묶여 있지 않다 (Table 4 의 핫도그 행, Table 5 의 Threonine 3건)
 
 ---
@@ -453,17 +579,18 @@ Fig. 5 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" �
 | 파일 | 역할 |
 |------|------|
 | `run_paper_eval.py` | §5.1 방법 1(20문항을 KG 에 질의)·방법 2(근거 존재) |
+| `m1.py` | §5.1 방법 1 — (질문, 논문 정답, 검증쿼리) 20삼중항 + 전문가 전원동의 분리. 공개 KG 공통 로더도 여기 |
+| `paper_data.py` | **논문 전사 자료 한 곳** — Supplement Table 1(20문항) · Table 5(15건) · 논문 수치 29개 체크리스트. MISMATCH 는 `tools/paper.py hunt` 탐색 후에만 표시 가능(코드 강제) |
+| `paper_kg_stats.py` | §3 전체 검증 — §3.1 Table 1 Relation·Entity 열·본문 수치, §3.2 Entity linking, §3.3 관계 표현 |
 | `paper_sparql.py` | 공개 KG 에 보충자료 SPARQL 을 실행해 Table 2~5 대조 (`pyoxigraph`) |
-| `paper_table1.py` | 전문가 20문항 (Supplementary Table 1) 전사 |
-| `paper_table5.py` | 문헌 검증 15건 (Table 5) |
 | `gold.py` | 논문이 부호를 명시한 compound 9종 — 파라미터를 고르는 독립 기준 |
 
 ### tools/ (진단·검증, 모두 `core.py` 공유)
 
 | 파일 | 하위 명령 |
 |------|-----------|
-| `scorecard.py` | 재현 집계 — 먼저 볼 것 |
-| `paper.py` | `units` 단위 역산 · `claims` 논문 주장 검정 · `invert` E 역추정 · `improve` 개선판 |
+| `scorecard.py` | 재현 집계 — 먼저 볼 것. `--check-docs` 로 문서 수치 검사(§17.19) |
+| `paper.py` | `units` 단위 역산 · `claims` 논문 주장 검정 · `invert` E 역추정 · `improve` 개선판 · **`hunt` 수치 탐색기**(논문 값이 안 나온다고 말하기 전 필수) |
 | `ab.py` | 설정 A/B: `rules` `fallback` `menda_both` `menda_tiebreak` `study_type` `merge` `margin` `units` `polarity` |
 | `sweep.py` | 수식·부호 스윕: `formula` `sign` `sources` `menda` `promenda` `ceiling` |
 | `diag.py` | 진단: `kg` `signs` `lipids` `unassigned` `data` `food` `menda_jsonld` `menda_orig` `menda_rule` `promenda_types` `supplements` |
@@ -529,12 +656,39 @@ Fig. 5 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" �
 **외부 기준 (보조)** — Antidepressant Food Score (LaChance & Ramsey 2018) 를 85 compound 로
 근사했다. 논문 순위를 포함해 어떤 순위도 AFS 와 상관이 없다 (|ρ| ≤ 0.11).
 
-### 남은 방향
-- **KG embedding** (TransE, RotatE) → food–depression link prediction
-- **GNN** (R-GCN, CompGCN) → food node embedding
-- **SMILES trial** (Jacka et al. 2017) ModiMedDiet 권장 식품을 ground truth 로 평가
-- Table 5 방식 문헌 검증 확장
-- 저자에게 `weight.csv` 요청 — E 를 확정할 수 있는 유일한 경로
+### 남은 방향 (상세는 REPRODUCTION §18, 우선순위대로)
+
+논문 지표를 움직이는 크기 / 비용으로 매겼다. 판정은 §5.1 방법 1·2 와 §3·§4 수치로만 한다.
+
+| | 항목 | 논문 근거 | 성공 기준 |
+|---|---|---|---|
+| ~~1~~ | ~~§3.2 Entity linking 검증~~ | §3.2 수치 4개 | **완료 — 0/5 일치 (§17.7)** |
+| 2 | §3.3 추론 재구현 (474만) | §3.3 규칙 (a) 전이 (b) 공통 세균 | Table 5 Complication 8/8, 생성 수 대조 |
+| 3 | **E 보강 69 → 85/85** | §4.2.1 | gold 8/9·Spearman +0.786 유지 이상 |
+| 4 | 방법 2 PubMed 재검색 | §5.1 | 11/15 재현 |
+| 5 | 방법 1 문항 확장 | §5.1 "further evaluations ... necessary" | 확장 문항 재현율이 18/20 수준 유지 |
+| 6 | SNOMED 284 개념 | — | Query 3 원문 실행 (수치는 거의 불변, §17.6) |
+
+논문 범위 밖(§5.2 가 든 한계를 따라가는 확장, 재현 수치와 분리): KG embedding
+(TransE/RotatE), 미생물 없이 성립하는 nutrient→neurotransmitter 경로, 개인화.
+외부 ground truth 로는 SMILES trial (Jacka et al. 2017) ModiMedDiet.
+
+여전히 유효한 지름길: 저자에게 `weight.csv` 요청 — E 를 확정할 수 있는 유일한 경로다.
+
+---
+
+### 최신 데이터로 다시 만든 우리 KG (`ourkg/`)
+
+논문의 구축 방식·평가 방식을 그대로 쓰고 데이터만 최신 공개본으로 바꾼 별도
+파이프라인이다. **재현 결과와 섞지 않는다** — 재현은 `reconstruct.py` →
+`run_recommendation.py` 경로이고, 이쪽은 `ourkg/run_all.py` 다.
+
+- FDC 2026-09 전체(2,101,279 항목) + ProMENDA(Pu et al. 2024) + KEGG/NCBI 재조회
+- RDF 3,166,603 triple / 음식 14,719 / compound 130 / 음식당 측정 compound 중앙값 47
+- 추천 Bottom 30 은 논문 §4.2.3(소시지·소고기류)과 일치, Top 30 은 부분 일치
+- §5.1 방법 2 자동 문헌검증 4/15 (논문 11/15)
+
+상세·설계 결정·한계는 `ourkg/README.md`.
 
 ---
 

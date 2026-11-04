@@ -1,0 +1,13 @@
+{
+ "disorders_with_relation": [
+  "Major depressive disorder"
+ ],
+ "mikg_total": 10,
+ "mikg_usable": 1,
+ "q1_variants": {
+  "Vitamin B|Egg|Milk": 5,
+  "Vitamin C|Apple|Orange": 5,
+  "Calcium|Cheese|Yogurt": 5
+ },
+ "q1_all_ok": true
+}

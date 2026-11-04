@@ -194,6 +194,9 @@ def to_prob(u):
 
 p1, p2, p3, p4 = to_prob(u1), to_prob(u2), to_prob(u3), to_prob(u4)
 
+# 컬럼 이름은 공식 final.py 에 맞춘다 — cal_results() 가 df['infer'] df['faecal']
+# df['type1'] df['type4'] 를 읽는다. 우리 내부 4번째 소스는 ProMENDA 의 **Type2**
+# 부분집합이지만(weight.csv 에서는 'type2'), 출력 컬럼명만 'type4' 로 맞춘다.
 pd.DataFrame({'infer': p1, 'faecal': p2,
               'type1': p3, 'type4': p4}
              ).to_csv(os.path.join(OUT_DIR, 'acs04.csv'), index=False)

@@ -8,7 +8,20 @@
     python3 tools/paper.py claims    §16.2 논문 주장 C1~C6 검정 (+ 논문 내부 C3, C4 PCA)
     python3 tools/paper.py invert    §16.3 논문 순위 → E 역추정, held-out
     python3 tools/paper.py improve   §16.4 논문 기반 개선판 V1~V4 (재현과 분리)
-    python3 tools/paper.py all
+    python3 tools/paper.py hunt <수>  §17.18 수치 탐색기 — 논문 값이 레포에서 나오는가
+    python3 tools/paper.py all       (hunt 제외)
+
+------------------------------------------------------------------------
+hunt — 수치 탐색기 (§17.18)
+  "논문 값이 안 나온다" 고 말하기 전에 반드시 돌린다. §17.9·§17.10·§17.12·§17.14·
+  §17.16 에서 우리는 정의를 좁게 잡고 다섯 번 오판했다.
+  레포에서 뽑을 수 있는 후보(파일별 triples/subj/objURI/objLit/nodes/union,
+  predicate 별 subj/obj/sum, 라벨 정규화 10변형)를 만들고 단일값·배수·쌍합으로
+  목표를 찾는다. 후보는 analyse/hunt_candidates.json 에 캐시된다.
+
+    python3 tools/paper.py hunt 230 128 3505
+    python3 tools/paper.py hunt --paper      논문 수치 전부 (eval/paper_data.py)
+    python3 tools/paper.py hunt --rebuild 230
 
 ------------------------------------------------------------------------
 units — 논문 F 의 단위 규약
@@ -51,7 +64,10 @@ improve — 논문 기반 개선판 (재현 결과에 넣지 않는다)
   (보조) AFS  LaChance & Ramsey (2018) Antidepressant Food Score 의 12 영양소 중
               85 compound 에 있는 11종(B6 없음), %DV/100g(상한 100%) 평균. 논문 밖 기준.
 """
+import itertools
+import json
 import os
+import re
 import sys
 
 import numpy as np
@@ -513,10 +529,157 @@ def improve():
           f'1비트 {stats.spearmanr(core.one_bit(d.Y), afs).statistic:+.3f}')
 
 
+FKG = os.path.join(core.BASE, 'foodkg_triply')
+HUNT_CACHE = os.path.join(core.OUT, 'hunt_candidates.json')
+
+NORMS = {
+    '원문': lambda x: x,
+    'lower': lambda x: x.lower(),
+    'comma': lambda x: x.split(',')[0].strip().lower(),
+    'paren': lambda x: re.sub(r'\(.*?\)', '', x).strip().lower(),
+    'sing': lambda x: re.sub(r'\b(\w+?)s\b', r'\1', x.lower()),
+    'comma+sing': lambda x: re.sub(r'\b(\w+?)s\b', r'\1',
+                                   x.split(',')[0].strip().lower()),
+    'noOther': lambda x: re.sub(r'^other\s+', '', x.lower()).strip(),
+    'noAnd': lambda x: x.lower().split(' and ')[0].strip(),
+    'first1': lambda x: (x.replace(',', ' ').split() or [''])[0].lower(),
+    'first2': lambda x: ' '.join(x.replace(',', ' ').split()[:2]).lower(),
+}
+
+
+def hunt_build():
+    """레포에서 뽑을 수 있는 후보 수치를 전부 만든다."""
+    import collections
+    import pyoxigraph as ox
+    cand = {}
+    for fn in sorted(os.listdir(FKG)):
+        if not fn.endswith(('.trig', '.jsonld')):
+            continue
+        st = ox.Store()
+        fmt = ox.RdfFormat.TRIG if fn.endswith('.trig') else ox.RdfFormat.JSON_LD
+        kw = {} if fn.endswith('.trig') else {'to_graph': ox.NamedNode('file://' + fn)}
+        st.bulk_load(path=os.path.join(FKG, fn), format=fmt, **kw)
+        subj, oU, oL = set(), set(), set()
+        by = collections.defaultdict(lambda: (set(), set()))
+        labels = set()
+        for q in st:
+            p = str(q.predicate.value)
+            s = str(q.subject.value)
+            subj.add(s)
+            by[p][0].add(s)
+            if isinstance(q.object, ox.NamedNode):
+                o = str(q.object.value)
+                oU.add(o)
+                by[p][1].add(o)
+            else:
+                o = str(q.object)
+                oL.add(o)
+                by[p][1].add(o)
+                if p.endswith(('label', 'Label')):
+                    labels.add(str(q.object.value))
+        cand[f'{fn}:triples'] = len(st)
+        cand[f'{fn}:subj'] = len(subj)
+        cand[f'{fn}:objURI'] = len(oU)
+        cand[f'{fn}:objLit'] = len(oL)
+        cand[f'{fn}:nodes'] = len(subj) + len(oU) + len(oL)
+        cand[f'{fn}:union'] = len(subj | oU)
+        for p, (ps, po) in by.items():
+            n = p.rsplit('#', 1)[-1].rsplit('/', 1)[-1]
+            cand[f'{fn}:{n}.subj'] = len(ps)
+            cand[f'{fn}:{n}.obj'] = len(po)
+            cand[f'{fn}:{n}.sum'] = len(ps) + len(po)
+        for nm, f in NORMS.items():
+            if labels:
+                cand[f'{fn}:label~{nm}'] = len({f(x) for x in labels})
+        del st
+    return cand
+
+
+def hunt_load(rebuild=False):
+    if not rebuild and os.path.exists(HUNT_CACHE):
+        return {k: v for k, v in json.load(open(HUNT_CACHE)).items()}
+    print('후보 생성 중 (약 1분)...', file=sys.stderr)
+    cand = hunt_build()
+    os.makedirs(os.path.dirname(HUNT_CACHE), exist_ok=True)
+    json.dump(cand, open(HUNT_CACHE, 'w'))
+    return cand
+
+
+PRIMARY = ('nodes', 'triples', 'subj', 'objURI', 'objLit', 'union')
+
+
+def _rank(key):
+    """1차 지표(파일 단위 집계)를 predicate 단위보다 앞세운다."""
+    k = key.split(':', 1)[-1]
+    return 0 if k in PRIMARY else (1 if k.startswith('label~') else 2)
+
+
+def hunt(target, cand, pairs=True):
+    """목표 값을 만드는 후보를 찾는다 -> [(설명, 신뢰도)]"""
+    out = []
+    for k, v in cand.items():
+        if v == target:
+            out.append((f'{k} = {v:,d}', '단일'))
+        elif v and target == 2 * v:
+            out.append((f'{k} × 2 = {target:,d}  (원값 {v:,d})', '배수'))
+        elif v and target == 3 * v:
+            out.append((f'{k} × 3 = {target:,d}  (원값 {v:,d})', '배수'))
+    if pairs:
+        items = [(k, v) for k, v in cand.items() if v]
+        hits = [(a, va, b, vb) for (a, va), (b, vb) in itertools.combinations(items, 2)
+                if va + vb == target]
+        hits.sort(key=lambda t: (_rank(t[0]) + _rank(t[2]), t[0]))
+        for a, va, b, vb in hits:
+            tag = '쌍합' + ('★' if _rank(a) == 0 and _rank(b) == 0 else '')
+            out.append((f'{a}({va:,d}) + {b}({vb:,d})', tag))
+    return out
+
+
+def hunt_report(targets, cand, show_pairs=8):
+    for t in targets:
+        hits = hunt(t, cand)
+        single = [h for h, c in hits if c == '단일']
+        mult = [h for h, c in hits if c == '배수']
+        pair = [h for h, c in hits if c.startswith('쌍합')]
+        star = [h for h, c in hits if c == '쌍합★']
+        print(f'\n=== {t:,} ===')
+        if single:
+            print('  [단일 일치] ← 가장 신뢰도 높음')
+            for h in single[:10]:
+                print(f'     {h}')
+        if mult:
+            print('  [배수 일치] ← 재구성. 확정으로 쓰지 말 것')
+            for h in mult[:6]:
+                print(f'     {h}')
+        if star:
+            print(f'  [두 값의 합 — 1차 지표끼리] {len(star)}건 ← 검토 가치 있음')
+            for h in star[:6]:
+                print(f'     {h}')
+        rest = [h for h in pair if h not in star]
+        if rest:
+            print(f'  [두 값의 합 — 그 외] {len(rest)}건 ← 우연 가능')
+            for h in rest[:show_pairs]:
+                print(f'     {h}')
+        if not hits:
+            print('  일치 없음 — 이 경우에만 "배포본에서 나오지 않는다" 고 말할 수 있다')
+
 FUNCS = {'units': units, 'claims': claims, 'invert': invert, 'improve': improve}
 
 if __name__ == '__main__':
     which = sys.argv[1] if len(sys.argv) > 1 else 'all'
+    if which == 'hunt':
+        args = sys.argv[2:]
+        rebuild = '--rebuild' in args
+        args = [a for a in args if a != '--rebuild']
+        cand = hunt_load(rebuild)
+        print(f'후보 {len(cand):,}개 ({HUNT_CACHE})')
+        if '--paper' in args:
+            sys.path.insert(0, os.path.join(core.BASE, 'eval'))
+            from paper_data import PAPER_NUMBERS
+            hunt_report([n for _, n, _, _ in PAPER_NUMBERS], cand, show_pairs=3)
+        else:
+            hunt_report([int(a.replace(',', '')) for a in args or ['0']], cand)
+        sys.exit()
     for k in (list(FUNCS) if which == 'all' else [which]):
         if k not in FUNCS:
             sys.exit(f'알 수 없는 항목: {k}\n가능: {", ".join(FUNCS)}, all')
