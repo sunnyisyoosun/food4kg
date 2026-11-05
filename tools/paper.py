@@ -507,11 +507,35 @@ def improve():
     idx, rank, _, ptop, pbot = core.paper_ranking(d.names)
     print(f'\n{"":16s} {"Spearman":>9s} {"Top30":>6s} {"Bot30":>6s} {"gold":>5s} '
           f'{"claims":>7s} {"(보조)AFS":>10s}   E')
+    # V5 — §4.2.3 "nonrecommended foods ... higher levels of trace elements and
+    # macronutrients that might not be beneficial" 를 E 에 그대로 넣어 본다.
+    # 미채움 16종 중 Trace Elements 5 + Macronutrient 5 가 바로 이 두 그룹이다.
+    grp = core.paper85().set_index('kegg')['group']
+    tm = np.array([grp.get(c, '') in ('Trace Elements', 'Macronutrient')
+                   for c in d.cols]) & (d.E == 0)
+    E5 = d.E.copy()
+    E5[tm] = -1.0
+    E5b = d.E.copy()
+    E5b[tm] = +1.0          # 부호 민감도 대조군
+    # V7 — ProMENDA 엄밀 다수결(동률은 0). margin 0.10 을 0 으로 낮춘 것과 같되
+    # 정확한 동률은 임의 부호를 주지 않는다.
+    E7 = d.E.copy()
+    for j, c in enumerate(d.cols):
+        if E7[j]:
+            continue
+        v = core.lookup(tab, c)
+        if v and sum(v) >= 2 and v[0] != v[1]:
+            E7[j] = 1.0 if v[0] > v[1] else -1.0
+    print(f'V5: §4.2.3 그룹 서술로 채울 수 있는 compound {int(tm.sum())}개')
+
     for lbl, p, E in (('R  재현 기준', d.score(d.E), d.E),
                       ('V1 근거 가중 E', d.score(E1), E1),
                       ('V2 미생물 경로', d.score(d.E * gate), d.E * gate),
                       ('V3 유사도 제거', d.Xn @ d.E, d.E),
-                      ('V4 V1+V2', d.score(E1 * gate), E1 * gate)):
+                      ('V4 V1+V2', d.score(E1 * gate), E1 * gate),
+                      ('V5 §4.2.3 그룹(-)', d.score(E5), E5),
+                      ('V5b 대조 (+)', d.score(E5b), E5b),
+                      ('V7 엄밀 다수결', d.score(E7), E7)):
         order = np.argsort(-p)
         top = {d.names[i] for i in order[:K]}
         bot = {d.names[i] for i in order[-K:]}

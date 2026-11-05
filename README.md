@@ -48,7 +48,7 @@
 | 성분 행렬 F vs 논문 heatmap | 행 코사인 0.981 | — | ✅ |
 | 측정 밀도 (compound 수 중앙값) | 28 | 33 | ⚠️ FDC 판 차이 |
 | PCA 80% 도달 성분 수 (§4.2.1) | 5 | 5 | ✅ |
-| E 방향 확보 | 69 / 85 | 85 | ⚠️ |
+| E 방향 확보 | 69 / 85 | 85 | ⚠️ 16종은 MENDA 에 데이터가 없다 (§17.28) |
 | 논문이 부호를 명시한 compound (gold) | 8 / 9 | 9 | ✅ |
 | **추천 순위 Top30 겹침** (우연 6.7) ※ | **18 / 30** | 30 | ✅ |
 | **추천 순위 Bottom30 겹침** (우연 6.7) ※ | **15 / 30** | 30 | ✅ |
@@ -491,6 +491,11 @@ Fig. 5 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" �
   disabilities**" 로 적는다. 배포 KG 에서 `D008607`(Intellectual Disability) 은 `sameAs`
   0건·세균 연결 0건의 고립 노드이고, E. coli·L. plantarum 에 붙는 것은
   `D007859`(Learning Disabilities) 다. Table 5 쪽이 KG 와 일관된다 (REPRODUCTION §17.23)
+- **§4.2.1 의 `E ∈ {+1,−1}` 은 배포 자료로 충족할 수 없다.** 85종 중 **16종이 0** 인데,
+  15종은 KG 의 pos/neg 목록에 **아예 없고** 12종은 ProMENDA 에도 없다. 특히 Fig. 4(c) 의
+  **Trace Elements 5/5 · Macronutrient 5/5 가 통째로 비어 있다** — 미네랄은 우울증
+  대사체 DB 인 MENDA 에 있을 수 없다. 논문은 이 10종에 어떻게 부호를 주었는지 적지 않는다
+  (REPRODUCTION §17.28)
 - **§5.1 의 0.95/0.9/0.95 는 정확도가 아니라 전문가별 동의율이다.** Supplement Table 1
   의 V0/V1/V2 열 합(19/18/19)이 그 수치를 정확히 재현한다. 논문은 "accuracy against the
   **gold standard** answers" 라 적었으나 단일 gold 가 없고 전문가 판정이 4문항에서
