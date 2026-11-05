@@ -836,6 +836,10 @@ def invert():
 
     C_REG = float(os.environ.get('INVERT_C', '1.0'))
     SEED = int(os.environ.get('INVERT_SEED', '0'))
+    # FEATURES=compound(기본, 논문 F 그대로) | form(구조·가공 축만) | both
+    # form 은 build.py form 이 만든 FDC 측정값이다. 라벨이 이름 규칙이므로
+    # 측정값만 쓰는 한 누수가 없다(§10).
+    FEATURES = os.environ.get('FEATURES', 'compound')
 
     print('[1/5] 코호트와 라벨')
     foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
@@ -850,6 +854,22 @@ def invert():
     X = F.values.astype(float)
     colmax = X.max(axis=0)
     X = np.divide(X, colmax, out=np.zeros_like(X), where=colmax > 0)
+
+    if FEATURES in ('form', 'both'):
+        fp = os.path.join(OUT, 'food_form.csv')
+        if not os.path.exists(fp):
+            sys.exit('food_form.csv 가 없다. python3 ourkg/build.py form')
+        Ff = (pd.read_csv(fp).set_index('food_key')
+              .reindex(foods['food_key']).fillna(0.0))
+        Xf = Ff.values.astype(float)
+        fmax = np.abs(Xf).max(axis=0)
+        Xf = np.divide(Xf, fmax, out=np.zeros_like(Xf), where=fmax > 0)
+        if FEATURES == 'form':
+            X, compounds = Xf, list(Ff.columns)
+        else:
+            X = np.hstack([X, Xf])
+            compounds = compounds + list(Ff.columns)
+        print(f'  FEATURES={FEATURES} -> 특징 {X.shape[1]}')
 
     m = (lab != 0).values
     y = (lab[m] == 1).astype(int).values
@@ -877,7 +897,22 @@ def invert():
 
     learned = pd.DataFrame({'kegg': compounds, 'e_learned': np.round(e_learned, 4),
                             'coef': np.round(coef, 4)})
-    learned.to_csv(os.path.join(OUT, 'compound_learned.csv'), index=False)
+    # E_MODE=learned 가 읽는 파일은 compound 축일 때만 덮어쓴다.
+    # form/both 는 compound 가 아닌 특징이 섞여 있어 E 로 쓸 수 없다.
+    lname = ('compound_learned.csv' if FEATURES == 'compound'
+             else f'learned_{FEATURES}.csv')
+    learned.to_csv(os.path.join(OUT, lname), index=False)
+    print(f'  저장: {lname}')
+    if FEATURES != 'compound':
+        print('  상위 가중치:')
+        for _, r in learned.reindex(learned['e_learned'].abs()
+                                    .sort_values(ascending=False).index).head(12).iterrows():
+            print(f'    {r.kegg:22s} {r.e_learned:+.3f}')
+
+    if FEATURES != 'compound':
+        print('\n  (FEATURES != compound 이므로 부호 대조·파이프라인 단계는 건너뛴다 '
+              '— 논문 E 는 compound 축에만 정의된다)')
+        return
 
     print('[4/5] 공개 소스 E 와 부호 대조')
     dep = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')

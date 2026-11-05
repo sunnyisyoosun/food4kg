@@ -46,6 +46,7 @@ KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐�
 | 파일 | 단계 | 하는 일 | 주요 산출물 |
 |---|---|---|---|
 | `build.py` | `food` | FDC 원본 2,700만 행 스트리밍 → 단위 g 환산 → 논문 §3.2 라벨 병합 → 카테고리 정규화 | `food_compound_long.csv`, `foods.csv` |
+| | `form` | FDC 측정값에서 구조·가공 축 19개를 뽑는다 (F 확장) | `food_form.csv` |
 | | `promenda` | ProMENDA → compound별 우울증 극성 E | `compound_depression.csv` |
 | | `evidence` | ProMENDA·MENDA·재현 규칙·AFS 네 근거로 E 구성 (결합 6가지) | `compound_evidence.csv` |
 | | `microbe` | MeSH tree / NCBI taxonomy / KEGG 로 미생물 축 | `microbes.csv`, `compound_microbe.csv`, `microbe_disease*.csv` |

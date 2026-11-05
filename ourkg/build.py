@@ -15,6 +15,7 @@
 """
 
 import os
+import numpy as np
 import pandas as pd
 import re
 import json
@@ -956,8 +957,111 @@ def evidence():
     print(f'    총 {len(diff)}개')
 
 
-STEPS = {'food': food, 'promenda': promenda, 'evidence': evidence,
-         'microbe': microbe, 'kg': kg}
+def form():
+    """F 에 구조·가공 축을 더한다 — FDC **측정값**에서만.
+
+    왜
+    --
+    §7 에서 ModiMedDiet 이 가르는 것은 상당 부분 성분이 아니라 **형태**였다
+    (separable lean only vs lean and fat, whole vs refined, raw vs fried).
+    지금 F 는 KEGG 에 매핑되는 영양소 130종만 담아 이걸 전혀 모른다.
+    §8 에서 잰 성분 중량만의 상한은 AUC 0.816 이다. 그 상한 자체를 올리는 길이다.
+
+    누수 방지
+    ---------
+    ModiMedDiet 라벨은 **음식 이름 문자열** 규칙으로 만들었다(§7). 그러므로
+    형태 축을 이름에서 뽑으면 라벨을 특징으로 쓰는 것이 되어 평가가 무의미해진다.
+    여기서는 **FDC 가 측정한 영양소 값만** 쓴다. 이름·카테고리는 보지 않는다.
+
+    더하는 축 (전부 FDC 측정 영양소, KEGG 매핑이 없어 F 에서 빠져 있던 것들)
+      절대량   Energy(1008) Protein(1003) Fat(1004) Carb(1005) Water(1051)
+               Fiber(1079) AddedSugar(1235) TotalSugar(2000/1063)
+               SFA(1258) MUFA(1292) PUFA(1293) TFA(1257) Ash(1007)
+      비율     added_sugar_share(= 첨가당/탄수화물), sugar_share,
+               sat_share(= 포화/지방), unsat_ratio(= (MUFA+PUFA)/SFA),
+               carb_share·fat_energy_share(= 중량/열량)
+               ※ 절대량이 이미 100 g 당 값이라 'x/100' 은 비율이 아니다. 뺐다.
+    비율이 가공·형태의 대리 변수다 — 정제 곡물은 섬유 밀도가 낮고 첨가당 비중이
+    높으며, 기름에 튀긴 것은 지방 비중과 에너지 밀도가 높다.
+
+    논문 §3.1 은 "The nutrients of the food are quantified in weight" 라고만 하고
+    KEGG 매핑을 요구하지 않는다. 다만 KG 의 compound 축은 KEGG 그대로 둔다 —
+    여기서 더하는 것은 추천 입력 F 이지 KG 의 엔티티가 아니다.
+
+    출력
+      out/food_form.csv   food_key x (절대량 + 비율)
+    """
+    NUTRIENTS = {
+        1008: 'energy_kcal', 1003: 'protein_g', 1004: 'fat_g',
+        1005: 'carb_g', 1051: 'water_g', 1079: 'fiber_g',
+        1235: 'added_sugar_g', 2000: 'total_sugar_g', 1063: 'total_sugar_g2',
+        1258: 'sfa_g', 1292: 'mufa_g', 1293: 'pufa_g', 1257: 'tfa_g',
+        1007: 'ash_g',
+    }
+    CHUNK = 2_000_000
+
+    print('[1/3] food.csv (라벨 병합용)')
+    food = pd.read_csv(os.path.join(FDC_RAW, 'food.csv'), low_memory=False,
+                       usecols=['fdc_id', 'description'])
+    food['food_key'] = normalize_label(food['description'])
+    keep_keys = set(pd.read_csv(os.path.join(OUT, 'foods.csv'))['food_key'])
+    food = food[food['food_key'].isin(keep_keys)]
+    key_of = dict(zip(food['fdc_id'], food['food_key']))
+    print(f'  대상 FDC 항목 {len(food):,} -> 음식 {food["food_key"].nunique():,}')
+
+    print('[2/3] food_nutrient.csv 스트리밍 (구조 영양소만)')
+    want = set(NUTRIENTS)
+    parts, rows = [], 0
+    for ch in pd.read_csv(os.path.join(FDC_RAW, 'food_nutrient.csv'), chunksize=CHUNK,
+                          usecols=['fdc_id', 'nutrient_id', 'amount'], low_memory=False):
+        rows += len(ch)
+        ch = ch[ch['nutrient_id'].isin(want) & ch['fdc_id'].isin(key_of)]
+        if len(ch):
+            parts.append(ch)
+        print(f'\r  읽음 {rows:,} / 보관 {sum(len(p) for p in parts):,}',
+              end='', flush=True)
+    print()
+    fn = pd.concat(parts, ignore_index=True)
+    fn['food_key'] = fn['fdc_id'].map(key_of)
+    fn['feat'] = fn['nutrient_id'].map(NUTRIENTS)
+    fn['amount'] = pd.to_numeric(fn['amount'], errors='coerce')
+    tab = fn.pivot_table(index='food_key', columns='feat', values='amount',
+                         aggfunc='mean')
+    # total_sugar 는 두 nutrient_id 중 있는 쪽을 쓴다
+    if 'total_sugar_g2' in tab.columns:
+        tab['total_sugar_g'] = tab.get('total_sugar_g', np.nan).fillna(
+            tab['total_sugar_g2'])
+        tab = tab.drop(columns='total_sugar_g2')
+    tab = tab.reindex(sorted(keep_keys)).fillna(0.0)
+    print(f'  음식 {len(tab):,} x 절대량 {tab.shape[1]}')
+
+    print('[3/3] 비율 (가공·형태 대리 변수)')
+    def ratio(a, b):
+        return np.divide(tab[a].values, tab[b].values,
+                         out=np.zeros(len(tab)), where=tab[b].values > 0)
+
+    # 절대량은 이미 100 g 당 값이므로 'x/100' 꼴은 비율이 아니라 같은 열의
+    # 복사본이다(완전 공선). 진짜 비율만 더한다.
+    tab['added_sugar_share'] = ratio('added_sugar_g', 'carb_g')
+    tab['sugar_share'] = ratio('total_sugar_g', 'carb_g')
+    tab['sat_share'] = ratio('sfa_g', 'fat_g')
+    tab['unsat_ratio'] = np.divide((tab['mufa_g'] + tab['pufa_g']).values,
+                                   tab['sfa_g'].values,
+                                   out=np.zeros(len(tab)),
+                                   where=tab['sfa_g'].values > 0)
+    tab['carb_share'] = ratio('carb_g', 'energy_kcal')
+    tab['fat_energy_share'] = ratio('fat_g', 'energy_kcal')
+    tab = tab.replace([np.inf, -np.inf], 0.0).fillna(0.0)
+    tab.to_csv(os.path.join(OUT, 'food_form.csv'))
+    print(f'  저장: food_form.csv  {tab.shape[0]:,} x {tab.shape[1]}')
+    nz = (tab != 0).mean().sort_values(ascending=False)
+    print('  비영 비율 상위:')
+    for k, v in nz.head(8).items():
+        print(f'    {k:20s} {v*100:5.1f}%')
+
+
+STEPS = {'food': food, 'form': form, 'promenda': promenda,
+         'evidence': evidence, 'microbe': microbe, 'kg': kg}
 
 
 def main(argv):

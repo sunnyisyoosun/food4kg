@@ -27,6 +27,7 @@
 | §5.1 방법 2 문헌 검증 | 11 / 15 | **4 / 15** |
 | ModiMedDiet AUC (외부 기준) | — | 0.491 (기본) / 0.665 (공개 소스 최고) |
 | 같은 기준, E 를 역추정하면 | — | **0.803** (상한 0.816) |
+| 구조·가공 축을 더하면 | — | **0.835** (상한 0.847) |
 
 추천 점수 `D = E × Fᵀ` 에는 미생물이 들어가지 않는다 — 논문 식 (1)(2) 의 정의가
 그렇다. gut-brain 경로를 거치는 compound 만 남겨도 순위 상관이 +0.99 다 (§6).
@@ -811,7 +812,117 @@ E_MODE=stype:t2 python3 ourkg/analyze.py recommend    # 변형 하나로 추천
 
 ---
 
-## 10. 과정에서 드러난 것
+## 10. F 에 구조·가공 축을 더한다 (`build.py form`)
+
+### 왜
+
+§7 에서 ModiMedDiet 이 가르는 것은 상당 부분 성분이 아니라 **형태**였다
+(`separable lean only` vs `lean and fat`, `whole` vs `refined`, `raw` vs `fried`).
+지금 `F` 는 KEGG 에 매핑되는 영양소 130종만 담아 이걸 모른다. §8 에서 잰 상한
+0.816 은 그 제약 아래의 상한이다. **상한 자체를 올리는 길이다.**
+
+### 누수를 어떻게 막았나
+
+ModiMedDiet 라벨은 **음식 이름 문자열** 규칙으로 만들었다(§7). 그러므로 형태 축을
+이름에서 뽑으면 라벨을 특징으로 쓰는 셈이 되어 평가가 무의미해진다.
+**FDC 가 측정한 영양소 값만 쓴다. 이름도 카테고리도 보지 않는다.**
+
+더한 축 19개 — 전부 FDC 측정 영양소인데 KEGG 매핑이 없어 `F` 에서 빠져 있던 것들.
+
+| | |
+|---|---|
+| 절대량 (13) | Energy, Protein, Fat, Carbohydrate, Water, Fiber, Added sugar, Total sugar, SFA, MUFA, PUFA, TFA, Ash |
+| 비율 (6) | `added_sugar_share`(첨가당/탄수화물), `sugar_share`, `sat_share`(포화/지방), `unsat_ratio`((MUFA+PUFA)/SFA), `carb_share`·`fat_energy_share`(중량/열량) |
+
+비율이 가공·형태의 대리 변수다 — 정제 곡물은 섬유가 적고 첨가당 비중이 높으며,
+튀긴 것은 지방 비중과 에너지 밀도가 높다.
+
+> 처음 판에서는 `energy_density = energy_kcal/100` 같은 열을 '비율'로 넣었는데,
+> 절대량이 이미 100 g 당 값이라 같은 열의 복사본(완전 공선)이었다. 5개를 뺐다.
+
+### 결과 — 구조 축 19개가 KEGG compound 130종보다 낫다
+
+ModiMedDiet 라벨 8,688개, 음식 단위 50/50 분할(seed 0), 학습은 train 만.
+
+| 특징 집합 | 특징 수 | 상한 (5-fold CV) | 역추정 held-out (`D = X·e`) |
+|---|---:|---:|---:|
+| `compound` — 논문 `F` 그대로 | 130 | 0.816 | 0.803 |
+| **`form` — 구조·가공 축만** | **19** | **0.819** | **0.809** |
+| **`both`** | 149 | **0.847** | **0.835** |
+| *(참고) ProMENDA `e_shrunk`* | 130 | — | *0.520* |
+
+**구조 축 19개만으로 KEGG compound 130종과 같거나 낫다** (0.819 vs 0.816).
+그리고 둘은 **상호 보완적이다** — 합치면 0.847 로 둘 중 어느 쪽보다 높다.
+
+### 무엇이 가르는가
+
+`form` 만 썼을 때의 상위 가중치 (`learned_form.csv`)
+
+| 축 | 가중치 |
+|---|---:|
+| fiber | **+1.000** |
+| PUFA | +0.545 |
+| water | +0.442 |
+| protein | +0.437 |
+| SFA | **−0.339** |
+| carbohydrate | −0.253 |
+| unsat_ratio | +0.241 |
+| energy | −0.231 |
+| total sugar | −0.205 |
+
+섬유 많고 불포화지방·수분·단백질 많고, 포화지방·당·열량 적은 쪽 — 익숙한
+건강식 서명이다. 중요한 것은 **이것을 가정한 적이 없다는 점이다.** ModiMedDiet
+라벨에서 배운 결과다.
+
+`both` 에서는 두 축이 섞여 나온다 (`learned_both.csv`)
+
+| 축 | 가중치 |
+|---|---:|
+| fiber | +1.000 |
+| **Magnesium (C00305)** | +0.813 |
+| water | +0.596 |
+| **Lutein + zeaxanthin (C06098)** | +0.504 |
+| PUFA | +0.484 |
+| **Ethanol (C00469)** | **−0.464** |
+| **β-carotene (C02094)** | +0.374 |
+| **Vitamin K (C02059)** | +0.369 |
+| total sugar | −0.322 |
+
+§8 에서 "ProMENDA 가 0 인데 역추정 |e| 가 큰 것"으로 지목했던 식물성 미량영양소
+(마그네슘·루테인·β-카로틴·비타민 K)가 그대로 상위에 있다. 구조 축을 더해도
+그 compound 들은 밀려나지 않는다 — 서로 다른 것을 재고 있다는 뜻이다.
+
+### 전체 파이프라인에 넣으면 — 또 S 가 깎는다
+
+| 특징 | `D = X·e` | Algorithm 1 전체 `P = D × S` |
+|---|---:|---:|
+| `compound` | 0.803 | 0.698 |
+| `both` | **0.835** | 0.616 |
+
+특징이 늘수록 유사도 단계가 더 많이 깎는다(§8 의 관찰이 더 강해진다).
+`S` 는 성분 프로파일의 코사인 유사도라, 축이 늘면 "비슷한 음식"의 정의가
+흐려지고 점수가 이웃으로 번진다.
+
+### 한계
+
+- 더한 축은 `F` 이지 KG 의 엔티티가 아니다. **KG 의 compound 축은 KEGG 그대로** 둔다.
+  논문 §3.1 은 "nutrients ... quantified in weight" 라고만 하고 KEGG 매핑을
+  요구하지 않으므로 `F` 확장은 논문 범위 안이지만, `E` 는 compound 축에만
+  정의되므로 `form`/`both` 는 **논문 Algorithm 1 의 E 가 아니다.**
+  `E_MODE=learned` 는 `compound` 축일 때만 쓸 수 있게 막아 뒀다.
+- NOVA 같은 공인 가공도 분류를 쓰지 않았다. 측정값 대리 변수다.
+- 여전히 ModiMedDiet 라벨로 학습한 결과다. 공개 소스만으로 이 축의 부호를
+  정하는 길은 아직 없다.
+
+```bash
+python3 ourkg/build.py form                               # 구조 축 생성
+FEATURES=form python3 ourkg/analyze.py invert             # 구조 축만
+FEATURES=both python3 ourkg/analyze.py invert             # 합쳐서
+```
+
+---
+
+## 11. 과정에서 드러난 것
 
 세 가지 모두 **논문 규모(음식 135종)에서는 드러나지 않고 14,000종에서만 터지는**
 문제다. 각각 환경변수로 되돌릴 수 있고, 근거는 [`README.md`](README.md) 설계 결정에 있다.
@@ -851,7 +962,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 11. 한계
+## 12. 한계
 
 - **식품 온톨로지 미통합** — FoodOn·중국 식품 온톨로지가 없어 음식 분류가 FDC SR 27군에
   머문다. 논문의 128 카테고리 체계와 대응되지 않는다.
@@ -865,7 +976,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 12. 산출물
+## 13. 산출물
 
 | 파일 | 내용 |
 |---|---|
@@ -882,6 +993,8 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 | `out/invert_comparison.csv` | 역추정 E vs 공개 소스 E 부호 대조 (전수) |
 | `out/compound_depression_stype.csv` | 연구 설계별 E 7변형 |
 | `out/stype_comparison.csv` | 설계별 E 채점표 |
+| `out/food_form.csv` | 구조·가공 축 19 (FDC 측정값) |
+| `out/learned_form.csv`, `out/learned_both.csv` | 그 축으로 역추정한 가중치 |
 | `out/compound_microbe.csv` | KEGG 재계산 compound-미생물 2,124 |
 | `out/microbes.csv` | NCBI 갱신 미생물 127 |
 | `out/microbe_disease.csv`, `out/microbe_disease_mikg.csv` | 미생물-질환 |
