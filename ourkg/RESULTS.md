@@ -25,6 +25,7 @@
 | 음식당 측정 compound 중앙값 | 33 | **47** |
 | 우울증 극성이 확정된 compound | 85 (공개 소스로는 69) | 66 |
 | §5.1 방법 2 문헌 검증 | 11 / 15 | **4 / 15** |
+| ModiMedDiet AUC (외부 기준) | — | 0.491 (기본) / 0.665 (최고) |
 
 추천 점수 `D = E × Fᵀ` 에는 미생물이 들어가지 않는다 — 논문 식 (1)(2) 의 정의가
 그렇다. gut-brain 경로를 거치는 compound 만 남겨도 순위 상관이 +0.99 다 (§6).
@@ -519,7 +520,119 @@ PATHS=direct,gutbrain python3 ourkg/analyze.py compare    # 위 16행 표
 
 ---
 
-## 7. 과정에서 드러난 것
+## 7. 외부 정답셋 — SMILES trial 의 ModiMedDiet (`analyze.py external`)
+
+### 왜 필요했나
+
+§5·§6 의 모든 판정이 논문 §4.2.3 서술 하나에 기대고 있었다. 그것은 논문이 자기
+알고리즘의 **출력을 서술한 문장**이라, 같은 기준으로 설정을 고르면 성적이
+과대평가된다. 그래서 기본값을 바꾸지 못하고 있었다.
+
+**ModiMedDiet** (Jacka et al. 2017, *BMC Medicine* 15:23) 은 중등도~중증 우울증
+환자 67명 대상 12주 RCT(SMILES)에서 **실제로 처방된** 식단이고, 1차 결과(MADRS)가
+유의하게 개선됐다. 알고리즘의 출력이 아니라 임상 개입이므로 **출처가 독립이다.**
+
+내용까지 독립인 것은 아니다 — 지중해식이라 "채소·생선 좋고 가공육·과자 나쁨"이라는
+방향은 §4.2.3 과 겹친다. 겹치지 않는 지점이 중요한데, 그중 하나가 **붉은 고기**다.
+§4.2.3 은 소고기·소시지를 비추천으로 두지만 ModiMedDiet 은 **lean red meat 를 주
+3-4회 처방**한다.
+
+### 처방 내용과 라벨 규칙
+
+| 처방군 (+1) | 양 |
+|---|---|
+| whole grains | 5–8 / day |
+| vegetables | 6 / day |
+| fruit | 3 / day |
+| low-fat, unsweetened dairy | 2–3 / day |
+| raw, unsalted nuts | 1 / day |
+| olive oil | 3 tbsp / day |
+| legumes | 3–4 / week |
+| fish | ≥ 2 / week |
+| lean red meat | 3–4 / week |
+| chicken | 2–3 / week |
+| eggs | ≤ 6 / week |
+
+**extras (−1)** — sweets, refined cereals, fried food, fast food, processed meats,
+sugary drinks, 그리고 spirits/beer. 합쳐 **≤ 3 / week**.
+
+처방이 조건부인 것들(`low-fat`·`unsweetened`·`raw`·`unsalted`·`lean`·`whole`·`olive`)은
+카테고리만으로 가를 수 없어 이름 규칙을 뒀다. 규칙은 전부 위 처방 문구에서 그대로
+가져왔고, 어느 쪽에도 걸리지 않는 음식은 **집계에서 뺀다**. 성인 RCT 이므로 이유식도
+뺀다. 라벨 전수는 `ourkg/out/modimed_labels.csv` 에 규칙 출처와 함께 있다.
+
+추천 코호트 12,574 중 **처방군 5,360 / extras 3,328 / 해당 없음 3,886**.
+
+`separable lean only`(지방 제거 부위)만 lean red meat 로 보고 `separable lean and
+fat` 은 해당 없음으로 둔 것이 중요하다 — 소고기 1,104종 중 459종만 처방군이다.
+
+### 채점
+
+**AUC** = 처방군 음식이 extras 음식보다 위에 올 확률(Mann–Whitney U / n₁n₂).
+0.5 가 무작위다.
+
+| E 모드 | 경로 | **ModiMedDiet AUC** | Top30 처방군 | Top30 extras | §4.2.3 Bottom30 |
+|---|---|---:|---:|---:|---:|
+| `vote` | direct | **0.665** | **24** | 4 | 2 |
+| `priority` | direct | **0.610** | 18 | 10 | 7 |
+| `weighted` | direct | **0.595** | 18 | 5 | 6 |
+| `weighted_norules` | direct | 0.495 | 20 | 7 | 3 |
+| **`shrunk` (기본)** | direct | **0.491** | 6 | 13 | **29** |
+| `weighted_norules` | gutbrain | 0.486 | 27 | 2 | **30** |
+| `vote_norules` | gutbrain | 0.485 | 14 | 10 | **30** |
+| `vote_norules` | direct | 0.484 | 11 | 14 | **30** |
+| `shrunk` | gutbrain | 0.482 | 6 | 14 | 29 |
+| `binary` | direct | 0.481 | 5 | 18 | 25 |
+| `priority_norules` | direct/gutbrain | 0.477 | 9 | 10~12 | 27~28 |
+| `vote` | gutbrain | 0.465 | 15 | 7 | 28 |
+| `priority` | gutbrain | 0.422 | 12 | 10 | **30** |
+| `weighted` | gutbrain | 0.412 | 15 | 7 | **30** |
+
+### 읽히는 것 — 두 기준이 반대를 가리킨다
+
+**1. 기본 설정은 외부 기준에서 우연 수준이다.** `shrunk` 의 AUC 0.491 은 동전
+던지기와 구별되지 않는다. §4.2.3 Bottom30 29/30 으로 가장 좋아 보이던 설정이,
+임상에서 처방된 식단을 그 식단이 제한한 음식과 **전혀 가르지 못한다.**
+
+**2. 두 기준의 순위가 거의 뒤집힌다.** AUC 상위 셋(`vote`·`priority`·`weighted`,
+전부 direct)은 §4.2.3 Bottom30 이 2·7·6 으로 최하위권이다. 반대로 §4.2.3 Bottom30
+30/30 을 받은 설정들은 AUC 0.41~0.49 다.
+
+**3. 갈라지는 지점은 붉은 고기다.** §4.2.3 을 잘 맞추는 설정은 **모든 육류를
+바닥으로** 보낸다. ModiMedDiet 은 지방을 제거한 붉은 고기를 주 3-4회 처방하므로,
+그 설정들은 처방군의 상당수를 extras 와 같이 바닥에 두게 된다. §4.2.3 점수가
+좋을수록 AUC 가 나빠지는 구조다.
+
+**4. 그래도 AUC 0.665 는 높지 않다.** 가장 좋은 설정도 처방 식단을 2/3 정도만
+가른다. 라벨 규칙의 잡음도 있고(이름 문자열 기반), 무엇보다 **알고리즘이 보는
+것은 성분 85~130종의 중량뿐**이라 조리법·가공도·식품군을 모른다.
+
+### 그래서 기본값은
+
+여전히 `shrunk` 다. 이유가 바뀌었다 — 전에는 "같은 기준으로 고르면 과대평가"라서
+못 바꿨고, 지금은 **두 기준이 반대를 가리켜 한쪽을 고를 근거가 없기** 때문이다.
+어느 쪽을 믿을지는 질문에 달렸다.
+
+- 논문 재현·대조가 목적이면 `shrunk` (§4.2.3 과 가장 잘 맞는다)
+- 임상 식단에 가까운 추천이 목적이면 `vote` direct (AUC 0.665)
+
+```bash
+python3 ourkg/analyze.py external                       # 정답셋 자체를 검수
+PATHS=direct,gutbrain python3 ourkg/analyze.py compare  # 두 기준으로 16조합 채점
+```
+
+### 한계
+
+- ModiMedDiet 은 **식품군·분량** 처방이고 우리 알고리즘은 **성분 중량**만 본다.
+  같은 축에서 비교하는 것이 아니다.
+- 라벨은 FDC 이름 문자열 규칙이라 잡음이 있다. `modimed_labels.csv` 를 열어
+  규칙별로 검수할 수 있게 해 뒀다.
+- SMILES 는 참가자 67명, 1개 시험이다. 메타분석 수준의 근거가 아니다.
+- 내용이 §4.2.3 과 부분적으로 겹친다. 독립인 것은 근거의 출처이지 내용이 아니다.
+
+---
+
+## 8. 과정에서 드러난 것
 
 세 가지 모두 **논문 규모(음식 135종)에서는 드러나지 않고 14,000종에서만 터지는**
 문제다. 각각 환경변수로 되돌릴 수 있고, 근거는 [`README.md`](README.md) 설계 결정에 있다.
@@ -559,7 +672,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 8. 한계
+## 9. 한계
 
 - **식품 온톨로지 미통합** — FoodOn·중국 식품 온톨로지가 없어 음식 분류가 FDC SR 27군에
   머문다. 논문의 128 카테고리 체계와 대응되지 않는다.
@@ -573,7 +686,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 9. 산출물
+## 10. 산출물
 
 | 파일 | 내용 |
 |---|---|
@@ -584,7 +697,8 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 | `out/compound_depression.csv` | ProMENDA 극성 E (binary / shrunk / BH q) |
 | `out/compound_depression_menda.csv` | MENDA 2020 극성 |
 | `out/compound_evidence.csv` | 근거 4종 점수 + 결합 6가지 |
-| `out/e_mode_comparison.csv` | E 구성 방식 비교표 |
+| `out/e_mode_comparison.csv` | E 구성 방식 비교표 (§4.2.3 + ModiMedDiet 두 기준) |
+| `out/modimed_labels.csv` | ModiMedDiet 정답셋 라벨과 규칙 출처 |
 | `out/compound_microbe.csv` | KEGG 재계산 compound-미생물 2,124 |
 | `out/microbes.csv` | NCBI 갱신 미생물 127 |
 | `out/microbe_disease.csv`, `out/microbe_disease_mikg.csv` | 미생물-질환 |

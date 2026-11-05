@@ -53,6 +53,7 @@ KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐�
 | `analyze.py` | `recommend` | 논문 Algorithm 1 (식 1·2) | `recommendation.csv`, `recommendation.png` |
 | | `compare` | E 구성 방식·경로를 논문 §4.2.3 기준으로 대조 | `e_mode_comparison.csv` |
 | | `pathcheck` | gut-brain 경로 compound 를 CSV 와 KG(SPARQL)에서 각각 뽑아 대조 | `gutbrain_compounds.json` |
+| | `external` | SMILES trial ModiMedDiet 로 외부 정답셋을 만든다 | `modimed_labels.csv` |
 | | `evaluate` | §4.1 SPARQL Q1~Q3, §5.1 방법 1·2 | `eval_*.csv/json` |
 | `common.py` | — | 경로·단위 환산·라벨/카테고리 정규화 공유 | |
 | `run_all.py` | — | 위 둘을 순서대로 호출 | |
@@ -167,6 +168,18 @@ Complication 8건이 모두 확인된 것과 대비된다 — 논문이 쓴 MiKG
    135개 음식은 전부 Foundation / SR Legacy / FNDDS 다. branded_food 는 라벨 신고값이라
    대부분 성분이 결측이고, 성분이 거의 없는 탄산수·단백질파우더가 상위를 차지한다.
    KG 자체(04)는 FDC 전체를 담는다. `DATA_TYPES=all` 로 포함 가능.
+
+## 평가 기준 둘
+
+판정에 두 기준을 쓴다.
+
+- **논문 §4.2.3** — 논문이 자기 알고리즘의 출력을 서술한 문장. 재현·대조용.
+- **ModiMedDiet** (Jacka et al. 2017 SMILES trial) — 우울증 RCT 에서 실제로
+  처방된 식단. 출처가 독립인 외부 기준.
+
+두 기준이 **반대를 가리킨다** — §4.2.3 을 잘 맞추는 설정일수록 ModiMedDiet AUC 가
+나쁘다. 갈라지는 지점은 붉은 고기다(§4.2.3 은 비추천, ModiMedDiet 은 주 3-4회 처방).
+상세는 RESULTS.md §7.
 
 ## 경로
 

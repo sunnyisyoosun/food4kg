@@ -511,6 +511,7 @@ def compare():
             # Bottom 에 들어간 수. 한쪽만 보면 좋아 보이는 모드를 걸러낸다.
             f'top{K}_위반': int(top['food_group'].isin(NOT_OK).sum()),
             f'bot{K}_위반': int(bot['food_group'].isin(REC_OK).sum()),
+            **modimed_score(r, K),
             'top_food': top['food_name'].iloc[0][:40],
             'bot_food': bot['food_name'].iloc[-1][:40],
         })
@@ -543,7 +544,9 @@ def compare():
     tab.to_csv(os.path.join(OUT, 'e_mode_comparison.csv'), index=False)
 
     print('\n' + '=' * 78)
-    print('E 구성 방식 비교 — 판정 기준은 논문 §4.2.3')
+    print('E 구성 방식 비교')
+    print('  §4.2.3  논문이 자기 출력을 서술한 문장 (top/bot 열)')
+    print('  ModiMedDiet  SMILES trial (Jacka 2017) 이 실제로 처방한 식단 — 외부 기준')
     print('=' * 78)
     print(tab.to_string(index=False))
 
@@ -631,7 +634,165 @@ def pathcheck():
         print('  ⚠ 어긋난다. build.py kg 가 쓰는 관계와 CSV 필터의 정의를 맞춰야 한다.')
 
 
-STEPS = {'recommend': recommend, 'compare': compare,
+# ======================================================================
+# 외부 정답셋 — SMILES trial 의 ModiMedDiet (Jacka et al. 2017)
+#
+# 지금까지의 판정 기준은 논문 §4.2.3 서술 하나뿐이었다. 그것은 논문이 자기
+# 알고리즘의 출력을 서술한 문장이라, 같은 기준으로 설정을 고르면 성적이
+# 과대평가된다(RESULTS.md §5 끝).
+#
+# ModiMedDiet 은 우울증 환자 67명 대상 12주 RCT 에서 **실제로 처방된** 식단이고,
+# 1차 결과(MADRS)가 유의하게 개선됐다. 출력이 아니라 개입이므로 출처가 독립이다.
+# 단, 내용은 완전히 독립이 아니다 — 지중해식 식단이라 "채소·생선 좋고 가공육·
+# 과자 나쁨"이라는 방향 자체는 §4.2.3 과 겹친다. 겹치지 않는 것은 근거의 출처다.
+#
+# 처방 (Jacka et al. 2017, BMC Medicine 15:23, ModiMedDiet 12 food groups)
+#   whole grains 5-8/day · vegetables 6/day · fruit 3/day · legumes 3-4/week
+#   low-fat unsweetened dairy 2-3/day · raw unsalted nuts 1/day · fish >=2/week
+#   lean red meat 3-4/week · chicken 2-3/week · eggs <=6/week · olive oil 3 tbsp/day
+#   extras (sweets, refined cereals, fried food, fast food, processed meats,
+#           sugary drinks, 그리고 spirits/beer) 합쳐 <=3/week
+#
+# 처방이 조건부인 것들(low-fat·unsweetened·raw·unsalted·lean·whole·olive)은
+# 카테고리만으로 가를 수 없으므로 이름 규칙을 둔다. 규칙은 전부 위 처방 문구에서
+# 그대로 가져왔고, 어느 쪽에도 걸리지 않는 음식은 unlabeled 로 두어 집계에서 뺀다.
+# ======================================================================
+
+# (정규식, 라벨, 근거) — 순서대로 평가하고 먼저 맞는 것이 이긴다.
+# extras 가 먼저다: "refined cereals" 는 곡물이지만 extra 이고,
+# "fried food" 는 채소여도 extra 다.
+MODIMED_RULES = [
+    # --- extras (<=3 servings/week 로 제한된 것) ---
+    (r'fried|french fries|deep.?fried|tempura|batter',       -1, 'extras: fried food'),
+    (r'fast food|mcdonald|burger king|kfc|taco bell|pizza hut|wendy',
+                                                              -1, 'extras: fast food'),
+    (r'sausage|frankfurter|hot dog|bologna|salami|bacon|ham,|luncheon|'
+     r'pepperoni|bratwurst|chorizo|jerky|spam|loaf, ',        -1, 'extras: processed meat'),
+    (r'candy|candies|chocolate|cookie|brownie|cake|pie,|doughnut|donut|'
+     r'pastry|ice cream|pudding|syrup|sugars?(?!\s*snap)|honey|jam,|jelly|'
+     r'sweet roll',                                           -1, 'extras: sweets'),
+    (r'soft drink|soda|cola|energy drink|fruit drink|sports drink|'
+     r'lemonade|punch|sweetened bever',                       -1, 'extras: sugary drinks'),
+    # 'tomato juice cocktail' · 'fruit cocktail' 은 술이 아니다.
+    (r'beer|liquor|whiskey|vodka|gin |rum |tequila|(?<!juice )(?<!fruit )cocktail|'
+     r'martini|daiquiri|'
+     r'margarita|liqueur|brandy|bourbon|schnapps',            -1, 'extras: spirits/beer'),
+    # refined cereals — 통곡물 표기가 없는 빵·시리얼·흰쌀·흰밀가루
+    (r'^(bread|bagel|roll|bun|cracker|muffin|pancake|waffle|tortilla|biscuit|'
+     r'cereal|pasta|noodle|rice|flour)\b(?!.*(whole|bran|brown|multigrain|'
+     r'multi.grain|whole.grain|rye|oat))',                    -1, 'extras: refined cereal'),
+
+    # --- 처방된 12군 ---
+    # 'oat' 를 그냥 쓰면 'coated'(튀김옷 입힌 닭) 가 통곡물로 잡힌다.
+    (r'whole.?grain|whole.?wheat|multi.?grain|brown rice|\boats?\b|oatmeal|'
+     r'barley|quinoa|bulgur|\brye\b|\bbran\b',               +1, 'whole grains 5-8/day'),
+    (r'\bolive oil\b|oil, olive',                             +1, 'olive oil 3 tbsp/day'),
+    # 처방은 low-fat **unsweetened** dairy 다. 가당·가향 제품은 위 sweets 규칙에
+    # 걸리지 않는 것들(바닐라·과일 요구르트 등)을 여기서 뺀다.
+    (r'^(?!.*(vanilla|flavored|fruit|sweetened|chocolate|strawberry|honey))'
+     r'(.*(milk|yogurt|cheese).*(nonfat|low.?fat|skim|1% |2% |reduced fat|'
+     r'part.?skim)|.*(nonfat|low.?fat|skim|reduced fat).*(milk|yogurt|cheese))',
+                                                              +1, 'low-fat unsweetened dairy 2-3/day'),
+    (r'^egg|egg, whole|egg white|egg yolk',                   +1, 'eggs <=6/week'),
+    (r'chicken|turkey',                                       +1, 'chicken 2-3/week'),
+    # 처방은 **lean** red meat 이다. FDC 의 'separable lean and fat' 은 지방을
+    # 포함한 부위라 처방 대상이 아니다. 'separable lean only' 만 잡는다.
+    (r'(beef|lamb|veal).*separable lean only',                +1, 'lean red meat 3-4/week'),
+    # 'oyster mushroom' 이 어패류로 잡히지 않도록 버섯을 먼저 거른다.
+    (r'mushroom',                                             +1, 'vegetables 6/day'),
+    (r'fish|salmon|tuna|sardine|mackerel|cod|haddock|trout|herring|anchov|'
+     r'shrimp|crab|oyster|mussel|clam|scallop|squid|lobster',  +1, 'fish >=2/week'),
+    (r'bean|lentil|chickpea|\bpeas?\b|legume|soy|tofu|hummus',
+                                                              +1, 'legumes 3-4/week'),
+    # 콩보다 뒤에 둔다 — 'Pigeon peas, mature seeds, raw' 는 견과가 아니라 콩이다.
+    (r'nuts?, .*(raw|unsalted|without salt)|seeds?, .*(raw|unsalted|without salt)',
+                                                              +1, 'raw unsalted nuts 1/day'),
+    # 'breadfruit' 가 과일로 잡히지 않게 앞 글자를 막는다.
+    (r'(?<![a-z])fruit|apple|banana|orange|berr|grape|melon|peach|pear|plum|mango|'
+     r'pineapple|kiwi|cherr|apricot|fig|date',                 +1, 'fruit 3/day'),
+    (r'vegetable|lettuce|spinach|broccoli|carrot|tomato|onion|cabbage|kale|'
+     r'pepper|cucumber|zucchini|squash|celery|asparagus|mushroom|potato|'
+     r'cauliflower|eggplant|beet|turnip|radish',               +1, 'vegetables 6/day'),
+]
+
+
+def modimed_labels(foods):
+    """음식 이름·카테고리에 ModiMedDiet 라벨을 붙인다.
+
+    +1 처방군 / -1 extras / 0 해당 없음(집계에서 제외).
+    """
+    text = (foods['food_name'].astype(str) + ' | '
+            + foods['food_group'].astype(str)).str.lower()
+    label = pd.Series(0, index=foods.index)
+    why = pd.Series('', index=foods.index)
+    # SMILES 는 성인 우울증 환자 대상이다. 이유식은 처방 대상이 아니므로 뺀다.
+    adult = foods['food_group'] != 'Baby Foods'
+    for pat, lab, src in MODIMED_RULES:
+        hit = adult & (label == 0) & text.str.contains(pat, regex=True, na=False)
+        label[hit] = lab
+        why[hit] = src
+    return label, why
+
+
+def modimed_score(res, K):
+    """추천 순위를 ModiMedDiet 정답셋으로 채점한다.
+
+    AUC   처방군이 extras 보다 위에 오는 확률 (Mann-Whitney U / n1n2).
+          0.5 가 무작위, 1.0 이 완전 분리. 해당 없음(0) 인 음식은 뺀다.
+    Top K / Bottom K  각 끝에 처방군·extras 가 몇 개인지.
+    """
+    lab, _ = modimed_labels(res)
+    pos = res.loc[lab == 1, 'score'].values
+    neg = res.loc[lab == -1, 'score'].values
+    if len(pos) == 0 or len(neg) == 0:
+        return {}
+    from scipy.stats import mannwhitneyu
+    u = mannwhitneyu(pos, neg, alternative='two-sided').statistic
+    auc = u / (len(pos) * len(neg))
+    top, bot = res.head(K), res.tail(K)
+    ltop, _ = modimed_labels(top)
+    lbot, _ = modimed_labels(bot)
+    return {
+        'modimed_AUC': round(float(auc), 3),
+        f'top{K}_처방군': int((ltop == 1).sum()),
+        f'top{K}_extras': int((ltop == -1).sum()),
+        f'bot{K}_extras': int((lbot == -1).sum()),
+    }
+
+
+def external():
+    """ModiMedDiet 정답셋 자체를 찍어 본다 — 라벨이 타당한지 사람이 보라고.
+
+    출력
+      out/modimed_labels.csv
+    """
+    foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
+    CURATED = ('foundation_food', 'sr_legacy_food', 'survey_fndds_food')
+    foods = foods[foods['data_type'].isin(CURATED)].reset_index(drop=True)
+    lab, why = modimed_labels(foods)
+    foods['modimed'] = lab
+    foods['modimed_rule'] = why
+    foods.to_csv(os.path.join(OUT, 'modimed_labels.csv'), index=False)
+
+    print(f'  추천 코호트 {len(foods):,}')
+    print(f'  처방군(+1) {int((lab == 1).sum()):,} / '
+          f'extras(-1) {int((lab == -1).sum()):,} / '
+          f'해당 없음 {int((lab == 0).sum()):,}')
+    print('\n  규칙별 건수:')
+    for rule, n in why[why != ''].value_counts().items():
+        print(f'    {n:6,d}  {rule}')
+    print('\n  표본 — 처방군:')
+    for _, r in foods[lab == 1].sample(8, random_state=0).iterrows():
+        print(f'    {r.food_name[:52]:54s} {r.modimed_rule}')
+    print('  표본 — extras:')
+    for _, r in foods[lab == -1].sample(8, random_state=0).iterrows():
+        print(f'    {r.food_name[:52]:54s} {r.modimed_rule}')
+    print('  표본 — 해당 없음:')
+    for _, r in foods[lab == 0].sample(8, random_state=0).iterrows():
+        print(f'    {r.food_name[:52]:54s} {r.food_group}')
+
+
+STEPS = {'recommend': recommend, 'compare': compare, 'external': external,
          'pathcheck': pathcheck, 'evaluate': evaluate}
 
 
