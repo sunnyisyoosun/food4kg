@@ -97,3 +97,56 @@ def normalize_category(raw_category, food_name):
         if rx.search(text):
             return group
     return 'Unclassified'
+
+
+# ------------------------------------------------------------------
+# MENDA / ProMENDA 공통 극성 집계
+#
+# 두 데이터셋은 열 이름만 다르고 구조가 같다 (Up/Down + Study_type).
+# 논문 §4.2.1 의 극성 규약과 Type1 반전은 PROBLEMS.md §7 에서 확정한 것을 쓴다.
+# ------------------------------------------------------------------
+UP_WORDS = {'up', 'upregulated', 'up-regulated', 'increased', 'increase', 'higher'}
+DOWN_WORDS = {'down', 'downregulated', 'down-regulated', 'decreased', 'decrease', 'lower'}
+
+
+def polarity(value):
+    """원 표기 → 기본 해석. 우울증에서 증가 = 악화(-1), 감소 = +1."""
+    v = str(value).lower().strip()
+    if v in UP_WORDS:
+        return -1
+    if v in DOWN_WORDS:
+        return 1
+    return 0
+
+
+def menda_consensus(df, kegg_col, reg_col, stype_col, name_col=None, study_col=None,
+                    shrink_k=10):
+    """MENDA 계열 테이블 → compound 별 극성 합의.
+
+    논문 규약: Type1(우울증 vs 대조군)만 up = +1 로 뒤집는다.
+    Type2~5 는 치료·반응 비교라 현재 해석(-1)이 이미 논문 규약과 같다.
+
+    반환 열: kegg, name, pos, neg, n_study, n_record, direction, e_shrunk
+      direction  다수결 +1 / -1 / 0
+      e_shrunk   (pos-neg)/(pos+neg+K) — 근거가 얕으면 0 쪽으로 축소
+    """
+    d = df[df[kegg_col].astype(str).str.contains(r'C\d{5}', na=False)].copy()
+    d['kegg'] = d[kegg_col].astype(str).str.extract(r'(C\d{5})')[0]
+    d['incidence'] = d[reg_col].apply(polarity)
+    if stype_col in d.columns:
+        is_t1 = d[stype_col].astype(str) == 'Type1'
+        d.loc[is_t1, 'incidence'] *= -1
+    rows = []
+    for kegg, sub in d.groupby('kegg'):
+        pos = int((sub['incidence'] == 1).sum())
+        neg = int((sub['incidence'] == -1).sum())
+        rows.append({
+            'kegg': kegg,
+            'name': sub[name_col].iloc[0] if name_col else '',
+            'pos': pos, 'neg': neg,
+            'n_study': sub[study_col].nunique() if study_col else len(sub),
+            'n_record': len(sub),
+            'direction': 1 if pos > neg else (-1 if neg > pos else 0),
+            'e_shrunk': (pos - neg) / (pos + neg + shrink_k),
+        })
+    return pd.DataFrame(rows), d

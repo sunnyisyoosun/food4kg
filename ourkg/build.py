@@ -720,7 +720,183 @@ def kg():
     print(st.to_string(index=False))
 
 
-STEPS = {'food': food, 'promenda': promenda, 'microbe': microbe, 'kg': kg}
+def evidence():
+    """근거 여러 개로 E 를 만든다 — 논문 §4.2.1 의 E 를 한 소스에 의존하지 않게.
+
+    논문은 MENDA 한 소스로 E 를 만들었다(§3.1·§4.2.1). ProMENDA 하나만 쓰면
+    130 compound 중 66 개만 방향이 정해지고, 근거가 얕은 compound 가 다수결로
+    ±1 을 받는 문제가 있다(RESULTS.md §5-(3)). 여기서는 네 근거를 각각 부호 있는
+    점수로 환산해 함께 둔다.
+
+      promenda  ProMENDA (Pu et al. 2024) 995 연구. 가장 크고 최신      가중 1.00
+      menda     MENDA (Pu et al. 2020) 5,675 관계. 논문이 실제 쓴 소스.
+                ProMENDA 의 전판이라 상당 부분 겹친다                   가중 0.60
+      rules     논문의 85 compound 목록에 대해 재현 파이프라인이 정한 극성
+                (analyse/knowledge_query_results.csv). MENDA + 온톨로지·
+                MiKG 규칙이 섞여 휴리스틱이 포함된다                     가중 0.40
+      afs       Antidepressant Food Score (LaChance & Ramsey 2018) 의
+                12 영양소. 우울증 근거가 정리된 외부 기준이지만 양성만
+                있고 음성이 없어 부호가 한쪽으로 치우친다                가중 0.50
+
+    가중치는 근거의 규모·최신성·휴리스틱 포함 여부로 실행 전에 정했고
+    SOURCE_WEIGHTS 환경변수로 바꿀 수 있다. 결과를 보고 고르지 않았다.
+
+    결합은 두 가지를 모두 만들어 둔다 (analyze.py 가 E_MODE 로 고른다).
+      e_weighted  소스 점수의 가중 평균. 근거가 엇갈리면 0 에 가까워진다.
+      e_priority  우선순위 첫 비영 값. 기본 rules > promenda > menda > afs
+                  (논문이 쓴 목록에 가장 가까운 것부터).
+
+    출력
+      out/compound_evidence.csv
+    """
+    import ast
+
+    from common import menda_consensus
+
+    W = {'promenda': 1.0, 'menda': 0.6, 'rules': 0.4, 'afs': 0.5}
+    if os.environ.get('SOURCE_WEIGHTS'):
+        W.update(ast.literal_eval(os.environ['SOURCE_WEIGHTS']))
+    PRIORITY = os.environ.get('PRIORITY', 'rules,promenda,menda,afs').split(',')
+
+    food = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    cpds = sorted(food['kegg'].unique())
+    print(f'  대상 compound {len(cpds)} (FDC 영양소에 매핑된 KEGG)')
+
+    src = {}        # source -> {kegg: signed score}
+    meta = {}       # kegg -> name
+
+    # --- 1. ProMENDA
+    pm = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
+    src['promenda'] = dict(zip(pm['kegg'], pm['e_shrunk']))
+    meta.update(dict(zip(pm['kegg'], pm['name'])))
+    print(f'  promenda  {sum(1 for c in cpds if src["promenda"].get(c, 0)):3d} compound')
+
+    # --- 2. MENDA 2020 원본
+    menda_path = os.path.join(BASE, 'menda.xlsx')
+    if os.path.exists(menda_path):
+        md = pd.read_excel(menda_path, sheet_name='Metabolite')
+        tab, _ = menda_consensus(md, 'KEGG', 'Up/Down_regulated ',
+                                 'Study_type_Metabolite_level',
+                                 name_col='Metabolite_name', study_col='Study_ID')
+        src['menda'] = dict(zip(tab['kegg'], tab['e_shrunk']))
+        for k, n in zip(tab['kegg'], tab['name']):
+            meta.setdefault(k, n)
+        tab.to_csv(os.path.join(OUT, 'compound_depression_menda.csv'), index=False)
+    else:
+        src['menda'] = {}
+        print('  ⚠ menda.xlsx 없음 — menda 근거 생략')
+    print(f'  menda     {sum(1 for c in cpds if src["menda"].get(c, 0)):3d} compound')
+
+    # --- 3. 논문 85 목록에 대한 재현 파이프라인의 극성
+    q_path = os.path.join(BASE, 'analyse', 'knowledge_query_results.csv')
+    if os.path.exists(q_path):
+        q = pd.read_csv(q_path)
+        q = q[q['incidence'] != 0]
+        src['rules'] = dict(zip(q['compound'], q['incidence'].astype(float)))
+        for k, n in zip(q['compound'], q['name']):
+            meta.setdefault(k, n)
+        rules_src = dict(zip(q['compound'], q['source']))
+    else:
+        src['rules'], rules_src = {}, {}
+        print('  ⚠ analyse/knowledge_query_results.csv 없음 — rules 근거 생략')
+    print(f'  rules     {sum(1 for c in cpds if src["rules"].get(c, 0)):3d} compound')
+
+    # --- 4. AFS (LaChance & Ramsey 2018) 의 12 영양소 — 전부 양성
+    # tools/paper.py 의 AFS 근사와 같은 KEGG 목록.
+    AFS = {'C00504': 'Folate', 'C00023': 'Iron', 'C06429': 'DHA',
+           'C00305': 'Magnesium', 'C00238': 'Potassium', 'C01529': 'Selenium',
+           'C00378': 'Thiamine', 'C00473': 'Vitamin A', 'C02823': 'Vitamin B12',
+           'C00072': 'Vitamin C', 'C00038': 'Zinc'}
+    src['afs'] = {k: 1.0 for k in AFS}
+    for k, n in AFS.items():
+        meta.setdefault(k, n)
+    print(f'  afs       {sum(1 for c in cpds if src["afs"].get(c, 0)):3d} compound')
+
+    # --- 소스별 스케일 맞추기
+    #
+    # 소스마다 점수의 크기 규모가 다르다. MENDA 계열은 근거량으로 축소한 연속값이라
+    # |score| 중앙값이 0.16 인 반면, rules·afs 는 범주형 판정이라 전부 ±1 이다.
+    # 그대로 가중 평균하면 가중치와 무관하게 범주형 소스가 혼합을 지배한다
+    # (실측: rules 가 ProMENDA 와 부호 일치 48% 인데도 순위를 뒤집었다).
+    # 각 소스를 그 소스 안의 최대 |score| 로 나눠 [-1, 1] 로 맞춘다.
+    # 소스 안의 상대적 강약은 보존되고, 소스 사이의 비중은 W 가 정한다.
+    for s_name, d in src.items():
+        mx = max((abs(v) for v in d.values()), default=0.0)
+        if mx:
+            src[s_name] = {k: v / mx for k, v in d.items()}
+
+    # --- 결합
+    #
+    # 세 가지 결합을 모두 만들어 둔다 (analyze.py 가 E_MODE 로 고른다).
+    #   e_weighted  스케일 맞춘 점수의 가중 평균
+    #   e_priority  우선순위 첫 비영 소스의 부호
+    #   e_vote      모든 소스를 부호로만 보는 가중 투표
+    # 각각 rules 를 뺀 판(_norules)도 함께 낸다. rules 는 재현 파이프라인의
+    # 휴리스틱이 섞인 범주형 판정이라, 넣고 뺀 차이를 비교할 수 있어야 한다.
+    def combine(vals, weights, priority):
+        active = {s: v for s, v in vals.items() if v != 0 and weights.get(s, 0) > 0}
+        wsum = sum(weights[s] for s in active)
+        if not wsum:
+            return 0.0, 0.0, 0.0, set()
+        e_w = sum(weights[s] * v for s, v in active.items()) / wsum
+        e_v = sum(weights[s] * (1 if v > 0 else -1) for s, v in active.items()) / wsum
+        e_p = 0.0
+        for s in priority:
+            if s in active:
+                e_p = 1.0 if active[s] > 0 else -1.0
+                break
+        return e_w, e_p, e_v, {1 if v > 0 else -1 for v in active.values()}
+
+    W_NR = {**W, 'rules': 0.0}
+    PRIORITY_NR = [s for s in PRIORITY if s != 'rules']
+
+    rows = []
+    for c in cpds:
+        vals = {s: float(src[s].get(c, 0.0)) for s in W}
+        e_w, e_p, e_v, signs = combine(vals, W, PRIORITY)
+        e_w2, e_p2, e_v2, _ = combine(vals, W_NR, PRIORITY_NR)
+        active = {s: v for s, v in vals.items() if v != 0}
+        rows.append({
+            'kegg': c, 'name': meta.get(c, ''),
+            **{f'{s}_score': round(vals[s], 4) for s in W},
+            'n_source': len(active),
+            'agree': '' if len(active) < 2 else ('same' if len(signs) == 1 else 'conflict'),
+            'rules_src': rules_src.get(c, ''),
+            'e_weighted': round(e_w, 4), 'e_priority': round(e_p, 4),
+            'e_vote': round(e_v, 4),
+            'e_weighted_norules': round(e_w2, 4),
+            'e_priority_norules': round(e_p2, 4),
+            'e_vote_norules': round(e_v2, 4),
+        })
+    ev = pd.DataFrame(rows).sort_values('n_source', ascending=False)
+    ev.to_csv(os.path.join(OUT, 'compound_evidence.csv'), index=False)
+
+    nz_w = int((ev['e_weighted'] != 0).sum())
+    nz_p = int((ev['e_priority'] != 0).sum())
+    only_pm = int((ev['promenda_score'] != 0).sum())
+    print()
+    print(f'  방향이 정해진 compound   ProMENDA 단독 {only_pm}  ->  '
+          f'가중합의 {nz_w} / 우선순위 {nz_p}  (전체 {len(ev)})')
+    print(f'  근거 2개 이상 {int((ev.n_source >= 2).sum())} '
+          f'(일치 {int((ev.agree == "same").sum())} / '
+          f'충돌 {int((ev.agree == "conflict").sum())})')
+    print()
+    print('  근거가 충돌하는 compound:')
+    for _, r in ev[ev.agree == 'conflict'].head(12).iterrows():
+        parts = ' '.join(f'{s}={r[f"{s}_score"]:+.2f}' for s in W if r[f'{s}_score'])
+        print(f'    {r.kegg} {str(r["name"])[:26]:28s} {parts}  '
+              f'-> w={r.e_weighted:+.2f} p={r.e_priority:+.0f}')
+    print()
+    print('  두 결합이 부호까지 다른 compound:')
+    diff = ev[(ev.e_weighted * ev.e_priority) < 0]
+    for _, r in diff.head(10).iterrows():
+        print(f'    {r.kegg} {str(r["name"])[:26]:28s} '
+              f'weighted {r.e_weighted:+.2f} / priority {r.e_priority:+.0f}')
+    print(f'    총 {len(diff)}개')
+
+
+STEPS = {'food': food, 'promenda': promenda, 'evidence': evidence,
+         'microbe': microbe, 'kg': kg}
 
 
 def main(argv):

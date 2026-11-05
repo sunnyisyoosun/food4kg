@@ -47,9 +47,11 @@ KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐�
 |---|---|---|---|
 | `build.py` | `food` | FDC 원본 2,700만 행 스트리밍 → 단위 g 환산 → 논문 §3.2 라벨 병합 → 카테고리 정규화 | `food_compound_long.csv`, `foods.csv` |
 | | `promenda` | ProMENDA → compound별 우울증 극성 E | `compound_depression.csv` |
+| | `evidence` | ProMENDA·MENDA·재현 규칙·AFS 네 근거로 E 구성 (결합 6가지) | `compound_evidence.csv` |
 | | `microbe` | MeSH tree / NCBI taxonomy / KEGG 로 미생물 축 | `microbes.csv`, `compound_microbe.csv`, `microbe_disease*.csv` |
 | | `kg` | 논문 §3.3 표현 규약대로 RDF 출력 | `ourkg.nt`, `kg_stats.csv` |
 | `analyze.py` | `recommend` | 논문 Algorithm 1 (식 1·2) | `recommendation.csv`, `recommendation.png` |
+| | `compare` | E 구성 방식들을 논문 §4.2.3 기준으로 대조 | `e_mode_comparison.csv` |
 | | `evaluate` | §4.1 SPARQL Q1~Q3, §5.1 방법 1·2 | `eval_*.csv/json` |
 | `common.py` | — | 경로·단위 환산·라벨/카테고리 정규화 공유 | |
 | `run_all.py` | — | 위 둘을 순서대로 호출 | |

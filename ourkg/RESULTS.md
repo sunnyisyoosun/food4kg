@@ -265,7 +265,99 @@ Bipolar disorder / Intellectual disability 가 고루 나온다.
 
 ---
 
-## 5. 과정에서 드러난 것
+## 5. E 를 여러 근거로 만들기 (`build.py evidence`)
+
+논문은 MENDA 한 소스로 E 를 만들었다(§3.1·§4.2.1). ProMENDA 하나만 쓰면
+130 compound 중 66 개만 방향이 정해진다. 네 근거를 각각 부호 있는 점수로 환산해
+함께 두고, 결합 방식 세 가지를 비교했다. `ourkg/out/compound_evidence.csv`
+
+### 근거 네 가지
+
+| 소스 | 내용 | 가중 | 방향이 정해지는 compound |
+|---|---|---:|---:|
+| `promenda` | ProMENDA (Pu et al. 2024) 995 연구 | 1.00 | 66 |
+| `menda` | MENDA (Pu et al. 2020) 5,675 관계 — 논문이 실제 쓴 소스 | 0.60 | 40 |
+| `rules` | 논문 85 compound 목록에 대해 재현 파이프라인이 정한 극성 (`analyse/knowledge_query_results.csv`). MENDA + 온톨로지·MiKG 규칙이 섞여 휴리스틱 포함 | 0.40 | 57 |
+| `afs` | Antidepressant Food Score (LaChance & Ramsey 2018) 12 영양소. **양성만 있고 음성이 없다** | 0.50 | 10 |
+
+가중치는 근거의 규모·최신성·휴리스틱 포함 여부로 실행 전에 정했고 `SOURCE_WEIGHTS`
+로 바꿀 수 있다. 소스마다 점수 규모가 달라(`promenda` 는 축소 연속값 중앙값 0.16,
+`rules`·`afs` 는 범주형 ±1) 결합 전에 소스별 최대 |score| 로 나눠 눈금을 맞춘다.
+
+### 소스끼리 얼마나 맞는가
+
+| 비교 | 겹치는 compound | 부호 일치 |
+|---|---:|---:|
+| promenda ↔ menda | 38 | **31 (82%)** |
+| menda ↔ rules | 27 | 17 (63%) |
+| promenda ↔ rules | 31 | **15 (48%)** |
+| promenda ↔ afs | 5 | 3 (60%) |
+
+ProMENDA 와 MENDA 는 같은 큐레이션 계보라 82% 일치한다. 반면 **재현 파이프라인이
+논문의 85 compound 에 매긴 극성(`rules`)은 ProMENDA 와 48% — 동전 던지기 수준이다.**
+
+### 결합 방식 세 가지
+
+| | 정의 |
+|---|---|
+| `weighted` | 눈금 맞춘 점수의 가중 평균. 근거가 엇갈리면 0 에 가까워진다 |
+| `priority` | 우선순위(`rules > promenda > menda > afs`) 첫 비영 소스의 부호 |
+| `vote` | 모든 소스를 **부호로만** 보는 가중 투표 |
+
+각각 `rules` 를 뺀 판(`_norules`)도 함께 낸다.
+
+### 비교 — 판정 기준은 논문 §4.2.3
+
+추천군 = 어패류·과일·채소, 비추천군 = 소시지·베이커리·과자·소고기·돼지고기·양고기.
+`위반` 은 교차 위반(비추천군이 Top 에, 추천군이 Bottom 에 들어간 수)이다.
+`ourkg/out/e_mode_comparison.csv`
+
+| E 모드 | 방향 확정 compound | Top30 추천군 | Bottom30 비추천군 | Top30 주류 | Top30 위반 | shrunk 과의 ρ |
+|---|---:|---:|---:|---:|---:|---:|
+| **`shrunk`** (기본, ProMENDA 단독) | 66 | 7 | **29** | **12** | **4** | — |
+| `binary` | 66 | 6 | 25 | 0 | 17 | +0.992 |
+| `weighted` | 98 | 12 | 6 | 0 | 16 | **−0.784** |
+| `priority` | 98 | 0 | 7 | 0 | 0 | **−0.677** |
+| `vote` | 95 | 1 | 2 | 0 | 0 | **−0.500** |
+| `weighted_norules` | 73 | 6 | 3 | 0 | 19 | +0.618 |
+| `priority_norules` | 73 | 0 | 27 | 0 | 11 | +0.954 |
+| **`vote_norules`** | 73 | 2 | **30** | **0** | 10 | +0.958 |
+
+### 읽히는 것 셋
+
+1. **`rules` 를 넣으면 순위가 뒤집힌다.** `rules` 가 들어간 세 모드는 전부 기본
+   모드와 음의 상관(ρ −0.50 ~ −0.78)이고 Top30 이 한 개도 겹치지 않는다.
+   ProMENDA 와 48% 밖에 맞지 않는 범주형 판정이 ±1 끝에 있어 결합을 끌고 간다.
+   논문 §4.2.3 기준으로도 Bottom30 일치가 29 → 2~7 로 무너진다.
+   **재현 파이프라인의 E 와 ProMENDA 의 E 는 같은 것을 재는 두 추정이 아니다.**
+2. **`rules` 를 빼고 부호 투표를 하면 비추천 쪽이 완벽해진다.** `vote_norules` 는
+   Bottom30 이 30/30(소고기 24·소시지 4·돼지고기 2)이고 **칵테일이 사라진다**
+   (주류 12 → 0). 방향이 정해진 compound 도 66 → 73 으로 는다.
+   부호만 보면 Ethanol 의 얕은 +신호가 다른 compound 들과 같은 크기가 되어
+   프로파일을 지배하지 못하기 때문이다.
+3. **어느 설정도 깨끗하지 않다.** `vote_norules` 의 Top30 은 시리얼·빵·쌀이고,
+   논문 §4.2.3 이 **비추천**으로 든 "baked products" 가 7개 들어간다(위반 10).
+   기본 모드는 반대로 Bottom 쪽이 좋지만 Top 에 칵테일 12개가 있다.
+   탄수화물이 위로 오는 기전 자체는 논문 Fig.4(c) 그대로다(§3 참조).
+
+### 기본값을 바꾸지 않은 이유
+
+위 비교는 §4.2.3 을 **판정에도 쓰고 선택에도 썼다.** 같은 기준으로 고른 설정을
+기본값으로 올리면 그 기준에서의 성적이 과대평가된다. 그래서 기본은 `shrunk`
+(ProMENDA 단독) 그대로 두고, 다른 설정은 환경변수로 재현할 수 있게만 열어 둔다.
+
+```bash
+python3 ourkg/build.py evidence
+E_MODE=vote_norules python3 ourkg/analyze.py recommend
+python3 ourkg/analyze.py compare          # 위 표를 다시 만든다
+```
+
+독립 기준으로 가르려면 §5.1 방법 2(문헌 검증)를 모드별로 돌리는 게 맞지만,
+표본이 15건이라 4/15 기준선에서 모드를 가를 만큼의 검정력이 없다.
+
+---
+
+## 6. 과정에서 드러난 것
 
 세 가지 모두 **논문 규모(음식 135종)에서는 드러나지 않고 14,000종에서만 터지는**
 문제다. 각각 환경변수로 되돌릴 수 있고, 근거는 [`README.md`](README.md) 설계 결정에 있다.
@@ -305,7 +397,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 6. 한계
+## 7. 한계
 
 - **식품 온톨로지 미통합** — FoodOn·중국 식품 온톨로지가 없어 음식 분류가 FDC SR 27군에
   머문다. 논문의 128 카테고리 체계와 대응되지 않는다.
@@ -319,7 +411,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 7. 산출물
+## 8. 산출물
 
 | 파일 | 내용 |
 |---|---|
@@ -328,6 +420,9 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 | `out/foods.csv` | 음식 14,719 (fdc_id, 카테고리, 측정 compound 수) |
 | `out/food_compound_long.csv` | 음식 × compound 중량 768,157 (g/100g) |
 | `out/compound_depression.csv` | ProMENDA 극성 E (binary / shrunk / BH q) |
+| `out/compound_depression_menda.csv` | MENDA 2020 극성 |
+| `out/compound_evidence.csv` | 근거 4종 점수 + 결합 6가지 |
+| `out/e_mode_comparison.csv` | E 구성 방식 비교표 |
 | `out/compound_microbe.csv` | KEGG 재계산 compound-미생물 2,124 |
 | `out/microbes.csv` | NCBI 갱신 미생물 127 |
 | `out/microbe_disease.csv`, `out/microbe_disease_mikg.csv` | 미생물-질환 |

@@ -30,7 +30,7 @@ sys.path.insert(0, os.path.join(
 from common import OUT, BASE
 
 
-def recommend():
+def recommend(e_mode=None, save=True):
     """05 — 논문 Algorithm 1 을 우리 KG 에 적용 (depression).
 
     §4.2.1  D = E x F^T
@@ -42,6 +42,9 @@ def recommend():
     출력
       out/recommendation.csv   rank, food_key, food_name, food_group, score, n_compound
       out/recommendation.png   Fig.4(b) 대응 t-SNE
+
+    e_mode 를 주면 환경변수 E_MODE 대신 그 값을 쓴다 (compare 가 쓴다).
+    save=False 면 파일을 쓰지 않고 결과 DataFrame 만 돌려준다.
     """
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -76,9 +79,17 @@ def recommend():
     # §4.2.1 E: +1 완화 / -1 악화. 방향이 확정되지 않은 compound 는 0.
     #   E_MODE=binary  논문 그대로의 +1/-1/0
     #   E_MODE=shrunk  근거량으로 축소한 연속값 (기본, 02 단계 참조)
-    #   E_MODE=sig     BH q<0.05 인 compound 만 ±1
-    E_MODE = os.environ.get('E_MODE', 'shrunk')
-    if E_MODE == 'binary':
+    #   E_MODE=sig       BH q<0.05 인 compound 만 ±1
+    #   E_MODE=weighted  네 근거의 가중 합의 (build.py evidence)
+    #   E_MODE=priority  우선순위 첫 비영 값 (build.py evidence)
+    E_MODE = e_mode or os.environ.get('E_MODE', 'shrunk')
+    if E_MODE.split('_')[0] in ('weighted', 'priority', 'vote'):
+        ev_path = os.path.join(OUT, 'compound_evidence.csv')
+        if not os.path.exists(ev_path):
+            sys.exit('compound_evidence.csv 가 없다. python3 ourkg/build.py evidence')
+        ev = pd.read_csv(ev_path).set_index('kegg')
+        col = ev['e_' + E_MODE]
+    elif E_MODE == 'binary':
         col = E_df['e_binary']
     elif E_MODE == 'sig':
         col = E_df['e_binary'].where(E_df['q'] < 0.05, 0.0)
@@ -154,6 +165,8 @@ def recommend():
                    on='food_key')
     res = res.sort_values('score', ascending=False).reset_index(drop=True)
     res.insert(0, 'rank', res.index + 1)
+    if not save:
+        return res
     res.to_csv(os.path.join(OUT, 'recommendation.csv'), index=False)
 
     print(f'\n=== Top {K} (추천) ===')
@@ -189,6 +202,7 @@ def recommend():
     plt.tight_layout()
     plt.savefig(os.path.join(OUT, 'recommendation.png'), dpi=140)
     print(f'\n저장: {os.path.join(OUT, "recommendation.csv")}, recommendation.png')
+    return res
 
 
 def evaluate():
@@ -423,7 +437,92 @@ def evaluate():
               f"(논문 Table 5: 11 / 3 / 반대 1)")
 
 
-STEPS = {'recommend': recommend, 'evaluate': evaluate}
+def compare():
+    """E 를 만드는 방식들을 같은 기준으로 나란히 비교한다.
+
+    판정 기준은 논문 §4.2.3 서술에서 실행 전에 가져왔다.
+      추천   "the recommended foods are mainly fish and shellfish products,
+              as well as fruits and vegetables"
+      비추천 "the not recommended foods are mainly sausage products, baked
+              products, and sweets" + Fig.5 피라미드 상단의 beef / sausages /
+              luncheon meats / pork
+
+    각 모드에서 Top K / Bottom K 가 이 카테고리에 몇 개나 들어가는지 세고,
+    모드 사이의 순위 상관과 Top K 겹침을 함께 낸다.
+
+    출력
+      out/e_mode_comparison.csv
+    """
+    from scipy.stats import spearmanr
+
+    K = int(os.environ.get('TOP_K', '30'))
+    MODES = os.environ.get(
+        'E_MODES',
+        'shrunk,binary,weighted,priority,vote,'
+        'weighted_norules,priority_norules,vote_norules').split(',')
+
+    REC_OK = {'Finfish and Shellfish Products', 'Fruits and Fruit Juices',
+              'Vegetables and Vegetable Products'}
+    NOT_OK = {'Sausages and Luncheon Meats', 'Baked Products', 'Sweets',
+              'Beef Products', 'Pork Products', 'Lamb, Veal, and Game Products'}
+
+    res, rows = {}, []
+    for m in MODES:
+        print(f'\n--- E_MODE={m}')
+        r = recommend(e_mode=m, save=False)
+        res[m] = r
+        top, bot = r.head(K), r.tail(K)
+        rows.append({
+            'e_mode': m,
+            'n_compound_nonzero': None,          # 아래에서 채운다
+            f'top{K}_논문추천군': int(top['food_group'].isin(REC_OK).sum()),
+            f'bot{K}_논문비추천군': int(bot['food_group'].isin(NOT_OK).sum()),
+            f'top{K}_주류': int((top['food_group'] == 'Alcoholic Beverages').sum()),
+            # 교차 위반 — 논문이 비추천이라고 한 군이 Top 에, 추천이라고 한 군이
+            # Bottom 에 들어간 수. 한쪽만 보면 좋아 보이는 모드를 걸러낸다.
+            f'top{K}_위반': int(top['food_group'].isin(NOT_OK).sum()),
+            f'bot{K}_위반': int(bot['food_group'].isin(REC_OK).sum()),
+            'top_food': top['food_name'].iloc[0][:40],
+            'bot_food': bot['food_name'].iloc[-1][:40],
+        })
+
+    # 모드별로 실제로 몇 개 compound 가 0 이 아닌지
+    ev_path = os.path.join(OUT, 'compound_evidence.csv')
+    dep = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+    ev = pd.read_csv(ev_path).set_index('kegg') if os.path.exists(ev_path) else None
+    long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    cpds = sorted(long['kegg'].unique())
+    for row in rows:
+        m = row['e_mode']
+        if m.split('_')[0] in ('weighted', 'priority', 'vote') and ev is not None:
+            col = ev['e_' + m]
+        elif m == 'binary':
+            col = dep['e_binary']
+        elif m == 'sig':
+            col = dep['e_binary'].where(dep['q'] < 0.05, 0.0)
+        else:
+            col = dep['e_shrunk']
+        row['n_compound_nonzero'] = sum(1 for c in cpds if col.get(c, 0))
+
+    tab = pd.DataFrame(rows)
+    tab.to_csv(os.path.join(OUT, 'e_mode_comparison.csv'), index=False)
+
+    print('\n' + '=' * 78)
+    print('E 구성 방식 비교 — 판정 기준은 논문 §4.2.3')
+    print('=' * 78)
+    print(tab.to_string(index=False))
+
+    print(f'\n모드 사이의 순위 상관 (Spearman) / Top{K} 겹침')
+    base = res[MODES[0]][['food_key', 'score']].set_index('food_key')
+    for a, b in itertools.combinations(MODES, 2):
+        ra = res[a].set_index('food_key')['score']
+        rb = res[b].set_index('food_key')['score'].reindex(ra.index)
+        rho = spearmanr(ra.values, rb.values).statistic
+        ov = len(set(res[a].head(K)['food_key']) & set(res[b].head(K)['food_key']))
+        print(f'  {a:9s} vs {b:9s}   rho={rho:+.3f}   Top{K} 겹침 {ov}/{K}')
+
+
+STEPS = {'recommend': recommend, 'compare': compare, 'evaluate': evaluate}
 
 
 def main(argv):
