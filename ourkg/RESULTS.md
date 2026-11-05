@@ -25,7 +25,8 @@
 | 음식당 측정 compound 중앙값 | 33 | **47** |
 | 우울증 극성이 확정된 compound | 85 (공개 소스로는 69) | 66 |
 | §5.1 방법 2 문헌 검증 | 11 / 15 | **4 / 15** |
-| ModiMedDiet AUC (빈도 반영, 논문 PCA 적용) | — | **0.714** |
+| ModiMedDiet AUC (빈도 반영, 논문 PCA 5 성분) | — | **0.703** |
+| 같은 기준, 논문 규칙(분산 80% → 10 성분) 적용 시 | — | **0.714** (교차 위반 0) |
 | 같은 기준에서 ModiMedDiet 로 학습한 E | — | 0.678 — **공개 소스가 이긴다** (§12) |
 | `D = X·e` 만 비교하면 (PCA 무관) | — | 공개 0.520 / 역추정 0.803 / 상한 0.816 (§8) |
 
@@ -101,72 +102,69 @@ MeSH SPARQL / NCBI efetch
 ## 3. 추천 결과 (depression)
 
 `ourkg/out/recommendation.csv` — 12,569 음식 전체 순위.
-기본 설정은 `E_MODE=shrunk` + 논문 §4.2.1 의 PCA(분산 80% → 10 성분, §12).
+기본 설정은 `E_MODE=shrunk` + **논문 §4.2.1 의 PCA 5 성분**(§12).
 
 ### Top 12
 
 | 순위 | 음식 | 카테고리 | 점수 |
 |---:|---|---|---:|
-| 1 | Spices, chili powder | Spices and Herbs | 83.98 |
-| 2 | Spices, paprika | Spices and Herbs | 34.61 |
-| 3 | Spices, oregano, dried | Spices and Herbs | 24.04 |
-| 4 | Cereals RTE, RALSTON Enriched Wheat Bran flakes | Breakfast Cereals | 11.44 |
-| 5 | Spices, pepper, red or cayenne | Spices and Herbs | 10.09 |
-| 6 | Nuts, coconut meat, dried, not sweetened | Nut and Seed Products | 9.57 |
-| 7 | Snacks, corn-based, extruded, chips, plain | Snacks | 8.19 |
-| 8 | Formulated Bar, SOUTH BEACH protein bar | Snacks | 4.11 |
-| 9 | Parsley, freeze-dried | Vegetables | 3.64 |
-| 10 | Yogurt, Greek, strawberry, nonfat | Dairy and Egg Products | 2.23 |
-| 11 | Snacks, shrimp cracker | Snacks | 1.98 |
-| 12 | Mushrooms, portabella, UV-exposed, raw | Vegetables | 1.72 |
+| 1 | Muffins, wheat bran, dry mix | Baked Products | 138.0 |
+| 2 | Spices, ginger, ground | Spices and Herbs | 118.8 |
+| 3 | Cereals RTE, RALSTON Enriched Wheat Bran flakes | Breakfast Cereals | 112.8 |
+| 4 | Muffins, oat bran | Baked Products | 109.0 |
+| 5 | Spices, chili powder | Spices and Herbs | 102.7 |
+| 6 | Parsley, freeze-dried | Vegetables | 94.6 |
+| 7 | Snacks, crisped rice bar, almond | Snacks | 92.2 |
+| 8 | Snacks, granola bars, soft, uncoated, plain | Snacks | 89.9 |
+| 9 | Spices, oregano, dried | Spices and Herbs | 84.2 |
+| 10 | Snacks, granola bars, soft, nut and raisin | Snacks | 69.9 |
+| 11 | Snacks, popcorn, caramel-coated, with peanuts | Snacks | 68.6 |
+| 12 | Cookies, oatmeal, dry mix | Baked Products | 63.2 |
 
-향신료·건조식품이 맨 위에 오는 것은 **100 g 기준** 때문이다. 논문 §4.1.2 도
-"each food instance's unit weight is standardized to 100 g" 라고 했다. 건조·분말
-식품은 같은 100 g 에 성분이 훨씬 많이 들어간다. 1회 섭취량 기준으로 바꾸면
-사라질 결함이고, 논문도 같은 기준을 썼으므로 같은 성질을 가진다.
+통곡물 머핀·브랜 시리얼·그래놀라바가 상위다. 향신료·건조식품이 끼는 것은
+**100 g 기준** 때문이고, 논문 §4.1.2 도 "each food instance's unit weight is
+standardized to 100 g" 라고 해서 같은 성질을 공유한다.
 
-### Bottom 12
+### Bottom — 전부 육류 살코기 부위
 
-전부 돼지·소·가금류의 살코기 부위다.
-
-| 순위 | 음식 | 카테고리 |
-|---:|---|---|
-| 12540 | Beef, eye of round roast, separable lean only, roasted | Beef Products |
-| 12541 | Turkey, wing, meat only, roasted | Poultry Products |
-| 12542–12551 | Pork, loin/blade/rib (chops·roasts), 대부분 separable lean only | Pork Products |
-| 12552 | Pork, leg (ham), rump half, lean and fat, roasted | Pork Products |
+돼지 17 / 가금 9 / 소 2 / 양 1 / 소시지 1.
 
 ### 카테고리 분포 — 논문 §4.2.3 과의 대조
 
 | 카테고리 | Top 30 | Bottom 30 |
 |---|---:|---:|
-| **Vegetables and Vegetable Products** | **7** | 0 |
-| Dairy and Egg Products | 6 | 0 |
-| Spices and Herbs | 5 | 0 |
-| Baby Foods | 4 | 0 |
-| Snacks | 3 | 0 |
-| Breakfast Cereals / Soups / Fast Foods / Beverages / Nuts | 각 1 | 0 |
-| **Pork Products** | 0 | **18** |
-| **Beef Products** | 0 | **8** |
-| Poultry Products | 0 | 3 |
-| Lamb, Veal, and Game Products | 0 | 1 |
+| Snacks | 12 | 0 |
+| Baked Products | 7 | 0 |
+| Spices and Herbs | 3 | 0 |
+| Breakfast Cereals | 2 | 0 |
+| **Vegetables and Vegetable Products** | **2** | 0 |
+| Sweets | 2 | 0 |
+| Nut and Seed / Cereal Grains | 각 1 | 0 |
+| **Pork Products** | 0 | **17** |
+| **Poultry Products** | 0 | **9** |
+| Beef Products | 0 | 2 |
+| Lamb, Veal, and Game / Sausages | 0 | 각 1 |
 
 | | 값 |
 |---|---|
-| §4.2.3 Top30 추천군(어패류·과일·채소) | 7 |
-| §4.2.3 Bottom30 비추천군(소시지·베이커리·과자·육류) | **27** |
-| 교차 위반 (비추천군이 Top 에) | **0** |
-| ModiMedDiet AUC (빈도 반영) | **0.714** |
+| §4.2.3 Top30 추천군(어패류·과일·채소) | 2 |
+| §4.2.3 Bottom30 비추천군(소시지·베이커리·과자·육류) | 21 |
+| 교차 위반 (비추천군이 Top 에 — 베이커리 7·과자 2) | 9 |
+| ModiMedDiet AUC (빈도 반영) | **0.703** |
 
-**비추천 쪽은 논문 §4.2.3·Fig.5 와 맞는다** — 피라미드 상단의 "beef products,
-sausages and luncheon meats, pork products" 그대로다.
-**추천 쪽은 채소가 1위 군(7개)으로 들어오지만** 논문이 1순위로 든 어패류는
-Top 30 에 없다. 향신료·간식이 끼는 것은 위의 100 g 기준 문제다.
+**비추천 쪽은 논문 §4.2.3·Fig.5 와 맞는다** — 피라미드 상단의 육류 그대로다.
+**추천 쪽은 맞지 않는다** — 논문이 1순위로 든 어패류가 Top 30 에 없고, 논문이
+**비추천**으로 든 베이커리·과자가 9개 들어간다.
+
+> 논문이 같은 문장에서 함께 적은 **분산 80% 규칙**을 우리 데이터에 적용하면
+> 10 성분이고(5 성분은 74.1%), 그쪽은 Top30 추천군 7 / Bottom30 비추천군 27 /
+> **교차 위반 0** / AUC **0.714** 로 양쪽 기준에서 모두 낫다.
+> 기본값은 논문이 명시한 숫자 5 로 두되, 규칙 적용판은 아래 한 줄로 돌릴 수 있다.
+> ```bash
+> PCA_COMPONENTS=auto python3 ourkg/analyze.py recommend
+> ```
 
 시각화: `ourkg/out/recommendation.png` (논문 Fig.4(b) 대응 t-SNE)
-
-> 이전 판(PCA 없음)의 Top 30 은 설탕 대체재·꿀·시럽절임 과일이었고 ModiMedDiet
-> AUC 가 0.633 이었다. 논문 §4.2.1 의 PCA 를 켠 뒤 바뀐 것이다 — §12.
 
 ## 4. 평가 — 논문 §5.1
 
@@ -1103,10 +1101,29 @@ ModiMedDiet 은 빈도 반영(`MODIMED_POSITIVES=high_freq`, §11 D) 기준이�
    §4.2.3 Top30 추천군 7 / Bottom30 비추천군 27 / **교차 위반 0** 이다.
    지금까지 어떤 설정도 양쪽을 동시에 만족하지 못했다.
 
-### 그래서 기본값을 바꿨다
+### 그래서 기본값을 바꿨다 — 논문이 명시한 5 로
 
-`PCA_COMPONENTS` 의 기본값이 `0`(공식 코드 경로) 에서 `auto`(논문 §4.2.1) 로 바뀌었다.
-E 는 `shrunk` 그대로다. `PCA_COMPONENTS=0` 으로 이전 동작을 재현할 수 있고,
+`PCA_COMPONENTS` 의 기본값이 `0`(공식 코드 경로) 에서 **`5`**(논문 §4.2.1 이
+명시한 숫자) 로 바뀌었다. E 는 `shrunk` 그대로다.
+
+논문은 같은 문장에서 숫자(5)와 규칙(분산 80%)을 함께 적는다. 논문 데이터에서는
+둘이 같지만 우리 `F` 에서는 5 성분이 74.1% 라 어긋난다. **기본값은 논문이 명시한
+숫자를 따르고**, 규칙 적용판(10 성분)은 `PCA_COMPONENTS=auto` 로 함께 낸다.
+전체 대조는 `ourkg/out/pca_comparison.csv` 에 있다.
+
+| PCA | ModiMedDiet AUC | §4.2.3 Top30 추천군 | Bottom30 비추천군 | Top30 위반 |
+|---|---:|---:|---:|---:|
+| 없음 (공식 `final.py`) | 0.633 | 7 | 29 | 4 |
+| **5 (논문 숫자, 기본)** | **0.703** | 2 | 21 | 9 |
+| 10 (논문 규칙 80%) | **0.714** | **7** | 27 | **0** |
+| 20 (참고) | 0.678 | 0 | 30 | 0 |
+
+**규칙 적용판이 두 기준 모두에서 낫다는 점은 분명히 남긴다.** 5 성분은 외부
+기준에서 0.703 으로 PCA 없음(0.633)보다 좋지만, §4.2.3 에서는 교차 위반이
+9 로 늘어난다(베이커리 7·과자 2가 Top 30 에 들어온다). 10 성분은 위반 0 이다.
+숫자를 따를지 규칙을 따를지는 논문 자체가 결정해 주지 않는다.
+
+`PCA_COMPONENTS=0` 으로 이전 동작을 재현할 수 있고,
 **§5~§11 의 수치는 전부 PCA 를 끈 경로에서 잰 것이다.**
 
 ### 교훈
@@ -1192,6 +1209,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 | `out/food_form.csv` | 구조·가공 축 19 (FDC 측정값) |
 | `out/learned_form.csv`, `out/learned_both.csv` | 그 축으로 역추정한 가중치 |
 | `out/disagreement_by_group.csv` | 두 기준이 갈리는 지점의 음식군별 분해 |
+| `out/pca_comparison.csv` | PCA 성분 수별 두 기준 채점 |
 | `out/compound_microbe.csv` | KEGG 재계산 compound-미생물 2,124 |
 | `out/microbes.csv` | NCBI 갱신 미생물 127 |
 | `out/microbe_disease.csv`, `out/microbe_disease_mikg.csv` | 미생물-질환 |

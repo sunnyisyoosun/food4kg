@@ -67,10 +67,14 @@ def recommend(e_mode=None, path=None, save=True):
     # S 가 신호를 깎는 것으로 보였는데(§8·§10), 논문의 PCA 를 켜면 반대로 돕는다.
     # 논문이 쓴 것은 '5' 라는 숫자가 아니라 '분산 80% 보존' 이라는 규칙이다.
     # 우리 F 에서 80% 를 넘는 최소 성분 수는 10 이다(논문 데이터에서는 5).
-    #   PCA_COMPONENTS=auto  분산 PCA_VARIANCE(기본 0.80) 를 넘는 최소 성분 (기본)
+    # 논문은 숫자(5)와 규칙(분산 80%)을 함께 적는데, 논문 데이터에서는 둘이 같고
+    # 우리 F 에서는 다르다 — 5 성분은 74.1%, 80% 를 넘으려면 10 성분이다.
+    # 기본값은 논문이 명시한 숫자 5 로 둔다. 규칙 적용판은 auto 로 돌린다.
+    #   PCA_COMPONENTS=5     논문 §4.2.1 의 숫자 (기본)
+    #   PCA_COMPONENTS=auto  논문 규칙(분산 PCA_VARIANCE, 기본 0.80) 적용 -> 10
     #   PCA_COMPONENTS=0     PCA 없음 (공식 final.py 경로)
-    #   PCA_COMPONENTS=<n>   성분 수를 직접 지정
-    _pca_opt = os.environ.get('PCA_COMPONENTS', 'auto')
+    #   PCA_COMPONENTS=<n>   직접 지정
+    _pca_opt = os.environ.get('PCA_COMPONENTS', '5')
     PCA_VAR = float(os.environ.get('PCA_VARIANCE', '0.80'))
     PCA_N = -1 if _pca_opt == 'auto' else int(_pca_opt)
 
