@@ -1,0 +1,8 @@
+variant,n_compound,modimed_AUC,sign_vs_learned,agree_pct
+paper,66,0.52,32/63,51
+t1_paper,64,0.519,32/60,53
+t1_harm,64,0.481,28/60,47
+t2,53,0.504,26/52,50
+t4,16,0.308,8/16,50
+t24,53,0.471,27/52,52
+semantic,65,0.487,29/61,48

@@ -83,7 +83,13 @@ def recommend(e_mode=None, path=None, save=True):
     #   E_MODE=weighted  네 근거의 가중 합의 (build.py evidence)
     #   E_MODE=priority  우선순위 첫 비영 값 (build.py evidence)
     E_MODE = e_mode or os.environ.get('E_MODE', 'shrunk')
-    if E_MODE == 'learned':
+    if E_MODE.startswith('stype:'):
+        sp = os.path.join(OUT, 'compound_depression_stype.csv')
+        if not os.path.exists(sp):
+            sys.exit('compound_depression_stype.csv 가 없다. '
+                     'python3 ourkg/analyze.py stype')
+        col = pd.read_csv(sp).set_index('kegg')[E_MODE.split(':', 1)[1]]
+    elif E_MODE == 'learned':
         # 주의: 이 E 는 ModiMedDiet 라벨로 학습한 것이다(analyze.py invert).
         # ModiMedDiet 기준으로 잴 때는 held-out 음식만 써야 한다.
         lp = os.path.join(OUT, 'compound_learned.csv')
@@ -938,8 +944,154 @@ def invert():
     print(f'  Bottom{K} 끝 음식: {bot["food_name"].iloc[-1][:50]}')
 
 
+def stype():
+    """ProMENDA 를 연구 설계(Study type)별로 나눠 E 를 만들고 외부 기준으로 잰다.
+
+    왜
+    --
+    §8 에서 공개 소스 E 의 부호가 ModiMedDiet 과 48% 밖에 맞지 않았고, 그 이유를
+    "case-control 메타볼로믹스(농도)와 식이 효과(먹으면 좋/나쁨)는 다른 것을
+    잰다"로 봤다. 그렇다면 ProMENDA 안에서도 **개입 효과를 재는 설계**는
+    식이 방향에 더 가까워야 한다. 그걸 직접 검정한다.
+
+    ProMENDA 의 M_Study_type_Metabolite_level (M_Groups 로 역추론, map_promenda.py)
+      Type1  14,370행  "depression vs control", "CUMS vs control"
+                       -> 환자에서 올라간 것. 원인인지 결과인지 모른다.
+      Type2   6,169행  "CUMS + fluoxetine vs CUMS", "post-ketamine vs baseline"
+                       -> **치료로 올라간 것**. 개입 효과다.
+      Type3   1,717행  "rTMS vs control" (대상이 건강인)
+                       -> 우울증 방향과 대응하지 않는다. 뺀다.
+      Type4     239행  "responder vs non-responder"
+                       -> 반응자에서 올라간 것. 개입 효과 쪽이다.
+      Type5      24행  표본이 작아 뺀다.
+
+    비교하는 E (전부 공개 소스만, 학습 없음)
+      paper      현재 기본값. Type1 만 up=+1 로 뒤집고 나머지는 그대로 (= e_shrunk)
+      t1_paper   Type1 만, up=+1 (논문 규약)
+      t1_harm    Type1 만, up=-1 (환자에서 오른 것 = 해롭다는 읽기)
+      t2         Type2 만, up=+1 (치료로 오른 것 = 이롭다)
+      t4         Type4 만, up=+1
+      t24        Type2+4, up=+1  <- 개입 효과만 모은 것
+      semantic   Type1 up=-1 + Type2/4 up=+1, Type3/5 제외
+
+    학습이 없으므로 ModiMedDiet 라벨 전체로 잰다(누수 없음). 다만 변형 일곱 중
+    하나를 이 기준으로 고르는 것은 선택이므로, 전부 보고하고 §4.2.3 도 함께 낸다.
+
+    출력
+      out/stype_comparison.csv
+      out/compound_depression_stype.csv   변형별 E (E_MODE=stype:<이름> 로 쓸 수 있다)
+    """
+    from sklearn.metrics import roc_auc_score
+    from common import polarity
+
+    SHRINK_K = int(os.environ.get('SHRINK_K', '10'))
+    SRC = os.path.join(BASE, '41398_2024_2948_MOESM3_ESM.xlsx')
+    STYPE = 'M_Study_type_Metabolite_level'
+
+    print('[1/4] ProMENDA 로드')
+    df = pd.read_excel(SRC, sheet_name='M_Metabolite')
+    df = df[df['M_KEGG'].astype(str).str.contains(r'C\d{5}', na=False)].copy()
+    df['kegg'] = df['M_KEGG'].astype(str).str.extract(r'(C\d{5})')[0]
+    df['base'] = df['M_Up/Down_regulated '].apply(polarity)   # up=-1, down=+1
+    df['t'] = df[STYPE].astype(str)
+    print('  ' + ' / '.join(f'{t} {int(n):,}' for t, n in
+                            df['t'].value_counts().sort_index().items()))
+
+    def build(spec):
+        """spec: {Type 이름: up 의 부호}. 없는 Type 은 제외."""
+        sub = df[df['t'].isin(spec)].copy()
+        # base 는 up=-1 이다. spec[t] 가 +1 이면 뒤집는다.
+        mult = sub['t'].map(lambda t: -1 if spec[t] > 0 else 1)
+        sub['inc'] = sub['base'] * mult
+        g = sub.groupby('kegg')['inc']
+        pos = g.apply(lambda x: int((x == 1).sum()))
+        neg = g.apply(lambda x: int((x == -1).sum()))
+        return ((pos - neg) / (pos + neg + SHRINK_K)).to_dict()
+
+    VARIANTS = {
+        't1_paper': {'Type1': +1},
+        't1_harm':  {'Type1': -1},
+        't2':       {'Type2': +1},
+        't4':       {'Type4': +1},
+        't24':      {'Type2': +1, 'Type4': +1},
+        'semantic': {'Type1': -1, 'Type2': +1, 'Type4': +1},
+    }
+    E = {name: build(spec) for name, spec in VARIANTS.items()}
+    dep = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+    E['paper'] = dep['e_shrunk'].to_dict()
+
+    print('[2/4] 음식 행렬과 ModiMedDiet 라벨')
+    foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
+    foods = foods[foods['data_type'].isin(
+        ('foundation_food', 'sr_legacy_food', 'survey_fndds_food'))].reset_index(drop=True)
+    lab, _ = modimed_labels(foods)
+    long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    F = (long.pivot_table(index='food_key', columns='kegg', values='amount_g',
+                          fill_value=0.0).reindex(foods['food_key']).fillna(0.0))
+    compounds = list(F.columns)
+    X = F.values.astype(float)
+    cmax = X.max(axis=0)
+    X = np.divide(X, cmax, out=np.zeros_like(X), where=cmax > 0)
+    m = (lab != 0).values
+    y = (lab[m] == 1).astype(int).values
+    Xs = X[m]
+    print(f'  라벨 있는 음식 {len(y):,}')
+
+    lp = os.path.join(OUT, 'compound_learned.csv')
+    learned = (pd.read_csv(lp).set_index('kegg')['e_learned'].to_dict()
+               if os.path.exists(lp) else {})
+
+    print('[3/4] 변형별 채점')
+    rows = []
+    out_e = {'kegg': compounds}
+    for name in ['paper', 't1_paper', 't1_harm', 't2', 't4', 't24', 'semantic']:
+        e = np.array([float(E[name].get(c, 0.0)) for c in compounds])
+        out_e[name] = np.round(e, 4)
+        nz = int((e != 0).sum())
+        auc = roc_auc_score(y, Xs @ e) if nz else float('nan')
+        both = [(e[i], learned.get(c, 0.0)) for i, c in enumerate(compounds)
+                if e[i] and learned.get(c, 0.0)]
+        agree = (sum(1 for a, b in both if np.sign(a) == np.sign(b)) / len(both)
+                 if both else float('nan'))
+        rows.append({'variant': name, 'n_compound': nz,
+                     'modimed_AUC': round(auc, 3),
+                     'sign_vs_learned': f'{int(agree*len(both))}/{len(both)}'
+                                        if both else '',
+                     'agree_pct': round(agree * 100) if both else None})
+    tab = pd.DataFrame(rows)
+    pd.DataFrame(out_e).to_csv(
+        os.path.join(OUT, 'compound_depression_stype.csv'), index=False)
+    tab.to_csv(os.path.join(OUT, 'stype_comparison.csv'), index=False)
+
+    print()
+    print('=' * 70)
+    print('ProMENDA 연구 설계별 E — ModiMedDiet 기준 (학습 없음)')
+    print('=' * 70)
+    print(tab.to_string(index=False))
+    print(f'\n  참고: 역추정 E held-out 0.803 / 성분 중량 상한 0.816 / 무작위 0.500')
+
+    print('\n[4/4] 가장 좋은 변형으로 논문 Algorithm 1 을 돌린다')
+    best = tab.loc[tab['modimed_AUC'].idxmax(), 'variant']
+    print(f'  (ModiMedDiet 기준 최고: {best})')
+    res = recommend(e_mode=f'stype:{best}', save=False)
+    K = int(os.environ.get('TOP_K', '30'))
+    REC_OK = {'Finfish and Shellfish Products', 'Fruits and Fruit Juices',
+              'Vegetables and Vegetable Products'}
+    NOT_OK = {'Sausages and Luncheon Meats', 'Baked Products', 'Sweets',
+              'Beef Products', 'Pork Products', 'Lamb, Veal, and Game Products'}
+    top, bot = res.head(K), res.tail(K)
+    lab_r, _ = modimed_labels(res)
+    print(f'  전체 파이프라인 ModiMedDiet AUC '
+          f'{roc_auc_score((lab_r[lab_r != 0] == 1).astype(int).values, res.loc[lab_r != 0, "score"].values):.3f}')
+    print(f'  §4.2.3 — Top{K} 추천군 {int(top["food_group"].isin(REC_OK).sum())} / '
+          f'Bottom{K} 비추천군 {int(bot["food_group"].isin(NOT_OK).sum())}')
+    print(f'  Top{K} 첫 음식: {top["food_name"].iloc[0][:50]}')
+    print(f'  Bottom{K} 끝 음식: {bot["food_name"].iloc[-1][:50]}')
+
+
 STEPS = {'recommend': recommend, 'compare': compare, 'external': external,
-         'invert': invert, 'pathcheck': pathcheck, 'evaluate': evaluate}
+         'invert': invert, 'stype': stype, 'pathcheck': pathcheck,
+         'evaluate': evaluate}
 
 
 def main(argv):

@@ -746,7 +746,72 @@ E_MODE=learned python3 ourkg/analyze.py recommend
 
 ---
 
-## 9. 과정에서 드러난 것
+## 9. ProMENDA 를 연구 설계별로 나눠 봤다 — 가설 반증 (`analyze.py stype`)
+
+### 가설
+
+§8 에서 공개 소스 E 의 부호가 ModiMedDiet 과 48% 밖에 맞지 않았고, 그 이유를
+"case-control 메타볼로믹스(농도)와 식이 효과(먹으면 좋/나쁨)는 다른 것을 잰다"로
+봤다. 그렇다면 **ProMENDA 안에서도 개입 효과를 재는 설계는 식이 방향에 더
+가까워야 한다.** 이것을 직접 검정했다.
+
+ProMENDA 의 `M_Study_type_Metabolite_level` (M_Groups 로 역추론, `map_promenda.py`)
+
+| Type | 행 | 설계 | 읽기 |
+|---|---:|---|---|
+| Type1 | 14,370 | depression vs control, CUMS vs control | 환자에서 올라간 것. 원인인지 결과인지 모른다 |
+| **Type2** | **6,169** | **CUMS + fluoxetine vs CUMS, post-ketamine vs baseline** | **치료로 올라간 것 — 개입 효과다** |
+| Type3 | 1,717 | rTMS vs control (대상이 건강인) | 우울증 방향과 대응하지 않는다. 제외 |
+| Type4 | 239 | responder vs non-responder | 반응자에서 올라간 것. 개입 효과 쪽 |
+| Type5 | 24 | — | 표본이 작아 제외 |
+
+### 결과 — 어떤 설계로 나눠도 우연 수준이다
+
+학습이 없으므로 ModiMedDiet 라벨 전체(8,688)로 쟀다. `D = X·e` 의 AUC 다.
+
+| 변형 | compound | **ModiMedDiet AUC** | 역추정 E 와 부호 일치 |
+|---|---:|---:|---:|
+| `paper` (현재 기본값) | 66 | 0.520 | 32/63 (51%) |
+| `t1_paper` — Type1 만, up=+1 | 64 | 0.519 | 32/60 (53%) |
+| `t1_harm` — Type1 만, up=−1 | 64 | 0.481 | 28/60 (47%) |
+| **`t2` — Type2 만 (개입 효과)** | 53 | **0.504** | 26/52 (50%) |
+| `t4` — Type4 만 | 16 | 0.308 | 8/16 (50%) |
+| `t24` — Type2+4 | 53 | 0.471 | 27/52 (52%) |
+| `semantic` — Type1 해롭다 + Type2/4 이롭다 | 65 | 0.487 | 29/61 (48%) |
+| *(참고) 역추정 E, held-out* | 122 | *0.803* | — |
+| *(참고) 성분 중량 상한* | 130 | *0.816* | — |
+
+**가설이 반증됐다.** 개입 효과만 모은 `t2` 는 AUC 0.504 — 정확히 무작위다.
+일곱 변형 전부 0.47~0.52 구간에 있고, 역추정 E 와의 부호 일치도 47~53% 로
+전부 동전 던지기다. `t4` 의 0.308 은 compound 16종뿐이라 잡음으로 본다.
+
+ModiMedDiet 기준 최고는 `paper` (0.520) — **현재 기본값이다. 바꿀 것이 없다.**
+
+### 이게 말하는 것
+
+문제는 **ProMENDA 를 어떻게 자르느냐가 아니다.** 어떤 설계로 잘라도 식이 효과
+방향이 나오지 않는다. §8 의 결론이 오히려 강해진다 —
+
+> 혈액·뇌의 **대사물 농도** 변화는, 그 대사물을 **음식으로 먹었을 때의 이해득실**을
+> 담고 있지 않다.
+
+치료로 어떤 대사물이 올라갔다는 것조차 그 대사물을 먹으라는 뜻이 아니다.
+약물이 대사 경로를 바꾼 결과일 뿐이고, 경구 섭취로 같은 변화가 일어난다는 보장이
+없다. 논문 §4.2.1 이 MENDA 의 up/down 을 그대로 `E` 로 쓴 것은 **규약을 잘못 고른
+것이 아니라 소스의 종류가 맞지 않는 것**이다.
+
+바꿔 말하면, 이 방향의 개선은 여기서 막힌다. `E` 를 식이 효과로 만들려면
+**섭취-결과를 재는 소스**(RCT, 코호트 식이조사, 영양역학)가 필요하고, 그것이
+§8 의 역추정이 한 일이다.
+
+```bash
+python3 ourkg/analyze.py stype                        # 위 표
+E_MODE=stype:t2 python3 ourkg/analyze.py recommend    # 변형 하나로 추천
+```
+
+---
+
+## 10. 과정에서 드러난 것
 
 세 가지 모두 **논문 규모(음식 135종)에서는 드러나지 않고 14,000종에서만 터지는**
 문제다. 각각 환경변수로 되돌릴 수 있고, 근거는 [`README.md`](README.md) 설계 결정에 있다.
@@ -786,7 +851,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 10. 한계
+## 11. 한계
 
 - **식품 온톨로지 미통합** — FoodOn·중국 식품 온톨로지가 없어 음식 분류가 FDC SR 27군에
   머문다. 논문의 128 카테고리 체계와 대응되지 않는다.
@@ -800,7 +865,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 11. 산출물
+## 12. 산출물
 
 | 파일 | 내용 |
 |---|---|
@@ -815,6 +880,8 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 | `out/modimed_labels.csv` | ModiMedDiet 정답셋 라벨과 규칙 출처 |
 | `out/compound_learned.csv` | ModiMedDiet 로 역추정한 E |
 | `out/invert_comparison.csv` | 역추정 E vs 공개 소스 E 부호 대조 (전수) |
+| `out/compound_depression_stype.csv` | 연구 설계별 E 7변형 |
+| `out/stype_comparison.csv` | 설계별 E 채점표 |
 | `out/compound_microbe.csv` | KEGG 재계산 compound-미생물 2,124 |
 | `out/microbes.csv` | NCBI 갱신 미생물 127 |
 | `out/microbe_disease.csv`, `out/microbe_disease_mikg.csv` | 미생물-질환 |

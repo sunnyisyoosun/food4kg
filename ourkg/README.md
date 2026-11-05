@@ -55,6 +55,7 @@ KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐�
 | | `pathcheck` | gut-brain 경로 compound 를 CSV 와 KG(SPARQL)에서 각각 뽑아 대조 | `gutbrain_compounds.json` |
 | | `external` | SMILES trial ModiMedDiet 로 외부 정답셋을 만든다 | `modimed_labels.csv` |
 | | `invert` | 그 라벨로 E 의 부호를 역추정하고 공개 소스 E 와 대조 | `compound_learned.csv`, `invert_comparison.csv` |
+| | `stype` | ProMENDA 를 연구 설계별로 나눠 E 를 만들고 외부 기준으로 채점 | `stype_comparison.csv` |
 | | `evaluate` | §4.1 SPARQL Q1~Q3, §5.1 방법 1·2 | `eval_*.csv/json` |
 | `common.py` | — | 경로·단위 환산·라벨/카테고리 정규화 공유 | |
 | `run_all.py` | — | 위 둘을 순서대로 호출 | |
