@@ -1,0 +1,1572 @@
+{
+ "Q1": [
+  [
+   "Egg, whole, cooked, hard-boiled",
+   "Milk, reduced fat, fluid, 2% milkfat, protein fortified, with added vitamin A and vitamin D",
+   "Riboflavin",
+   0.000513,
+   0.000194,
+   0.000707
+  ],
+  [
+   "Egg, whole, cooked, hard-boiled",
+   "Milk, reduced fat, fluid, 2% milkfat, with added nonfat milk solids, without added vitamin A",
+   "Riboflavin",
+   0.000513,
+   0.000194,
+   0.000707
+  ],
+  [
+   "Egg, whole, cooked, hard-boiled",
+   "Milk, reduced fat, fluid, 2% milkfat, without added vitamin A and vitamin D",
+   "Riboflavin",
+   0.000513,
+   0.000185,
+   0.000698
+  ],
+  [
+   "Egg, whole, cooked, fried",
+   "Milk, reduced fat, fluid, 2% milkfat, protein fortified, with added vitamin A and vitamin D",
+   "Riboflavin",
+   0.000495,
+   0.000194,
+   0.0006889999999999999
+  ],
+  [
+   "Egg, whole, cooked, fried",
+   "Milk, reduced fat, fluid, 2% milkfat, with added nonfat milk solids, without added vitamin A",
+   "Riboflavin",
+   0.000495,
+   0.000194,
+   0.0006889999999999999
+  ],
+  [
+   "Egg, whole, cooked, hard-boiled",
+   "Milk, reduced fat, fluid, 2% milkfat, with added nonfat milk solids and vitamin A and vitamin D",
+   "Riboflavin",
+   0.000513,
+   0.000173,
+   0.000686
+  ],
+  [
+   "Egg, whole, cooked, fried",
+   "Milk, reduced fat, fluid, 2% milkfat, without added vitamin A and vitamin D",
+   "Riboflavin",
+   0.000495,
+   0.000185,
+   0.00068
+  ],
+  [
+   "Egg, whole, cooked, fried",
+   "Milk, reduced fat, fluid, 2% milkfat, with added nonfat milk solids and vitamin A and vitamin D",
+   "Riboflavin",
+   0.000495,
+   0.000173,
+   0.000668
+  ]
+ ],
+ "Q2": [
+  [
+   "Glycine",
+   "Agathobacter rectalis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Akkermansia muciniphila",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Alistipes indistinctus",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Alistipes onderdonkii",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Alistipes putredinis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Alistipes shahii",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Anaerobutyricum hallii",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Bacteroides fragilis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Bacteroides intestinalis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Bacteroides ovatus",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Bacteroides stercoris",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Bifidobacterium adolescentis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Bifidobacterium angulatum",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Bifidobacterium animalis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Bifidobacterium catenulatum",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Bifidobacterium dentium",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Bifidobacterium longum",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Blautia obeum",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Blautia producta",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Buchnera aphidicola",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Campylobacter ureolyticus",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Capnocytophaga canimorsus",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Christensenella minuta",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Clavibacter michiganensis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Clostridioides difficile",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Clostridium butyricum",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Clostridium perfringens",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Coprococcus eutactus",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Desulfovibrio desulfuricans",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Desulfovibrio piger",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Dorea longicatena",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Enterobacter cloacae",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Enterobacter hormaechei",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Enterocloster bolteae",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Enterocloster clostridioformis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Enterococcus casseliflavus",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Escherichia coli",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Eubacterium ventriosum",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Faecalibacterium prausnitzii",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Flavonifractor plautii",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Gardnerella vaginalis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Halobacillus mangrovi",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Hathewaya histolytica",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Hominimerdicola alba",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Hungatella hathewayi",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Intestinibacter bartlettii",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Klebsiella oxytoca",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Lactiplantibacillus plantarum",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Lactobacillus acidophilus",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Lactobacillus gasseri",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Ligilactobacillus ruminis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Ligilactobacillus salivarius",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Limosilactobacillus fermentum",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Limosilactobacillus mucosae",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Limosilactobacillus reuteri",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Mediterraneibacter gnavus",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Odoribacter splanchnicus",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Parabacteroides distasonis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Parabacteroides merdae",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Paraclostridium bifermentans",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Paraclostridium sordellii",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Paraprevotella clara",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Parascardovia denticolens",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Phascolarctobacterium faecium",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Phocaeicola dorei",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Phocaeicola vulgatus",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Priestia megaterium",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Roseburia faecis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Roseburia hominis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Roseburia intestinalis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Scardovia inopinata",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Segatella copri",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Streptococcus mutans",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Streptococcus salivarius",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Streptococcus thermophilus",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Streptococcus vestibularis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Sutterella wadsworthensis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Terrisporobacter glycolicus",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Thomasclavelia ramosa",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Thomasclavelia spiroformis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Turicibacter sanguinis",
+   "hasPositiveAssociation"
+  ],
+  [
+   "Glycine",
+   "Wenyingzhuangia fucanilytica",
+   "hasPositiveAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Agathobacter rectalis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Akkermansia muciniphila",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Alistipes indistinctus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Alistipes onderdonkii",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Alistipes putredinis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Alistipes shahii",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Anaerobutyricum hallii",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bacteroides fragilis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bacteroides intestinalis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bacteroides ovatus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bacteroides stercoris",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bifidobacterium adolescentis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bifidobacterium angulatum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bifidobacterium animalis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bifidobacterium catenulatum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bifidobacterium dentium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bifidobacterium longum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Blautia obeum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Blautia producta",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Buchnera aphidicola",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Campylobacter ureolyticus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Capnocytophaga canimorsus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Christensenella minuta",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Clavibacter michiganensis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Clostridioides difficile",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Clostridium butyricum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Clostridium perfringens",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Coprococcus eutactus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Desulfovibrio desulfuricans",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Desulfovibrio piger",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Dorea longicatena",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Enterobacter cloacae",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Enterobacter hormaechei",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Enterocloster bolteae",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Enterocloster clostridioformis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Enterococcus casseliflavus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Escherichia coli",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Eubacterium ventriosum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Faecalibacterium prausnitzii",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Flavonifractor plautii",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Gardnerella vaginalis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Halobacillus mangrovi",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Hathewaya histolytica",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Hominimerdicola alba",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Hungatella hathewayi",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Intestinibacter bartlettii",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Klebsiella oxytoca",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Lactiplantibacillus plantarum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Lactobacillus acidophilus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Lactobacillus gasseri",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Ligilactobacillus ruminis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Ligilactobacillus salivarius",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Limosilactobacillus fermentum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Limosilactobacillus mucosae",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Limosilactobacillus reuteri",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Mediterraneibacter gnavus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Odoribacter splanchnicus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Parabacteroides distasonis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Parabacteroides merdae",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Paraclostridium bifermentans",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Paraclostridium sordellii",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Paraprevotella clara",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Parascardovia denticolens",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Phascolarctobacterium faecium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Phocaeicola dorei",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Phocaeicola vulgatus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Priestia megaterium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Roseburia faecis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Roseburia hominis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Roseburia intestinalis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Scardovia inopinata",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Segatella copri",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Streptococcus mutans",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Streptococcus salivarius",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Streptococcus thermophilus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Streptococcus vestibularis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Sutterella wadsworthensis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Terrisporobacter glycolicus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Thomasclavelia ramosa",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Thomasclavelia spiroformis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Turicibacter sanguinis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Wenyingzhuangia fucanilytica",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Akkermansia muciniphila",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Alistipes indistinctus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Alistipes onderdonkii",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Alistipes putredinis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Alistipes shahii",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Bacteroides fragilis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Bacteroides intestinalis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Bacteroides ovatus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Bacteroides stercoris",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Bifidobacterium adolescentis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Bifidobacterium angulatum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Bifidobacterium animalis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Bifidobacterium catenulatum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Bifidobacterium dentium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Bifidobacterium longum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Blautia producta",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Buchnera aphidicola",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Campylobacter ureolyticus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Capnocytophaga canimorsus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Christensenella minuta",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Clavibacter michiganensis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Clostridioides difficile",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Clostridium butyricum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Clostridium perfringens",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Coprococcus eutactus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Desulfovibrio desulfuricans",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Desulfovibrio piger",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Dorea longicatena",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Enterobacter hormaechei",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Enterocloster bolteae",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Enterocloster clostridioformis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Enterococcus casseliflavus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Escherichia coli",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Phocaeicola dorei",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Phocaeicola vulgatus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Lysine",
+   "Priestia megaterium",
+   "hasNegativeAssociation"
+  ]
+ ],
+ "Q3": [
+  [
+   "4-Hydroxyproline",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "4-Hydroxyproline",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "4-Hydroxyproline",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "4-Hydroxyproline",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "5-Methyltetrahydrofolic acid",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "5-Methyltetrahydrofolic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "5-Methyltetrahydrofolic acid",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "5-Methyltetrahydrofolic acid",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "5-Methyltetrahydrofolic acid",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "Alpha-Linolenic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Arachidic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Arachidonic acid",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "Arachidonic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Ascorbic acid",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "Ascorbic acid",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Betaine",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Butyric acid",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "Butyric acid",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Caprylic acid",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "Caprylic acid",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "D-Maltose",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "D-Maltose",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "D-Maltose",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "D-Maltose",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "D-Maltose",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "Dihomo-gamma-linolenic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Docosahexaenoic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Eicosapentaenoic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Ethanol",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "Ethanol",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Ethanol",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Ethanol",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "Ethanol",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "Folic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Folic acid",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "Folic acid",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "Folinic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Folinic acid",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Folinic acid",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "Folinic acid",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "Gamma-Linolenic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Glycerophosphocholine",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Glycerophosphocholine",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Glycine",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "Glycine",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Glycine",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Glycine",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "Glycine",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "L-Glutamic acid",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "L-Glutamic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "L-Glutamic acid",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "L-Glutamic acid",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "L-Glutamic acid",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "L-Lysine",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "L-Lysine",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "L-Lysine",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "L-Lysine",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "L-Lysine",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "L-Threonine",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "L-Threonine",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "L-Threonine",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "L-Threonine",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "L-Threonine",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "Linoleic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Nicotinic acid",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "Nicotinic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Nicotinic acid",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Nicotinic acid",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "Nicotinic acid",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "Oleic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Oleic acid",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Oleic acid",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "Palmitic acid",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "Palmitic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Pantothenic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Pantothenic acid",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Pantothenic acid",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "Pantothenic acid",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "Phosphorylcholine",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Phosphorylcholine",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Riboflavin",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "Riboflavin",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Riboflavin",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Riboflavin",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "Riboflavin",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "Stearic acid",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Sucrose",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "Sucrose",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Sucrose",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Sucrose",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "Sucrose",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "Thiamine",
+   "Clostridium butyricum",
+   "Autism"
+  ],
+  [
+   "Thiamine",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Thiamine",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Thiamine",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "Thiamine",
+   "Streptococcus thermophilus",
+   "Autism"
+  ],
+  [
+   "Vitamin A",
+   "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Vitamin A",
+   "Paraclostridium bifermentans",
+   "Autism"
+  ],
+  [
+   "Vitamin A",
+   "Streptococcus salivarius",
+   "Autism"
+  ],
+  [
+   "Vitamin A",
+   "Streptococcus thermophilus",
+   "Autism"
+  ]
+ ]
+}

@@ -429,4 +429,6 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 | `out/recommendation.csv`, `out/recommendation.png` | 추천 순위·시각화 |
 | `out/eval_method1.csv`, `out/eval_method2.csv`, `out/eval_sparql.json` | §5.1·§4.1 평가 |
 
-`out/` 과 `cache/` 는 용량 때문에 git 에 올리지 않는다. `python3 ourkg/run_all.py` 로 재생성한다.
+`out/` 의 결과표·평가 결과는 레포에 함께 올라가 있다. 대용량 둘만 제외한다 —
+`ourkg.nt` (470 MB) 와 `food_compound_long.csv` (48 MB). 둘 다 `python3 ourkg/run_all.py`
+로 재생성한다 (`food` 약 12분, `kg` 약 2분).

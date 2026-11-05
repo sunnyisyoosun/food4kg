@@ -19,6 +19,9 @@ logs/
 analyse/final.py
 analyse/p5_foodname.txt
 
-# ourkg 산출물 — 대용량. ourkg/run_all.py 로 재생성한다.
-ourkg/out/
+# ourkg 산출물
+# 작은 결과표·평가 결과는 올린다(리뷰에 필요). 대용량 둘만 뺀다 —
+# ourkg.nt 470MB, food_compound_long.csv 48MB. `ourkg/run_all.py` 로 재생성한다.
+ourkg/out/ourkg.nt
+ourkg/out/food_compound_long.csv
 ourkg/cache/

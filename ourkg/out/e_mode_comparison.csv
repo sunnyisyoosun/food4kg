@@ -1,0 +1,9 @@
+e_mode,n_compound_nonzero,top30_논문추천군,bot30_논문비추천군,top30_주류,top30_위반,bot30_위반,top_food,bot_food
+shrunk,66,7,29,12,4,0,"Sugar substitute, sucralose, powder","Beerwurst, pork and beef"
+binary,66,6,25,0,17,0,"Sugar substitute, sucralose, powder","Beerwurst, pork and beef"
+weighted,98,12,6,0,16,0,"Lamb, Australian, imported, fresh, rib c","Butter, stick, salted"
+priority,98,0,7,0,0,0,"Refried beans, canned, traditional style","Butter, stick, salted"
+vote,95,1,2,0,0,2,"Beans, navy, mature seeds, raw","Margarine-like, butter-margarine blend, "
+weighted_norules,73,6,3,0,19,0,"Bagel, whole wheat, with raisins","Cheese, cream"
+priority_norules,73,0,27,0,11,0,"Bagels, whole grain white","Beef, brisket, whole, separable lean and"
+vote_norules,73,2,30,0,10,0,"Bagels, whole grain white","Dutch brand loaf, chicken, pork and beef"

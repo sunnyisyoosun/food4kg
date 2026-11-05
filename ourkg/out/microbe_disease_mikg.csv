@@ -1,0 +1,574 @@
+microbe,neurotransmitter,disease
+Bacillus cereus,Serotonin,Anxiety disorders
+Bacillus cereus,Serotonin,Depressive disorder
+Bacillus cereus,Serotonin,Sleep disorders
+Bacillus cereus,Serotonin,Eating disorders
+Bacillus cereus,Serotonin,Sex behavior disorder
+Bacillus cereus,Serotonin,Personality disorder
+Bacillus cereus,Serotonin,Bipolar disorder
+Bacillus cereus,Serotonin,Autistic disorder
+Bacillus cereus,Serotonin,Cognition disorders
+Bacillus cereus,Serotonin,Learning disorder
+Bacillus cereus,Dopamine,Anxiety disorders
+Bacillus cereus,Dopamine,Depressive disorder
+Bacillus cereus,Dopamine,Sleep disorders
+Bacillus cereus,Dopamine,Eating disorders
+Bacillus cereus,Dopamine,Sex behavior disorder
+Bacillus cereus,Dopamine,Personality disorder
+Bacillus cereus,Dopamine,Bipolar disorder
+Bacillus cereus,Dopamine,Autistic disorder
+Bacillus cereus,Dopamine,Cognition disorders
+Burkholderia oklahomensis,Serotonin,Anxiety disorders
+Burkholderia oklahomensis,Serotonin,Depressive disorder
+Burkholderia oklahomensis,Serotonin,Sleep disorders
+Burkholderia oklahomensis,Serotonin,Eating disorders
+Burkholderia oklahomensis,Serotonin,Sex behavior disorder
+Burkholderia oklahomensis,Serotonin,Personality disorder
+Burkholderia oklahomensis,Serotonin,Bipolar disorder
+Burkholderia oklahomensis,Serotonin,Autistic disorder
+Burkholderia oklahomensis,Serotonin,Cognition disorders
+Burkholderia oklahomensis,Serotonin,Learning disorder
+Burkholderia oklahomensis,Dopamine,Anxiety disorders
+Burkholderia oklahomensis,Dopamine,Depressive disorder
+Burkholderia oklahomensis,Dopamine,Sleep disorders
+Burkholderia oklahomensis,Dopamine,Eating disorders
+Burkholderia oklahomensis,Dopamine,Sex behavior disorder
+Burkholderia oklahomensis,Dopamine,Personality disorder
+Burkholderia oklahomensis,Dopamine,Bipolar disorder
+Burkholderia oklahomensis,Dopamine,Autistic disorder
+Burkholderia oklahomensis,Dopamine,Cognition disorders
+Acinetobacter baumannii,Serotonin,Anxiety disorders
+Acinetobacter baumannii,Serotonin,Depressive disorder
+Acinetobacter baumannii,Serotonin,Sleep disorders
+Acinetobacter baumannii,Serotonin,Eating disorders
+Acinetobacter baumannii,Serotonin,Sex behavior disorder
+Acinetobacter baumannii,Serotonin,Personality disorder
+Acinetobacter baumannii,Serotonin,Bipolar disorder
+Acinetobacter baumannii,Serotonin,Autistic disorder
+Acinetobacter baumannii,Serotonin,Cognition disorders
+Acinetobacter baumannii,Serotonin,Learning disorder
+Acinetobacter baumannii,Histamine,Depressive disorder
+Acinetobacter baumannii,Histamine,Sleep disorders
+Acinetobacter baumannii,Histamine,Bipolar disorder
+Acinetobacter baumannii,Histamine,Autistic disorder
+Acinetobacter baumannii,Histamine,Learning disorders
+Paenibacillus,Serotonin,Anxiety disorders
+Paenibacillus,Serotonin,Depressive disorder
+Paenibacillus,Serotonin,Sleep disorders
+Paenibacillus,Serotonin,Eating disorders
+Paenibacillus,Serotonin,Sex behavior disorder
+Paenibacillus,Serotonin,Personality disorder
+Paenibacillus,Serotonin,Bipolar disorder
+Paenibacillus,Serotonin,Autistic disorder
+Paenibacillus,Serotonin,Cognition disorders
+Paenibacillus,Serotonin,Learning disorder
+Coprococcus,Dopamine,Anxiety disorders
+Coprococcus,Dopamine,Depressive disorder
+Coprococcus,Dopamine,Sleep disorders
+Coprococcus,Dopamine,Eating disorders
+Coprococcus,Dopamine,Sex behavior disorder
+Coprococcus,Dopamine,Personality disorder
+Coprococcus,Dopamine,Bipolar disorder
+Coprococcus,Dopamine,Autistic disorder
+Coprococcus,Dopamine,Cognition disorders
+Fusobacterium varium,Histamine,Depressive disorder
+Fusobacterium varium,Histamine,Sleep disorders
+Fusobacterium varium,Histamine,Bipolar disorder
+Fusobacterium varium,Histamine,Autistic disorder
+Fusobacterium varium,Histamine,Learning disorders
+Fusobacterium ulcerans,Histamine,Depressive disorder
+Fusobacterium ulcerans,Histamine,Sleep disorders
+Fusobacterium ulcerans,Histamine,Bipolar disorder
+Fusobacterium ulcerans,Histamine,Autistic disorder
+Fusobacterium ulcerans,Histamine,Learning disorders
+Bacteroides fragilis,Histamine,Depressive disorder
+Bacteroides fragilis,Histamine,Sleep disorders
+Bacteroides fragilis,Histamine,Bipolar disorder
+Bacteroides fragilis,Histamine,Autistic disorder
+Bacteroides fragilis,Histamine,Learning disorders
+Acetomicrobium hydrogeniformans,Acetylcholine,Depressive disorder
+Acetomicrobium hydrogeniformans,Acetylcholine,Bipolar disorder
+Acetomicrobium hydrogeniformans,Acetylcholine,Autistic disorder
+Lactobacillus plantarum,Serotonin,Anxiety disorders
+Lactobacillus plantarum,Serotonin,Depressive disorder
+Lactobacillus plantarum,Serotonin,Sleep disorders
+Lactobacillus plantarum,Serotonin,Eating disorders
+Lactobacillus plantarum,Serotonin,Sex behavior disorder
+Lactobacillus plantarum,Serotonin,Personality disorder
+Lactobacillus plantarum,Serotonin,Bipolar disorder
+Lactobacillus plantarum,Serotonin,Autistic disorder
+Lactobacillus plantarum,Serotonin,Cognition disorders
+Lactobacillus plantarum,Serotonin,Learning disorder
+Lactobacillus plantarum,Dopamine,Anxiety disorders
+Lactobacillus plantarum,Dopamine,Depressive disorder
+Lactobacillus plantarum,Dopamine,Sleep disorders
+Lactobacillus plantarum,Dopamine,Eating disorders
+Lactobacillus plantarum,Dopamine,Sex behavior disorder
+Lactobacillus plantarum,Dopamine,Personality disorder
+Lactobacillus plantarum,Dopamine,Bipolar disorder
+Lactobacillus plantarum,Dopamine,Autistic disorder
+Lactobacillus plantarum,Dopamine,Cognition disorders
+Lactobacillus plantarum,GABA,Anxiety disorders
+Lactobacillus plantarum,GABA,Depressive disorder
+Lactobacillus plantarum,GABA,Sleep disorders
+Lactobacillus plantarum,GABA,Personality disorder
+Lactobacillus plantarum,GABA,Bipolar disorder
+Lactobacillus plantarum,GABA,Autistic disorder
+Lactobacillus plantarum,GABA,Learning disorder
+Lactobacillus plantarum,Acetylcholine,Depressive disorder
+Lactobacillus plantarum,Acetylcholine,Bipolar disorder
+Lactobacillus plantarum,Acetylcholine,Autistic disorder
+Bacteroides uniformis,Serotonin,Anxiety disorders
+Bacteroides uniformis,Serotonin,Depressive disorder
+Bacteroides uniformis,Serotonin,Sleep disorders
+Bacteroides uniformis,Serotonin,Eating disorders
+Bacteroides uniformis,Serotonin,Sex behavior disorder
+Bacteroides uniformis,Serotonin,Personality disorder
+Bacteroides uniformis,Serotonin,Bipolar disorder
+Bacteroides uniformis,Serotonin,Autistic disorder
+Bacteroides uniformis,Serotonin,Cognition disorders
+Bacteroides uniformis,Serotonin,Learning disorder
+Clostridium ramosum,Serotonin,Anxiety disorders
+Clostridium ramosum,Serotonin,Depressive disorder
+Clostridium ramosum,Serotonin,Sleep disorders
+Clostridium ramosum,Serotonin,Eating disorders
+Clostridium ramosum,Serotonin,Sex behavior disorder
+Clostridium ramosum,Serotonin,Personality disorder
+Clostridium ramosum,Serotonin,Bipolar disorder
+Clostridium ramosum,Serotonin,Autistic disorder
+Clostridium ramosum,Serotonin,Cognition disorders
+Clostridium ramosum,Serotonin,Learning disorder
+Hafnia alvei,Serotonin,Anxiety disorders
+Hafnia alvei,Serotonin,Depressive disorder
+Hafnia alvei,Serotonin,Sleep disorders
+Hafnia alvei,Serotonin,Eating disorders
+Hafnia alvei,Serotonin,Sex behavior disorder
+Hafnia alvei,Serotonin,Personality disorder
+Hafnia alvei,Serotonin,Bipolar disorder
+Hafnia alvei,Serotonin,Autistic disorder
+Hafnia alvei,Serotonin,Cognition disorders
+Hafnia alvei,Serotonin,Learning disorder
+Hafnia alvei,Dopamine,Anxiety disorders
+Hafnia alvei,Dopamine,Depressive disorder
+Hafnia alvei,Dopamine,Sleep disorders
+Hafnia alvei,Dopamine,Eating disorders
+Hafnia alvei,Dopamine,Sex behavior disorder
+Hafnia alvei,Dopamine,Personality disorder
+Hafnia alvei,Dopamine,Bipolar disorder
+Hafnia alvei,Dopamine,Autistic disorder
+Hafnia alvei,Dopamine,Cognition disorders
+Klebsiella pneumoniae,Serotonin,Anxiety disorders
+Klebsiella pneumoniae,Serotonin,Depressive disorder
+Klebsiella pneumoniae,Serotonin,Sleep disorders
+Klebsiella pneumoniae,Serotonin,Eating disorders
+Klebsiella pneumoniae,Serotonin,Sex behavior disorder
+Klebsiella pneumoniae,Serotonin,Personality disorder
+Klebsiella pneumoniae,Serotonin,Bipolar disorder
+Klebsiella pneumoniae,Serotonin,Autistic disorder
+Klebsiella pneumoniae,Serotonin,Cognition disorders
+Klebsiella pneumoniae,Serotonin,Learning disorder
+Klebsiella pneumoniae,Dopamine,Anxiety disorders
+Klebsiella pneumoniae,Dopamine,Depressive disorder
+Klebsiella pneumoniae,Dopamine,Sleep disorders
+Klebsiella pneumoniae,Dopamine,Eating disorders
+Klebsiella pneumoniae,Dopamine,Sex behavior disorder
+Klebsiella pneumoniae,Dopamine,Personality disorder
+Klebsiella pneumoniae,Dopamine,Bipolar disorder
+Klebsiella pneumoniae,Dopamine,Autistic disorder
+Klebsiella pneumoniae,Dopamine,Cognition disorders
+Morganella morganii,Serotonin,Anxiety disorders
+Morganella morganii,Serotonin,Depressive disorder
+Morganella morganii,Serotonin,Sleep disorders
+Morganella morganii,Serotonin,Eating disorders
+Morganella morganii,Serotonin,Sex behavior disorder
+Morganella morganii,Serotonin,Personality disorder
+Morganella morganii,Serotonin,Bipolar disorder
+Morganella morganii,Serotonin,Autistic disorder
+Morganella morganii,Serotonin,Cognition disorders
+Morganella morganii,Serotonin,Learning disorder
+Morganella morganii,Dopamine,Anxiety disorders
+Morganella morganii,Dopamine,Depressive disorder
+Morganella morganii,Dopamine,Sleep disorders
+Morganella morganii,Dopamine,Eating disorders
+Morganella morganii,Dopamine,Sex behavior disorder
+Morganella morganii,Dopamine,Personality disorder
+Morganella morganii,Dopamine,Bipolar disorder
+Morganella morganii,Dopamine,Autistic disorder
+Morganella morganii,Dopamine,Cognition disorders
+Morganella morganii,Histamine,Depressive disorder
+Morganella morganii,Histamine,Sleep disorders
+Morganella morganii,Histamine,Bipolar disorder
+Morganella morganii,Histamine,Autistic disorder
+Morganella morganii,Histamine,Learning disorders
+Escherichia coli,Serotonin,Anxiety disorders
+Escherichia coli,Serotonin,Depressive disorder
+Escherichia coli,Serotonin,Sleep disorders
+Escherichia coli,Serotonin,Eating disorders
+Escherichia coli,Serotonin,Sex behavior disorder
+Escherichia coli,Serotonin,Personality disorder
+Escherichia coli,Serotonin,Bipolar disorder
+Escherichia coli,Serotonin,Autistic disorder
+Escherichia coli,Serotonin,Cognition disorders
+Escherichia coli,Serotonin,Learning disorder
+Escherichia coli,Dopamine,Anxiety disorders
+Escherichia coli,Dopamine,Depressive disorder
+Escherichia coli,Dopamine,Sleep disorders
+Escherichia coli,Dopamine,Eating disorders
+Escherichia coli,Dopamine,Sex behavior disorder
+Escherichia coli,Dopamine,Personality disorder
+Escherichia coli,Dopamine,Bipolar disorder
+Escherichia coli,Dopamine,Autistic disorder
+Escherichia coli,Dopamine,Cognition disorders
+Escherichia coli,Norepinephrine,Anxiety disorders
+Escherichia coli,Norepinephrine,Depressive disorder
+Escherichia coli,Norepinephrine,Sleep disorders
+Escherichia coli,Norepinephrine,Sex behavior disorder
+Escherichia coli,Norepinephrine,Personality disorder
+Escherichia coli,Norepinephrine,Bipolar disorder
+Escherichia coli,Norepinephrine,Autistic disorder
+Escherichia coli,Histamine,Depressive disorder
+Escherichia coli,Histamine,Sleep disorders
+Escherichia coli,Histamine,Bipolar disorder
+Escherichia coli,Histamine,Autistic disorder
+Escherichia coli,Histamine,Learning disorders
+Candida albicans,Serotonin,Anxiety disorders
+Candida albicans,Serotonin,Depressive disorder
+Candida albicans,Serotonin,Sleep disorders
+Candida albicans,Serotonin,Eating disorders
+Candida albicans,Serotonin,Sex behavior disorder
+Candida albicans,Serotonin,Personality disorder
+Candida albicans,Serotonin,Bipolar disorder
+Candida albicans,Serotonin,Autistic disorder
+Candida albicans,Serotonin,Cognition disorders
+Candida albicans,Serotonin,Learning disorder
+Lactococcus lactis subsp lactis,Serotonin,Anxiety disorders
+Lactococcus lactis subsp lactis,Serotonin,Depressive disorder
+Lactococcus lactis subsp lactis,Serotonin,Sleep disorders
+Lactococcus lactis subsp lactis,Serotonin,Eating disorders
+Lactococcus lactis subsp lactis,Serotonin,Sex behavior disorder
+Lactococcus lactis subsp lactis,Serotonin,Personality disorder
+Lactococcus lactis subsp lactis,Serotonin,Bipolar disorder
+Lactococcus lactis subsp lactis,Serotonin,Autistic disorder
+Lactococcus lactis subsp lactis,Serotonin,Cognition disorders
+Lactococcus lactis subsp lactis,Serotonin,Learning disorder
+Lactococcus lactis subsp cremoris,Serotonin,Anxiety disorders
+Lactococcus lactis subsp cremoris,Serotonin,Depressive disorder
+Lactococcus lactis subsp cremoris,Serotonin,Sleep disorders
+Lactococcus lactis subsp cremoris,Serotonin,Eating disorders
+Lactococcus lactis subsp cremoris,Serotonin,Sex behavior disorder
+Lactococcus lactis subsp cremoris,Serotonin,Personality disorder
+Lactococcus lactis subsp cremoris,Serotonin,Bipolar disorder
+Lactococcus lactis subsp cremoris,Serotonin,Autistic disorder
+Lactococcus lactis subsp cremoris,Serotonin,Cognition disorders
+Lactococcus lactis subsp cremoris,Serotonin,Learning disorder
+Streptococcus thermophilus,Serotonin,Anxiety disorders
+Streptococcus thermophilus,Serotonin,Depressive disorder
+Streptococcus thermophilus,Serotonin,Sleep disorders
+Streptococcus thermophilus,Serotonin,Eating disorders
+Streptococcus thermophilus,Serotonin,Sex behavior disorder
+Streptococcus thermophilus,Serotonin,Personality disorder
+Streptococcus thermophilus,Serotonin,Bipolar disorder
+Streptococcus thermophilus,Serotonin,Autistic disorder
+Streptococcus thermophilus,Serotonin,Cognition disorders
+Streptococcus thermophilus,Serotonin,Learning disorder
+Streptococcus thermophilus,Dopamine,Anxiety disorders
+Streptococcus thermophilus,Dopamine,Depressive disorder
+Streptococcus thermophilus,Dopamine,Sleep disorders
+Streptococcus thermophilus,Dopamine,Eating disorders
+Streptococcus thermophilus,Dopamine,Sex behavior disorder
+Streptococcus thermophilus,Dopamine,Personality disorder
+Streptococcus thermophilus,Dopamine,Bipolar disorder
+Streptococcus thermophilus,Dopamine,Autistic disorder
+Streptococcus thermophilus,Dopamine,Cognition disorders
+Streptococcus thermophilus,Histamine,Depressive disorder
+Streptococcus thermophilus,Histamine,Sleep disorders
+Streptococcus thermophilus,Histamine,Bipolar disorder
+Streptococcus thermophilus,Histamine,Autistic disorder
+Streptococcus thermophilus,Histamine,Learning disorders
+Enterococcus faecalis,Serotonin,Anxiety disorders
+Enterococcus faecalis,Serotonin,Depressive disorder
+Enterococcus faecalis,Serotonin,Sleep disorders
+Enterococcus faecalis,Serotonin,Eating disorders
+Enterococcus faecalis,Serotonin,Sex behavior disorder
+Enterococcus faecalis,Serotonin,Personality disorder
+Enterococcus faecalis,Serotonin,Bipolar disorder
+Enterococcus faecalis,Serotonin,Autistic disorder
+Enterococcus faecalis,Serotonin,Cognition disorders
+Enterococcus faecalis,Serotonin,Learning disorder
+Candida guilliermondii,Serotonin,Anxiety disorders
+Candida guilliermondii,Serotonin,Depressive disorder
+Candida guilliermondii,Serotonin,Sleep disorders
+Candida guilliermondii,Serotonin,Eating disorders
+Candida guilliermondii,Serotonin,Sex behavior disorder
+Candida guilliermondii,Serotonin,Personality disorder
+Candida guilliermondii,Serotonin,Bipolar disorder
+Candida guilliermondii,Serotonin,Autistic disorder
+Candida guilliermondii,Serotonin,Cognition disorders
+Candida guilliermondii,Serotonin,Learning disorder
+Rhodospirillum rubrum,Serotonin,Anxiety disorders
+Rhodospirillum rubrum,Serotonin,Depressive disorder
+Rhodospirillum rubrum,Serotonin,Sleep disorders
+Rhodospirillum rubrum,Serotonin,Eating disorders
+Rhodospirillum rubrum,Serotonin,Sex behavior disorder
+Rhodospirillum rubrum,Serotonin,Personality disorder
+Rhodospirillum rubrum,Serotonin,Bipolar disorder
+Rhodospirillum rubrum,Serotonin,Autistic disorder
+Rhodospirillum rubrum,Serotonin,Cognition disorders
+Rhodospirillum rubrum,Serotonin,Learning disorder
+Saccharomyces cerevisiae,Serotonin,Anxiety disorders
+Saccharomyces cerevisiae,Serotonin,Depressive disorder
+Saccharomyces cerevisiae,Serotonin,Sleep disorders
+Saccharomyces cerevisiae,Serotonin,Eating disorders
+Saccharomyces cerevisiae,Serotonin,Sex behavior disorder
+Saccharomyces cerevisiae,Serotonin,Personality disorder
+Saccharomyces cerevisiae,Serotonin,Bipolar disorder
+Saccharomyces cerevisiae,Serotonin,Autistic disorder
+Saccharomyces cerevisiae,Serotonin,Cognition disorders
+Saccharomyces cerevisiae,Serotonin,Learning disorder
+Saccharomyces cerevisiae,Dopamine,Anxiety disorders
+Saccharomyces cerevisiae,Dopamine,Depressive disorder
+Saccharomyces cerevisiae,Dopamine,Sleep disorders
+Saccharomyces cerevisiae,Dopamine,Eating disorders
+Saccharomyces cerevisiae,Dopamine,Sex behavior disorder
+Saccharomyces cerevisiae,Dopamine,Personality disorder
+Saccharomyces cerevisiae,Dopamine,Bipolar disorder
+Saccharomyces cerevisiae,Dopamine,Autistic disorder
+Saccharomyces cerevisiae,Dopamine,Cognition disorders
+Saccharomyces cerevisiae,Histamine,Depressive disorder
+Saccharomyces cerevisiae,Histamine,Sleep disorders
+Saccharomyces cerevisiae,Histamine,Bipolar disorder
+Saccharomyces cerevisiae,Histamine,Autistic disorder
+Saccharomyces cerevisiae,Histamine,Learning disorders
+Clostridium,Dopamine,Anxiety disorders
+Clostridium,Dopamine,Depressive disorder
+Clostridium,Dopamine,Sleep disorders
+Clostridium,Dopamine,Eating disorders
+Clostridium,Dopamine,Sex behavior disorder
+Clostridium,Dopamine,Personality disorder
+Clostridium,Dopamine,Bipolar disorder
+Clostridium,Dopamine,Autistic disorder
+Clostridium,Dopamine,Cognition disorders
+Clostridium,Norepinephrine,Anxiety disorders
+Clostridium,Norepinephrine,Depressive disorder
+Clostridium,Norepinephrine,Sleep disorders
+Clostridium,Norepinephrine,Sex behavior disorder
+Clostridium,Norepinephrine,Personality disorder
+Clostridium,Norepinephrine,Bipolar disorder
+Clostridium,Norepinephrine,Autistic disorder
+Bacillus mycoides,Dopamine,Anxiety disorders
+Bacillus mycoides,Dopamine,Depressive disorder
+Bacillus mycoides,Dopamine,Sleep disorders
+Bacillus mycoides,Dopamine,Eating disorders
+Bacillus mycoides,Dopamine,Sex behavior disorder
+Bacillus mycoides,Dopamine,Personality disorder
+Bacillus mycoides,Dopamine,Bipolar disorder
+Bacillus mycoides,Dopamine,Autistic disorder
+Bacillus mycoides,Dopamine,Cognition disorders
+Bacillus mycoides,Norepinephrine,Anxiety disorders
+Bacillus mycoides,Norepinephrine,Depressive disorder
+Bacillus mycoides,Norepinephrine,Sleep disorders
+Bacillus mycoides,Norepinephrine,Sex behavior disorder
+Bacillus mycoides,Norepinephrine,Personality disorder
+Bacillus mycoides,Norepinephrine,Bipolar disorder
+Bacillus mycoides,Norepinephrine,Autistic disorder
+Bacillus subtilis,Dopamine,Anxiety disorders
+Bacillus subtilis,Dopamine,Depressive disorder
+Bacillus subtilis,Dopamine,Sleep disorders
+Bacillus subtilis,Dopamine,Eating disorders
+Bacillus subtilis,Dopamine,Sex behavior disorder
+Bacillus subtilis,Dopamine,Personality disorder
+Bacillus subtilis,Dopamine,Bipolar disorder
+Bacillus subtilis,Dopamine,Autistic disorder
+Bacillus subtilis,Dopamine,Cognition disorders
+Bacillus subtilis,Norepinephrine,Anxiety disorders
+Bacillus subtilis,Norepinephrine,Depressive disorder
+Bacillus subtilis,Norepinephrine,Sleep disorders
+Bacillus subtilis,Norepinephrine,Sex behavior disorder
+Bacillus subtilis,Norepinephrine,Personality disorder
+Bacillus subtilis,Norepinephrine,Bipolar disorder
+Bacillus subtilis,Norepinephrine,Autistic disorder
+Proteus vulgaris,Dopamine,Anxiety disorders
+Proteus vulgaris,Dopamine,Depressive disorder
+Proteus vulgaris,Dopamine,Sleep disorders
+Proteus vulgaris,Dopamine,Eating disorders
+Proteus vulgaris,Dopamine,Sex behavior disorder
+Proteus vulgaris,Dopamine,Personality disorder
+Proteus vulgaris,Dopamine,Bipolar disorder
+Proteus vulgaris,Dopamine,Autistic disorder
+Proteus vulgaris,Dopamine,Cognition disorders
+Proteus vulgaris,Norepinephrine,Anxiety disorders
+Proteus vulgaris,Norepinephrine,Depressive disorder
+Proteus vulgaris,Norepinephrine,Sleep disorders
+Proteus vulgaris,Norepinephrine,Sex behavior disorder
+Proteus vulgaris,Norepinephrine,Personality disorder
+Proteus vulgaris,Norepinephrine,Bipolar disorder
+Proteus vulgaris,Norepinephrine,Autistic disorder
+Staphylococcus aureus,Dopamine,Anxiety disorders
+Staphylococcus aureus,Dopamine,Depressive disorder
+Staphylococcus aureus,Dopamine,Sleep disorders
+Staphylococcus aureus,Dopamine,Eating disorders
+Staphylococcus aureus,Dopamine,Sex behavior disorder
+Staphylococcus aureus,Dopamine,Personality disorder
+Staphylococcus aureus,Dopamine,Bipolar disorder
+Staphylococcus aureus,Dopamine,Autistic disorder
+Staphylococcus aureus,Dopamine,Cognition disorders
+Serratia marcescens,Dopamine,Anxiety disorders
+Serratia marcescens,Dopamine,Depressive disorder
+Serratia marcescens,Dopamine,Sleep disorders
+Serratia marcescens,Dopamine,Eating disorders
+Serratia marcescens,Dopamine,Sex behavior disorder
+Serratia marcescens,Dopamine,Personality disorder
+Serratia marcescens,Dopamine,Bipolar disorder
+Serratia marcescens,Dopamine,Autistic disorder
+Serratia marcescens,Dopamine,Cognition disorders
+Serratia marcescens,Norepinephrine,Anxiety disorders
+Serratia marcescens,Norepinephrine,Depressive disorder
+Serratia marcescens,Norepinephrine,Sleep disorders
+Serratia marcescens,Norepinephrine,Sex behavior disorder
+Serratia marcescens,Norepinephrine,Personality disorder
+Serratia marcescens,Norepinephrine,Bipolar disorder
+Serratia marcescens,Norepinephrine,Autistic disorder
+Bacillus,Dopamine,Anxiety disorders
+Bacillus,Dopamine,Depressive disorder
+Bacillus,Dopamine,Sleep disorders
+Bacillus,Dopamine,Eating disorders
+Bacillus,Dopamine,Sex behavior disorder
+Bacillus,Dopamine,Personality disorder
+Bacillus,Dopamine,Bipolar disorder
+Bacillus,Dopamine,Autistic disorder
+Bacillus,Dopamine,Cognition disorders
+Yersinia enterocolitica,Dopamine,Anxiety disorders
+Yersinia enterocolitica,Dopamine,Depressive disorder
+Yersinia enterocolitica,Dopamine,Sleep disorders
+Yersinia enterocolitica,Dopamine,Eating disorders
+Yersinia enterocolitica,Dopamine,Sex behavior disorder
+Yersinia enterocolitica,Dopamine,Personality disorder
+Yersinia enterocolitica,Dopamine,Bipolar disorder
+Yersinia enterocolitica,Dopamine,Autistic disorder
+Yersinia enterocolitica,Dopamine,Cognition disorders
+Yersinia enterocolitica,Norepinephrine,Anxiety disorders
+Yersinia enterocolitica,Norepinephrine,Depressive disorder
+Yersinia enterocolitica,Norepinephrine,Sleep disorders
+Yersinia enterocolitica,Norepinephrine,Sex behavior disorder
+Yersinia enterocolitica,Norepinephrine,Personality disorder
+Yersinia enterocolitica,Norepinephrine,Bipolar disorder
+Yersinia enterocolitica,Norepinephrine,Autistic disorder
+Salmonella enterica,Dopamine,Anxiety disorders
+Salmonella enterica,Dopamine,Depressive disorder
+Salmonella enterica,Dopamine,Sleep disorders
+Salmonella enterica,Dopamine,Eating disorders
+Salmonella enterica,Dopamine,Sex behavior disorder
+Salmonella enterica,Dopamine,Personality disorder
+Salmonella enterica,Dopamine,Bipolar disorder
+Salmonella enterica,Dopamine,Autistic disorder
+Salmonella enterica,Dopamine,Cognition disorders
+Salmonella enterica,Norepinephrine,Anxiety disorders
+Salmonella enterica,Norepinephrine,Depressive disorder
+Salmonella enterica,Norepinephrine,Sleep disorders
+Salmonella enterica,Norepinephrine,Sex behavior disorder
+Salmonella enterica,Norepinephrine,Personality disorder
+Salmonella enterica,Norepinephrine,Bipolar disorder
+Salmonella enterica,Norepinephrine,Autistic disorder
+Pseudomonas aeruginosa,Norepinephrine,Anxiety disorders
+Pseudomonas aeruginosa,Norepinephrine,Depressive disorder
+Pseudomonas aeruginosa,Norepinephrine,Sleep disorders
+Pseudomonas aeruginosa,Norepinephrine,Sex behavior disorder
+Pseudomonas aeruginosa,Norepinephrine,Personality disorder
+Pseudomonas aeruginosa,Norepinephrine,Bipolar disorder
+Pseudomonas aeruginosa,Norepinephrine,Autistic disorder
+Oscillibacter,GABA,Anxiety disorders
+Oscillibacter,GABA,Depressive disorder
+Oscillibacter,GABA,Sleep disorders
+Oscillibacter,GABA,Personality disorder
+Oscillibacter,GABA,Bipolar disorder
+Oscillibacter,GABA,Autistic disorder
+Oscillibacter,GABA,Learning disorder
+Bacteroides,GABA,Anxiety disorders
+Bacteroides,GABA,Depressive disorder
+Bacteroides,GABA,Sleep disorders
+Bacteroides,GABA,Personality disorder
+Bacteroides,GABA,Bipolar disorder
+Bacteroides,GABA,Autistic disorder
+Bacteroides,GABA,Learning disorder
+Escherichia,GABA,Anxiety disorders
+Escherichia,GABA,Depressive disorder
+Escherichia,GABA,Sleep disorders
+Escherichia,GABA,Personality disorder
+Escherichia,GABA,Bipolar disorder
+Escherichia,GABA,Autistic disorder
+Escherichia,GABA,Learning disorder
+Parabacteroides,GABA,Anxiety disorders
+Parabacteroides,GABA,Depressive disorder
+Parabacteroides,GABA,Sleep disorders
+Parabacteroides,GABA,Personality disorder
+Parabacteroides,GABA,Bipolar disorder
+Parabacteroides,GABA,Autistic disorder
+Parabacteroides,GABA,Learning disorder
+Lactobacillus reuteri,GABA,Anxiety disorders
+Lactobacillus reuteri,GABA,Depressive disorder
+Lactobacillus reuteri,GABA,Sleep disorders
+Lactobacillus reuteri,GABA,Personality disorder
+Lactobacillus reuteri,GABA,Bipolar disorder
+Lactobacillus reuteri,GABA,Autistic disorder
+Lactobacillus reuteri,GABA,Learning disorder
+Bifidobacterium dentium,GABA,Anxiety disorders
+Bifidobacterium dentium,GABA,Depressive disorder
+Bifidobacterium dentium,GABA,Sleep disorders
+Bifidobacterium dentium,GABA,Personality disorder
+Bifidobacterium dentium,GABA,Bipolar disorder
+Bifidobacterium dentium,GABA,Autistic disorder
+Bifidobacterium dentium,GABA,Learning disorder
+Lactobacillus rhamnosus,GABA,Anxiety disorders
+Lactobacillus rhamnosus,GABA,Depressive disorder
+Lactobacillus rhamnosus,GABA,Sleep disorders
+Lactobacillus rhamnosus,GABA,Personality disorder
+Lactobacillus rhamnosus,GABA,Bipolar disorder
+Lactobacillus rhamnosus,GABA,Autistic disorder
+Lactobacillus rhamnosus,GABA,Learning disorder
+Lactobacillus brevis,GABA,Anxiety disorders
+Lactobacillus brevis,GABA,Depressive disorder
+Lactobacillus brevis,GABA,Sleep disorders
+Lactobacillus brevis,GABA,Personality disorder
+Lactobacillus brevis,GABA,Bipolar disorder
+Lactobacillus brevis,GABA,Autistic disorder
+Lactobacillus brevis,GABA,Learning disorder
+Lactobacillus buchneri,GABA,Anxiety disorders
+Lactobacillus buchneri,GABA,Depressive disorder
+Lactobacillus buchneri,GABA,Sleep disorders
+Lactobacillus buchneri,GABA,Personality disorder
+Lactobacillus buchneri,GABA,Bipolar disorder
+Lactobacillus buchneri,GABA,Autistic disorder
+Lactobacillus buchneri,GABA,Learning disorder
+Lactobacillus paracasei,GABA,Anxiety disorders
+Lactobacillus paracasei,GABA,Depressive disorder
+Lactobacillus paracasei,GABA,Sleep disorders
+Lactobacillus paracasei,GABA,Personality disorder
+Lactobacillus paracasei,GABA,Bipolar disorder
+Lactobacillus paracasei,GABA,Autistic disorder
+Lactobacillus paracasei,GABA,Learning disorder
+Lactobacillus delbrueckii,GABA,Anxiety disorders
+Lactobacillus delbrueckii,GABA,Depressive disorder
+Lactobacillus delbrueckii,GABA,Sleep disorders
+Lactobacillus delbrueckii,GABA,Personality disorder
+Lactobacillus delbrueckii,GABA,Bipolar disorder
+Lactobacillus delbrueckii,GABA,Autistic disorder
+Lactobacillus delbrueckii,GABA,Learning disorder
+Monascus purpureus,GABA,Anxiety disorders
+Monascus purpureus,GABA,Depressive disorder
+Monascus purpureus,GABA,Sleep disorders
+Monascus purpureus,GABA,Personality disorder
+Monascus purpureus,GABA,Bipolar disorder
+Monascus purpureus,GABA,Autistic disorder
+Monascus purpureus,GABA,Learning disorder
+Streptococcus salivarius,GABA,Anxiety disorders
+Streptococcus salivarius,GABA,Depressive disorder
+Streptococcus salivarius,GABA,Sleep disorders
+Streptococcus salivarius,GABA,Personality disorder
+Streptococcus salivarius,GABA,Bipolar disorder
+Streptococcus salivarius,GABA,Autistic disorder
+Streptococcus salivarius,GABA,Learning disorder
+Lactobacillus vaginalis,Histamine,Depressive disorder
+Lactobacillus vaginalis,Histamine,Sleep disorders
+Lactobacillus vaginalis,Histamine,Bipolar disorder
+Lactobacillus vaginalis,Histamine,Autistic disorder
+Lactobacillus vaginalis,Histamine,Learning disorders

@@ -1,0 +1,21 @@
+no,aspect,question,paper_answer,ourkg,basis,expert_consensus
+0,food categories,Lists of fruits which contains Lysine,"Melons, oranges, strawberries, etc",△,"FDC 14,719 음식 / SR 27군. FoodOn·Chinese Food Ontology 미통합이라 온톨로지 계층 질문은 답하지 못한다",1
+1,food categories,The food categories of the cola,"Soft drinks, beverages",△,"FDC 14,719 음식 / SR 27군. FoodOn·Chinese Food Ontology 미통합이라 온톨로지 계층 질문은 답하지 못한다",1
+2,food categories,The food categories of the soy milk,"Milk substitutes, beverages",△,"FDC 14,719 음식 / SR 27군. FoodOn·Chinese Food Ontology 미통합이라 온톨로지 계층 질문은 답하지 못한다",1
+3,food categories,The lists of baby food,"Carrots(baby food), plums(baby food), etc",△,"FDC 14,719 음식 / SR 27군. FoodOn·Chinese Food Ontology 미통합이라 온톨로지 계층 질문은 답하지 못한다",1
+4,compounds in food and gut,The weight of folate that peach pie can provides in gut,0.046mg/100g,O,FDC 성분 + KEGG compound-미생물 경로,1
+5,compounds in food and gut,The difference of retinol between milk and yogurt,"0.127mg/100g milk, 0.702mg/100g yogurt",O,FDC 성분 + KEGG compound-미생물 경로,1
+6,compounds in food and gut,The weight of citric acid can Adlercreutzia equolifaciens taken from grape juice,309mg/100g,O,FDC 성분 + KEGG compound-미생물 경로,1
+7,compounds in food and gut,The weight of ascorbic acid can Bifidobacterium longum taken from lettuce,15mg/100g,O,FDC 성분 + KEGG compound-미생물 경로,1
+8,weight calculation,The rank of Potassium weight in food,"Beans, Egg whites, Almonds, etc",O,"성분 중량 768,157 건 (g/100g)",1
+9,weight calculation,The weight of Vitamin B12 in mixed diet orange and sausage,0.072mg/200g,O,"성분 중량 768,157 건 (g/100g)",1
+10,weight calculation,The weight of Vitamin B6 in egg and whole milk,6.591mg/200g,O,"성분 중량 768,157 건 (g/100g)",1
+11,disease classification,The microbial related mental disorders,"Autistic disorder, developmental disorder, etc",△,MeSH tree number 244 질환. SNOMED CT 미통합,1
+12,disease classification,The difference between depression and autistic disorder,Depression(Mood disorder) / Autistic disorder(developmental disorder),△,MeSH tree number 244 질환. SNOMED CT 미통합,0
+13,disease classification,The list of diseases in mental disorders,"Eating disorder, bipolar disorder, etc",△,MeSH tree number 244 질환. SNOMED CT 미통합,1
+14,compounds categories,The vitamins may have effects on depression,"Vitamin B1-B5, VC, VE, etc",O,KEGG compound 130,0
+15,compounds categories,The alkaloids involved from food,"Caffeine, theobromine, etc",O,KEGG compound 130,0
+16,compounds categories,The categories of biological compounds,"Peptides, alkaloids, etc",O,KEGG compound 130,1
+17,bacteria taxonomy,The Bacteroides may have effects on depression,"Bacteroides ovatus, vulgatus, fragilis",O,NCBI taxonomy 127 종 (학명·계통·rank 갱신),1
+18,bacteria taxonomy,The taxonomy tree of Escherichia coli,"Escherichia, Enterobacteriaceae, etc",O,NCBI taxonomy 127 종 (학명·계통·rank 갱신),1
+19,bacteria taxonomy,The top 3 genus of bacteria related to disease,"Streptococcus, Bacteroides, Prevotella",O,NCBI taxonomy 127 종 (학명·계통·rank 갱신),0

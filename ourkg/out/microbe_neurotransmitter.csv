@@ -1,0 +1,83 @@
+microbe,neurotransmitter,nt_kegg,modulation,pmids
+Bacillus cereus,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Valles2019
+Bacillus cereus,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Tsavkelova2000
+Burkholderia oklahomensis,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Valles2019
+Burkholderia oklahomensis,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Valles2019
+Acinetobacter baumannii,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Valles2019
+Acinetobacter baumannii,Histamine,C00388,Increase,http://ztonebv.com/MiKG#Valles2019
+Paenibacillus,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Valles2019
+Coprococcus,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Valles2019
+Fusobacterium varium,Histamine,C00388,Increase,http://ztonebv.com/MiKG#Valles2019
+Fusobacterium ulcerans,Histamine,C00388,Increase,http://ztonebv.com/MiKG#Valles2019
+Bacteroides fragilis,Histamine,C00388,Increase,http://ztonebv.com/MiKG#Valles2019
+Acetomicrobium hydrogeniformans,Acetylcholine,C01996,Increase,http://ztonebv.com/MiKG#
+Lactobacillus plantarum,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Liu2016
+Lactobacillus plantarum,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Liu2016
+Lactobacillus plantarum,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Ozogul2012
+Lactobacillus plantarum,GABA,C00334,Increase,http://ztonebv.com/MiKG#Siragus2007
+Lactobacillus plantarum,Acetylcholine,C01996,Increase,http://ztonebv.com/MiKG#Stanasze1997
+Bacteroides uniformis,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Yano2015
+Clostridium ramosum,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Mandic2019
+Hafnia alvei,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Ozogul2004
+Hafnia alvei,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Ozogul2004
+Klebsiella pneumoniae,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Ozogul2004
+Klebsiella pneumoniae,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Ozogul2004
+Morganella morganii,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Ozogul2004
+Morganella morganii,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Ozogul2004
+Morganella morganii,Histamine,C00388,Increase,http://ztonebv.com/MiKG#Kim2000
+Escherichia coli,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Shishov2009
+Escherichia coli,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Shishov2009
+Escherichia coli,Norepinephrine,C00547,Increase,http://ztonebv.com/MiKG#Shishov2009
+Escherichia coli,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Tsavkelova2000
+Escherichia coli,Dopamine,C03758,,http://ztonebv.com/MiKG#Freestone2007
+Escherichia coli,Norepinephrine,C00547,,http://ztonebv.com/MiKG#Freestone2007
+Escherichia coli,Histamine,C00388,Increase,http://ztonebv.com/MiKG#Scheffer1985
+Candida albicans,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Mayr2005
+Candida albicans,Serotonin,C00780,,http://ztonebv.com/MiKG#Mayr2005
+Lactococcus lactis subsp lactis,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Ozogul2012
+Lactococcus lactis subsp cremoris,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Ozogul2012
+Streptococcus thermophilus,Serotonin,C00780,Increase,http://ztonebv.com/MiKG#Gezginc2013
+Streptococcus thermophilus,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Gezginc2013
+Streptococcus thermophilus,Histamine,C00388,Increase,http://ztonebv.com/MiKG#Gezginc2013
+Enterococcus faecalis,Serotonin,C00780,,http://ztonebv.com/MiKG#Strakhovskaia1993
+Candida guilliermondii,Serotonin,C00780,,http://ztonebv.com/MiKG#Strakhovskaia1993
+Rhodospirillum rubrum,Serotonin,C00780,,http://ztonebv.com/MiKG#Oleskin1998
+Saccharomyces cerevisiae,Serotonin,C00780,,http://ztonebv.com/MiKG#Malikina2010
+Saccharomyces cerevisiae,Dopamine,C03758,,http://ztonebv.com/MiKG#Malikina2010
+Saccharomyces cerevisiae,Histamine,C00388,,http://ztonebv.com/MiKG#Malikina2010
+Clostridium,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Asano2012
+Clostridium,Norepinephrine,C00547,Increase,http://ztonebv.com/MiKG#Asano2012
+Bacillus mycoides,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Tsavkelova2000
+Bacillus mycoides,Norepinephrine,C00547,Increase,http://ztonebv.com/MiKG#Tsavkelova2000
+Bacillus subtilis,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Tsavkelova2000
+Bacillus subtilis,Norepinephrine,C00547,Increase,http://ztonebv.com/MiKG#Tsavkelova2000
+Proteus vulgaris,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Tsavkelova2000
+Proteus vulgaris,Norepinephrine,C00547,Increase,http://ztonebv.com/MiKG#Tsavkelova2000
+Staphylococcus aureus,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Tsavkelova2000
+Serratia marcescens,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Tsavkelova2000
+Serratia marcescens,Norepinephrine,C00547,Increase,http://ztonebv.com/MiKG#Tsavkelova2000
+Bacillus,Dopamine,C03758,Increase,http://ztonebv.com/MiKG#Lyte2011
+Yersinia enterocolitica,Dopamine,C03758,,http://ztonebv.com/MiKG#Freestone2007
+Yersinia enterocolitica,Norepinephrine,C00547,,http://ztonebv.com/MiKG#Freestone2007
+Salmonella enterica,Dopamine,C03758,,http://ztonebv.com/MiKG#Freestone2007
+Salmonella enterica,Norepinephrine,C00547,,http://ztonebv.com/MiKG#Freestone2007
+Pseudomonas aeruginosa,Norepinephrine,C00547,,http://ztonebv.com/MiKG#Hegde2009
+Oscillibacter,GABA,C00334,Increase,http://ztonebv.com/MiKG#Naseribafroue2014
+Bacteroides,GABA,C00334,Increase,http://ztonebv.com/MiKG#Strandwitz2019
+Escherichia,GABA,C00334,Increase,http://ztonebv.com/MiKG#Strandwitz2019
+Parabacteroides,GABA,C00334,Increase,http://ztonebv.com/MiKG#Strandwitz2019
+Lactobacillus reuteri,GABA,C00334,Increase,http://ztonebv.com/MiKG#Kunze2009
+Bifidobacterium dentium,GABA,C00334,Increase,http://ztonebv.com/MiKG#DeVadder2018
+Bifidobacterium dentium,GABA,C00334,Increase,http://ztonebv.com/MiKG#Pokusaeve2017
+Bifidobacterium dentium,GABA,C00334,Increase,http://ztonebv.com/MiKG#Barrett2012
+Lactobacillus rhamnosus,GABA,C00334,Increase,http://ztonebv.com/MiKG#Bravo2011
+Lactobacillus rhamnosus,GABA,C00334,Increase,http://ztonebv.com/MiKG#Siragus2007
+Lactobacillus brevis,GABA,C00334,Increase,http://ztonebv.com/MiKG#Barrett2012
+Lactobacillus brevis,GABA,C00334,Increase,http://ztonebv.com/MiKG#Wu2018
+Lactobacillus brevis,GABA,C00334,Increase,http://ztonebv.com/MiKG#Li2010
+Lactobacillus buchneri,GABA,C00334,Increase,http://ztonebv.com/MiKG#Cho2007
+Lactobacillus paracasei,GABA,C00334,Increase,http://ztonebv.com/MiKG#Komatsuzak2005
+Lactobacillus delbrueckii,GABA,C00334,Increase,http://ztonebv.com/MiKG#Siragus2007
+Monascus purpureus,GABA,C00334,Increase,http://ztonebv.com/MiKG#Su2003
+Streptococcus salivarius,GABA,C00334,Increase,http://ztonebv.com/MiKG#Yang2008
+Lactobacillus vaginalis,Histamine,C00388,Increase,http://ztonebv.com/MiKG#Diaz2015
