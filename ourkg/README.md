@@ -57,6 +57,7 @@ KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐�
 | | `external` | SMILES trial ModiMedDiet 로 외부 정답셋을 만든다 | `modimed_labels.csv` |
 | | `invert` | 그 라벨로 E 의 부호를 역추정하고 공개 소스 E 와 대조 | `compound_learned.csv`, `invert_comparison.csv` |
 | | `stype` | ProMENDA 를 연구 설계별로 나눠 E 를 만들고 외부 기준으로 채점 | `stype_comparison.csv` |
+| | `disagree` | 두 평가 기준이 갈리는 지점을 음식군별로 분해 | `disagreement_by_group.csv` |
 | | `evaluate` | §4.1 SPARQL Q1~Q3, §5.1 방법 1·2 | `eval_*.csv/json` |
 | `common.py` | — | 경로·단위 환산·라벨/카테고리 정규화 공유 | |
 | `run_all.py` | — | 위 둘을 순서대로 호출 | |
@@ -180,9 +181,14 @@ Complication 8건이 모두 확인된 것과 대비된다 — 논문이 쓴 MiKG
 - **ModiMedDiet** (Jacka et al. 2017 SMILES trial) — 우울증 RCT 에서 실제로
   처방된 식단. 출처가 독립인 외부 기준.
 
-두 기준이 **반대를 가리킨다** — §4.2.3 을 잘 맞추는 설정일수록 ModiMedDiet AUC 가
-나쁘다. 갈라지는 지점은 붉은 고기다(§4.2.3 은 비추천, ModiMedDiet 은 주 3-4회 처방).
-상세는 RESULTS.md §7.
+갈라지는 지점은 **붉은 고기 하나의 축**이다 — §4.2.3 은 비추천으로 두지만
+ModiMedDiet 은 lean red meat 를 주 3-4회 처방한다. 음식군별로 분해해 확인했다:
+충돌하는 군은 Beef 와 Lamb/Veal 둘뿐이고, 설정을 바꾸면 붉은 고기 세 군이
+바닥(17~21 백분위)에서 상위(72~81)로 통째로 올라간다 (§11 A·C).
+
+그리고 처방 **빈도**(채소 6회/일 vs 붉은 고기 주 3-4회)를 반영하면 두 기준의
+간극이 0.209 → 0.039 로 거의 사라지고, 기본값이 공개 소스 설정 중 최고가 된다
+(§11 D). 상세는 RESULTS.md §7·§11.
 
 왜 반대인지는 §8 에서 측정했다 — ProMENDA·MENDA 는 "우울증 환자에서 대사물 농도가
 높/낮다"를 재는 case-control 메타볼로믹스고, 논문 §4.2.1 의 `E` 는 "먹으면 완화/악화"

@@ -747,6 +747,23 @@ def modimed_labels(foods):
     return label, why
 
 
+# ModiMedDiet 은 **빈도** 처방이다. 채소 6회/일(주 42회)과 lean red meat 주 3-4회를
+# 같은 +1 로 두면 정답셋이 처방 강도를 잃는다(§11 D). MODIMED_POSITIVES 로 고른다.
+#   all        처방 12군 전부를 양성으로 (기본, §7 표가 이것이다)
+#   high_freq  매일 처방되는 군만 양성으로 — 채소·과일·통곡물·유제품·견과·올리브유
+LOW_FREQ_RULES = {'lean red meat 3-4/week', 'chicken 2-3/week', 'eggs <=6/week',
+                  'fish >=2/week', 'legumes 3-4/week'}
+
+
+def modimed_positives(res):
+    """양성 마스크를 MODIMED_POSITIVES 규약에 맞춰 돌려준다."""
+    lab, why = modimed_labels(res)
+    if os.environ.get('MODIMED_POSITIVES', 'all') == 'high_freq':
+        lab = lab.copy()
+        lab[(lab == 1) & why.isin(LOW_FREQ_RULES)] = 0
+    return lab
+
+
 def modimed_score(res, K):
     """추천 순위를 ModiMedDiet 정답셋으로 채점한다.
 
@@ -754,7 +771,7 @@ def modimed_score(res, K):
           0.5 가 무작위, 1.0 이 완전 분리. 해당 없음(0) 인 음식은 뺀다.
     Top K / Bottom K  각 끝에 처방군·extras 가 몇 개인지.
     """
-    lab, _ = modimed_labels(res)
+    lab = modimed_positives(res)
     pos = res.loc[lab == 1, 'score'].values
     neg = res.loc[lab == -1, 'score'].values
     if len(pos) == 0 or len(neg) == 0:
@@ -763,8 +780,8 @@ def modimed_score(res, K):
     u = mannwhitneyu(pos, neg, alternative='two-sided').statistic
     auc = u / (len(pos) * len(neg))
     top, bot = res.head(K), res.tail(K)
-    ltop, _ = modimed_labels(top)
-    lbot, _ = modimed_labels(bot)
+    ltop = modimed_positives(top)
+    lbot = modimed_positives(bot)
     return {
         'modimed_AUC': round(float(auc), 3),
         f'top{K}_처방군': int((ltop == 1).sum()),
@@ -1124,9 +1141,127 @@ def stype():
     print(f'  Bottom{K} 끝 음식: {bot["food_name"].iloc[-1][:50]}')
 
 
+def disagree():
+    """두 평가 기준이 어디서 갈리는지 음식군별로 분해한다.
+
+    §7 에서 "§4.2.3 을 잘 맞추는 설정일수록 ModiMedDiet AUC 가 나쁘다"를 보고,
+    그 이유를 "붉은 고기 때문"이라고 적었다. 서술이지 측정이 아니었다. 여기서 잰다.
+
+    세 가지를 낸다.
+      A  음식군별로 두 기준이 무엇이라 말하는가 (라벨 교차표)
+      B  음식군을 하나씩 빼고 ModiMedDiet AUC 를 다시 재서 영향력을 본다
+         (leave-one-group-out). 뺐을 때 AUC 가 오르면 그 군이 깎고 있던 것이다.
+      C  §4.2.3 최적 설정(shrunk)과 ModiMedDiet 최적 설정(learned)에서
+         음식군의 평균 순위 백분위가 얼마나 움직이는가
+
+    출력
+      out/disagreement_by_group.csv
+    """
+    from sklearn.metrics import roc_auc_score
+
+    REC_OK = {'Finfish and Shellfish Products', 'Fruits and Fruit Juices',
+              'Vegetables and Vegetable Products'}
+    NOT_OK = {'Sausages and Luncheon Meats', 'Baked Products', 'Sweets',
+              'Beef Products', 'Pork Products', 'Lamb, Veal, and Game Products'}
+
+    print('[1/3] 두 설정의 순위')
+    r_shrunk = recommend(e_mode='shrunk', save=False)
+    r_learned = recommend(e_mode='learned', save=False)
+    for r in (r_shrunk, r_learned):
+        r['pct'] = 100.0 * (1 - r['rank'] / len(r))     # 100 = 최상위
+
+    base = r_shrunk[['food_key', 'food_name', 'food_group', 'score', 'pct']].copy()
+    base = base.rename(columns={'score': 'score_shrunk', 'pct': 'pct_shrunk'})
+    base = base.merge(
+        r_learned[['food_key', 'score', 'pct']].rename(
+            columns={'score': 'score_learned', 'pct': 'pct_learned'}),
+        on='food_key')
+    lab, _ = modimed_labels(base)
+    base['modimed'] = lab.values
+
+    print('[2/3] A — 음식군별 두 기준의 말')
+    rows = []
+    sub = base[base['modimed'] != 0]
+    y_all = (sub['modimed'] == 1).astype(int).values
+    auc_s = roc_auc_score(y_all, sub['score_shrunk'].values)
+    auc_l = roc_auc_score(y_all, sub['score_learned'].values)
+    print(f'  전체 ModiMedDiet AUC — shrunk {auc_s:.3f} / learned {auc_l:.3f}')
+
+    for g, part in base.groupby('food_group'):
+        p = int((part['modimed'] == 1).sum())
+        e = int((part['modimed'] == -1).sum())
+        n = int((part['modimed'] == 0).sum())
+        paper = ('추천군' if g in REC_OK else
+                 ('비추천군' if g in NOT_OK else '-'))
+        # B — 이 군을 빼고 다시 잰 AUC
+        keep = sub['food_group'] != g
+        d_s = d_l = float('nan')
+        yk = (sub.loc[keep, 'modimed'] == 1).astype(int).values
+        if len(set(yk)) == 2:
+            d_s = roc_auc_score(yk, sub.loc[keep, 'score_shrunk'].values) - auc_s
+            d_l = roc_auc_score(yk, sub.loc[keep, 'score_learned'].values) - auc_l
+        rows.append({
+            'food_group': g, 'n': len(part),
+            'paper_§4.2.3': paper,
+            'modimed_처방': p, 'modimed_extras': e, 'modimed_미분류': n,
+            'conflict': ('O' if (paper == '비추천군' and p > e)
+                         or (paper == '추천군' and e > p) else ''),
+            'pct_shrunk': round(part['pct_shrunk'].mean(), 1),
+            'pct_learned': round(part['pct_learned'].mean(), 1),
+            'pct_이동': round(part['pct_learned'].mean() - part['pct_shrunk'].mean(), 1),
+            'drop_dAUC_shrunk': round(d_s, 4),
+            'drop_dAUC_learned': round(d_l, 4),
+        })
+    tab = pd.DataFrame(rows).sort_values('n', ascending=False)
+    tab.to_csv(os.path.join(OUT, 'disagreement_by_group.csv'), index=False)
+
+    print('\n  두 기준이 충돌하는 음식군 (논문은 비추천인데 ModiMedDiet 은 처방 우세)')
+    conf = tab[tab['conflict'] == 'O']
+    cols = ['food_group', 'n', 'paper_§4.2.3', 'modimed_처방', 'modimed_extras',
+            'modimed_미분류']
+    print(conf[cols].to_string(index=False) if len(conf) else '  없음')
+
+    print('\n[3/3] B — 음식군을 빼면 ModiMedDiet AUC 가 얼마나 움직이나')
+    print('  (양수 = 그 군을 빼면 AUC 가 오른다 = 그 군이 깎고 있었다)')
+    inf = tab.reindex(tab['drop_dAUC_shrunk'].abs().sort_values(
+        ascending=False).index).head(8)
+    print(f'    {"food_group":36s} {"n":>5s} {"shrunk":>9s} {"learned":>9s}')
+    for _, r in inf.iterrows():
+        print(f'    {r.food_group[:36]:36s} {r.n:5d} '
+              f'{r.drop_dAUC_shrunk:+9.4f} {r.drop_dAUC_learned:+9.4f}')
+
+    # ------------------------------------------------------------------
+    # D — 정답셋 자체의 결함 점검: ModiMedDiet 은 **빈도** 처방이다.
+    #     채소 6회/일(주 42회) 과 lean red meat 주 3-4회를 우리 라벨은 똑같이
+    #     +1 로 둔다. 충돌이 전부 붉은 고기에서 나온다면, 저빈도 처방군을
+    #     양성에서 빼도 결론이 유지되는지 봐야 한다.
+    # ------------------------------------------------------------------
+    LOW_FREQ = {'lean red meat 3-4/week', 'chicken 2-3/week', 'eggs <=6/week',
+                'fish >=2/week', 'legumes 3-4/week'}
+    print('\n  D — 저빈도 처방군을 양성에서 빼면 (ModiMedDiet 은 빈도 처방이다)')
+    _, why_all = modimed_labels(base)
+    hi = base['modimed'].values.copy()
+    hi[(base['modimed'].values == 1) & why_all.isin(LOW_FREQ).values] = 0
+    sub2 = base[hi != 0]
+    y2 = (hi[hi != 0] == 1).astype(int)
+    a_s2 = roc_auc_score(y2, sub2['score_shrunk'].values)
+    a_l2 = roc_auc_score(y2, sub2['score_learned'].values)
+    print(f'    고빈도 처방군(채소·과일·통곡물·유제품·견과·올리브유) {int(y2.sum()):,} '
+          f'vs extras {int((1-y2).sum()):,}')
+    print(f'    AUC — shrunk {a_s2:.3f} (전체 {auc_s:.3f}) / '
+          f'learned {a_l2:.3f} (전체 {auc_l:.3f})')
+
+    print('\n  C — 순위 백분위가 가장 많이 움직인 음식군 (shrunk -> learned)')
+    mv = tab.reindex(tab['pct_이동'].abs().sort_values(ascending=False).index).head(8)
+    print(f'    {"food_group":36s} {"n":>5s} {"shrunk":>7s} {"learned":>8s} {"이동":>7s}')
+    for _, r in mv.iterrows():
+        print(f'    {r.food_group[:36]:36s} {r.n:5d} '
+              f'{r.pct_shrunk:7.1f} {r.pct_learned:8.1f} {r.pct_이동:+7.1f}')
+
+
 STEPS = {'recommend': recommend, 'compare': compare, 'external': external,
-         'invert': invert, 'stype': stype, 'pathcheck': pathcheck,
-         'evaluate': evaluate}
+         'invert': invert, 'stype': stype, 'disagree': disagree,
+         'pathcheck': pathcheck, 'evaluate': evaluate}
 
 
 def main(argv):
