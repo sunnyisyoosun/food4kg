@@ -653,6 +653,67 @@ def kg():
         n_rel += 1
     print(f'  compound {len(food_cpds)} / depression 극성 관계 {n_rel}')
 
+    # --- 근거별 극성과 결합값 (build.py evidence 의 산출물)
+    #
+    # 위의 hasPositive/NegativeAssociation 은 ProMENDA 단독 극성이다 —
+    # 논문 §3.1 이 MENDA 한 소스로 E 를 만든 것과 같은 구조다.
+    # 근거가 여럿일 때 그것을 KG 안에서 추적할 수 있어야 하므로,
+    # 소스마다 근거 노드를 하나 두고(논문이 중량에 쓰는 reification 과 같은 꼴:
+    # npq:hasNutrientWeights -> 노드 -> rdf:value) 점수와 출처를 단다.
+    # 결합값 여섯 가지는 compound 에 직접 리터럴로 붙인다.
+    ev_path = os.path.join(OUT, 'compound_evidence.csv')
+    if os.path.exists(ev_path):
+        ev = pd.read_csv(ev_path)
+        SOURCES = ['promenda', 'menda', 'rules', 'afs']
+        SOURCE_META = {
+            'promenda': ('ProMENDA (Pu et al. 2024)', 1.0),
+            'menda': ('MENDA (Pu et al. 2020)', 0.6),
+            'rules': ('재현 파이프라인 85 compound 극성', 0.4),
+            'afs': ('Antidepressant Food Score (LaChance & Ramsey 2018)', 0.5),
+        }
+        COMBINED = ['e_weighted', 'e_priority', 'e_vote',
+                    'e_weighted_norules', 'e_priority_norules', 'e_vote_norules']
+        for name, (label, weight) in SOURCE_META.items():
+            su = NS['our'] + 'source/' + name
+            W.t(su, A, NS['ent'] + 'EvidenceSource', 'evidence')
+            W.t(su, LABEL, label, 'evidence', literal=True)
+            W.t(su, NS['our'] + 'sourceWeight', f'{weight:g}', 'evidence',
+                literal=True, dtype='double')
+
+        n_ev, n_comb = 0, 0
+        for _, r in ev.iterrows():
+            cu = NS['kegg'] + r['kegg']
+            for name in SOURCES:
+                score = float(r.get(f'{name}_score', 0) or 0)
+                if score == 0:
+                    continue
+                nu = f'{NS["our"]}evidence/{r["kegg"]}_{name}'
+                W.t(cu, NS['our'] + 'hasEvidence', nu, 'evidence')
+                W.t(nu, A, NS['ent'] + 'Evidence', 'evidence')
+                W.t(nu, NS['our'] + 'fromSource', NS['our'] + 'source/' + name,
+                    'evidence')
+                W.t(nu, NS['our'] + 'aboutDisease', DEPRESSION, 'evidence')
+                W.t(nu, VALUE, f'{score:.6g}', 'evidence',
+                    literal=True, dtype='double')
+                rel = ('hasPositiveAssociation' if score > 0
+                       else 'hasNegativeAssociation')
+                W.t(nu, NS['npq'] + rel, DEPRESSION, 'evidence')
+                n_ev += 1
+            for col in COMBINED:
+                val = float(r.get(col, 0) or 0)
+                if val == 0:
+                    continue
+                # 주의: col.replace('e_', ...) 는 'e_vote' 의 'vot|e_' 까지 바꾼다.
+                prop = NS['our'] + 'combinedE_' + col[len('e_'):]
+                W.t(cu, prop, f'{val:.6g}', 'evidence',
+                    literal=True, dtype='double')
+                n_comb += 1
+        print(f'  근거 노드 {n_ev:,} (소스 {len(SOURCES)}) / 결합값 {n_comb:,} '
+              f'(방식 {len(COMBINED)})')
+    else:
+        print('  ⚠ compound_evidence.csv 없음 — 근거별 극성은 싣지 않는다 '
+              '(python3 ourkg/build.py evidence)')
+
     print('[4/5] Microbe (NCBI) · compound-microbe (KEGG) · microbe-disease')
     mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str})
     for _, r in mic.iterrows():

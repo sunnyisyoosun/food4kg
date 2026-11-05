@@ -49,7 +49,7 @@ KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐�
 | | `promenda` | ProMENDA → compound별 우울증 극성 E | `compound_depression.csv` |
 | | `evidence` | ProMENDA·MENDA·재현 규칙·AFS 네 근거로 E 구성 (결합 6가지) | `compound_evidence.csv` |
 | | `microbe` | MeSH tree / NCBI taxonomy / KEGG 로 미생물 축 | `microbes.csv`, `compound_microbe.csv`, `microbe_disease*.csv` |
-| | `kg` | 논문 §3.3 표현 규약대로 RDF 출력 | `ourkg.nt`, `kg_stats.csv` |
+| | `kg` | 논문 §3.3 표현 규약대로 RDF 출력. 근거 4종과 결합값 6가지도 함께 싣는다 | `ourkg.nt`, `kg_stats.csv` |
 | `analyze.py` | `recommend` | 논문 Algorithm 1 (식 1·2) | `recommendation.csv`, `recommendation.png` |
 | | `compare` | E 구성 방식·경로를 논문 §4.2.3 기준으로 대조 | `e_mode_comparison.csv` |
 | | `pathcheck` | gut-brain 경로 compound 를 CSV 와 KG(SPARQL)에서 각각 뽑아 대조 | `gutbrain_compounds.json` |
@@ -68,8 +68,12 @@ KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐�
 | MeSH | 2 | 245 | 5,400 |
 | ProMENDA | 6 | 1,289 | 5,150 |
 | KEGG | 3 | 213 | 2,384 |
+| evidence | 15 | 278 | 1,560 |
 | NCBI taxonomy | 5 | 210 | 590 |
-| **Total** | **20** | **785,393** | **3,166,603** |
+| **Total** | **30** | **785,572** | **3,168,163** |
+
+`evidence` 는 논문에 대응이 없다 — E 의 근거(ProMENDA·MENDA·재현 규칙·AFS)와
+결합값을 KG 안에서 추적하려고 추가한 축이다. RESULTS.md §5.
 
 논문은 140 relation / 1,637,915 entity / 13,346,991 triple 이다. 차이의 대부분은
 온톨로지 축(SNOMED CT 429만, NCBI taxonomy 전체 131만, FoodOn·중국 온톨로지 30만)을

@@ -17,9 +17,9 @@
 
 | | 논문 (2023) | ourkg |
 |---|---|---|
-| triple | 13,346,991 | **3,166,603** |
-| entity | 1,637,915 | 785,393 |
-| relation | 140 | 20 |
+| triple | 13,346,991 | **3,168,163** |
+| entity | 1,637,915 | 785,572 |
+| relation | 140 | 30 |
 | 음식 | 34,250 샘플 → 135 사용 | 14,719 (추천 코호트 12,574) |
 | compound | 85 | 130 |
 | 음식당 측정 compound 중앙값 | 33 | **47** |
@@ -32,6 +32,9 @@
 triple 수가 논문의 1/4 인 것은 온톨로지 축(SNOMED CT 429만, NCBI taxonomy 전체 131만,
 FoodOn·중국 식품 온톨로지 30만)을 통합하지 않았기 때문이다.
 **음식-성분 축만 보면 우리 쪽이 더 크다 (314만 vs 233만).**
+
+`evidence` 행은 논문에 대응이 없다 — E 의 근거를 KG 안에서 추적하려고 우리가
+추가한 축이다 (§5 끝).
 
 ---
 
@@ -46,8 +49,9 @@ FoodOn·중국 식품 온톨로지 30만)을 통합하지 않았기 때문이다
 | MeSH | 2 | 245 | 5,400 |
 | ProMENDA | 6 | 1,289 | 5,150 |
 | KEGG | 3 | 213 | 2,384 |
+| evidence | 15 | 278 | 1,560 |
 | NCBI taxonomy | 5 | 210 | 590 |
-| **Total** | **20** | **785,393** | **3,166,603** |
+| **Total** | **30** | **785,572** | **3,168,163** |
 
 논문 Table 1 과 대조:
 
@@ -343,6 +347,48 @@ ProMENDA 와 MENDA 는 같은 큐레이션 계보라 82% 일치한다. 반면 **
    기본 모드는 반대로 Bottom 쪽이 좋지만 Top 에 칵테일 12개가 있다.
    탄수화물이 위로 오는 기전 자체는 논문 Fig.4(c) 그대로다(§3 참조).
 
+### 근거를 KG 안에 싣는다
+
+위의 네 소스와 결합값 여섯 가지는 분석 단계의 CSV 로만 두지 않고 KG 에 넣었다.
+`npq:hasPositiveAssociation` / `hasNegativeAssociation` 자체는 ProMENDA 단독 극성
+그대로 두고(§4.1 쿼리가 그것을 쓴다), 근거는 **소스마다 노드를 하나 두는 방식**으로
+붙였다. 논문이 중량에 쓰는 reification 과 같은 꼴이다
+(`npq:hasNutrientWeights` → 노드 → `rdf:value`).
+
+```
+<kegg:C00378>  our:hasEvidence  <our:evidence/C00378_promenda> .
+               our:combinedE_weighted       "0.1906"^^xsd:double .
+               our:combinedE_vote_norules   "1"^^xsd:double .
+
+<our:evidence/C00378_promenda>
+    our:fromSource   <our:source/promenda> ;
+    our:aboutDisease <mesh:D003865> ;
+    rdf:value        "0.295"^^xsd:double ;
+    npq:hasPositiveAssociation <mesh:D003865> .
+
+<our:source/promenda>  rdfs:label "ProMENDA (Pu et al. 2024)" ;
+                       our:sourceWeight "1"^^xsd:double .
+```
+
+실린 양: 근거 노드 173개(ProMENDA 66 / MENDA 40 / rules 57 / AFS 10),
+결합값 510개(98·98·95·73·73·73), 소스 노드 4개 — 합쳐 1,560 triple.
+compound 98종이 근거를 갖는다.
+
+이제 "어느 소스가 무슨 점수로 이 극성을 주장하는가"를 SPARQL 로 물을 수 있다.
+
+```sparql
+select ?cname ?slabel ?w ?v ?rel where {
+  ?c rdfs:label ?cname ; our:hasEvidence ?e .
+  ?e our:fromSource ?s ; rdf:value ?v ; ?rel mesh:D003865 .
+  ?s rdfs:label ?slabel ; our:sourceWeight ?w .
+  filter(?rel in (npq:hasPositiveAssociation, npq:hasNegativeAssociation))
+}
+```
+
+Thiamine (C00378) 을 물으면 네 소스가 그대로 나온다 — ProMENDA +0.295(가중 1.0),
+MENDA +0.125(0.6), rules −1.0(0.4), AFS +1.0(0.5). §5 표에서 본 충돌이
+KG 안에서 그대로 조회된다.
+
 ### 기본값을 바꾸지 않은 이유
 
 위 비교는 §4.2.3 을 **판정에도 쓰고 선택에도 썼다.** 같은 기준으로 고른 설정을
@@ -531,7 +577,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 | 파일 | 내용 |
 |---|---|
-| `out/ourkg.nt` | RDF N-Triples 3,166,603 |
+| `out/ourkg.nt` | RDF N-Triples 3,168,163 |
 | `out/kg_stats.csv` | 논문 Table 1 대응 통계 |
 | `out/foods.csv` | 음식 14,719 (fdc_id, 카테고리, 측정 compound 수) |
 | `out/food_compound_long.csv` | 음식 × compound 중량 768,157 (g/100g) |
