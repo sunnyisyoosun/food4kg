@@ -26,6 +26,9 @@
 | 우울증 극성이 확정된 compound | 85 (공개 소스로는 69) | 66 |
 | §5.1 방법 2 문헌 검증 | 11 / 15 | **4 / 15** |
 
+추천 점수 `D = E × Fᵀ` 에는 미생물이 들어가지 않는다 — 논문 식 (1)(2) 의 정의가
+그렇다. gut-brain 경로를 거치는 compound 만 남겨도 순위 상관이 +0.99 다 (§6).
+
 triple 수가 논문의 1/4 인 것은 온톨로지 축(SNOMED CT 429만, NCBI taxonomy 전체 131만,
 FoodOn·중국 식품 온톨로지 30만)을 통합하지 않았기 때문이다.
 **음식-성분 축만 보면 우리 쪽이 더 크다 (314만 vs 233만).**
@@ -357,7 +360,95 @@ python3 ourkg/analyze.py compare          # 위 표를 다시 만든다
 
 ---
 
-## 6. 과정에서 드러난 것
+## 6. 경로 비교 — gut-brain 축은 추천에 기여하는가 (`PATH_MODE`)
+
+### 먼저 짚을 것: 추천 점수에는 미생물이 들어가 있지 않았다
+
+논문은 §1·§3.1 에서 gut-brain axis 를 전면에 내세우지만, §4.2 의 추천 알고리즘이
+실제로 쓰는 것은 `E`(compound-우울증)와 `F`(음식-compound) 둘뿐이다. 미생물은
+`D = E × F^T` 어디에도 들어가지 않는다. 우리 구현도 같다 — 미생물 축은 KG 와
+§4.1 쿼리(Q2·Q3)에만 쓰인다.
+
+그래서 "정신건강만으로 추천"은 **이미 기본 동작**이고, 비교 대상이 되는 쪽은
+반대로 gut-brain 경로를 거치는 compound 만 남기는 제한이다.
+
+| `PATH_MODE` | 경로 | 쓰는 compound |
+|---|---|---|
+| `direct` (기본) | Food → Compound → Mental disorder | E 가 있는 전부 |
+| `gutbrain` | Food → Compound → **Gut microbiota** → Mental disorder | KEGG compound-미생물 링크가 있고, 그 미생물이 MeSH F03 정신질환과 연관된 것만 |
+
+### 결과 (8 모드 × 2 경로)
+
+`ourkg/out/e_mode_comparison.csv`
+
+| E 모드 | 경로 | 방향 확정 compound | Top30 추천군 | Bottom30 비추천군 | Top30 주류 | Top30 위반 |
+|---|---|---:|---:|---:|---:|---:|
+| `shrunk` (기본) | direct | 66 | 7 | 29 | 12 | 4 |
+| `shrunk` | gutbrain | 35 | 7 | 29 | 8 | 7 |
+| `binary` | direct | 66 | 6 | 25 | 0 | 17 |
+| `binary` | gutbrain | 35 | 6 | 26 | 0 | 14 |
+| `weighted` | direct | 98 | 12 | 6 | 0 | 16 |
+| `weighted` | gutbrain | 45 | 0 | **30** | 0 | 5 |
+| `priority` | direct | 98 | 0 | 7 | 0 | 0 |
+| `priority` | gutbrain | 45 | 0 | **30** | 0 | 4 |
+| `vote` | direct | 95 | 1 | 2 | 0 | 0 |
+| `vote` | gutbrain | 44 | 1 | **28** | 0 | 6 |
+| `weighted_norules` | direct | 73 | 6 | 3 | 0 | 19 |
+| `weighted_norules` | gutbrain | 37 | **14** | **30** | 0 | 8 |
+| `priority_norules` | direct | 73 | 0 | 27 | 0 | 11 |
+| `priority_norules` | gutbrain | 37 | 3 | 28 | 0 | 10 |
+| `vote_norules` | direct | 73 | 2 | **30** | 0 | 10 |
+| `vote_norules` | gutbrain | 37 | 8 | **30** | 0 | 10 |
+
+같은 모드의 direct ↔ gutbrain 순위 상관:
+
+| E 모드 | Spearman ρ | Top30 겹침 |
+|---|---:|---:|
+| `shrunk` | **+0.991** | 24/30 |
+| `binary` | **+0.998** | 24/30 |
+| `priority_norules` | **+0.995** | 21/30 |
+| `vote_norules` | **+0.996** | 16/30 |
+| `weighted_norules` | +0.922 | 10/30 |
+| `weighted` | **−0.512** | 0/30 |
+| `priority` | **−0.529** | 0/30 |
+| `vote` | **−0.454** | 0/30 |
+
+### 읽히는 것 둘
+
+**1. ProMENDA 계열 E 에서는 경로 제한이 순위를 바꾸지 않는다.**
+`shrunk` 는 compound 를 66 → 35 (47% 삭제)로 줄여도 ρ +0.991, Top30 24/30 이
+그대로다. `binary` 는 ρ +0.998. §4.2.3 점수도 Bottom30 29→29, 25→26 으로 거의
+변화가 없다.
+
+즉 **gut-brain 축을 통과하는 compound 만 남겨도 추천 결과가 바뀌지 않는다.**
+미생물 경로를 거치는 compound 가 그렇지 않은 것들의 대표 표본이거나(둘 다 FDC
+주요 영양소라 성분 프로파일이 비슷하다), 순위를 만드는 것이 경로가 아니라 `F` 의
+성분량 분포와 `E` 의 부호이기 때문이다. REPRODUCTION §16 의 V3(similarity 단계를
+빼도 ρ +0.761 유지)와 같은 방향의 관찰이다.
+
+**이것은 우리 구현의 한계가 아니라 Algorithm 1 의 정의 때문이다.** 논문 §4.2.2 의
+식 (1)(2) 어디에도 미생물이 없다. 논문이 §1·§3.1 에서 내세우는 gut-brain axis 는
+KG 의 서사와 §4.1 쿼리(Q2·Q3)에는 쓰이지만 추천 점수를 움직이지 않는다.
+
+**2. 경로 제한이 `rules` 가 일으킨 역전을 되돌린다.**
+`rules` 가 섞인 세 모드(`weighted`·`priority`·`vote`)는 direct ↔ gutbrain 상관이
+ρ −0.45 ~ −0.53 으로 뒤집히고, §4.2.3 Bottom30 이 **6 → 30 / 7 → 30 / 2 → 28** 로
+회복된다. 순위를 뒤집던 compound 들이 미생물 경로가 없는 쪽에 몰려 있다는 뜻이다.
+§5 에서 본 "`rules` 가 ProMENDA 와 48% 밖에 맞지 않는다"는 관찰과 이어진다 —
+경로 제한이 그 불일치를 걸러 내는 필터로 작동한다.
+
+가장 좋은 §4.2.3 점수는 `weighted_norules` + `gutbrain` 이다
+(Top30 추천군 14, Bottom30 비추천군 30, 주류 0, 위반 8). 다만 §5 끝에 적은 이유로
+이것을 기본값으로 올리지는 않는다 — 같은 기준을 판정과 선택에 함께 썼다.
+
+```bash
+PATH_MODE=gutbrain python3 ourkg/analyze.py recommend
+PATHS=direct,gutbrain python3 ourkg/analyze.py compare    # 위 16행 표
+```
+
+---
+
+## 7. 과정에서 드러난 것
 
 세 가지 모두 **논문 규모(음식 135종)에서는 드러나지 않고 14,000종에서만 터지는**
 문제다. 각각 환경변수로 되돌릴 수 있고, 근거는 [`README.md`](README.md) 설계 결정에 있다.
@@ -397,7 +488,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 7. 한계
+## 8. 한계
 
 - **식품 온톨로지 미통합** — FoodOn·중국 식품 온톨로지가 없어 음식 분류가 FDC SR 27군에
   머문다. 논문의 128 카테고리 체계와 대응되지 않는다.
@@ -411,7 +502,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 8. 산출물
+## 9. 산출물
 
 | 파일 | 내용 |
 |---|---|

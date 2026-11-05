@@ -30,7 +30,7 @@ sys.path.insert(0, os.path.join(
 from common import OUT, BASE
 
 
-def recommend(e_mode=None, save=True):
+def recommend(e_mode=None, path=None, save=True):
     """05 — 논문 Algorithm 1 을 우리 KG 에 적용 (depression).
 
     §4.2.1  D = E x F^T
@@ -43,7 +43,7 @@ def recommend(e_mode=None, save=True):
       out/recommendation.csv   rank, food_key, food_name, food_group, score, n_compound
       out/recommendation.png   Fig.4(b) 대응 t-SNE
 
-    e_mode 를 주면 환경변수 E_MODE 대신 그 값을 쓴다 (compare 가 쓴다).
+    e_mode / path 를 주면 환경변수 E_MODE / PATH 대신 그 값을 쓴다 (compare 가 쓴다).
     save=False 면 파일을 쓰지 않고 결과 DataFrame 만 돌려준다.
     """
     matplotlib.use('Agg')
@@ -97,6 +97,31 @@ def recommend(e_mode=None, save=True):
         col = E_df['e_shrunk']
     e = np.array([col.get(c, 0.0) for c in compounds], dtype=float)
     print(f'  E_MODE={E_MODE}')
+
+    # 경로 제한 — 논문 Fig.2 의 두 갈래 중 어느 쪽을 쓸 것인가.
+    #
+    #   direct    Food → Compound → Mental disorder
+    #             지금까지의 기본값이자 논문 Algorithm 1 이 실제로 쓰는 경로다.
+    #             E 가 compound-우울증 직접 연관(ProMENDA)에서 오고 미생물은
+    #             점수에 들어가지 않는다. 미생물 축은 KG 와 §4.1 쿼리에만 쓰인다.
+    #
+    #   gutbrain  Food → Compound → Gut microbiota → Mental disorder
+    #             논문이 §1·§3.1 에서 내세우는 gut-brain axis 경로. 미생물을
+    #             거치는 compound 만 남기고 나머지 E 를 0 으로 둔다.
+    #             (KEGG compound-미생물 링크 + 그 미생물의 MeSH F03 연관)
+    #             REPRODUCTION §16 의 V2 ablation 과 같은 취지인데, 그쪽은
+    #             공개 KG 에서 85 중 8종만 남았고 여기서는 35종이 남는다.
+    PATH = path or os.environ.get('PATH_MODE', 'direct')
+    if PATH == 'gutbrain':
+        cm = pd.read_csv(os.path.join(OUT, 'compound_microbe.csv'), dtype={'taxid': str})
+        md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
+        mental_tax = set(md[md['is_mental']]['taxid'])
+        gut = set(cm[cm['taxid'].isin(mental_tax)]['kegg'])
+        keep_e = np.array([c in gut for c in compounds])
+        e = e * keep_e
+    elif PATH != 'direct':
+        sys.exit(f'PATH_MODE 는 direct 또는 gutbrain. 받은 값: {PATH}')
+    print(f'  PATH={PATH}  (E 비영 {int((e != 0).sum())})')
     print(f'  F {F.shape[0]:,} x {F.shape[1]}  /  E 비영 {int((e != 0).sum())} '
           f'(+{int((e > 0).sum())} / -{int((e < 0).sum())})')
 
@@ -466,14 +491,18 @@ def compare():
     NOT_OK = {'Sausages and Luncheon Meats', 'Baked Products', 'Sweets',
               'Beef Products', 'Pork Products', 'Lamb, Veal, and Game Products'}
 
+    PATHS = os.environ.get('PATHS', 'direct').split(',')
+
     res, rows = {}, []
     for m in MODES:
-        print(f'\n--- E_MODE={m}')
-        r = recommend(e_mode=m, save=False)
-        res[m] = r
+      for pth in PATHS:
+        key = m if pth == 'direct' else f'{m}|{pth}'
+        print(f'\n--- E_MODE={m}  PATH={pth}')
+        r = recommend(e_mode=m, path=pth, save=False)
+        res[key] = r
         top, bot = r.head(K), r.tail(K)
         rows.append({
-            'e_mode': m,
+            'e_mode': m, 'path': pth,
             'n_compound_nonzero': None,          # 아래에서 채운다
             f'top{K}_논문추천군': int(top['food_group'].isin(REC_OK).sum()),
             f'bot{K}_논문비추천군': int(bot['food_group'].isin(NOT_OK).sum()),
@@ -502,7 +531,13 @@ def compare():
             col = dep['e_binary'].where(dep['q'] < 0.05, 0.0)
         else:
             col = dep['e_shrunk']
-        row['n_compound_nonzero'] = sum(1 for c in cpds if col.get(c, 0))
+        sel = cpds
+        if row['path'] == 'gutbrain':
+            cm = pd.read_csv(os.path.join(OUT, 'compound_microbe.csv'), dtype={'taxid': str})
+            md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
+            gut = set(cm[cm['taxid'].isin(set(md[md['is_mental']]['taxid']))]['kegg'])
+            sel = [c for c in cpds if c in gut]
+        row['n_compound_nonzero'] = sum(1 for c in sel if col.get(c, 0))
 
     tab = pd.DataFrame(rows)
     tab.to_csv(os.path.join(OUT, 'e_mode_comparison.csv'), index=False)
@@ -513,8 +548,7 @@ def compare():
     print(tab.to_string(index=False))
 
     print(f'\n모드 사이의 순위 상관 (Spearman) / Top{K} 겹침')
-    base = res[MODES[0]][['food_key', 'score']].set_index('food_key')
-    for a, b in itertools.combinations(MODES, 2):
+    for a, b in itertools.combinations(res, 2):
         ra = res[a].set_index('food_key')['score']
         rb = res[b].set_index('food_key')['score'].reindex(ra.index)
         rho = spearmanr(ra.values, rb.values).statistic

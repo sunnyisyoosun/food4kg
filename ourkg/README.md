@@ -51,7 +51,7 @@ KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐�
 | | `microbe` | MeSH tree / NCBI taxonomy / KEGG 로 미생물 축 | `microbes.csv`, `compound_microbe.csv`, `microbe_disease*.csv` |
 | | `kg` | 논문 §3.3 표현 규약대로 RDF 출력 | `ourkg.nt`, `kg_stats.csv` |
 | `analyze.py` | `recommend` | 논문 Algorithm 1 (식 1·2) | `recommendation.csv`, `recommendation.png` |
-| | `compare` | E 구성 방식들을 논문 §4.2.3 기준으로 대조 | `e_mode_comparison.csv` |
+| | `compare` | E 구성 방식·경로를 논문 §4.2.3 기준으로 대조 | `e_mode_comparison.csv` |
 | | `evaluate` | §4.1 SPARQL Q1~Q3, §5.1 방법 1·2 | `eval_*.csv/json` |
 | `common.py` | — | 경로·단위 환산·라벨/카테고리 정규화 공유 | |
 | `run_all.py` | — | 위 둘을 순서대로 호출 | |
@@ -162,6 +162,13 @@ Complication 8건이 모두 확인된 것과 대비된다 — 논문이 쓴 MiKG
    135개 음식은 전부 Foundation / SR Legacy / FNDDS 다. branded_food 는 라벨 신고값이라
    대부분 성분이 결측이고, 성분이 거의 없는 탄산수·단백질파우더가 상위를 차지한다.
    KG 자체(04)는 FDC 전체를 담는다. `DATA_TYPES=all` 로 포함 가능.
+
+## 경로
+
+추천 점수 `D = E x F^T` 에는 미생물이 들어가지 않는다 — 논문 §4.2.2 식 (1)(2) 의
+정의가 그렇다. 미생물 축은 KG 와 §4.1 쿼리에만 쓰인다. `PATH_MODE=gutbrain` 으로
+미생물을 거치는 compound 만 남겨 비교할 수 있다. compound 가 절반으로 줄어도
+순위 상관이 +0.99 다 — RESULTS.md §6.
 
 ## 한계
 

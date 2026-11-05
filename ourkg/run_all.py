@@ -7,7 +7,7 @@
 analyze.py 의 recommend/evaluate 다. 각 파일을 직접 돌려도 같다.
 
 환경변수: MIN_COV, E_MODE, SHRINK_K, SOURCE_WEIGHTS, PRIORITY, NORM,
-          SIM_NORM, DATA_TYPES, TOP_K, E_MODES, PART
+          SIM_NORM, DATA_TYPES, TOP_K, E_MODES, PATH_MODE, PATHS, PART
           — 해당 함수의 docstring·주석 참조.
 """
 import os
