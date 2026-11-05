@@ -1,0 +1,4 @@
+Threshold,추천군,비추천군,위반,MMD처방,MMDextras,AUC참고,top
+none,22,27,2,22,1,0.592,"Vegetable juice, BOLTHOUSE FAR"
+positive,0,27,1,0,19,0.587,"Alcoholic beverage, beer, ligh"
+negative,18,11,2,22,2,0.694,"Vegetable juice, BOLTHOUSE FAR"

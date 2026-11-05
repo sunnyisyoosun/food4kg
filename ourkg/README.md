@@ -179,11 +179,17 @@ Complication 8건이 모두 확인된 것과 대비된다 — 논문이 쓴 MiKG
    5 성분이 74.1% 라 어긋난다. 기본값은 논문이 명시한 5, 규칙 적용판(10 성분)은
    `PCA_COMPONENTS=auto` 로 돌린다 — 그쪽이 AUC 0.714 에 교차 위반 0 으로 두 기준
    모두에서 낫다. `PCA_COMPONENTS=0` 은 공식 경로. 상세는 RESULTS.md §12.
-9. **식 (2) 에 정규화 없음** (`SIM_NORM=none`) — 공식 `final.py` 는 `p[i] /= sum(S[:,i])`
+9. **Algorithm 1 의 `Threshold` 는 걸지 않는다** (`SIM_THRESHOLD=none`) —
+   §4.2.2 line 8 의 "Threshold and Top K" 를 Sarwar et al. (2001) 의 이웃 선택으로
+   읽어 네 가지로 구현했는데, 어떤 방식으로 잘라도 Top 1 이 술이 되고 §4.2.3
+   추천군이 22 → 0~1 로 무너진다. 추천을 만드는 것이 **음(−)의 유사도**이기
+   때문이다 — 해로운 음식과 성분 구성이 반대인 음식이 점수를 받는다.
+   RESULTS.md §14.
+10. **식 (2) 에 정규화 없음** (`SIM_NORM=none`) — 공식 `final.py` 는 `p[i] /= sum(S[:,i])`
    를 덧붙이는데, 식 (2) 에는 없다. adjusted cosine 은 음수를 가지므로 이 열합이
    0 근처가 될 수 있고, 성분이 적은 음식의 열합이 ~15 (중앙값 3,894)까지 떨어져
    점수를 폭발시켰다. `SIM_NORM=colsum` 으로 공식 경로 실행 가능.
-10. **추천 코호트를 분석 측정 데이터로 제한** (`DATA_TYPES=curated`) — 논문 §4.2 의
+11. **추천 코호트를 분석 측정 데이터로 제한** (`DATA_TYPES=curated`) — 논문 §4.2 의
    135개 음식은 전부 Foundation / SR Legacy / FNDDS 다. branded_food 는 라벨 신고값이라
    대부분 성분이 결측이고, 성분이 거의 없는 탄산수·단백질파우더가 상위를 차지한다.
    KG 자체(04)는 FDC 전체를 담는다. `DATA_TYPES=all` 로 포함 가능.

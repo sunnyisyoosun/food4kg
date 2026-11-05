@@ -238,6 +238,40 @@ def recommend(e_mode=None, path=None, save=True):
     den = np.outer(nrm, nrm)
     S = np.divide(num, den, out=np.zeros_like(num), where=den > 0)
     np.fill_diagonal(S, 0.0)
+
+    # 논문 §4.2.2 Algorithm 1 line 8 — "P = D x S : **Threshold** and Top K"
+    #
+    # 논문은 Threshold 가 무엇에 걸리는지 밝히지 않는다. 유사도로 인용한
+    # Sarwar et al. (2001) item-based CF 에서 Threshold 는 **이웃 선택**을
+    # 뜻한다 — 약한 유사도를 예측에서 빼는 것이다. 그 읽기를 따른다.
+    # Top K 는 출력(P)에 걸리고 Threshold 는 S 에 걸린다.
+    #
+    #   positive  S < 0 을 0 으로 (기본). 매개변수가 없어 사전 지정이 가능하다.
+    #             adjusted cosine 의 음수는 '성분 구성이 반대' 라는 뜻인데,
+    #             그대로 두면 닮지 않은 음식의 점수가 부호를 뒤집어 전파된다.
+    #   none      자르지 않는다 (2026-11-05 이전 동작)
+    #   topn:<N>  음식마다 가장 닮은 N 개만 남긴다 (Sarwar 의 model size)
+    #   q<p>      |S| 의 p 분위수 미만을 0 으로
+    SIM_THRESHOLD = os.environ.get('SIM_THRESHOLD', 'none')
+    _n_before = int((S != 0).sum())
+    if SIM_THRESHOLD == 'positive':
+        S[S < 0] = 0.0
+    elif SIM_THRESHOLD == 'negative':      # 진단용 — 음수 절반만 남긴다
+        S[S > 0] = 0.0
+    elif SIM_THRESHOLD.startswith('topn:'):
+        N = int(SIM_THRESHOLD.split(':', 1)[1])
+        if N < S.shape[1]:
+            cut = np.partition(S, -N, axis=1)[:, -N][:, None]
+            S = np.where(S >= cut, S, 0.0)
+    elif SIM_THRESHOLD.startswith('q'):
+        q = float(SIM_THRESHOLD[1:]) / 100.0
+        t = np.quantile(np.abs(S[S != 0]), q) if (S != 0).any() else 0.0
+        S = np.where(np.abs(S) >= t, S, 0.0)
+    elif SIM_THRESHOLD != 'none':
+        sys.exit(f'SIM_THRESHOLD 는 positive|none|topn:<N>|q<p>. 받은 값: {SIM_THRESHOLD}')
+    _n_after = int((S != 0).sum())
+    print(f'  Threshold={SIM_THRESHOLD}  S 비영 {_n_before:,} -> {_n_after:,} '
+          f'({_n_after / max(_n_before, 1) * 100:.0f}%)')
     print(f'  S {S.shape}  비영 비율 {float((S != 0).mean()):.3f}')
 
     print('[5/5] P = D x S, Top K')
