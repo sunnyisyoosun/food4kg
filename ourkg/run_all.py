@@ -3,11 +3,13 @@
     python3 ourkg/run_all.py                  # 구축 4단계 → 분석 2단계
     python3 ourkg/run_all.py kg recommend     # 지정 단계만
 
-단계 이름은 build.py 의 food/promenda/microbe/kg,
-analyze.py 의 recommend/evaluate 다. 각 파일을 직접 돌려도 같다.
+단계 이름은 build.py 의 food/form/promenda/evidence/microbe/kg,
+analyze.py 의 recommend/compare/external/invert/stype/pathcheck/evaluate 다.
+각 파일을 직접 돌려도 같다.
 
 환경변수: MIN_COV, E_MODE, SHRINK_K, SOURCE_WEIGHTS, PRIORITY, NORM,
-          SIM_NORM, DATA_TYPES, TOP_K, E_MODES, PATH_MODE, PATH_SOURCE, PATHS, PART
+          SIM_NORM, DATA_TYPES, TOP_K, E_MODES, PATH_MODE, PATH_SOURCE, PATHS,
+          FEATURES, INVERT_C, INVERT_SEED, PART
           — 해당 함수의 docstring·주석 참조.
 """
 import os
@@ -15,8 +17,9 @@ import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-BUILD = ['food', 'promenda', 'evidence', 'microbe', 'kg']
-ANALYZE = ['recommend', 'compare', 'pathcheck', 'evaluate']
+BUILD = ['food', 'form', 'promenda', 'evidence', 'microbe', 'kg']
+ANALYZE = ['recommend', 'compare', 'external', 'invert', 'stype',
+           'pathcheck', 'evaluate']
 
 want = sys.argv[1:]
 plan = [('build.py', [s for s in BUILD if not want or s in want]),
