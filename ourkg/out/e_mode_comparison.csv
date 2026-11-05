@@ -1,7 +1,6 @@
 e_mode,path,n_compound_nonzero,top30_논문추천군,bot30_논문비추천군,top30_주류,top30_위반,bot30_위반,modimed_AUC,top30_처방군,top30_extras,bot30_extras,top_food,bot_food
-shrunk,direct,66,7,29,12,4,0,0.633,5,13,4,"Sugar substitute, sucralose, powder","Beerwurst, pork and beef"
-binary,direct,66,6,25,0,17,0,0.622,5,18,7,"Sugar substitute, sucralose, powder","Beerwurst, pork and beef"
-weighted,direct,98,12,6,0,16,0,0.496,0,5,8,"Lamb, Australian, imported, fresh, rib c","Butter, stick, salted"
-vote,direct,95,1,2,0,0,2,0.625,0,4,7,"Beans, navy, mature seeds, raw","Margarine-like, butter-margarine blend, "
-vote_norules,direct,73,2,30,0,10,0,0.618,11,14,4,"Bagels, whole grain white","Dutch brand loaf, chicken, pork and beef"
-weighted_norules,direct,73,6,3,0,19,0,0.603,19,7,4,"Bagel, whole wheat, with raisins","Cheese, cream"
+shrunk,direct,66,7,27,0,0,0,0.714,12,4,4,"Spices, chili powder","Beef, ground, 97% lean meat /3% fat, pat"
+binary,direct,66,7,30,0,1,0,0.71,10,6,5,"Spices, chili powder","Beef, ground, 97% lean meat /3% fat, pat"
+vote,direct,95,5,10,0,8,0,0.605,0,4,9,"Chicken patty, frozen, cooked","Cookies, chocolate chip, prepared from r"
+vote_norules,direct,73,7,27,0,3,0,0.72,13,1,0,"Spices, chili powder","Pork, fresh, loin, sirloin (chops), bone"
+learned,direct,66,1,8,0,17,1,0.678,0,1,4,"Seal, bearded (Oogruk), meat, dried, in ","Snacks, granola bars, soft, coated, milk"

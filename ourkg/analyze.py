@@ -54,7 +54,25 @@ def recommend(e_mode=None, path=None, save=True):
     from common import OUT
 
     K = int(os.environ.get('TOP_K', '30'))
-    PCA_N = int(os.environ.get('PCA_COMPONENTS', '0'))   # 0 = 공식 경로(PCA 없음)
+    # 논문 §4.2.1 — "we employ principal component analysis (PCA) on the obtained
+    # incidence matrix to reduce its dimensionality ... To ensure that we preserve
+    # more than 80% of the variance present in the original sample, we select five
+    # principal components as the final dimension of the matrix."
+    #
+    # Fig.4(a) 의 x 축이 principal components 1~85 이므로 PCA 는 compound 축에
+    # 걸리고, 그 축소 공간에서 유사도 S 를 계산하라는 뜻이다. D = E x F^T 는
+    # 원래 F 로 계산한다(E 가 compound 축에 정의돼 있으므로).
+    #
+    # 2026-11-05 이전에는 공식 final.py 를 따라 PCA 를 끄고 돌렸다. 그 결과
+    # S 가 신호를 깎는 것으로 보였는데(§8·§10), 논문의 PCA 를 켜면 반대로 돕는다.
+    # 논문이 쓴 것은 '5' 라는 숫자가 아니라 '분산 80% 보존' 이라는 규칙이다.
+    # 우리 F 에서 80% 를 넘는 최소 성분 수는 10 이다(논문 데이터에서는 5).
+    #   PCA_COMPONENTS=auto  분산 PCA_VARIANCE(기본 0.80) 를 넘는 최소 성분 (기본)
+    #   PCA_COMPONENTS=0     PCA 없음 (공식 final.py 경로)
+    #   PCA_COMPONENTS=<n>   성분 수를 직접 지정
+    _pca_opt = os.environ.get('PCA_COMPONENTS', 'auto')
+    PCA_VAR = float(os.environ.get('PCA_VARIANCE', '0.80'))
+    PCA_N = -1 if _pca_opt == 'auto' else int(_pca_opt)
 
     print('[1/5] 행렬 구성')
     long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
@@ -166,11 +184,18 @@ def recommend(e_mode=None, path=None, save=True):
 
     if PCA_N:
         from sklearn.decomposition import PCA
+        if PCA_N < 0:
+            _p = PCA().fit(X)
+            cum = np.cumsum(_p.explained_variance_ratio_)
+            PCA_N = int(np.argmax(cum >= PCA_VAR)) + 1
+            print(f'  PCA 성분 자동 선택: 분산 {PCA_VAR:.0%} 를 넘는 최소 {PCA_N} 성분')
         p = PCA(n_components=PCA_N)
         Xs = p.fit_transform(X)
-        print(f'  PCA {PCA_N} 성분, 설명분산 {p.explained_variance_ratio_.sum():.3f}')
+        print(f'  PCA {PCA_N} 성분, 설명분산 {p.explained_variance_ratio_.sum():.3f} '
+              f'(논문 §4.2.1)')
     else:
         Xs = X
+        print('  PCA 없음 (공식 final.py 경로)')
 
     print('[3/5] D = E x F^T')
     D = X @ e

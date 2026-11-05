@@ -25,10 +25,9 @@
 | 음식당 측정 compound 중앙값 | 33 | **47** |
 | 우울증 극성이 확정된 compound | 85 (공개 소스로는 69) | 66 |
 | §5.1 방법 2 문헌 검증 | 11 / 15 | **4 / 15** |
-| ModiMedDiet AUC, 동등가중 라벨 | — | 0.491 (기본) / 0.665 (최고) |
-| ModiMedDiet AUC, **빈도 반영** (§11 D) | — | **0.633 (기본 = 공개 소스 최고)** |
-| 같은 기준, E 를 역추정하면 | — | **0.803** (상한 0.816) |
-| 구조·가공 축을 더하면 | — | **0.835** (상한 0.847) |
+| ModiMedDiet AUC (빈도 반영, 논문 PCA 적용) | — | **0.714** |
+| 같은 기준에서 ModiMedDiet 로 학습한 E | — | 0.678 — **공개 소스가 이긴다** (§12) |
+| `D = X·e` 만 비교하면 (PCA 무관) | — | 공개 0.520 / 역추정 0.803 / 상한 0.816 (§8) |
 
 추천 점수 `D = E × Fᵀ` 에는 미생물이 들어가지 않는다 — 논문 식 (1)(2) 의 정의가
 그렇다. gut-brain 경로를 거치는 compound 만 남겨도 순위 상관이 +0.99 다 (§6).
@@ -101,83 +100,73 @@ MeSH SPARQL / NCBI efetch
 
 ## 3. 추천 결과 (depression)
 
-`ourkg/out/recommendation.csv` — 12,569 음식 전체 순위
+`ourkg/out/recommendation.csv` — 12,569 음식 전체 순위.
+기본 설정은 `E_MODE=shrunk` + 논문 §4.2.1 의 PCA(분산 80% → 10 성분, §12).
 
-### Top 10
-
-| 순위 | 음식 | 카테고리 | 점수 |
-|---:|---|---|---:|
-| 1 | Sugar substitute, sucralose, powder | Sweets | 24.42 |
-| 2 | Honey | Sweets | 21.17 |
-| 3 | Leavening agents, cream of tartar | Baked Products | 17.91 |
-| 4 | Lettuce, cos or romaine, raw | Vegetables | 13.73 |
-| 5 | Pears, canned, heavy syrup pack | Fruits and Fruit Juices | 13.63 |
-| 6 | Beverages, Energy Drink, sugar free | Beverages | 13.41 |
-| 7 | Applesauce, canned, sweetened | Fruits and Fruit Juices | 13.33 |
-| 8 | Pears, canned, light syrup pack | Fruits and Fruit Juices | 12.72 |
-| 9 | Beverages, Energy Drink with HFCS | Beverages | 12.24 |
-| 10 | Squash, winter, butternut, raw | Vegetables | 11.97 |
-
-### Bottom 10
+### Top 12
 
 | 순위 | 음식 | 카테고리 | 점수 |
 |---:|---|---|---:|
-| 12560 | Lamb, loin, trimmed to 1/4" fat, raw | Lamb, Veal, and Game | −411.43 |
-| 12561 | Beef, rib large end, prime, roasted | Beef Products | −411.43 |
-| 12562 | Beef, rib whole, prime, broiled | Beef Products | −411.46 |
-| 12563 | Beef, rib whole, prime, roasted | Beef Products | −411.53 |
-| 12564 | Dutch brand loaf, chicken, pork and beef | Sausages and Luncheon Meats | −411.59 |
-| 12565 | Beef, rib small end, prime, roasted | Beef Products | −411.66 |
-| 12566 | Beef, rib large end, all grades, roasted | Beef Products | −411.72 |
-| 12567 | Bologna, beef and pork | Sausages and Luncheon Meats | −411.74 |
-| 12568 | Beef, rib whole, choice, roasted | Beef Products | −412.21 |
-| 12569 | Beerwurst, pork and beef | Sausages and Luncheon Meats | −413.05 |
+| 1 | Spices, chili powder | Spices and Herbs | 83.98 |
+| 2 | Spices, paprika | Spices and Herbs | 34.61 |
+| 3 | Spices, oregano, dried | Spices and Herbs | 24.04 |
+| 4 | Cereals RTE, RALSTON Enriched Wheat Bran flakes | Breakfast Cereals | 11.44 |
+| 5 | Spices, pepper, red or cayenne | Spices and Herbs | 10.09 |
+| 6 | Nuts, coconut meat, dried, not sweetened | Nut and Seed Products | 9.57 |
+| 7 | Snacks, corn-based, extruded, chips, plain | Snacks | 8.19 |
+| 8 | Formulated Bar, SOUTH BEACH protein bar | Snacks | 4.11 |
+| 9 | Parsley, freeze-dried | Vegetables | 3.64 |
+| 10 | Yogurt, Greek, strawberry, nonfat | Dairy and Egg Products | 2.23 |
+| 11 | Snacks, shrimp cracker | Snacks | 1.98 |
+| 12 | Mushrooms, portabella, UV-exposed, raw | Vegetables | 1.72 |
+
+향신료·건조식품이 맨 위에 오는 것은 **100 g 기준** 때문이다. 논문 §4.1.2 도
+"each food instance's unit weight is standardized to 100 g" 라고 했다. 건조·분말
+식품은 같은 100 g 에 성분이 훨씬 많이 들어간다. 1회 섭취량 기준으로 바꾸면
+사라질 결함이고, 논문도 같은 기준을 썼으므로 같은 성질을 가진다.
+
+### Bottom 12
+
+전부 돼지·소·가금류의 살코기 부위다.
+
+| 순위 | 음식 | 카테고리 |
+|---:|---|---|
+| 12540 | Beef, eye of round roast, separable lean only, roasted | Beef Products |
+| 12541 | Turkey, wing, meat only, roasted | Poultry Products |
+| 12542–12551 | Pork, loin/blade/rib (chops·roasts), 대부분 separable lean only | Pork Products |
+| 12552 | Pork, leg (ham), rump half, lean and fat, roasted | Pork Products |
 
 ### 카테고리 분포 — 논문 §4.2.3 과의 대조
 
 | 카테고리 | Top 30 | Bottom 30 |
 |---|---:|---:|
-| **Alcoholic Beverages** | **12** | 0 |
-| Beverages | 6 | 0 |
-| Fruits and Fruit Juices | 4 | 0 |
-| Sweets | 3 | 0 |
-| Vegetables and Vegetable Products | 2 | 0 |
-| Finfish and Shellfish Products | 1 | 0 |
-| Baby Foods | 1 | 0 |
-| Baked Products | 1 | 0 |
-| **Beef Products** | 0 | **20** |
-| **Lamb, Veal, and Game Products** | 0 | **5** |
-| **Sausages and Luncheon Meats** | 0 | **4** |
-| Poultry Products | 0 | 1 |
+| **Vegetables and Vegetable Products** | **7** | 0 |
+| Dairy and Egg Products | 6 | 0 |
+| Spices and Herbs | 5 | 0 |
+| Baby Foods | 4 | 0 |
+| Snacks | 3 | 0 |
+| Breakfast Cereals / Soups / Fast Foods / Beverages / Nuts | 각 1 | 0 |
+| **Pork Products** | 0 | **18** |
+| **Beef Products** | 0 | **8** |
+| Poultry Products | 0 | 3 |
+| Lamb, Veal, and Game Products | 0 | 1 |
 
-**비추천 쪽은 논문과 그대로 일치한다.** 논문 §4.2.3 은 비추천을 "sausage products,
-baked products, and sweets", Fig.5 피라미드 상단을 "barbecue products, beef products,
-sausages, and luncheon meats, pork products" 로 적는다. 우리 Bottom 30 은 소고기 20 /
-양고기 5 / 소시지·런천미트 4 로 같은 구성이다.
+| | 값 |
+|---|---|
+| §4.2.3 Top30 추천군(어패류·과일·채소) | 7 |
+| §4.2.3 Bottom30 비추천군(소시지·베이커리·과자·육류) | **27** |
+| 교차 위반 (비추천군이 Top 에) | **0** |
+| ModiMedDiet AUC (빈도 반영) | **0.714** |
 
-**추천 쪽은 일치하지 않는다.** 논문은 "mainly fish and shellfish products, as well as
-fruits and vegetables" 라고 했고, 우리 Top 30 은 **칵테일류 12 / 음료 6** 이 절반 이상을
-차지한다. 과일 4 / 채소 2 / 어패류 1 은 들어오지만 소수다.
-
-원인은 둘이고, 둘 다 데이터를 바꾼 데서 온다.
-
-1. **당류** — 논문 Fig.4(c) 의 추천 음식군 히트맵에서 가장 진한 축이 탄수화물
-   (D-glucose, maltose, sucrose, starch, fructose)이고, §4.2.3 은 양파의 D-glucose 를
-   추천 근거로 든다. 즉 당류가 위로 오는 것은 **논문의 기전 그대로**다. 음식 모집단이
-   135종으로 큐레이션되지 않으면 같은 기전이 설탕·시럽절임 과일·에너지드링크를 끌어올린다.
-2. **에탄올** — ProMENDA 에서 Ethanol 은 연구 3건(pos 4 : neg 1)으로 "우울증에서 감소"
-   쪽이라 E 가 +가 된다. 논문의 85 compound 목록에는 에탄올이 없었다. 근거량 축소
-   (`E_MODE=shrunk`)로도 칵테일류는 Top 30 에 남는다 — 칵테일은 측정 성분이 적어
-   에탄올이 프로파일을 지배하기 때문이다.
-
-**이것은 우리 KG 가 "칵테일을 우울증에 권한다"는 뜻이 아니라, 논문의 알고리즘이
-큐레이션된 음식 목록과 큐레이션된 compound 목록에 의존한다는 뜻이다.** 논문 §4.2.1 의
-"135 food samples and their associated 85 component compounds" 가 어떻게 선정됐는지
-본문에 없고(REPRODUCTION §4), 그 선정이 결과의 상당 부분을 만든다.
+**비추천 쪽은 논문 §4.2.3·Fig.5 와 맞는다** — 피라미드 상단의 "beef products,
+sausages and luncheon meats, pork products" 그대로다.
+**추천 쪽은 채소가 1위 군(7개)으로 들어오지만** 논문이 1순위로 든 어패류는
+Top 30 에 없다. 향신료·간식이 끼는 것은 위의 100 g 기준 문제다.
 
 시각화: `ourkg/out/recommendation.png` (논문 Fig.4(b) 대응 t-SNE)
 
----
+> 이전 판(PCA 없음)의 Top 30 은 설탕 대체재·꿀·시럽절임 과일이었고 ModiMedDiet
+> AUC 가 0.633 이었다. 논문 §4.2.1 의 PCA 를 켠 뒤 바뀐 것이다 — §12.
 
 ## 4. 평가 — 논문 §5.1
 
@@ -277,6 +266,9 @@ Bipolar disorder / Intellectual disability 가 고루 나온다.
 ---
 
 ## 5. E 를 여러 근거로 만들기 (`build.py evidence`)
+
+> **이 절의 수치는 PCA 를 끈 경로에서 잰 것이다**(당시 기본값).
+> 논문 §4.2.1 의 PCA 를 켜면 결론 일부가 바뀐다 — §12.
 
 논문은 MENDA 한 소스로 E 를 만들었다(§3.1·§4.2.1). ProMENDA 하나만 쓰면
 130 compound 중 66 개만 방향이 정해진다. 네 근거를 각각 부호 있는 점수로 환산해
@@ -412,6 +404,9 @@ python3 ourkg/analyze.py compare          # 위 표를 다시 만든다
 
 ## 6. 경로 비교 — gut-brain 축은 추천에 기여하는가 (`PATH_MODE`)
 
+> **이 절의 수치는 PCA 를 끈 경로에서 잰 것이다**(당시 기본값).
+> 논문 §4.2.1 의 PCA 를 켜면 결론 일부가 바뀐다 — §12.
+
 ### 먼저 짚을 것: 추천 점수에는 미생물이 들어가 있지 않았다
 
 논문은 §1·§3.1 에서 gut-brain axis 를 전면에 내세우지만, §4.2 의 추천 알고리즘이
@@ -524,6 +519,9 @@ PATHS=direct,gutbrain python3 ourkg/analyze.py compare    # 위 16행 표
 ---
 
 ## 7. 외부 정답셋 — SMILES trial 의 ModiMedDiet (`analyze.py external`)
+
+> **이 절의 수치는 PCA 를 끈 경로에서 잰 것이다**(당시 기본값).
+> 논문 §4.2.1 의 PCA 를 켜면 결론 일부가 바뀐다 — §12.
 
 ### 왜 필요했나
 
@@ -640,6 +638,9 @@ PATHS=direct,gutbrain python3 ourkg/analyze.py compare  # 두 기준으로 16조
 
 ## 8. E 의 부호를 역추정한다 (`analyze.py invert`)
 
+> **이 절의 수치는 PCA 를 끈 경로에서 잰 것이다**(당시 기본값).
+> 논문 §4.2.1 의 PCA 를 켜면 결론 일부가 바뀐다 — §12.
+
 ### 먼저 상한을 쟀다
 
 §7 에서 두 기준이 반대를 가리켰다. 그러면 "어느 E 가 맞나" 이전에
@@ -753,6 +754,9 @@ E_MODE=learned python3 ourkg/analyze.py recommend
 
 ## 9. ProMENDA 를 연구 설계별로 나눠 봤다 — 가설 반증 (`analyze.py stype`)
 
+> **이 절의 수치는 PCA 를 끈 경로에서 잰 것이다**(당시 기본값).
+> 논문 §4.2.1 의 PCA 를 켜면 결론 일부가 바뀐다 — §12.
+
 ### 가설
 
 §8 에서 공개 소스 E 의 부호가 ModiMedDiet 과 48% 밖에 맞지 않았고, 그 이유를
@@ -817,6 +821,9 @@ E_MODE=stype:t2 python3 ourkg/analyze.py recommend    # 변형 하나로 추천
 ---
 
 ## 10. F 에 구조·가공 축을 더한다 (`build.py form`)
+
+> **이 절의 수치는 PCA 를 끈 경로에서 잰 것이다**(당시 기본값).
+> 논문 §4.2.1 의 PCA 를 켜면 결론 일부가 바뀐다 — §12.
 
 ### 왜
 
@@ -928,6 +935,9 @@ FEATURES=both python3 ourkg/analyze.py invert             # 합쳐서
 
 ## 11. 두 기준이 어디서 갈리는가 (`analyze.py disagree`)
 
+> **이 절의 수치는 PCA 를 끈 경로에서 잰 것이다**(당시 기본값).
+> 논문 §4.2.1 의 PCA 를 켜면 결론 일부가 바뀐다 — §12.
+
 §7 에서 "§4.2.3 을 잘 맞추는 설정일수록 ModiMedDiet AUC 가 나쁘다"를 보고 그 이유를
 "붉은 고기 때문"이라고 적었다. 서술이었지 측정이 아니었다. 여기서 쟀고,
 **재는 과정에서 §7 의 결론이 정답셋의 결함 때문이었음이 드러났다.**
@@ -1028,7 +1038,87 @@ MODIMED_POSITIVES=high_freq python3 ourkg/analyze.py compare
 
 ---
 
-## 12. 과정에서 드러난 것
+## 12. ★ 논문을 다시 읽고 찾은 것 — 우리가 건너뛴 PCA 단계
+
+### 무엇을 빠뜨렸나
+
+논문 §4.2.1 의 마지막 문단이다.
+
+> "The resulting incidence matrix 𝐷 combines the effects of different compounds
+> present in each food sample on depression, and **dimensionality reduction is
+> required** to reduce computational complexity. In our data preprocessing, we
+> employ **principal component analysis (PCA)** on the obtained incidence matrix
+> to reduce its dimensionality while retaining a significant amount of its original
+> characteristics. ... **To ensure that we preserve more than 80% of the variance**
+> present in the original sample, **we select five principal components** as the
+> final dimension of the matrix."
+
+Fig.4(a) 의 x 축이 principal components 1~85 이므로 PCA 는 **compound 축**에
+걸린다. 즉 유사도 `S` 를 85차원 원공간이 아니라 축소 공간에서 계산하라는 뜻이다.
+
+**우리는 이 단계를 꺼 두고 돌려왔다.** 공식 `final.py` 에 PCA 가 없어서 그 경로를
+따랐기 때문이다(`PCA_COMPONENTS=0`). 그런데 §8·§10 에서 "유사도 단계가 신호를
+깎는다"고 지목한 것이 바로 이 단계다. 논문이 그 자리에 쓰라고 한 처리를 빼고
+돌린 뒤 그 단계를 탓하고 있었다.
+
+### 성분 수는 논문의 '5' 가 아니라 논문의 '규칙' 을 따른다
+
+논문이 고정한 것은 숫자가 아니라 **분산 80% 보존**이라는 기준이다. 우리 `F` 의
+누적 설명분산:
+
+| 성분 | 1 | 3 | 5 | 8 | **10** | 15 | 20 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 누적 분산 | 60.5% | 69.7% | 74.1% | 78.2% | **80.2%** | 83.9% | 86.8% |
+
+**80% 를 넘는 최소 성분 수는 10 이다.** 논문이 5 를 쓴 것은 그쪽 데이터에서 5 가
+80% 를 넘었기 때문이다. 같은 규칙을 우리 데이터에 적용하면 10 이고, 이것은 외부
+기준으로 고른 값이 아니라 **논문 규칙의 적용**이다.
+(`PCA_COMPONENTS=auto`, `PCA_VARIANCE=0.80` 이 기본값이 됐다.)
+
+### 결과 — 공개 소스 E 가 학습한 E 를 이긴다
+
+ModiMedDiet 은 빈도 반영(`MODIMED_POSITIVES=high_freq`, §11 D) 기준이다.
+
+| E 모드 | PCA | **ModiMedDiet AUC** | §4.2.3 Top30 추천군 | Bottom30 비추천군 | Top30 위반 |
+|---|---|---:|---:|---:|---:|
+| `shrunk` (기본) | 없음 | 0.633 | 7 | 29 | 4 |
+| `shrunk` | 5 (논문 숫자) | 0.703 | 2 | 21 | 9 |
+| **`shrunk`** | **10 (논문 규칙)** | **0.714** | **7** | **27** | **0** |
+| `shrunk` | 20 | 0.678 | 0 | 30 | 0 |
+| `vote_norules` | 10 | 0.720 | 7 | 27 | 3 |
+| `binary` | 10 | 0.710 | 7 | 30 | 1 |
+| **`learned`** (ModiMedDiet 로 학습) | 10 | **0.678** | 1 | 8 | 17 |
+
+**세 가지가 한꺼번에 뒤집힌다.**
+
+1. **§8·§10 의 "유사도 단계가 신호를 깎는다"는 PCA 를 끈 상태에서만 참이다.**
+   130차원 원공간에서 코사인 유사도를 재면 축이 많아 이웃 정의가 흐려지고 점수가
+   번진다. 논문이 지시한 대로 80% 분산으로 줄이면 반대로 **돕는다**
+   (0.633 → 0.714).
+2. **학습 없이 공개 소스만으로 0.714 가 나온다.** ModiMedDiet 라벨로 학습한
+   `learned` 는 같은 조건에서 0.678 이다. §8 에서 "역추정이 0.803, 공개 소스는
+   0.520" 이라고 쓴 것은 `D = X·e` 단독 비교였고, **전체 파이프라인에서는 공개
+   소스 E 가 이긴다.**
+3. **두 기준이 처음으로 동시에 좋다.** `shrunk` + PCA 10 은 ModiMedDiet 0.714 에
+   §4.2.3 Top30 추천군 7 / Bottom30 비추천군 27 / **교차 위반 0** 이다.
+   지금까지 어떤 설정도 양쪽을 동시에 만족하지 못했다.
+
+### 그래서 기본값을 바꿨다
+
+`PCA_COMPONENTS` 의 기본값이 `0`(공식 코드 경로) 에서 `auto`(논문 §4.2.1) 로 바뀌었다.
+E 는 `shrunk` 그대로다. `PCA_COMPONENTS=0` 으로 이전 동작을 재현할 수 있고,
+**§5~§11 의 수치는 전부 PCA 를 끈 경로에서 잰 것이다.**
+
+### 교훈
+
+공식 구현과 논문 본문이 어긋날 때 어느 쪽을 따를지가 결과를 바꿨다. 우리는
+`final.py` 를 따랐고(REPRODUCTION §3 에서 식 (1)·(2) 의 불일치를 다룬 것과 같은
+상황), 그 선택이 §8·§10 의 "유사도 단계 무용론" 을 만들었다.
+**논문 본문에만 있고 공개 코드에 없는 단계가 결정적이었다.**
+
+---
+
+## 13. 과정에서 드러난 것
 
 세 가지 모두 **논문 규모(음식 135종)에서는 드러나지 않고 14,000종에서만 터지는**
 문제다. 각각 환경변수로 되돌릴 수 있고, 근거는 [`README.md`](README.md) 설계 결정에 있다.
@@ -1068,7 +1158,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 13. 한계
+## 14. 한계
 
 - **식품 온톨로지 미통합** — FoodOn·중국 식품 온톨로지가 없어 음식 분류가 FDC SR 27군에
   머문다. 논문의 128 카테고리 체계와 대응되지 않는다.
@@ -1082,7 +1172,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 14. 산출물
+## 15. 산출물
 
 | 파일 | 내용 |
 |---|---|
