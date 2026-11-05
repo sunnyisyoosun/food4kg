@@ -377,6 +377,31 @@ python3 ourkg/analyze.py compare          # 위 표를 다시 만든다
 | `direct` (기본) | Food → Compound → Mental disorder | E 가 있는 전부 |
 | `gutbrain` | Food → Compound → **Gut microbiota** → Mental disorder | KEGG compound-미생물 링크가 있고, 그 미생물이 MeSH F03 정신질환과 연관된 것만 |
 
+### 이 경로가 KG 와 일치하는지 (`analyze.py pathcheck`)
+
+`gutbrain` 필터는 속도 때문에 중간 CSV(`compound_microbe.csv` +
+`microbe_disease.csv`)로 계산한다. 추천 코드는 SPARQL 을 쓰지 않는다 —
+`ourkg.nt` 에 쿼리를 던지는 것은 §4.1 평가(`evaluate` PART A)뿐이다.
+
+그래서 같은 집합을 KG 에서도 뽑아 대조했다. 논문 §4.1.1 Query 3 과 같은 패턴이다.
+
+```sparql
+select distinct ?c where {
+  ?m mpq:hasMetabolites ?c ; mpq:hasAssociation ?d .
+  ?d rdfs:subClassOf ent:MentalDisorder .
+}
+```
+
+| 출처 | compound |
+|---|---:|
+| CSV (`compound_microbe` + `microbe_disease.is_mental`) | 52 |
+| KG (`ourkg.nt` SPARQL) | 52 |
+| 일치 / CSV 에만 / KG 에만 | **52 / 0 / 0** |
+
+두 경로가 같은 집합을 낸다 — `build.py kg` 가 쓴 triple 과 중간 CSV 가 일관된다.
+이 52종 중 E 의 방향까지 정해진 것이 아래 표의 35종(`shrunk` 기준)이다.
+`PATH_SOURCE=kg` 로 추천에서도 KG 쪽 집합을 쓸 수 있다(적재 60초).
+
 ### 결과 (8 모드 × 2 경로)
 
 `ourkg/out/e_mode_comparison.csv`

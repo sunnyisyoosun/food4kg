@@ -112,11 +112,11 @@ def recommend(e_mode=None, path=None, save=True):
     #             REPRODUCTION §16 의 V2 ablation 과 같은 취지인데, 그쪽은
     #             공개 KG 에서 85 중 8종만 남았고 여기서는 35종이 남는다.
     PATH = path or os.environ.get('PATH_MODE', 'direct')
+    # PATH_SOURCE=csv(기본, 빠름) | kg(ourkg.nt 에 SPARQL). 두 집합이 같은지는
+    # `analyze.py pathcheck` 가 검사한다.
     if PATH == 'gutbrain':
-        cm = pd.read_csv(os.path.join(OUT, 'compound_microbe.csv'), dtype={'taxid': str})
-        md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
-        mental_tax = set(md[md['is_mental']]['taxid'])
-        gut = set(cm[cm['taxid'].isin(mental_tax)]['kegg'])
+        gut = (gutbrain_from_kg() if os.environ.get('PATH_SOURCE') == 'kg'
+               else gutbrain_from_csv())
         keep_e = np.array([c in gut for c in compounds])
         e = e * keep_e
     elif PATH != 'direct':
@@ -556,7 +556,83 @@ def compare():
         print(f'  {a:9s} vs {b:9s}   rho={rho:+.3f}   Top{K} 겹침 {ov}/{K}')
 
 
-STEPS = {'recommend': recommend, 'compare': compare, 'evaluate': evaluate}
+def gutbrain_from_csv():
+    """중간 CSV 로 gut-brain 경로 compound 집합을 만든다 (빠른 경로)."""
+    cm = pd.read_csv(os.path.join(OUT, 'compound_microbe.csv'), dtype={'taxid': str})
+    md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
+    mental_tax = set(md[md['is_mental']]['taxid'])
+    return set(cm[cm['taxid'].isin(mental_tax)]['kegg'])
+
+
+def gutbrain_from_kg():
+    """같은 집합을 ourkg.nt 에 SPARQL 을 던져 만든다 (권위 있는 경로).
+
+    논문 §4.1.1 Query 3 과 같은 패턴이다 — compound 를 대사하는 세균이
+    정신질환(MeSH F03)과 연관된 경우. 결과는 out/gutbrain_compounds.json 에
+    캐시한다(3M triple 적재가 60초 걸린다).
+    """
+    cache = os.path.join(OUT, 'gutbrain_compounds.json')
+    nt = os.path.join(OUT, 'ourkg.nt')
+    if os.path.exists(cache) and os.path.exists(nt) and \
+            os.path.getmtime(cache) >= os.path.getmtime(nt):
+        return set(json.load(open(cache))['kegg'])
+
+    from rdflib import Graph
+    if not os.path.exists(nt):
+        sys.exit('ourkg.nt 가 없다. python3 ourkg/build.py kg')
+    print(f'  ourkg.nt 적재...', flush=True)
+    t0 = time.time()
+    g = Graph()
+    g.parse(nt, format='nt')
+    print(f'  triple {len(g):,}  {time.time()-t0:.0f}s', flush=True)
+
+    q = """
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX mpq:  <http://nlp_microbe.ccnu.edu.cn/pop/qualifier#>
+PREFIX ent:  <http://nutrition.vu.nl/entity#>
+select distinct ?c where {
+  ?m mpq:hasMetabolites ?c ; mpq:hasAssociation ?d .
+  ?d rdfs:subClassOf ent:MentalDisorder .
+}"""
+    got = {str(r[0]).rsplit('/', 1)[-1] for r in g.query(q)}
+    got = {c for c in got if c.startswith('C')}
+    json.dump({'kegg': sorted(got), 'query': q}, open(cache, 'w'), indent=1)
+    return got
+
+
+def pathcheck():
+    """gut-brain 경로 compound 집합을 CSV 와 KG 에서 각각 뽑아 대조한다.
+
+    §6 의 PATH_MODE=gutbrain 은 속도 때문에 중간 CSV 로 경로를 계산한다.
+    그 집합이 KG 에 실제로 실린 triple 과 같은지 여기서 검사한다. 어긋나면
+    build.py kg 가 관계를 빠뜨렸거나 URI 가 맞지 않는다는 뜻이다.
+
+    출력
+      out/gutbrain_compounds.json   KG 에서 뽑은 집합과 쿼리 원문
+    """
+    long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    fdc = set(long['kegg'].unique())
+
+    csv_set = gutbrain_from_csv() & fdc
+    kg_set = gutbrain_from_kg() & fdc
+
+    print(f'\n  CSV  (compound_microbe + microbe_disease.is_mental)  {len(csv_set)}종')
+    print(f'  KG   (ourkg.nt SPARQL, Query 3 패턴)                  {len(kg_set)}종')
+    only_csv = sorted(csv_set - kg_set)
+    only_kg = sorted(kg_set - csv_set)
+    print(f'  일치 {len(csv_set & kg_set)} / CSV 에만 {len(only_csv)} / KG 에만 {len(only_kg)}')
+    if only_csv:
+        print(f'    CSV 에만: {only_csv}')
+    if only_kg:
+        print(f'    KG 에만:  {only_kg}')
+    if not only_csv and not only_kg:
+        print('  두 경로가 같은 집합을 낸다 — KG 와 중간 CSV 가 일관된다.')
+    else:
+        print('  ⚠ 어긋난다. build.py kg 가 쓰는 관계와 CSV 필터의 정의를 맞춰야 한다.')
+
+
+STEPS = {'recommend': recommend, 'compare': compare,
+         'pathcheck': pathcheck, 'evaluate': evaluate}
 
 
 def main(argv):

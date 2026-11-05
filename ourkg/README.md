@@ -52,6 +52,7 @@ KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐�
 | | `kg` | 논문 §3.3 표현 규약대로 RDF 출력 | `ourkg.nt`, `kg_stats.csv` |
 | `analyze.py` | `recommend` | 논문 Algorithm 1 (식 1·2) | `recommendation.csv`, `recommendation.png` |
 | | `compare` | E 구성 방식·경로를 논문 §4.2.3 기준으로 대조 | `e_mode_comparison.csv` |
+| | `pathcheck` | gut-brain 경로 compound 를 CSV 와 KG(SPARQL)에서 각각 뽑아 대조 | `gutbrain_compounds.json` |
 | | `evaluate` | §4.1 SPARQL Q1~Q3, §5.1 방법 1·2 | `eval_*.csv/json` |
 | `common.py` | — | 경로·단위 환산·라벨/카테고리 정규화 공유 | |
 | `run_all.py` | — | 위 둘을 순서대로 호출 | |
@@ -169,6 +170,9 @@ Complication 8건이 모두 확인된 것과 대비된다 — 논문이 쓴 MiKG
 정의가 그렇다. 미생물 축은 KG 와 §4.1 쿼리에만 쓰인다. `PATH_MODE=gutbrain` 으로
 미생물을 거치는 compound 만 남겨 비교할 수 있다. compound 가 절반으로 줄어도
 순위 상관이 +0.99 다 — RESULTS.md §6.
+
+추천 코드는 SPARQL 을 쓰지 않고 중간 CSV 를 읽는다(속도). 그 CSV 가 KG 와 같은
+경로를 내는지는 `analyze.py pathcheck` 로 검사한다 — 현재 52종으로 정확히 일치한다.
 
 ## 한계
 

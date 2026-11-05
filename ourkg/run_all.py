@@ -7,7 +7,7 @@
 analyze.py 의 recommend/evaluate 다. 각 파일을 직접 돌려도 같다.
 
 환경변수: MIN_COV, E_MODE, SHRINK_K, SOURCE_WEIGHTS, PRIORITY, NORM,
-          SIM_NORM, DATA_TYPES, TOP_K, E_MODES, PATH_MODE, PATHS, PART
+          SIM_NORM, DATA_TYPES, TOP_K, E_MODES, PATH_MODE, PATH_SOURCE, PATHS, PART
           — 해당 함수의 docstring·주석 참조.
 """
 import os
@@ -16,7 +16,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 BUILD = ['food', 'promenda', 'evidence', 'microbe', 'kg']
-ANALYZE = ['recommend', 'compare', 'evaluate']
+ANALYZE = ['recommend', 'compare', 'pathcheck', 'evaluate']
 
 want = sys.argv[1:]
 plan = [('build.py', [s for s in BUILD if not want or s in want]),
