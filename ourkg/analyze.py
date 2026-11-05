@@ -83,7 +83,14 @@ def recommend(e_mode=None, path=None, save=True):
     #   E_MODE=weighted  네 근거의 가중 합의 (build.py evidence)
     #   E_MODE=priority  우선순위 첫 비영 값 (build.py evidence)
     E_MODE = e_mode or os.environ.get('E_MODE', 'shrunk')
-    if E_MODE.split('_')[0] in ('weighted', 'priority', 'vote'):
+    if E_MODE == 'learned':
+        # 주의: 이 E 는 ModiMedDiet 라벨로 학습한 것이다(analyze.py invert).
+        # ModiMedDiet 기준으로 잴 때는 held-out 음식만 써야 한다.
+        lp = os.path.join(OUT, 'compound_learned.csv')
+        if not os.path.exists(lp):
+            sys.exit('compound_learned.csv 가 없다. python3 ourkg/analyze.py invert')
+        col = pd.read_csv(lp).set_index('kegg')['e_learned']
+    elif E_MODE.split('_')[0] in ('weighted', 'priority', 'vote'):
         ev_path = os.path.join(OUT, 'compound_evidence.csv')
         if not os.path.exists(ev_path):
             sys.exit('compound_evidence.csv 가 없다. python3 ourkg/build.py evidence')
@@ -792,8 +799,147 @@ def external():
         print(f'    {r.food_name[:52]:54s} {r.food_group}')
 
 
+def invert():
+    """E 의 부호를 ModiMedDiet 라벨에서 역추정하고 공개 소스 E 와 대조한다.
+
+    왜
+    --
+    성분 중량만으로 ModiMedDiet 처방군/extras 를 가르는 상한은 AUC 0.816 인데,
+    ProMENDA 기반 E 는 D = X·e 로 0.520 밖에 내지 못한다. 커버리지는 병목이
+    아니다 — E 가 있는 66종만 써도 지도학습은 0.782 다. 전부 **부호**에서 잃는다.
+
+    가설: ProMENDA 는 "우울증 환자에서 이 대사물 농도가 높/낮다"를 재는
+    case-control 메타볼로믹스지 "먹으면 좋/나쁘다"가 아니다. 논문 §4.2.1 의 E 는
+    그 둘을 동일시한다. 역추정한 E 와 ProMENDA 의 부호를 compound 별로 대조하면
+    어디서 갈리는지 목록이 나온다.
+
+    누수 방지 (실행 전에 고정)
+    --------------------------
+    - 음식 단위로 50/50 분할(seed 0, 층화). E 는 train 음식만 보고 학습한다.
+    - 보고하는 AUC 는 test 음식만으로 잰다.
+    - 논문 §4.2.3 기준은 학습에 전혀 쓰지 않으므로 독립 체크로 남는다.
+    - 유사도 S 는 라벨을 쓰지 않는 비지도 단계라 전체 음식으로 계산한다.
+
+    출력
+      out/compound_learned.csv    역추정 E (E_MODE=learned 로 쓸 수 있다)
+      out/invert_comparison.csv   compound 별 역추정 부호 vs 공개 소스 부호
+    """
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import StratifiedKFold, cross_val_predict, train_test_split
+    from sklearn.metrics import roc_auc_score
+
+    C_REG = float(os.environ.get('INVERT_C', '1.0'))
+    SEED = int(os.environ.get('INVERT_SEED', '0'))
+
+    print('[1/5] 코호트와 라벨')
+    foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
+    CURATED = ('foundation_food', 'sr_legacy_food', 'survey_fndds_food')
+    foods = foods[foods['data_type'].isin(CURATED)].reset_index(drop=True)
+    lab, _ = modimed_labels(foods)
+    long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    F = (long.pivot_table(index='food_key', columns='kegg', values='amount_g',
+                          fill_value=0.0)
+         .reindex(foods['food_key']).fillna(0.0))
+    compounds = list(F.columns)
+    X = F.values.astype(float)
+    colmax = X.max(axis=0)
+    X = np.divide(X, colmax, out=np.zeros_like(X), where=colmax > 0)
+
+    m = (lab != 0).values
+    y = (lab[m] == 1).astype(int).values
+    Xs, keys = X[m], foods.loc[m, 'food_key'].values
+    print(f'  라벨 있는 음식 {len(y):,} (처방군 {y.sum():,} / extras {(1-y).sum():,})'
+          f' / compound {len(compounds)}')
+
+    print('[2/5] 상한 — 성분 중량만으로 지도학습 (5-fold CV)')
+    cv = StratifiedKFold(5, shuffle=True, random_state=SEED)
+    oof = cross_val_predict(LogisticRegression(max_iter=2000, C=C_REG), Xs, y,
+                            cv=cv, method='predict_proba')[:, 1]
+    ceiling = roc_auc_score(y, oof)
+    print(f'  AUC {ceiling:.3f}')
+
+    print('[3/5] 50/50 분할로 E 역추정')
+    i_tr, i_te = train_test_split(np.arange(len(y)), test_size=0.5,
+                                  stratify=y, random_state=SEED)
+    clf = LogisticRegression(max_iter=2000, C=C_REG).fit(Xs[i_tr], y[i_tr])
+    coef = clf.coef_[0]
+    e_learned = coef / (np.abs(coef).max() or 1.0)
+    auc_te = roc_auc_score(y[i_te], Xs[i_te] @ coef)
+    print(f'  train {len(i_tr):,} / test {len(i_te):,}')
+    print(f'  held-out AUC (D = X·e 단독)  {auc_te:.3f}   '
+          f'(ProMENDA e_shrunk 0.520 / 상한 {ceiling:.3f})')
+
+    learned = pd.DataFrame({'kegg': compounds, 'e_learned': np.round(e_learned, 4),
+                            'coef': np.round(coef, 4)})
+    learned.to_csv(os.path.join(OUT, 'compound_learned.csv'), index=False)
+
+    print('[4/5] 공개 소스 E 와 부호 대조')
+    dep = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+    ev = pd.read_csv(os.path.join(OUT, 'compound_evidence.csv')).set_index('kegg')
+    # 이름은 ProMENDA/evidence 에 없을 수 있다 — FDC 영양소 이름으로 보충한다.
+    nmap = pd.read_csv(os.path.join(BASE, 'setup', 'nutrient_kegg_map.csv'))
+    fdc_name = (nmap.drop_duplicates('nutrient_kegg')
+                .set_index('nutrient_kegg')['nutrient_name'].to_dict())
+
+    def cname(c):
+        for v in (ev['name'].get(c), dep['name'].get(c), fdc_name.get(c)):
+            if isinstance(v, str) and v and v != 'nan':
+                return v
+        return c
+
+    rows = []
+    for i, c in enumerate(compounds):
+        pm = float(dep['e_shrunk'].get(c, 0.0))
+        rows.append({
+            'kegg': c,
+            'name': cname(c),
+            'e_learned': round(float(e_learned[i]), 4),
+            'promenda': round(pm, 4),
+            'menda': round(float(ev['menda_score'].get(c, 0.0)), 4),
+            'rules': round(float(ev['rules_score'].get(c, 0.0)), 4),
+            'afs': round(float(ev['afs_score'].get(c, 0.0)), 4),
+            'sign_vs_promenda': ('' if pm == 0 else
+                                 ('same' if np.sign(e_learned[i]) == np.sign(pm)
+                                  else 'FLIP')),
+        })
+    cmp_tab = pd.DataFrame(rows)
+    cmp_tab['abs'] = cmp_tab['e_learned'].abs()
+    cmp_tab = cmp_tab.sort_values('abs', ascending=False).drop(columns='abs')
+    cmp_tab.to_csv(os.path.join(OUT, 'invert_comparison.csv'), index=False)
+
+    both = cmp_tab[cmp_tab['sign_vs_promenda'] != '']
+    same = int((both['sign_vs_promenda'] == 'same').sum())
+    print(f'  둘 다 비영인 compound {len(both)} / 부호 일치 {same} '
+          f'({same/len(both)*100:.0f}%)')
+    print('\n  역추정 |e| 가 큰 상위 15 — biomarker 방향과 식이 방향이 갈리는 곳')
+    print(f'    {"kegg":8s} {"name":30s} {"learned":>8s} {"ProMENDA":>9s}  판정')
+    for _, r in cmp_tab.head(15).iterrows():
+        print(f'    {r.kegg:8s} {str(r["name"])[:30]:30s} '
+              f'{r.e_learned:+8.3f} {r.promenda:+9.3f}  {r.sign_vs_promenda}')
+
+    print('[5/5] 역추정 E 로 논문 Algorithm 1 을 돌린다')
+    res = recommend(e_mode='learned', save=False)
+    test_keys = set(keys[i_te])
+    sub = res[res['food_key'].isin(test_keys)]
+    lab_sub, _ = modimed_labels(sub)
+    auc_pipe = roc_auc_score((lab_sub == 1).astype(int).values, sub['score'].values)
+    K = int(os.environ.get('TOP_K', '30'))
+    NOT_OK = {'Sausages and Luncheon Meats', 'Baked Products', 'Sweets',
+              'Beef Products', 'Pork Products', 'Lamb, Veal, and Game Products'}
+    REC_OK = {'Finfish and Shellfish Products', 'Fruits and Fruit Juices',
+              'Vegetables and Vegetable Products'}
+    top, bot = res.head(K), res.tail(K)
+    print(f'  held-out 음식 {len(sub):,} 에서 전체 파이프라인 AUC {auc_pipe:.3f}')
+    print(f'  (참고: 현재 최고 vote direct 0.665 / 기본 shrunk 0.491)')
+    print(f'  §4.2.3 (학습에 쓰지 않은 독립 체크) — '
+          f'Top{K} 추천군 {int(top["food_group"].isin(REC_OK).sum())} / '
+          f'Bottom{K} 비추천군 {int(bot["food_group"].isin(NOT_OK).sum())}')
+    print(f'  Top{K} 첫 음식: {top["food_name"].iloc[0][:50]}')
+    print(f'  Bottom{K} 끝 음식: {bot["food_name"].iloc[-1][:50]}')
+
+
 STEPS = {'recommend': recommend, 'compare': compare, 'external': external,
-         'pathcheck': pathcheck, 'evaluate': evaluate}
+         'invert': invert, 'pathcheck': pathcheck, 'evaluate': evaluate}
 
 
 def main(argv):
