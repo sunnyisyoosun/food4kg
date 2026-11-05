@@ -70,11 +70,17 @@ def recommend(e_mode=None, path=None, save=True):
     # 논문은 숫자(5)와 규칙(분산 80%)을 함께 적는데, 논문 데이터에서는 둘이 같고
     # 우리 F 에서는 다르다 — 5 성분은 74.1%, 80% 를 넘으려면 10 성분이다.
     # 기본값은 논문이 명시한 숫자 5 로 둔다. 규칙 적용판은 auto 로 돌린다.
-    #   PCA_COMPONENTS=5     논문 §4.2.1 의 숫자 (기본)
-    #   PCA_COMPONENTS=auto  논문 규칙(분산 PCA_VARIANCE, 기본 0.80) 적용 -> 10
-    #   PCA_COMPONENTS=0     PCA 없음 (공식 final.py 경로)
+    #   PCA_COMPONENTS=0     PCA 없음 (기본, 아래 이유)
+    #   PCA_COMPONENTS=5     논문 §4.2.1 의 숫자
+    #   PCA_COMPONENTS=auto  논문 규칙(분산 PCA_VARIANCE, 기본 0.80) 적용
     #   PCA_COMPONENTS=<n>   직접 지정
-    _pca_opt = os.environ.get('PCA_COMPONENTS', '5')
+    #
+    # 기본값이 0 인 이유 (§13): F 를 논문대로 우울증 연결 compound 로 제한하면
+    # PCA 를 켜는 쪽이 Top 30 을 망가뜨린다. 논문 §4.2.3 이 보고한 결과
+    # ("recommended foods are mainly fish and shellfish products, as well as
+    # fruits and vegetables")를 재현하는 것은 PCA 를 끈 쪽이다.
+    # 논문 본문(PCA 를 쓰라)과 논문 결과(§4.2.3)가 어긋나고, 결과 쪽을 따랐다.
+    _pca_opt = os.environ.get('PCA_COMPONENTS', '0')
     PCA_VAR = float(os.environ.get('PCA_VARIANCE', '0.80'))
     PCA_N = -1 if _pca_opt == 'auto' else int(_pca_opt)
 
@@ -132,6 +138,26 @@ def recommend(e_mode=None, path=None, save=True):
         col = E_df['e_shrunk']
     e = np.array([col.get(c, 0.0) for c in compounds], dtype=float)
     print(f'  E_MODE={E_MODE}')
+
+    # 논문 §4.2.1 — "135 food samples and their associated 85 component compounds,
+    # **with these compounds being linked to depression**".
+    # 논문의 F 는 우울증에 연결된 compound 만 열로 갖는다. 우리 F 는 FDC 에서
+    # KEGG 로 매핑되는 130종 전부였고, 그중 E 가 비영인 것은 66종뿐이다.
+    # D = E x F^T 에는 영향이 없지만(E=0 열은 기여가 0) **유사도 S 가 쓸모없는
+    # 64개 축을 포함해 계산**되고 있었다. 논문대로 제한한다.
+    #   F_COLUMNS=linked  E 가 비영인 compound 만 (기본, 논문 §4.2.1)
+    #   F_COLUMNS=all     FDC 에서 매핑된 compound 전부 (2026-11-05 이전 동작)
+    F_COLUMNS = os.environ.get('F_COLUMNS', 'linked')
+    if F_COLUMNS == 'linked':
+        sel = np.flatnonzero(e)
+        if len(sel) == 0:
+            sys.exit(f'E_MODE={E_MODE} 에서 비영 compound 가 없다.')
+        F = F.iloc[:, sel]
+        compounds = [compounds[i] for i in sel]
+        e = e[sel]
+        print(f'  F_COLUMNS=linked — 우울증 연결 compound {len(sel)}열만 사용')
+    elif F_COLUMNS != 'all':
+        sys.exit(f'F_COLUMNS 는 linked 또는 all. 받은 값: {F_COLUMNS}')
 
     # 경로 제한 — 논문 Fig.2 의 두 갈래 중 어느 쪽을 쓸 것인가.
     #
@@ -811,11 +837,15 @@ def modimed_score(res, K):
     top, bot = res.head(K), res.tail(K)
     ltop = modimed_positives(top)
     lbot = modimed_positives(bot)
+    # 주지표는 Top K 다. AUC 는 음식 6,000여 개 전체의 순서를 재므로 맨 위에
+    # 무엇이 오는지에 둔감하다 — 실제로 AUC 최고 설정의 Top 30 이 처방 0 /
+    # extras 19(1위가 증류주)인 경우가 있었다(§13). Top-K 추천의 품질은
+    # Top K 안의 구성으로 잰다. AUC 는 참고로 남긴다.
     return {
-        'modimed_AUC': round(float(auc), 3),
         f'top{K}_처방군': int((ltop == 1).sum()),
         f'top{K}_extras': int((ltop == -1).sum()),
         f'bot{K}_extras': int((lbot == -1).sum()),
+        'modimed_AUC(참고)': round(float(auc), 3),
     }
 
 

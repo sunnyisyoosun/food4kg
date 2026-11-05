@@ -1,0 +1,7 @@
+F열,PCA,AUC,추천군,비추천군,위반,MMD_top30_처방,MMD_top30_extras,MMD_bot30_extras,top
+130 (all),없음,0.633,7,29,4,5,13,4,"Sugar substitute, sucralose, p"
+130 (all),5 (논문 숫자),0.703,2,21,9,9,6,2,"Muffins, wheat bran, dry mix"
+130 (all),auto (분산 80%),0.714,7,27,0,12,4,4,"Spices, chili powder"
+66 (linked),없음,0.592,22,27,2,22,1,8,"Vegetable juice, BOLTHOUSE FAR"
+66 (linked),5 (논문 숫자),0.699,1,20,7,5,10,2,"Turkey, skin from whole (light"
+66 (linked),auto (분산 80%),0.729,0,25,0,0,19,1,"Alcoholic beverage, distilled,"

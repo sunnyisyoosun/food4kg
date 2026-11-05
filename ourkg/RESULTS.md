@@ -25,8 +25,8 @@
 | 음식당 측정 compound 중앙값 | 33 | **47** |
 | 우울증 극성이 확정된 compound | 85 (공개 소스로는 69) | 66 |
 | §5.1 방법 2 문헌 검증 | 11 / 15 | **4 / 15** |
-| ModiMedDiet AUC (빈도 반영, 논문 PCA 5 성분) | — | **0.703** |
-| 같은 기준, 논문 규칙(분산 80% → 10 성분) 적용 시 | — | **0.714** (교차 위반 0) |
+| §4.2.3 Top30 추천군 / Bottom30 비추천군 | 서술 | **22 / 27** (교차 위반 2) |
+| ModiMedDiet Top30 처방군 / extras (빈도 반영) | — | **22 / 1** |
 | 같은 기준에서 ModiMedDiet 로 학습한 E | — | 0.678 — **공개 소스가 이긴다** (§12) |
 | `D = X·e` 만 비교하면 (PCA 무관) | — | 공개 0.520 / 역추정 0.803 / 상한 0.816 (§8) |
 
@@ -102,67 +102,58 @@ MeSH SPARQL / NCBI efetch
 ## 3. 추천 결과 (depression)
 
 `ourkg/out/recommendation.csv` — 12,569 음식 전체 순위.
-기본 설정은 `E_MODE=shrunk` + **논문 §4.2.1 의 PCA 5 성분**(§12).
+기본 설정은 `E_MODE=shrunk`, `F_COLUMNS=linked`(논문 §4.2.1), PCA 없음(§13).
 
 ### Top 12
 
 | 순위 | 음식 | 카테고리 | 점수 |
 |---:|---|---|---:|
-| 1 | Muffins, wheat bran, dry mix | Baked Products | 138.0 |
-| 2 | Spices, ginger, ground | Spices and Herbs | 118.8 |
-| 3 | Cereals RTE, RALSTON Enriched Wheat Bran flakes | Breakfast Cereals | 112.8 |
-| 4 | Muffins, oat bran | Baked Products | 109.0 |
-| 5 | Spices, chili powder | Spices and Herbs | 102.7 |
-| 6 | Parsley, freeze-dried | Vegetables | 94.6 |
-| 7 | Snacks, crisped rice bar, almond | Snacks | 92.2 |
-| 8 | Snacks, granola bars, soft, uncoated, plain | Snacks | 89.9 |
-| 9 | Spices, oregano, dried | Spices and Herbs | 84.2 |
-| 10 | Snacks, granola bars, soft, nut and raisin | Snacks | 69.9 |
-| 11 | Snacks, popcorn, caramel-coated, with peanuts | Snacks | 68.6 |
-| 12 | Cookies, oatmeal, dry mix | Baked Products | 63.2 |
-
-통곡물 머핀·브랜 시리얼·그래놀라바가 상위다. 향신료·건조식품이 끼는 것은
-**100 g 기준** 때문이고, 논문 §4.1.2 도 "each food instance's unit weight is
-standardized to 100 g" 라고 해서 같은 성질을 공유한다.
-
-### Bottom — 전부 육류 살코기 부위
-
-돼지 17 / 가금 9 / 소 2 / 양 1 / 소시지 1.
+| 1 | Vegetable juice, BOLTHOUSE FARMS, DAILY GREENS | Vegetables | 26.88 |
+| 2 | Mustard spinach (tendergreen), raw | Vegetables | 26.42 |
+| 3 | Mustard greens, boiled, with salt | Vegetables | 24.44 |
+| 4 | Mustard greens, boiled, without salt | Vegetables | 24.35 |
+| 5 | Beverages, FUZE orange mango, vitamin-fortified | Beverages | 22.41 |
+| 6 | Turnip greens, canned, no salt added | Vegetables | 21.07 |
+| 7 | Carrot juice, canned | Vegetables | 20.87 |
+| 8 | Mustard greens, frozen, cooked | Vegetables | 20.73 |
+| 9 | Cress, garden, raw | Vegetables | 20.12 |
+| 10 | Balsam-pear (bitter gourd), leafy tips, boiled | Vegetables | 19.97 |
+| 11 | McDONALD'S, Bacon Ranch Salad without chicken | Fast Foods | 19.15 |
+| 12 | Babyfood, juice, apple-sweet potato | Baby Foods | 19.12 |
 
 ### 카테고리 분포 — 논문 §4.2.3 과의 대조
 
 | 카테고리 | Top 30 | Bottom 30 |
 |---|---:|---:|
-| Snacks | 12 | 0 |
-| Baked Products | 7 | 0 |
-| Spices and Herbs | 3 | 0 |
-| Breakfast Cereals | 2 | 0 |
-| **Vegetables and Vegetable Products** | **2** | 0 |
+| **Vegetables and Vegetable Products** | **16** | 0 |
+| **Fruits and Fruit Juices** | **6** | 0 |
+| Baby Foods | 2 | 1 |
 | Sweets | 2 | 0 |
-| Nut and Seed / Cereal Grains | 각 1 | 0 |
-| **Pork Products** | 0 | **17** |
-| **Poultry Products** | 0 | **9** |
-| Beef Products | 0 | 2 |
-| Lamb, Veal, and Game / Sausages | 0 | 각 1 |
+| Fast Foods / Beverages / Dairy / AI-AN Foods | 각 1 | 0 |
+| **Beef Products** | 0 | **18** |
+| **Sausages and Luncheon Meats** | 0 | **6** |
+| **Pork Products** | 0 | **3** |
+| Poultry Products | 0 | 2 |
 
-| | 값 |
+| 기준 | 값 |
 |---|---|
-| §4.2.3 Top30 추천군(어패류·과일·채소) | 2 |
-| §4.2.3 Bottom30 비추천군(소시지·베이커리·과자·육류) | 21 |
-| 교차 위반 (비추천군이 Top 에 — 베이커리 7·과자 2) | 9 |
-| ModiMedDiet AUC (빈도 반영) | **0.703** |
+| §4.2.3 Top30 추천군 (어패류·과일·채소) | **22 / 30** |
+| §4.2.3 Bottom30 비추천군 (소시지·베이커리·과자·육류) | **27 / 30** |
+| 교차 위반 (비추천군이 Top 에) | **2** |
+| ModiMedDiet Top30 처방군 / extras | **22 / 1** |
+| ModiMedDiet AUC (참고) | 0.592 |
 
-**비추천 쪽은 논문 §4.2.3·Fig.5 와 맞는다** — 피라미드 상단의 육류 그대로다.
-**추천 쪽은 맞지 않는다** — 논문이 1순위로 든 어패류가 Top 30 에 없고, 논문이
-**비추천**으로 든 베이커리·과자가 9개 들어간다.
+**논문 §4.2.3 을 양쪽 모두 재현한다.**
 
-> 논문이 같은 문장에서 함께 적은 **분산 80% 규칙**을 우리 데이터에 적용하면
-> 10 성분이고(5 성분은 74.1%), 그쪽은 Top30 추천군 7 / Bottom30 비추천군 27 /
-> **교차 위반 0** / AUC **0.714** 로 양쪽 기준에서 모두 낫다.
-> 기본값은 논문이 명시한 숫자 5 로 두되, 규칙 적용판은 아래 한 줄로 돌릴 수 있다.
-> ```bash
-> PCA_COMPONENTS=auto python3 ourkg/analyze.py recommend
-> ```
+> "the recommended foods are mainly fish and shellfish products, **as well as
+> fruits and vegetables**. On the other hand, the not recommended foods are
+> mainly **sausage products**, baked products, and sweets."
+
+채소 16 + 과일 6 = 22/30 이고, 비추천 쪽은 소고기 18 · 소시지 6 · 돼지 3 이다.
+남는 차이는 **어패류가 Top 30 에 없다**는 점이다.
+
+두 평가 기준의 Top-30 측정이 처음으로 같은 방향을 가리킨다 — §4.2.3 추천군 22,
+ModiMedDiet 처방군 22 / extras 1.
 
 시각화: `ourkg/out/recommendation.png` (논문 Fig.4(b) 대응 t-SNE)
 
@@ -1101,7 +1092,10 @@ ModiMedDiet 은 빈도 반영(`MODIMED_POSITIVES=high_freq`, §11 D) 기준이�
    §4.2.3 Top30 추천군 7 / Bottom30 비추천군 27 / **교차 위반 0** 이다.
    지금까지 어떤 설정도 양쪽을 동시에 만족하지 못했다.
 
-### 그래서 기본값을 바꿨다 — 논문이 명시한 5 로
+> **★ §13 에서 다시 바뀜.** 논문 §4.2.1 의 `F` 제한을 함께 넣으면 PCA 를 켜는
+> 쪽이 Top 30 을 망가뜨린다. 기본값은 PCA 없음이 됐다.
+
+### 그때 기본값을 논문이 명시한 5 로 뒀다
 
 `PCA_COMPONENTS` 의 기본값이 `0`(공식 코드 경로) 에서 **`5`**(논문 §4.2.1 이
 명시한 숫자) 로 바뀌었다. E 는 `shrunk` 그대로다.
@@ -1135,7 +1129,68 @@ ModiMedDiet 은 빈도 반영(`MODIMED_POSITIVES=high_freq`, §11 D) 기준이�
 
 ---
 
-## 13. 과정에서 드러난 것
+## 13. ★ 논문의 `F` 제한과, AUC 가 Top-K 를 잘못 줄세운 일
+
+### A. 논문의 `F` 는 우울증에 연결된 compound 만 갖는다
+
+§4.2.1 첫 문장이다.
+
+> "we apply the knowledge query and inference to obtain a dataset consisting of
+> 135 food samples and their associated 85 component compounds, **with these
+> compounds being linked to depression**"
+
+우리 `F` 는 FDC 에서 KEGG 로 매핑되는 **130종 전부**였고, 그중 `E` 가 비영인 것은
+66종뿐이다. `D = E × Fᵀ` 에는 영향이 없다(E=0 열의 기여가 0). 그러나
+**유사도 `S` 가 쓸모없는 64개 축을 포함해 계산되고 있었다.**
+`F_COLUMNS=linked` 가 기본값이 됐다 (`all` 로 이전 동작 재현).
+
+### B. 조합을 전부 재 보니 AUC 와 Top-30 이 반대를 가리켰다
+
+`ourkg/out/fcolumns_comparison.csv`. ModiMedDiet 은 빈도 반영 기준(§11 D)이다.
+
+| `F` 열 | PCA | AUC | §4.2.3 추천군 | §4.2.3 비추천군 | 위반 | **MMD Top30 처방** | **MMD Top30 extras** | Top 1 |
+|---|---|---:|---:|---:|---:|---:|---:|---|
+| 130 (all) | 없음 | 0.633 | 7 | 29 | 4 | 5 | 13 | 설탕 대체재 |
+| 130 | 5 | 0.703 | 2 | 21 | 9 | 9 | 6 | 밀기울 머핀 |
+| 130 | auto(10) | 0.714 | 7 | 27 | 0 | 12 | 4 | 칠리파우더 |
+| **66 (linked)** | **없음** | 0.592 | **22** | 27 | 2 | **22** | **1** | **야채주스** |
+| 66 | 5 | 0.699 | 1 | 20 | 7 | 5 | 10 | 칠면조 껍질 |
+| 66 | auto | **0.729** | 0 | 25 | 0 | **0** | **19** | **증류주** |
+
+**AUC 가 가장 높은 설정의 Top 30 은 처방 0 / extras 19 이고 1위가 증류주다.
+AUC 가 가장 낮은 설정의 Top 30 은 처방 22 / extras 1 이고 1위가 야채주스다.**
+
+AUC 는 음식 6,000여 개 전체의 순서를 재므로 **맨 위에 무엇이 오는지에 둔감하다.**
+Top-K 추천의 품질은 Top K 안의 구성으로 재야 한다. §7 에서 AUC 를 주지표로
+삼은 것이 잘못이었다.
+
+→ ModiMedDiet 채점의 **주지표를 Top K 처방/extras 로 바꿨고**, AUC 는
+`modimed_AUC(참고)` 로 남긴다. §7·§11 의 AUC 기반 서열은 이 한계를 안고 읽어야 한다.
+(§11 D 의 '빈도 반영' 교정 자체는 영향을 받지 않는다 — 라벨 정의의 문제였다.)
+
+### C. 기본값 — 논문 본문과 논문 결과가 어긋날 때
+
+`F_COLUMNS=linked` + **PCA 없음** 이 두 기준의 Top-30 에서 모두 압도적이다.
+그런데 이것은 논문 본문이 쓰라고 한 PCA 를 끄는 설정이다.
+
+- 논문 **본문** §4.2.1: PCA 로 차원을 줄여라
+- 논문 **결과** §4.2.3: 추천은 어패류·과일·채소, 비추천은 소시지류
+
+`F` 를 제한한 뒤에는 둘을 동시에 만족시킬 수 없다. PCA 를 켜면 Top 30 이
+칠면조 껍질·크림치즈(5성분) 또는 증류주(10성분)가 되어 §4.2.3 서술에서 멀어진다.
+**논문이 보고한 결과 쪽을 따라 PCA 를 껐다.**
+
+이것은 §12 의 교훈을 한 겹 더한다. 거기서는 공식 코드와 논문 본문이 어긋났고,
+여기서는 **논문 본문과 논문 자신의 결과가 어긋난다.**
+
+```bash
+python3 ourkg/analyze.py recommend                      # 기본: linked, PCA 없음
+F_COLUMNS=all PCA_COMPONENTS=5 python3 ourkg/analyze.py recommend   # §12 설정
+```
+
+---
+
+## 14. 과정에서 드러난 것
 
 세 가지 모두 **논문 규모(음식 135종)에서는 드러나지 않고 14,000종에서만 터지는**
 문제다. 각각 환경변수로 되돌릴 수 있고, 근거는 [`README.md`](README.md) 설계 결정에 있다.
@@ -1175,7 +1230,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 14. 한계
+## 15. 한계
 
 - **식품 온톨로지 미통합** — FoodOn·중국 식품 온톨로지가 없어 음식 분류가 FDC SR 27군에
   머문다. 논문의 128 카테고리 체계와 대응되지 않는다.
@@ -1189,7 +1244,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
-## 15. 산출물
+## 16. 산출물
 
 | 파일 | 내용 |
 |---|---|
@@ -1210,6 +1265,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 | `out/learned_form.csv`, `out/learned_both.csv` | 그 축으로 역추정한 가중치 |
 | `out/disagreement_by_group.csv` | 두 기준이 갈리는 지점의 음식군별 분해 |
 | `out/pca_comparison.csv` | PCA 성분 수별 두 기준 채점 |
+| `out/fcolumns_comparison.csv` | `F` 열 제한 × PCA 조합 채점 (§13) |
 | `out/compound_microbe.csv` | KEGG 재계산 compound-미생물 2,124 |
 | `out/microbes.csv` | NCBI 갱신 미생물 127 |
 | `out/microbe_disease.csv`, `out/microbe_disease_mikg.csv` | 미생물-질환 |

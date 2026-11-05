@@ -164,18 +164,26 @@ Complication 8건이 모두 확인된 것과 대비된다 — 논문이 쓴 MiKG
    1.0 이 되므로 최대 성분이 우연히 E=+1 인 음식이 전부 상위에 온다. 열별 정규화는
    논문 Fig.4(c) "we normalize the compounds in the two groups of foods separately"
    를 근거로 한다. `NORM=row_minmax` 로 공식 경로 실행 가능.
-6. **논문 §4.2.1 의 PCA** (`PCA_COMPONENTS=5`) — 유사도 `S` 를 compound 원공간이
+6. **논문 §4.2.1 의 `F` 제한** (`F_COLUMNS=linked`) — 논문의 `F` 는 "compounds
+   being linked to depression" 만 열로 갖는다. 우리 `F` 는 130열 전부였고 `E` 가
+   비영인 것은 66종이라, 유사도 `S` 가 쓸모없는 64축을 포함해 계산되고 있었다.
+   제한하면 §4.2.3 Top30 추천군이 7 → **22** 가 된다. `F_COLUMNS=all` 로 되돌린다.
+7. **PCA 는 끈다** (`PCA_COMPONENTS=0`) — 논문 본문 §4.2.1 은 PCA 를 쓰라고 하지만,
+   `F` 를 제한한 뒤에는 PCA 를 켜면 Top 30 이 칠면조 껍질(5성분)·증류주(10성분)가
+   되어 논문이 보고한 결과 §4.2.3 에서 멀어진다. 논문 본문과 논문 결과가 어긋나고,
+   결과 쪽을 따랐다. `PCA_COMPONENTS=5|auto` 로 본문 쪽 실행. RESULTS.md §12·§13.
+8. **(이전) 논문 §4.2.1 의 PCA** — 유사도 `S` 를 compound 원공간이
    아니라 PCA 축소 공간에서 계산한다. 공식 `final.py` 에는 이 단계가 없어 처음에는
    꺼 두고 돌렸는데, 켜면 ModiMedDiet AUC 가 0.633 → 0.703 으로 오른다.
    논문은 같은 문장에서 숫자(5)와 규칙(분산 80%)을 함께 적는데 우리 `F` 에서는
    5 성분이 74.1% 라 어긋난다. 기본값은 논문이 명시한 5, 규칙 적용판(10 성분)은
    `PCA_COMPONENTS=auto` 로 돌린다 — 그쪽이 AUC 0.714 에 교차 위반 0 으로 두 기준
    모두에서 낫다. `PCA_COMPONENTS=0` 은 공식 경로. 상세는 RESULTS.md §12.
-7. **식 (2) 에 정규화 없음** (`SIM_NORM=none`) — 공식 `final.py` 는 `p[i] /= sum(S[:,i])`
+9. **식 (2) 에 정규화 없음** (`SIM_NORM=none`) — 공식 `final.py` 는 `p[i] /= sum(S[:,i])`
    를 덧붙이는데, 식 (2) 에는 없다. adjusted cosine 은 음수를 가지므로 이 열합이
    0 근처가 될 수 있고, 성분이 적은 음식의 열합이 ~15 (중앙값 3,894)까지 떨어져
    점수를 폭발시켰다. `SIM_NORM=colsum` 으로 공식 경로 실행 가능.
-8. **추천 코호트를 분석 측정 데이터로 제한** (`DATA_TYPES=curated`) — 논문 §4.2 의
+10. **추천 코호트를 분석 측정 데이터로 제한** (`DATA_TYPES=curated`) — 논문 §4.2 의
    135개 음식은 전부 Foundation / SR Legacy / FNDDS 다. branded_food 는 라벨 신고값이라
    대부분 성분이 결측이고, 성분이 거의 없는 탄산수·단백질파우더가 상위를 차지한다.
    KG 자체(04)는 FDC 전체를 담는다. `DATA_TYPES=all` 로 포함 가능.
