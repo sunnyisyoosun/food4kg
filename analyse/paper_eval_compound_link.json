@@ -1,0 +1,13 @@
+{
+ "kegg_nodes": 6685,
+ "kegg_keys": 8000,
+ "fdc_nutrients": 477,
+ "matched": 119,
+ "ambiguous": 5,
+ "paper_map": 123,
+ "agree": 51,
+ "differ": 15,
+ "unresolvable": 14,
+ "p85": 85,
+ "p85_in_kegg": 58
+}

@@ -3438,6 +3438,83 @@ V7(ProMENDA 엄밀 다수결)은 2종(Serine −, CYSTEINE +)을 채우고 Spear
 처음부터 존재할 수 없는 물질이고, 논문은 그 10종에 어떻게 부호를 주었는지 적지 않았다.
 Fig. 4(c) 가 이들을 85종에 포함시킨 것과 §4.2.1 의 E 정의가 서로 맞지 않는다.
 
+### 17.29 §3.2 compound 링킹을 재현하니 논문 ID 가 자기 KG 에 없다 (2026-11-09)
+
+§3.2 의 compound 링킹은 그동안 **절차가 아니라 결과를 물려받은** 상태였다 —
+`setup/nutrient_kegg_map.csv` 180 개 중 101 개가 공개 KG 의
+`nutrient_id owl:sameAs KEGG` 와 값까지 같다. 논문이 적은 절차를 직접 구현해
+그 101 개를 독립적으로 재현할 수 있는지 봤다. 실행:
+`python3 eval/paper_kg_stats.py clink`.
+
+#### 구현한 규칙 (논문 §3.2 그대로)
+
+> "compounds are linked to the KEGG database **using their labels** … The matching
+> process **ignores case, singular and plural forms, as well as the word sequence**"
+> / "we use the **Greek alphabet as a constraint**. For example, 'Tocopherol, gamma'
+> and 'Tocopherol, alpha' are recognized as two distinct compounds"
+
+- 매칭 키 = (어순 무시 토큰 집합, **그리스문자 집합**). 그리스문자는 따로 묶어
+  반드시 일치해야 하므로 `Tocopherol, gamma` ≠ `Tocopherol, alpha` 가 된다.
+- 단복수는 `ourkg/common.singularize` 와 같은 규칙.
+- 동의어는 KEGG 라벨의 괄호 표기에서 얻는다 — `Ascorbic acid (Vitamin C)`,
+  `alpha-Tocopherol (Vitamin E)`. 논문이 든 "vitamin E = alpha-tocopherol" 이 이것이다.
+
+#### 결과
+
+```
+KEGG 노드 6,685 / 매칭 키 8,000
+FDC nutrient 477 중 1:1 매칭 119 (모호 5)
+논문 매핑 123 과 대조 — 일치 51, 다름 15
+```
+
+절반도 재현되지 않는다. 그런데 불일치 쪽을 보면 원인이 우리가 아니다.
+
+#### 다름 15 건 중 14 건은 **논문 ID 가 자기 KEGG 파일에 노드로 없다**
+
+```
+Tryptophan     논문 C00806 (노드 없음)  재현 C00078 "Tryptophan (Trp)"
+Isoleucine     논문 C16434 (노드 없음)  재현 C00407 "Isoleucine (Ile)"
+Leucine        논문 C16439 (노드 없음)  재현 C00123 "Leucine (Leu)"
+Methionine     논문 C01733 (노드 없음)  재현 C00073 "Methionine (Met)"
+… Tyrosine · Valine · Arginine · Histidine · Alanine · Phenylalanine …
+```
+
+전부 아미노산이다. 논문이 가리킨 ID 는 배포된 `KEGG_Compound.jsonld`(6,685 노드)에
+**존재하지 않아 라벨도 brite 분류도 붙지 않는다.** 재현이 찾은 쪽은 전부 존재한다.
+
+#### 범위 — Fig 4(c) 85 중 27 개가 해소 불가
+
+| 그룹 | 미해소 |
+|---|---:|
+| Amino acid | 14 |
+| Macronutrient | 5 |
+| Trace Elements | 5 |
+| Carbohydrates | 2 |
+| Vitamins and cofactors | 1 |
+| **합계** | **27 / 85** |
+
+§17.28 과 맞물린다. 거기서 `E = 0` 이던 16 종 중 미량원소 5 + 다량영양소 5 가
+"MENDA 에 없다" 였는데, **같은 10 종이 KEGG 파일에도 없다.** 논문의 85 목록에는
+자기 KG 가 이름조차 붙이지 못하는 compound 가 27 개 들어 있다.
+
+#### 조치 — `kegg_alias.KEGG_ALIAS`
+
+재현으로 얻은 15 건(아미노산 14 + Vitamin B12)을 `kegg_alias.py` 에 세 번째 방향으로
+넣었다. 기존 `FOOD_ALIAS`(양 조회) · `INCIDENCE_ALIAS`(방향 조회) 와 같은 패턴이다.
+
+**교차검증**: 15 건 중 9 건은 예전에 ProMENDA 이름을 손으로 대조해 만든
+`INCIDENCE_ALIAS` 와 **독립적으로 같은 답**이다(9/9 일치). 서로 다른 경로로 같은
+대응에 도달했다.
+
+적용 범위는 **라벨·brite 분류·대사 경로 조회뿐**이다. 85 목록의 정본 ID 는 그대로 둔다.
+
+```
+Fig 4(c) 85 중 KEGG 해소   58/85  ->  73/85   (alias 적용 시)
+```
+
+남은 12 건(미네랄 10 · Fructose · Galactose)은 재현되지 않는다 — 배포된 KEGG
+서브셋에 해당 라벨 자체가 없다.
+
 ## 18. 개선 방안 (논문 근거 기준)
 
 재현(§1~17)과 **코드·수치를 섞지 않는다.** 아래는 전부 논문이 스스로 적은 내용을 근거로

@@ -6,6 +6,9 @@ KEGG ID를 쓰는 경우를 모은다. 매핑 실패가 아니라 ID 선택 차�
 
 두 방향이 있다.
 
+KEGG_ALIAS      논문 ID -> KEGG 정식 ID
+                라벨·brite 분류·대사 경로를 조회할 때 쓴다 (§17.29).
+
 FOOD_ALIAS      논문 ID -> food_nutrient.csv(FDC)의 ID
                 영양소 '양'을 가져올 때 쓴다. reconstruct.py.
 
@@ -18,6 +21,41 @@ MENDA/ProMENDA는 L-form을 쓰기 때문에 생긴다. ProMENDA에서 이름을
 정확 대조해 확인했다(부분 문자열 함정 주의: 'Alanine'은 'Phenylalanine'에도
 걸리고, 'Aspart'는 'N-Acetylaspartate'에도 걸린다).
 """
+
+# KEGG_ALIAS   논문 ID -> KEGG 정식 ID
+#              KEGG 라벨·brite 분류·대사 경로를 조회할 때 쓴다.
+#
+# 논문 §3.2 는 "compounds are linked to the KEGG database using their labels"
+# 라고 적지만, 논문이 실제로 쓴 ID 27 개는 **자기가 배포한 KEGG_Compound.jsonld 에
+# 노드로 존재하지 않는다**(§17.29). 그래서 라벨도 brite 분류도 붙지 않는다.
+#
+# 아래 15 건은 그 §3.2 절차(대소문자·단복수·어순 무시 + 그리스문자 제약)를
+# 그대로 재구현해 얻은 것이다 — eval/paper_kg_stats.py 의 compound_linking().
+# 그중 9 건은 예전에 ProMENDA 이름을 손으로 대조해 만든 INCIDENCE_ALIAS 와
+# **독립적으로 같은 답**이 나왔다(서로 다른 경로의 교차검증).
+#
+# 남은 12 건(미네랄 10 · Fructose · Galactose)은 재현되지 않는다 —
+# 배포된 KEGG 서브셋 6,685 노드에 해당 라벨이 아예 없다.
+KEGG_ALIAS = {
+    # --- 아미노산 14. 논문은 입체 비특이적/결번 ID, KEGG 정식은 L-form
+    'C01733': 'C00073',   # Methionine     (INCIDENCE_ALIAS 와 일치)
+    'C16436': 'C00183',   # Valine         (〃)
+    'C16435': 'C00148',   # Proline        (〃)
+    'C02385': 'C00062',   # Arginine       (〃)
+    'C16434': 'C00407',   # Isoleucine     (〃)
+    'C00716': 'C00065',   # Serine         (〃)
+    'C01401': 'C00041',   # Alanine        (〃)
+    'C00736': 'C00097',   # CYSTEINE       (〃)
+    'C16433': 'C00049',   # Aspartate      (〃)
+    'C01536': 'C00082',   # Tyrosine       (재현으로 새로 채움)
+    'C02057': 'C00079',   # Phenylalanine  (〃)
+    'C00806': 'C00078',   # Tryptophan     (〃)
+    'C16439': 'C00123',   # Leucine        (〃)
+    'C00768': 'C00135',   # Histidine      (〃)
+    # --- 비타민 1
+    'C02823': 'C05776',   # Vitamin B12 (FOOD_ALIAS 와 같은 대응)
+}
+
 
 FOOD_ALIAS = {
     'C02823': 'C05776',   # Vitamin B12        <- FDC 'Vitamin B-12'

@@ -447,6 +447,7 @@ HIER_PREDS = ('subClassOf', 'isChildOf')
 INFER_CACHE = os.path.join(OUT, 'paper_eval_inference.json')
 COMPL_CACHE = os.path.join(OUT, 'paper_eval_complication.json')
 COV_CACHE = os.path.join(OUT, 'paper_eval_coverage.json')
+CLINK_CACHE = os.path.join(OUT, 'paper_eval_compound_link.json')
 
 
 def inference(verbose=True):
@@ -895,6 +896,135 @@ def coverage(verbose=True):
     return out
 
 
+# ---------------------------------------------------- §3.2 compound 링킹
+# 논문 §3.2: "compounds are linked to the KEGG database using their labels …
+#   The matching process ignores case, singular and plural forms, as well as the
+#   word sequence" + "we use the Greek alphabet as a constraint. For example,
+#   'Tocopherol, gamma' and 'Tocopherol, alpha' are recognized as two distinct
+#   compounds"
+# 그 절차를 그대로 구현해, 논문이 배포한 매핑(nutrient_id owl:sameAs KEGG)을
+# 독립적으로 재현할 수 있는지 본다.
+GREEK = {'alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'theta',
+         'iota', 'kappa', 'lambda', 'mu', 'nu', 'xi', 'omicron', 'pi', 'rho',
+         'sigma', 'tau', 'upsilon', 'phi', 'chi', 'psi', 'omega'}
+_GREEK_SYM = {'α': 'alpha', 'β': 'beta', 'γ': 'gamma', 'δ': 'delta',
+              'ε': 'epsilon', 'ω': 'omega'}
+_PLURAL_RE = [(r'\b([a-z]+?)ies\b', r'\1y'),
+              (r'\b([a-z]+?(?:ch|sh|ss|x|z))es\b', r'\1'),
+              (r'\b([a-z]+?o)es\b', r'\1'),
+              (r"\b([a-z]+?[^siu'])s\b", r'\1')]
+
+
+def _name_variants(label):
+    """라벨 하나에서 매칭 후보 이름들. KEGG 는 'Ascorbic acid (Vitamin C)' 처럼
+    괄호로 동의어를 적는다 — 논문이 말한 'vitamin E = alpha-tocopherol' 이 이것이다."""
+    out = set()
+    for part in str(label).split(';'):
+        part = part.strip()
+        if not part:
+            continue
+        out.add(part)
+        out.add(re.sub(r'\s*\([^)]*\)\s*', ' ', part))
+        out |= {m.strip() for m in re.findall(r'\(([^)]*)\)', part)}
+    return {x.strip() for x in out if x.strip()}
+
+
+def _match_key(name):
+    """(어순 무시 토큰, 그리스문자 집합). 논문 규칙 그대로."""
+    t = str(name).lower()
+    for a, b in _GREEK_SYM.items():
+        t = t.replace(a, b)
+    t = re.sub(r'[^a-z0-9]+', ' ', t)
+    for pat, rep in _PLURAL_RE:
+        t = re.sub(pat, rep, t)
+    toks = t.split()
+    return (tuple(sorted(x for x in toks if x not in GREEK)),
+            frozenset(x for x in toks if x in GREEK))
+
+
+def compound_linking(verbose=True):
+    """§3.2 의 compound 링킹을 재현하고 논문 매핑과 대조한다 (§17.29)."""
+    import pandas as _pd
+    idx = collections.defaultdict(set)
+    label_of, node_ids = {}, set()
+    for n in _jsonld_nodes('KEGG_Compound.jsonld'):
+        u = n.get('@id', '')
+        if '/entry/C' not in u:
+            continue
+        kid = u.rsplit('/', 1)[-1]
+        node_ids.add(kid)
+        for v in (n.get(RDFS_LABEL) or []):
+            lab = v.get('@value') if isinstance(v, dict) else v
+            if not isinstance(lab, str):
+                continue
+            label_of.setdefault(kid, lab)
+            for nm in _name_variants(lab):
+                idx[_match_key(nm)].add(kid)
+
+    nut_csv = os.path.join(os.path.dirname(FKG), 'fdc_raw', 'nutrient.csv')
+    ours = {}
+    n_nut = n_amb = 0
+    if os.path.exists(nut_csv):
+        nut = _pd.read_csv(nut_csv)
+        n_nut = len(nut)
+        for nid, nm in zip(nut['id'], nut['name']):
+            hit = set()
+            for v in _name_variants(nm):
+                hit |= idx.get(_match_key(v), set())
+            if len(hit) == 1:
+                ours[int(nid)] = next(iter(hit))
+            elif len(hit) > 1:
+                n_amb += 1
+
+    paper = {}
+    for fname in ('Food_Nutrient.trig',):
+        path = os.path.join(FKG, fname)
+        if not os.path.exists(path):
+            continue
+        for line in open(path, errors='ignore'):
+            m = re.match(r'\s*<http://nutrition.vu.nl/nutrient_id/(\d+)> owl:sameAs '
+                         r'<https://www.kegg.jp/entry/(C\d+)>', line)
+            if m:
+                paper[int(m[1])] = m[2]
+
+    same = [k for k in ours if paper.get(k) == ours[k]]
+    diff = [k for k in ours if k in paper and paper[k] != ours[k]]
+    unresolvable = [k for k in diff if paper[k] not in node_ids]
+
+    p85 = os.path.join(OUT, 'paper85_compounds.csv')
+    n85 = n85_node = 0
+    if os.path.exists(p85):
+        d85 = _pd.read_csv(p85)
+        n85, n85_node = len(d85), int(d85.kegg.isin(node_ids).sum())
+
+    out = dict(kegg_nodes=len(node_ids), kegg_keys=len(idx), fdc_nutrients=n_nut,
+               matched=len(ours), ambiguous=n_amb, paper_map=len(paper),
+               agree=len(same), differ=len(diff), unresolvable=len(unresolvable),
+               p85=n85, p85_in_kegg=n85_node)
+    json.dump(out, open(CLINK_CACHE, 'w'), indent=1)
+    if verbose:
+        print('=' * 86)
+        print('논문 §3.2 compound 링킹 재현 (§17.29)')
+        print('=' * 86)
+        print(f'  KEGG 노드 {len(node_ids):,} / 매칭 키 {len(idx):,}')
+        print(f'  FDC nutrient {n_nut} 중 1:1 매칭 {len(ours)} (모호 {n_amb})')
+        print(f'  논문 매핑 {len(paper)} 과 대조 — 일치 {len(same)}, 다름 {len(diff)}')
+        print(f'    다름 {len(diff)} 건 중 **논문 id 가 자기 KEGG 파일에 노드로 없는 것 '
+              f'{len(unresolvable)} 건**')
+        for k in unresolvable[:8]:
+            print(f'      nutrient {k}: 논문 {paper[k]} (노드 없음) vs 재현 '
+                  f'{ours[k]} "{label_of.get(ours[k], "")}"')
+        print(f'  Fig 4(c) 85 compound 중 KEGG 파일에 있는 것 {n85_node}/{n85}')
+        print(f'\n  저장: {CLINK_CACHE}')
+    return out
+
+
+def load_cached_compound_linking():
+    if not os.path.exists(CLINK_CACHE):
+        return None
+    return json.load(open(CLINK_CACHE))
+
+
 def load_cached_coverage():
     if not os.path.exists(COV_CACHE):
         return None
@@ -1127,6 +1257,8 @@ if __name__ == '__main__':
         complication()
     elif len(sys.argv) > 1 and sys.argv[1] == 'coverage':
         coverage()
+    elif len(sys.argv) > 1 and sys.argv[1] == 'clink':
+        compound_linking()
     else:
         report()
         print()

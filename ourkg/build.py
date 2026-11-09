@@ -847,7 +847,13 @@ def kg():
     # 우리 KEGG 단계는 compound-미생물 경로만 만들었고 분류축이 없었다 —
     # §5.1 방법 1 의 #14·#15·#16 이 이것 때문에 답하지 못했다.
     KT = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
-    ours_kegg = set(long['kegg'].dropna()) | set(cdep['kegg'].dropna())
+    # 우리 compound 에 KEGG_ALIAS 를 **조회용으로만** 적용한다 — 논문 ID 27 개는
+    # 자기 KEGG 파일에 노드가 없어 라벨도 brite 분류도 붙지 않는다 (§17.29).
+    sys.path.insert(0, BASE)
+    from kegg_alias import KEGG_ALIAS
+    _raw = set(long['kegg'].dropna()) | set(cdep['kegg'].dropna())
+    ours_kegg = {KEGG_ALIAS.get(k, k) for k in _raw}
+    alias_hit = sum(1 for k in _raw if k in KEGG_ALIAS)
     cls_label, cls_parent, cmp_cls = {}, collections.defaultdict(set), collections.defaultdict(set)
     for n in _ld('KEGG_Compound.jsonld'):
         u = n['@id']
@@ -887,7 +893,8 @@ def kg():
     pd.DataFrame([{'kegg': k, 'class_uri': c} for k, cs in cmp_cls.items() for c in cs]
                  ).to_csv(os.path.join(OUT, 'compound_class.csv'), index=False)
     print(f'  KEGG brite {n_br:,} triple — 분류 {len(cls_label):,}, '
-          f'분류된 compound {len(cmp_cls)}/{len(ours_kegg)}')
+          f'분류된 compound {len(cmp_cls)}/{len(ours_kegg)} '
+          f'(KEGG_ALIAS 로 해소 {alias_hit})')
 
     # --- FoodOn
     n_fo = n_fo_link = 0

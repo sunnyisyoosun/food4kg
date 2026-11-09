@@ -95,6 +95,17 @@ FDC_CATEGORY = {
 
 
 def kegg_map():
+    """nutrient_id -> KEGG (논문/매핑표 ID 그대로).
+
+    KEGG_ALIAS 는 **여기에 적용하지 않는다.** F 행렬의 ID 를 정식 ID 로 바꾸면
+    ProMENDA 의 E 와 아미노산 13 개가 추가로 만나는데, 재 보니 A층이 엇갈린다 —
+    비추천군 Bottom30 은 27 -> 30 으로 완벽해지지만 추천군 Top30 이 22 -> 15 로
+    퇴행하고 상위가 마요네즈·버터로 바뀐다(아미노산이 E 에서 대부분 음(-)이라
+    단백질이 많은 음식이 내려가고 지방·당이 올라간다). §18.9 적용 규칙 2 에 따라
+    기각이다. 자세한 수치는 RESULTS.md 의 §3.2 절.
+
+    KEGG_ALIAS 는 라벨·brite 분류·대사 경로를 **조회할 때만** 쓴다(build.kg()).
+    """
     mp = pd.read_csv(os.path.join(BASE, 'setup', 'nutrient_kegg_map.csv'))
     mp = mp[mp['nutrient_kegg'].astype(str).str.startswith('C')]
     return mp
