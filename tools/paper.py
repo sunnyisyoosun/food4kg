@@ -76,7 +76,7 @@ from scipy import stats
 from scipy.optimize import linear_sum_assignment, lsq_linear
 
 import core
-import gold
+import paper_data as gold
 
 K = core.K
 ALPHA = 0.05

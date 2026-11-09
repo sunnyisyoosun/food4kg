@@ -51,7 +51,7 @@ consensus(전원 동의) 로 표시하고, 그 16문항에 한정한 재현율�
 
 KG 의 성분량 단위는 mg/100g 이다 (µg 성분도 mg 로 환산되어 있다).
 
-실행: python3 eval/m1.py     (eval/run_paper_eval.py 에서도 호출된다)
+실행: python3 eval/m1.py     (방법 1 20문항 + 방법 2 추론 재현)
 """
 import collections
 import json
@@ -64,10 +64,10 @@ import pandas as pd
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-from paper_data import PAPER_ACCURACY, TABLE1
+from paper_data import PAPER_COUNTS, PAPER_ACCURACY, TABLE1, TABLE5
 
 # ------------------------------------------------------------------
-# 공개 KG 공통 로더 (run_paper_eval.py 도 여기서 가져간다)
+# 공개 KG 공통 로더
 # 파싱 규칙은 knowledge_query.py 와 동일하다.
 # ------------------------------------------------------------------
 import json
@@ -567,6 +567,91 @@ def load_cached():
     return df
 
 
+# ==================================================================
+# 방법 2 (Table 5) — 우리 KG 가 **같은 추론을 만들어내는가**
+# ------------------------------------------------------------------
+# eval/paper_sparql.py 의 table5() 와 묻는 것이 다르다.
+#   paper_sparql.table5()  논문이 든 근거가 KG 에서 **엄격히** 성립하는가
+#                          (Complication 7/8, Diet 2/7)
+#   여기 table5_inference() 그 추론을 우리 KG 가 **생성할 수 있는가** (11/15)
+# 옛 eval/run_paper_eval.py 에 있던 것을 2026-11-09 에 여기로 합쳤다.
+# ==================================================================
+def table5_inference(save=True):
+    print('=' * 74)
+    print('방법 2 — 문헌 검증 대상 추론 15건 (논문 Table 5)')
+    print('=' * 74)
+    print('  논문 보고: confirmed 11 / contradicted 1 / unknown 3')
+    print('  여기서 보는 것: 우리 KG가 같은 추론을 만들어내는가')
+    print()
+
+    bac_names = load_bacteria_names()
+    name2bac = {}
+    for bid, nm in bac_names.items():
+        name2bac.setdefault(nm.strip().lower(), set()).add(bid)
+    bac2dis = load_disease_bacteria()
+    dis_labels = load_disease_labels()
+
+    weight = pd.read_csv(os.path.join(OUT, 'weight.csv'))
+    E = {c: (1 if weight[c].iloc[0] > 0 else (-1 if weight[c].iloc[1] > 0 else 0))
+         for c in weight.columns}
+    p85 = pd.read_csv(os.path.join(OUT, 'paper85_compounds.csv'))
+    name2kegg = {str(n).strip().lower(): k for k, n in zip(p85.kegg, p85['name'])}
+    # Table 5의 표기 흔들림 보정
+    name2kegg.setdefault('threonine', 'C00188')
+    name2kegg.setdefault('l-threonine', 'C00188')
+    name2kegg.setdefault('ascorbate', 'C00072')
+    name2kegg.setdefault('nicotinic acid', 'C00253')
+    name2kegg.setdefault('alpha-tocopherol', 'C02477')
+
+    rows = []
+    for no, q, attr, ev, pmid, result in TABLE5:
+        evl = ev.strip().lower()
+        if attr == 'Complication':
+            bids = name2bac.get(evl, set())
+            n_dis = sum(len(bac2dis.get(b, ())) for b in bids)
+            ok = bool(bids) and n_dis > 0
+            detail = (f'KG에 세균 {"있음" if bids else "없음"}, '
+                      f'연결된 질병 {n_dis}건')
+        else:
+            kegg = name2kegg.get(evl)
+            if kegg is None or kegg not in E:
+                # 논문 Table 3/5의 compound가 Fig.4(c)의 85 목록에 없는 경우.
+                # 논문 내부 불일치이지 우리 KG의 실패가 아니다(§4 참조).
+                ok = False
+                detail = f'{kegg or "?"} — 85 목록 밖 (논문 내부 불일치)'
+            else:
+                d = E[kegg]
+                ok = d != 0
+                detail = (f'{kegg} incidence='
+                          f'{"+" if d > 0 else ("-" if d < 0 else "0")}')
+        rows.append(dict(no=no, attribute=attr, question=q, evidence=ev,
+                         paper=result, reproduced=ok, detail=detail))
+
+    df = pd.DataFrame(rows)
+    for _, r in df.iterrows():
+        mark = 'O' if r.reproduced else 'X'
+        lab = {1: 'confirmed', -1: 'contradicted', 0: 'unknown'}[r.paper]
+        print(f'  {mark} #{r.no:<2d} [{r.attribute[:12]:12s}] {r.question[:38]:39s} '
+              f'{lab:12s} {r.detail}')
+
+    n = len(df)
+    rep = int(df.reproduced.sum())
+    print()
+    outside = int((df.detail.str.contains('85 목록 밖')).sum())
+    print(f'  KG 추론 재현: {rep}/{n}'
+          + (f'   (실패 {n-rep}건 중 {outside}건은 compound가 85 목록 밖)'
+             if outside else ''))
+    for lab, val in ((1, 'confirmed'), (-1, 'contradicted'), (0, 'unknown')):
+        sub = df[df.paper == lab]
+        print(f'    {val:12s} 논문 {PAPER_COUNTS[lab]}건 중 재현 '
+              f'{int(sub.reproduced.sum())}건')
+    if save:
+        out = os.path.join(OUT, 'paper_eval_table5.csv')
+        df.to_csv(out, index=False)
+        print(f'  저장: {out}')
+    return df
+
+
 def report(df=None, save=True):
     df = run() if df is None else df
     s = summary(df)
@@ -619,3 +704,5 @@ def report(df=None, save=True):
 
 if __name__ == '__main__':
     report()
+    print()
+    table5_inference()

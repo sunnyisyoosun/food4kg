@@ -190,7 +190,7 @@ python3 run_recommendation.py    # step4: 추천 + 시각화
 python3 eval/paper_data.py       # 논문 수치 29개 체크리스트 (상태·근거)
 python3 tools/paper.py hunt 230  # 수치 탐색 (판정 전 필수). --paper 로 전부
 python3 eval/paper_kg_stats.py   # 논문 §3 검증 (Table 1 Relation·Entity, 링킹, 관계) 약 1분
-python3 eval/run_paper_eval.py   # 논문 §5.1 평가 (전문가 20문항을 KG 에 질의, Table 5)
+python3 eval/m1.py               # 논문 §5.1 방법 1(20문항) + 방법 2 추론 재현
 python3 eval/paper_sparql.py     # 보충자료 SPARQL 을 공개 KG 에 실행 (Table 2~5, 약 4분)
 python3 eval/paper_sparql.py replaceable   # §4.1 "엔티티 교체 가능" 주장 실증 (§17.21)
 python3 tools/paper.py all       # 논문 기준 검증·개선 (REPRODUCTION §16)
@@ -357,7 +357,7 @@ Pork 하위)뿐이며, 그쪽이 재현 판정의 1차 기준이다. 세 층 구
 | Query 3 → Table 4 | **5 / 5** | 원문 Query 3 는 **0행** — SNOMED 이름을 MiKG 에서 보충. 음식–성분을 제대로 묶으면 4 / 5. 질병명 **2/5 불일치** (§17.23) |
 | Query 1 → Table 2 | 6 / 8 | **값이 틀렸다.** 올바른 합의 30~70배 (아래) |
 
-**§5.1 방법 1 — 전문가 20문항** (`eval/run_paper_eval.py`). 전문가 3인의 수작업 대조는
+**§5.1 방법 1 — 전문가 20문항** (`eval/m1.py`). 전문가 3인의 수작업 대조는
 재현할 수 없어, KG 에 20문항을 직접 질의했다. 재현 = 논문이 보고한 답이 KG 에서 나오는가,
 타당 = 그 답이 질문에 맞는가.
 
@@ -583,7 +583,7 @@ Fig. 5 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" �
 
 | 파일 | 역할 |
 |------|------|
-| `run_paper_eval.py` | §5.1 방법 1(20문항을 KG 에 질의)·방법 2(근거 존재) |
+| `m1.py` | §5.1 방법 1(20문항을 KG 에 질의)·방법 2 추론 재현(`table5_inference`) |
 | `m1.py` | §5.1 방법 1 — (질문, 논문 정답, 검증쿼리) 20삼중항 + 전문가 전원동의 분리. 공개 KG 공통 로더도 여기 |
 | `paper_data.py` | **논문 전사 자료 한 곳** — Supplement Table 1(20문항) · Table 5(15건) · 논문 수치 29개 체크리스트. MISMATCH 는 `tools/paper.py hunt` 탐색 후에만 표시 가능(코드 강제) |
 | `paper_kg_stats.py` | §3 전체 검증 — §3.1 Table 1 Relation·Entity 열·본문 수치, §3.2 Entity linking, §3.3 관계 표현 |

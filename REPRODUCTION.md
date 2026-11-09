@@ -562,7 +562,7 @@ eval/           논문 §5.1 평가 재현
   gold.py             방향 확정 compound 9종 (독립 기준)
   paper_table1.py     전문가 20문항 (Supplementary Table 1)
   paper_table5.py     문헌 검증 15건 (Table 5)
-  run_paper_eval.py   실행기
+  m1.py               방법 1 질의 20개 + 방법 2 추론 재현
 
 tools/          진단용. 모두 core.py 를 공유
   core.py         로드·정규화·유사도·채점·지표
@@ -1497,7 +1497,7 @@ and sweets")도 논문 순위와 맞지 않는 서술이 된다.
 
 지금까지 방법 1 은 표를 옮겨 적고 평균이 논문 수치와 같은지만 확인했다. 전문가 3인의
 수작업 대조는 재현할 수 없지만, **공개 KG 가 논문이 보고한 답을 내놓는가**는 확인할 수
-있다. `eval/run_paper_eval.py` 의 `KG` 클래스가 `foodkg_triply/` 를 읽어 20문항에 답한다.
+있다. `eval/m1.py` 의 `KG` 클래스가 `foodkg_triply/` 를 읽어 20문항에 답한다.
 
 판정 두 가지.
 - **재현** — 논문이 보고한 답이 공개 KG 에서 나오는가

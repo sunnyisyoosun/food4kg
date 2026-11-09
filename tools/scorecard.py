@@ -238,6 +238,13 @@ print(f'    논문 수치 체크리스트   {_pn["total"]}개 — '
       f'대상외 {_pn.get("NA",0)}')
 print('                         불일치는 tools/paper.py hunt 탐색 후에만 표시 가능 '
       '(eval/paper_data.py)')
+_t5i = os.path.join(core.OUT, 'paper_eval_table5.csv')
+if os.path.exists(_t5i):
+    _d = pd.read_csv(_t5i)
+    _rep = int(_d.reproduced.sum())
+    _out = int(_d.detail.astype(str).str.contains('85 목록 밖').sum())
+    print(f'    방법2 추론 재현        {_rep}/{len(_d)}  (실패 {len(_d)-_rep} 중 {_out} 건은 '
+          f'compound 가 85 목록 밖 — 논문 내부 불일치)')
 _au = PN.audit()
 print(f'    §5.1 평가 방식 점검    방법1 {_au["accuracy"]} = 전문가별 동의율 '
       f'(gold 아님). 만장일치 {_au["consensus"]}/{_au["n_question"]}, '

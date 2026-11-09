@@ -27,7 +27,7 @@ PROMENDA_XLSX = os.path.join(BASE, '41398_2024_2948_MOESM3_ESM.xlsx')
 
 sys.path.insert(0, BASE)
 sys.path.insert(0, os.path.join(BASE, 'eval'))
-import gold          # noqa: E402
+import paper_data as gold   # GOLD/score 는 paper_data 로 합쳤다 (옛 eval/gold.py)
 import kegg_alias    # noqa: E402
 
 K = 30
