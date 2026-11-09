@@ -632,6 +632,41 @@ def evaluate():
         random.seed(0)
         infs = []
 
+        def _species(name):
+            """균주 이름 -> 종 수준(속 + 종). 논문 Table 5 의 근거 세균은
+            `Bifidobacterium longum`·`Escherichia coli` 처럼 종 수준이다.
+            `Lactococcus lactis subsp. lactis` 같은 균주명은 문헌에 거의 안 붙는다."""
+            w = re.split(r'\s+', re.sub(r'\b(subsp|str|var|serovar)\.?\b.*', '',
+                                        str(name)).strip())
+            return ' '.join(w[:2]) if len(w) >= 2 else (w[0] if w else str(name))
+
+        def _food_terms(name):
+            """구체 음식명 -> 일반명 사다리.
+
+            논문 Table 5 의 Diet 행은 `Garlic`·`Milk`·`Coffee`·`Lettuce`·`Onion` 처럼
+            **일반명 수준**이다. 우리는 FDC 개별 항목에서 뽑으므로 그대로 쓰면 문헌이
+            붙지 않는다 — "Mustard greens" AND "depression" 은 0 건인데
+            "mustard" AND "depression" 은 194 건이다. 같은 수준으로 맞춘다.
+            """
+            def clean(seg):
+                # 브랜드 토큰 제거 — 대문자가 2 자 이상인 토큰(FUZE, BOLTHOUSE,
+                # McDONALD'S)은 문헌 검색어가 못 된다.
+                w = [x for x in seg.split() if sum(c.isupper() for c in x) < 2]
+                return re.sub(r'\s+', ' ', ' '.join(w)).strip(" '\"-")
+
+            t = ''
+            for seg in re.split(r'[,(]', str(name)):      # 첫 구간이 브랜드뿐이면 다음
+                t = clean(seg)
+                if t:
+                    break
+            if not t:
+                return ['food']
+            out = [t]
+            head = t.split()[0]
+            if head.lower() != t.lower():
+                out.append(head)
+            return out
+
         # 추론 (a) Complication — 같은 미생물을 공유하는 두 정신질환 (논문 §3.3)
         by_mic = collections.defaultdict(set)
         for _, r in mdis.iterrows():
@@ -645,7 +680,8 @@ def evaluate():
             # 공유 미생물이 여럿이면 시드 고정 난수로 하나를 고른다. 문헌이 가장 잘
             # 붙는 것을 고르면 검증이 아니라 확증 편향이 된다.
             infs.append({'type': 'Complication', 'q': f'{a} and {b}',
-                         'evidence': random.choice(shared), 'n_shared_microbe': n,
+                         'evidence': _species(random.choice(shared)),
+                         'n_shared_microbe': n,
                          'terms': [a, b]})
 
         # 추론 (b) Diet recommendation — 상·하위 음식과 그 근거 compound
@@ -665,9 +701,20 @@ def evaluate():
             nm = foods.loc[fk, 'food_name']
             infs.append({'type': 'Diet recommendation',
                          'q': f'{nm} and depression', 'evidence': c,
-                         'terms': [re.split(r'[,(]', str(nm))[0].strip(), 'depression']})
+                         'terms': [_food_terms(str(nm))[0], 'depression'],
+                         'ladder': _food_terms(str(nm))})
 
-        sample = random.sample(infs, 15)
+        # 표본 — 같은 근거 물질이 반복되면 15 건이 사실상 4~5 건이 된다.
+        # (2026-11-09 이전 판은 Palmitic acid + 소고기가 15 건 중 4 건이었다.)
+        random.shuffle(infs)
+        seen, sample = collections.Counter(), []
+        for inf in infs:
+            if seen[inf['evidence']] >= 2:
+                continue
+            seen[inf['evidence']] += 1
+            sample.append(inf)
+            if len(sample) == 15:
+                break
 
         def pubmed(terms, extra=None):
             q = ' AND '.join(f'"{t}"' for t in terms if t)
@@ -688,19 +735,57 @@ def evaluate():
             # 판정은 '두 엔티티 + KG 가 댄 근거' 세 항이 모두 함께 나오는 논문이
             # 있는가로 한다. 질환 이름 두 개만으로 검색하면 anxiety+depression 처럼
             # 1만 건이 나와 아무것도 검증하지 못한다(그 수치는 참고용으로만 남긴다).
-            n, ids = pubmed(inf['terms'], inf['evidence'])
-            n_pair, _ = pubmed(inf['terms'])
+            ladder = inf.get('ladder') or [inf['terms'][0]]
+            n = n_pair = 0
+            ids, used, level = [], inf['terms'][0], 0
+            for lv, term in enumerate(ladder):
+                terms = [term] + inf['terms'][1:]
+                n, ids = pubmed(terms, inf['evidence'])
+                n_pair, _ = pubmed(terms)
+                used, level = term, lv
+                if n:
+                    break
             rows.append({'no': i - 1, 'question': inf['q'], 'attributes': inf['type'],
                          'ourkg': inf['evidence'], 'pubmed': ';'.join(ids[:2]),
+                         'term_used': used, 'term_level': level,
                          'n_hits_with_evidence': n, 'n_hits_pair_only': n_pair,
                          'result': 1 if n else 0})
-            print(f"  {i:2d}. {inf['q'][:48]:50s} {inf['evidence'][:22]:24s} "
-                  f"근거포함={n:5d}  두항만={n_pair:6d}  -> {'1' if n else '0'}")
+            print(f"  {i:2d}. {inf['q'][:44]:46s} {inf['evidence'][:20]:22s} "
+                  f"[{used[:14]:16s}] 근거포함={n:5d}  두항만={n_pair:6d}"
+                  f"  -> {'1' if n else '0'}")
         t5 = pd.DataFrame(rows)
         t5.to_csv(os.path.join(OUT, 'eval_method2.csv'), index=False)
+        # --- 같은 자로 재기. 우리 기준(3항 공출현)을 **논문 자신의 15건**에 적용해
+        # 보정값을 얻는다. 이것 없이 "우리 x/15 vs 논문 11/15" 를 비교하면 자가 다르다.
+        from paper_data import TABLE5 as _PT5
+        cal = []
+        for _no, _q, _attr, _ev, _pmid, _res in _PT5:
+            _a, _b = [x.strip() for x in _q.split(' and ')]
+            _n3, _ = pubmed([_a, _b], _ev)
+            _n2, _ = pubmed([_a, _b])
+            cal.append({'no': _no, 'attributes': _attr, 'question': _q,
+                        'evidence': _ev, 'paper_result': _res,
+                        'n_hits_with_evidence': _n3, 'n_hits_pair_only': _n2})
+        cdf = pd.DataFrame(cal)
+        cdf.to_csv(os.path.join(OUT, 'eval_method2_calibration.csv'), index=False)
+
+        up = int((t5.term_level > 0).sum())
         print(f"\n  확인됨(1) {int((t5.result == 1).sum())}/15, "
               f"미확인(0) {int((t5.result == 0).sum())}/15   "
               f"(논문 Table 5: 11 / 3 / 반대 1)")
+        print(f"  일반명으로 올려서 맞은 것 {up}건, 근거 물질 고유 "
+              f"{t5.ourkg.nunique()}종 (전판 15건 중 4건이 같은 물질이었다)")
+        o3 = int((t5.n_hits_with_evidence > 0).sum())
+        o2 = int((t5.n_hits_pair_only > 0).sum())
+        c3 = int((cdf.n_hits_with_evidence > 0).sum())
+        c2 = int((cdf.n_hits_pair_only > 0).sum())
+        print()
+        print('  같은 자로 — 기준별 비교')
+        print(f'    {"기준":22s}{"우리 15건":>10s}{"논문 15건":>12s}')
+        print(f'    {"3항 공출현(엄격)":22s}{o3:>8d}/15{c3:>10d}/15')
+        print(f'    {"2항 공출현(논문에 가까움)":22s}{o2:>8d}/15{c2:>10d}/15')
+        print(f'    논문이 보고한 값: 11/15 (confirmed) — 2항 기준과 비슷하다')
+        print('    → 엄격 기준으로는 논문 자신도 거의 통과하지 못한다.')
 
 
 def compare():

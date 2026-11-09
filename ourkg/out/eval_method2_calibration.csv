@@ -1,0 +1,16 @@
+no,attributes,question,evidence,paper_result,n_hits_with_evidence,n_hits_pair_only
+0,Complication,Autistic disorder and depression,Bifidobacterium longum,1,0,1017
+1,Complication,Parkinson disorder and depression,Streptococcus mutans,1,0,4
+2,Complication,Learning disabilities and autism,Escherichia coli,1,0,893
+3,Complication,Anxiety and depression,Escherichia coli,1,40,194031
+4,Complication,Bipolar disorder and depression,Lactobacillus plantarum,1,0,21534
+5,Complication,Learning disabilities and depression,Bacillus cereus,0,0,634
+6,Complication,Parkinson disorder and autism,Lactobacillus reuteri,0,0,0
+7,Complication,Alzheimer Disease and autism,Bacteroides fragilis,1,0,1445
+8,Diet recommendation,Garlic and Alzheimer Disease,Threonine,1,0,69
+9,Diet recommendation,Milk and Learning disabilities,alpha-Tocopherol,0,0,28
+10,Diet recommendation,Egg products and depression,Cystine,-1,0,1
+11,Diet recommendation,Coffee and parkinson disorder,Threonine,1,0,0
+12,Diet recommendation,Lettuce and anxiety,Nicotinic acid,1,0,6
+13,Diet recommendation,Sweets and depression,L-Threonine,1,0,121
+14,Diet recommendation,Onion and depression,Ascorbate,1,0,32

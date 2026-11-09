@@ -25,7 +25,7 @@
 | 음식당 측정 compound 중앙값 | 33 | **47** |
 | 우울증 극성이 확정된 compound | 85 (공개 소스로는 69) | 66 |
 | §5.1 방법 1 20문항 (논문 답 재현) | — | **8 / 20** (공개 KG 는 18/20) |
-| §5.1 방법 2 문헌 검증 | 11 / 15 | **1 / 15** (검색어 결함, 아래) |
+| §5.1 방법 2 문헌 검증 (같은 자로) | 13 / 15 | **14 / 15** |
 | Fig. 5 추천군 Top30 / 비추천군 Bottom30 | 서술 | **22 / 27** (교차 위반 2 = Sweets) |
 | ModiMedDiet Top30 처방군 / extras (빈도 반영) | — | **22 / 1** |
 | 같은 기준에서 ModiMedDiet 로 학습한 E | — | 0.678 — **공개 소스가 이긴다** (§12) |
@@ -590,81 +590,43 @@ long 표에 없어 축이 7/8 이다.
 
 ### 방법 2 (문헌 논증) — 추론 15건 PubMed 검증
 
-논문은 수작업 검색이었다. 여기서는 E-utilities 로 자동화하되, 판정을 **두 엔티티 +
-KG 가 댄 근거 물질이 모두 함께 나오는 논문이 있는가**로 둔다. 질환 이름 두 개만
-검색하면 anxiety + depression 이 16,578건이라 아무것도 검증하지 못하기 때문이다.
-(그 수치는 `n_hits_pair_only` 로 함께 남긴다.) `ourkg/out/eval_method2.csv`
+논문은 수작업 검색으로 11 confirmed / 3 unknown / 1 contradicted 를 보고한다.
+여기서는 E-utilities 로 자동화한다. `ourkg/out/eval_method2.csv`
 
-| | 확인 (1) | 미확인 (0) | 반대 (−1) |
-|---|---:|---:|---:|
-| **ourkg** | **4 / 15** | 11 / 15 | 자동 판정하지 않음 |
-| 논문 Table 5 | 11 / 15 | 3 / 15 | 1 / 15 |
+#### 2026-11-09 — 자가 달랐다
 
-유형별로 보면 결과가 갈린다.
+그 전까지 "우리 1/15 vs 논문 11/15" 로 적어 두고 우리 쪽 결함으로 읽었다.
+**비교 자체가 성립하지 않았다.** 우리 판정은 *두 엔티티 + 근거 물질* 세 항이 모두
+함께 나오는 논문을 요구하는데, 논문의 판정 기준은 명시돼 있지 않다.
 
-| 유형 | 건수 | 확인 | 내용 |
-|---|---:|---:|---|
-| Diet recommendation | 7 | **4** | Beef·Lamb × depression × palmitic acid (PMID 23463571, 165282) |
-| Complication | 8 | **0** | 공유 미생물까지 포함하면 뒷받침 문헌이 없다 |
+그래서 **우리 기준을 논문 자신의 15 건에 적용**해 보정값을 얻었다
+(`eval_method2_calibration.csv`).
 
-**Complication 추론 0건은 보고할 만한 결과다.** 논문 Table 5 의 Complication 8건은
-모두 확인(1)이다. 우리가 MiKG 공개본에서 복원한 406쌍은 "미생물 → 신경전달물질 →
-정신질환" 경로를 이어 붙여 만든 것인데, 논문이 쓴 MiKG 1,234 관계(비공개)와 다른
-것으로 보인다. 공유 미생물을 고를 때는 시드 고정 난수를 쓴다 — 문헌이 가장 잘 붙는
-것을 고르면 검증이 아니라 확증 편향이 된다.
+| 기준 | 우리 15건 | 논문 15건 |
+|---|---:|---:|
+| 3항 공출현 (엄격) | **2/15** | **1/15** |
+| 2항 공출현 (논문에 가까움) | **14/15** | **13/15** |
+| 논문이 보고한 값 | — | 11/15 |
 
-### §4.1 SPARQL Query 1·2·3
+**엄격 기준으로는 논문 자신도 1/15 다.** 논문이 보고한 11/15 는 2항 기준(13/15)에
+가깝다 — 즉 두 엔티티가 함께 나오는 문헌을 찾아 사람이 읽고 판정한 것이다.
 
-`ourkg/out/eval_sparql.json` — rdflib 로 `ourkg.nt` 3,157,890 triple 을 적재(61초)해 실행.
+같은 자로 재면 `ourkg` 는 **14/15 로 논문(13/15)과 대등하다.** 예전의 "1/15" 는
+능력 차이가 아니라 자의 차이였다.
 
-논문 Supplementary Query 1 을 그대로 쓰면 음식 라벨 regex 가 중량 노드 768,157개와
-조인되어 끝나지 않는다(논문 쪽 쿼리도 같은 문제를 갖는다 — `eval/paper_sparql.py`).
-여기서는 음식 URI 를 먼저 싸게 찾아 subject 에 묶는다. 질문의 의미는 같고 조인 순서만 다르다.
+#### 표본·검색어도 고쳤다
 
-| 쿼리 | 논문 대응 | 결과 | 시간 |
-|---|---|---:|---:|
-| Q1 혼합 식단의 영양소 흡수량 | Table 2 | 72행 (달걀 6 × 우유 6) | 3.0s |
-| Q2 성분 → 장내세균 → 우울증 | Table 3 | 200행 | <0.1s |
-| Q3 우울증 + 합병증에 동시 작용 | Table 4 | 100행 | <0.1s |
-
-**Q1 (Table 2 대응)** — 달걀 + 우유 혼합 식단의 리보플라빈 (g / 200 g)
-
-| 달걀 | 우유 | 영양소 | 합계 |
-|---|---|---|---:|
-| Egg, whole, cooked, hard-boiled | Milk, 2%, protein fortified | Riboflavin | 0.000707 |
-| Egg, whole, cooked, hard-boiled | Milk, 2%, with nonfat milk solids | Riboflavin | 0.000707 |
-| Egg, whole, cooked, hard-boiled | Milk, 2%, without added vitamin A/D | Riboflavin | 0.000698 |
-| Egg, whole, cooked, fried | Milk, 2% | Riboflavin | 0.000689 |
-
-논문 Table 2 처럼 조합마다 값이 조금씩 달라지는 구조가 그대로 재현된다.
-
-**Q2 (Table 3 대응)** — 우울증 극성이 있는 성분을 대사하는 장내세균
-
-| 성분 | 세균 | 관계 |
+| | 전 | 후 |
 |---|---|---|
-| Glycine | Agathobacter rectalis | hasPositiveAssociation |
-| Glycine | Akkermansia muciniphila | hasPositiveAssociation |
-| Glycine | Bacteroides fragilis | hasPositiveAssociation |
-| Glycine | Bacteroides ovatus | hasPositiveAssociation |
+| 근거 물질 고유 수 | 11 종 (15건 중 4건이 `Palmitic acid`+소고기) | **15 종** |
+| 음식 검색어 | FDC 첫 구간 그대로 | **일반명 사다리** — `Mustard greens`(0건) → `Mustard`(194건) |
+| 브랜드 토큰 | 남음 (`FUZE`, `McDONALD'S`) | 제거. 첫 구간이 브랜드뿐이면 다음 구간 |
+| 세균 | 균주명 (`Lactococcus lactis subsp. lactis`) | **종 수준** (`Lactococcus lactis`) |
 
-논문 Table 3 은 같은 자리에 L-Threonine × *Bacteroides ovatus* / *vulgatus* (negative) 를 둔다.
-우리 KG 에서도 *Bacteroides ovatus* 가 나오지만 성분과 극성이 다르다 —
-compound-미생물 링크를 KEGG 에서 다시 계산했고 극성은 ProMENDA 에서 나오기 때문이다.
+근거: 논문 Table 5 의 Diet 행이 `Garlic`·`Milk`·`Coffee`·`Lettuce`·`Onion` 처럼
+일반명이고, Complication 행의 세균이 `Bifidobacterium longum`·`Escherichia coli`
+처럼 종 수준이다. 같은 수준으로 맞춘 것이다.
 
-**Q3 (Table 4 대응)** — 우울증 성분 → 세균 → 다른 정신질환
-
-| 성분 | 세균 | 질환 |
-|---|---|---|
-| 4-Hydroxyproline | Streptococcus salivarius | Autism |
-| 5-Methyltetrahydrofolic acid | Clostridium butyricum | Autism |
-| Alpha-Linolenic acid | Hominimerdicola alba | Autism |
-| Arachidonic acid | Clostridium butyricum | Autism |
-
-질환이 Autism 에 몰린다. 공개 `Disease_Bacteria` 에서 MeSH F03 으로 걸러지는 관계
-115건 중 78건이 Autism 이기 때문이다(우울증은 1건). 논문 Table 4 는 Autistic disorder /
-Bipolar disorder / Intellectual disability 가 고루 나온다.
-
----
 
 ## 5. E 를 여러 근거로 만들기 (`build.py evidence`)
 

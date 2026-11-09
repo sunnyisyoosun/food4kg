@@ -1,16 +1,16 @@
-no,question,attributes,ourkg,pubmed,n_hits_with_evidence,n_hits_pair_only,result
-0,"Chicken, broilers or fryers, wing, meat and skin, cooked, fried, batter and depression",Diet recommendation,Oleic acid,,0,430,0
-1,Cognition disorders and Depressive disorder,Complication,Morganella morganii,,0,2901,0
-2,Anxiety disorders and Bipolar disorder,Complication,Lactobacillus brevis,,0,2844,0
-3,Ham and cheese loaf or roll and depression,Diet recommendation,Palmitic acid,,0,230,0
-4,Autistic disorder and Depressive disorder,Complication,Lactobacillus paracasei,,0,226,0
-5,Autistic disorder and Personality disorder,Complication,Coprococcus,,0,205,0
-6,"Cress, garden, raw and depression",Diet recommendation,Erucic acid,,0,162,0
-7,Autistic disorder and Bipolar disorder,Complication,Lactobacillus buchneri,,0,253,0
-8,"Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled and depression",Diet recommendation,Palmitic acid,23463571,1,151,1
-9,"Mustard greens, cooked, boiled, drained, with salt and depression",Diet recommendation,Erucic acid,,0,0,0
-10,Bipolar disorder and Cognition disorders,Complication,Escherichia coli,,0,1436,0
-11,"Mustard spinach, (tendergreen), raw and depression",Diet recommendation,Ascorbic acid,,0,0,0
-12,Anxiety disorders and Depressive disorder,Complication,Oscillibacter,,0,16586,0
-13,Depressive disorder and Sex behavior disorder,Complication,Staphylococcus aureus,,0,2723,0
-14,Anxiety disorders and Eating disorders,Complication,Lactococcus lactis subsp cremoris,,0,1459,0
+no,question,attributes,ourkg,pubmed,term_used,term_level,n_hits_with_evidence,n_hits_pair_only,result
+0,"Carrot juice, canned and depression",Diet recommendation,Linoleic acid,,Carrot,1,0,19,0
+1,"Mustard greens, cooked, boiled, drained, without salt and depression",Diet recommendation,Erucic acid,27137637,Mustard,1,1,194,1
+2,Cognition disorders and Sex behavior disorder,Complication,Lactococcus lactis,,Cognition disorders,0,0,663,0
+3,"Beerwurst, pork and beef and depression",Diet recommendation,Palmitic acid,,Beerwurst,0,0,0,0
+4,Autistic disorder and Cognition disorders,Complication,Bacillus mycoides,,Autistic disorder,0,0,658,0
+5,Personality disorder and Sleep disorders,Complication,Klebsiella pneumoniae,,Personality disorder,0,0,56,0
+6,Jam and depression,Diet recommendation,11Z-Eicosenoic acid,,Jam,0,0,192,0
+7,Bipolar disorder and Sex behavior disorder,Complication,Streptococcus thermophilus,,Bipolar disorder,0,0,842,0
+8,"Lettuce, cos or romaine, raw and depression",Diet recommendation,L-Lysine,,Lettuce,0,0,16,0
+9,Anxiety disorders and Personality disorder,Complication,Lactobacillus paracasei,,Anxiety disorders,0,0,1472,0
+10,Anxiety disorders and Sleep disorders,Complication,Salmonella enterica,,Anxiety disorders,0,0,549,0
+11,"Beverages, FUZE, orange mango, fortified with vitamins A, C, E, B6 and depression",Diet recommendation,Ascorbic acid,15880960;12062570,Beverages,0,2,484,1
+12,Autistic disorder and Sleep disorders,Complication,Escherichia,,Autistic disorder,0,0,115,0
+13,"McDONALD'S, Bacon Ranch Salad without chicken and depression",Diet recommendation,Sucrose,,Bacon,1,0,137,0
+14,Sex behavior disorder and Sleep disorders,Complication,Clostridium ramosum,,Sex behavior disorder,0,0,368,0
