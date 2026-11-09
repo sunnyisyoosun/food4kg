@@ -8,7 +8,7 @@ food,상위 카테고리 (SR food group),27,
 compound,nutrient -> KEGG 매핑,180,
 compound,음식 행렬의 KEGG compound,130,"§3.2 23,212 compounds / §4.2.1 85"
 compound,ProMENDA E 의 KEGG compound,1412,
-compound,KEGG brite 로 분류된 compound,646,§3.1 compound ontology
+compound,KEGG brite 로 분류된 compound,744,§3.1 compound ontology
 microbe,NCBI taxonomy 링크 (taxid),127,"§3.2 984,031 gut microbiota"
 microbe,KEGG organism 매칭,82,
 disease,MeSH 링크,244,"§3.2 3,505 mental disorders"

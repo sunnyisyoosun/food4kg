@@ -59,6 +59,41 @@ def singularize(series):
     return out
 
 
+CACHE = os.path.join(OURKG, 'cache')
+
+
+def cached_get(name, fetch, ttl_days=30):
+    """네트워크로 받은 것을 ourkg/cache/ 에 둔다.
+
+    TTL 안이면 캐시를 쓰므로 **같은 창 안에서는 재현 가능**하고, 지나면 자동으로
+    다시 받아 **최신성**을 얻는다. build.microbe() 와 build.kg() 가 공유한다.
+    """
+    os.makedirs(CACHE, exist_ok=True)
+    import time
+    p = os.path.join(CACHE, name)
+    if os.path.exists(p) and (time.time() - os.path.getmtime(p)) < ttl_days * 86400:
+        return open(p, encoding='utf-8').read()
+    txt = fetch()
+    open(p, 'w', encoding='utf-8').write(txt)
+    return txt
+
+
+def kegg_rest(path, session=None, timeout=180):
+    """KEGG REST. rate limit(0.34s)을 지키고 캐시한다."""
+    import time
+    import requests
+
+    def f():
+        sess = session or requests.Session()
+        sess.headers.setdefault('User-Agent', 'ourkg/1.0')
+        r = sess.get(f'https://rest.kegg.jp/{path}', timeout=timeout)
+        r.raise_for_status()
+        time.sleep(0.34)
+        return r.text
+
+    return cached_get('kegg_' + path.replace('/', '_') + '.txt', f)
+
+
 def normalize_label(series):
     """논문 §3.2 의 음식 라벨 정규화."""
     s = (series.astype(str).str.strip().str.lower()

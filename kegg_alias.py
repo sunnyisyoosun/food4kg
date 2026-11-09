@@ -25,9 +25,11 @@ MENDA/ProMENDA는 L-form을 쓰기 때문에 생긴다. ProMENDA에서 이름을
 # KEGG_ALIAS   논문 ID -> KEGG 정식 ID
 #              KEGG 라벨·brite 분류·대사 경로를 조회할 때 쓴다.
 #
-# 논문 §3.2 는 "compounds are linked to the KEGG database using their labels"
-# 라고 적지만, 논문이 실제로 쓴 ID 27 개는 **자기가 배포한 KEGG_Compound.jsonld 에
-# 노드로 존재하지 않는다**(§17.29). 그래서 라벨도 brite 분류도 붙지 않는다.
+# 논문이 쓴 ID 27 개는 배포된 KEGG_Compound.jsonld(6,685 노드)에 **없다**(§17.29).
+# 그래서 그 KG 안에서는 라벨도 brite 분류도 붙지 않는다.
+# 단, KEGG REST 로 확인해 보면 27/27 이 **유효한 화합물**이다 — 논문은 입체
+# 비특이적(generic) 형태를 골랐고, FDC 가 아미노산을 총량으로 보고하는 것과 맞는
+# 선택이다. 아래 표는 ID 를 고치는 것이 아니라 **generic <-> L-form 조인**이다.
 #
 # 아래 15 건은 그 §3.2 절차(대소문자·단복수·어순 무시 + 그리스문자 제약)를
 # 그대로 재구현해 얻은 것이다 — eval/paper_kg_stats.py 의 compound_linking().
@@ -37,7 +39,7 @@ MENDA/ProMENDA는 L-form을 쓰기 때문에 생긴다. ProMENDA에서 이름을
 # 남은 12 건(미네랄 10 · Fructose · Galactose)은 재현되지 않는다 —
 # 배포된 KEGG 서브셋 6,685 노드에 해당 라벨이 아예 없다.
 KEGG_ALIAS = {
-    # --- 아미노산 14. 논문은 입체 비특이적/결번 ID, KEGG 정식은 L-form
+    # --- 아미노산 14. 논문=generic 형태, 배포 서브셋에 라벨이 있는 쪽=L-form
     'C01733': 'C00073',   # Methionine     (INCIDENCE_ALIAS 와 일치)
     'C16436': 'C00183',   # Valine         (〃)
     'C16435': 'C00148',   # Proline        (〃)

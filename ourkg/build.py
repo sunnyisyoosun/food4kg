@@ -28,7 +28,7 @@ import hashlib
 
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import (BASE, OUT, FDC_RAW, UNIT_TO_G, FDC_CATEGORY,
+from common import (BASE, OUT, FDC_RAW, UNIT_TO_G, FDC_CATEGORY, cached_get, kegg_rest,
                     normalize_label, normalize_category, kegg_map)
 
 
@@ -284,28 +284,11 @@ def microbe():
       compound_microbe.csv      kegg, taxid, kegg_org, n_ko   (hasMetabolites)
     캐시: ourkg/cache/
     """
-    CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cache')
-    os.makedirs(CACHE, exist_ok=True)
     S = requests.Session()
     S.headers['User-Agent'] = 'ourkg/1.0 (food4health reproduction+extension)'
-
-
-    def cached(name, fetch, ttl_days=30):
-        p = os.path.join(CACHE, name)
-        if os.path.exists(p) and (time.time() - os.path.getmtime(p)) < ttl_days * 86400:
-            return open(p, encoding='utf-8').read()
-        txt = fetch()
-        open(p, 'w', encoding='utf-8').write(txt)
-        return txt
-
-
+    cached = cached_get                       # common.py 로 올렸다
     def kegg(path):
-        def f():
-            r = S.get(f'https://rest.kegg.jp/{path}', timeout=180)
-            r.raise_for_status()
-            time.sleep(0.34)
-            return r.text
-        return cached('kegg_' + path.replace('/', '_') + '.txt', f)
+        return kegg_rest(path, session=S)
 
 
     # ------------------------------------------------------------------
@@ -846,6 +829,39 @@ def kg():
     # 논문 §3.1 "leveraged the compound ontology from KEGG compounds".
     # 우리 KEGG 단계는 compound-미생물 경로만 만들었고 분류축이 없었다 —
     # §5.1 방법 1 의 #14·#15·#16 이 이것 때문에 답하지 못했다.
+    # BRITE=live (기본) 면 KEGG REST 에서 분류축을 **다시 받는다**. 논문 배포본의
+    # KEGG 서브셋은 6,685 노드뿐이라 85 중 27 개에 분류가 붙지 않는다(§17.29).
+    # 실패하면 정적 스냅샷으로 폴백한다. 캐시 TTL 30일 — 같은 창 안에서는 재현된다.
+    BRITE_MODE = os.environ.get('BRITE', 'live')
+
+    def _brite_live():
+        """br08001·br08002·br08005 를 받아 (클래스라벨, 상위, compound->클래스)."""
+        lab, par, c2c = {}, collections.defaultdict(set), collections.defaultdict(set)
+        for br in ('br08001', 'br08002', 'br08005'):
+            txt = kegg_rest(f'get/br:{br}')
+            path = {}
+            for line in txt.split('\n'):
+                m = re.match(r'^([A-F])\s*(.*)$', line)
+                if not m or not m[2].strip():
+                    continue
+                lv, rest = m[1], m[2].strip()
+                cm = re.match(r'^(C\d{5})\s+(.+)$', rest)
+                if cm:                                   # compound 행
+                    parent = path.get(chr(ord(lv) - 1))
+                    if parent:
+                        c2c[cm[1]].add(parent)
+                    continue
+                uri = f'{NS["our"]}brite/{br}/{lv}/{re.sub(r"[^A-Za-z0-9]+", "_", rest)[:60]}'
+                lab[uri] = re.sub(r'\s*\[Fig\]\s*$', '', rest)
+                up = path.get(chr(ord(lv) - 1))
+                if up:
+                    par[uri].add(up)
+                path[lv] = uri
+                for d in 'BCDEF':                        # 더 깊은 경로는 무효화
+                    if d > lv:
+                        path.pop(d, None)
+        return lab, par, c2c
+
     KT = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
     # 우리 compound 에 KEGG_ALIAS 를 **조회용으로만** 적용한다 — 논문 ID 27 개는
     # 자기 KEGG 파일에 노드가 없어 라벨도 brite 분류도 붙지 않는다 (§17.29).
@@ -873,6 +889,21 @@ def kg():
             for v in n.get(KT, []):
                 if isinstance(v, dict) and 'Class' in v.get('@id', ''):
                     cmp_cls[kid].add(v['@id'])
+    if BRITE_MODE == 'live':
+        try:
+            l2, p2, c2 = _brite_live()
+            cls_label.update(l2)
+            for k, v in p2.items():
+                cls_parent[k] |= v
+            n_live = 0
+            for kid, cs in c2.items():
+                if kid in ours_kegg:
+                    cmp_cls[kid] |= cs
+                    n_live += 1
+            print(f'  KEGG brite live — 분류 {len(l2):,}, 우리 compound 에 붙은 것 {n_live}')
+        except Exception as e:
+            print(f'  ⚠ brite live 실패({type(e).__name__}) — 정적 스냅샷만 쓴다')
+
     n_br = 0
     for u, lab in cls_label.items():
         W.t(u, LABEL, lab, 'KEGG', literal=True)

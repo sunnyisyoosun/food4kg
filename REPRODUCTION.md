@@ -3469,18 +3469,38 @@ FDC nutrient 477 중 1:1 매칭 119 (모호 5)
 
 절반도 재현되지 않는다. 그런데 불일치 쪽을 보면 원인이 우리가 아니다.
 
-#### 다름 15 건 중 14 건은 **논문 ID 가 자기 KEGG 파일에 노드로 없다**
+#### 다름 15 건 중 14 건은 **배포된 KEGG 서브셋에 논문 ID 가 없다**
 
 ```
-Tryptophan     논문 C00806 (노드 없음)  재현 C00078 "Tryptophan (Trp)"
-Isoleucine     논문 C16434 (노드 없음)  재현 C00407 "Isoleucine (Ile)"
-Leucine        논문 C16439 (노드 없음)  재현 C00123 "Leucine (Leu)"
-Methionine     논문 C01733 (노드 없음)  재현 C00073 "Methionine (Met)"
+Tryptophan     논문 C00806 (서브셋에 없음)  재현 C00078 "Tryptophan (Trp)"
+Isoleucine     논문 C16434 (〃)             재현 C00407 "Isoleucine (Ile)"
+Leucine        논문 C16439 (〃)             재현 C00123 "Leucine (Leu)"
+Methionine     논문 C01733 (〃)             재현 C00073 "Methionine (Met)"
 … Tyrosine · Valine · Arginine · Histidine · Alanine · Phenylalanine …
 ```
 
 전부 아미노산이다. 논문이 가리킨 ID 는 배포된 `KEGG_Compound.jsonld`(6,685 노드)에
-**존재하지 않아 라벨도 brite 분류도 붙지 않는다.** 재현이 찾은 쪽은 전부 존재한다.
+없어서 **그 KG 안에서는 라벨도 brite 분류도 붙지 않는다.**
+
+#### 정정 — 논문 ID 는 틀린 것이 아니다 (2026-11-09, KEGG REST 확인)
+
+처음에 이 절은 논문 ID 를 "비정식" 인 것처럼 적었다. **틀린 서술이었다.**
+미해소 27 건을 KEGG REST(`rest.kegg.jp/get/<ID>`)로 전수 조회한 결과 **27/27 이 유효한
+KEGG 화합물**이고 이름도 정확히 대응한다.
+
+```
+C00806 = Tryptophan      C01733 = Methionine     C16434 = Isoleucine
+C00070 = Copper          C01496 = Fructose       C01529 = Selenium  …
+```
+
+논문은 **입체 비특이적(generic) 형태**를 골랐고, 그것은 FDC 가 아미노산을 L-/D- 구분
+없이 **총량으로** 보고하는 것과 오히려 맞는 선택이다. 재현이 L-form 을 찾은 이유는
+배포된 서브셋에 L-form 만 라벨과 함께 들어 있기 때문이지, 그쪽이 "정답" 이어서가 아니다.
+
+따라서 이 절의 결함 주장은 다음으로 좁힌다.
+
+> **배포된 KEGG 서브셋(6,685 노드)이 자기 85 목록 중 27 개를 담고 있지 않다.**
+> 논문의 ID 선택이 아니라 **배포 범위**의 문제다.
 
 #### 범위 — Fig 4(c) 85 중 27 개가 해소 불가
 
@@ -3500,7 +3520,8 @@ Methionine     논문 C01733 (노드 없음)  재현 C00073 "Methionine (Met)"
 #### 조치 — `kegg_alias.KEGG_ALIAS`
 
 재현으로 얻은 15 건(아미노산 14 + Vitamin B12)을 `kegg_alias.py` 에 세 번째 방향으로
-넣었다. 기존 `FOOD_ALIAS`(양 조회) · `INCIDENCE_ALIAS`(방향 조회) 와 같은 패턴이다.
+넣었다. **ID 를 고치는 표가 아니라 generic ↔ L-form 을 잇는 조인 표**다 —
+`INCIDENCE_ALIAS`(ProMENDA 가 L-form 을 쓴다)와 같은 성격이다. 기존 `FOOD_ALIAS`(양 조회) · `INCIDENCE_ALIAS`(방향 조회) 와 같은 패턴이다.
 
 **교차검증**: 15 건 중 9 건은 예전에 ProMENDA 이름을 손으로 대조해 만든
 `INCIDENCE_ALIAS` 와 **독립적으로 같은 답**이다(9/9 일치). 서로 다른 경로로 같은
