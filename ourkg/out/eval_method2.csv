@@ -1,16 +1,16 @@
 no,question,attributes,ourkg,pubmed,n_hits_with_evidence,n_hits_pair_only,result
-0,"Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled and depression",Diet recommendation,Palmitic acid,23463571,1,151,1
+0,"Chicken, broilers or fryers, wing, meat and skin, cooked, fried, batter and depression",Diet recommendation,Oleic acid,,0,430,0
 1,Cognition disorders and Depressive disorder,Complication,Morganella morganii,,0,2901,0
-2,Anxiety disorders and Bipolar disorder,Complication,Lactobacillus brevis,,0,2841,0
-3,"Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, prime, cooked, roasted and depression",Diet recommendation,Palmitic acid,23463571,1,151,1
+2,Anxiety disorders and Bipolar disorder,Complication,Lactobacillus brevis,,0,2844,0
+3,Ham and cheese loaf or roll and depression,Diet recommendation,Palmitic acid,,0,230,0
 4,Autistic disorder and Depressive disorder,Complication,Lactobacillus paracasei,,0,226,0
 5,Autistic disorder and Personality disorder,Complication,Coprococcus,,0,205,0
-6,Cape Cod and depression,Diet recommendation,Ethanol,,0,9,0
+6,"Cress, garden, raw and depression",Diet recommendation,Erucic acid,,0,162,0
 7,Autistic disorder and Bipolar disorder,Complication,Lactobacillus buchneri,,0,253,0
-8,"Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 0"" fat, choice, cooked, roasted and depression",Diet recommendation,Palmitic acid,23463571,1,151,1
-9,"Pears, canned, heavy syrup pack, solids and liquids and depression",Diet recommendation,D-Maltose,,0,22,0
+8,"Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled and depression",Diet recommendation,Palmitic acid,23463571,1,151,1
+9,"Mustard greens, cooked, boiled, drained, with salt and depression",Diet recommendation,Erucic acid,,0,0,0
 10,Bipolar disorder and Cognition disorders,Complication,Escherichia coli,,0,1436,0
-11,"Lettuce, cos or romaine, raw and depression",Diet recommendation,L-Lysine,,0,16,0
-12,Anxiety disorders and Depressive disorder,Complication,Oscillibacter,,0,16578,0
-13,Depressive disorder and Sex behavior disorder,Complication,Staphylococcus aureus,,0,2722,0
-14,"Lamb, new zealand, imported, frozen, rib, separable lean and fat, trimmed to 1/8"" fat, raw and depression",Diet recommendation,Palmitic acid,165282,1,240,1
+11,"Mustard spinach, (tendergreen), raw and depression",Diet recommendation,Ascorbic acid,,0,0,0
+12,Anxiety disorders and Depressive disorder,Complication,Oscillibacter,,0,16586,0
+13,Depressive disorder and Sex behavior disorder,Complication,Staphylococcus aureus,,0,2723,0
+14,Anxiety disorders and Eating disorders,Complication,Lactococcus lactis subsp cremoris,,0,1459,0

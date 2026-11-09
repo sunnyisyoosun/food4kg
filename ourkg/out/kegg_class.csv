@@ -1,0 +1,1729 @@
+class_uri,label,parent_uri
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class1,Monocarboxylic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class10,Saturated fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class12
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class100,Arginine vasopressin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class101,Melanotropin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class102,Corticotropin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class103,Growth hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class104,Prolactin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class105,Thyroid stimulating hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class106,Luteinizing hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class107,Follicle stimulating hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class108,beta-Endorphin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class109,Enkephalin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class11,Unsaturated fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class12
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class110,Dynorphin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class111,Chorionic gonadotropin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class112,Calcitonin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class113,Parathyroid hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class114,Atrial natriuretic peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class115,Brain natriuretic peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class116,C-Type natriuretic peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class117,Endothelin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class118,Glucagon,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class119,Insulin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class12,Fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class25
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class120,Amylin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class121,Peptide YY,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class122,Gastrin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class123,Ghrelin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class124,Cholecystokinin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class125,Incretin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class126,Motilin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class127,Secretin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class128,Thymosin alpha,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class129,Thymosin beta-4,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class13,Acylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class14
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class130,Thymosin beta-10,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class131,Insulin-like growth factor 1,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class132,Insulin-like growth factor 2,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class133,Erythropoietin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class134,Angiotensin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class135,Bradykinin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class136,Leptin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class137,Adiponectin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class138,Resistin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139,Peptide hormones,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class157
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class14,Fats,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class25
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class140,Androgens,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class146
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class141,Estrogens,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class146
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class142,Progestagens,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class146
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class143,Glucocorticoids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class146
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class144,Mineralocorticoids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class146
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class146
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class188
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class146,Steroid hormones,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class157
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class147,Melatonin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class152
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class148,Thyroid hormones,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class152
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class149,Adrenalines,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class152
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class15,Glycerophospholipids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class17
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class150,Dopamine,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class152
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class151,Histamine,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class152
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class152,Other hormones,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class157
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class153,Acetylcholine,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class156
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class156,Neurotransmitters,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class157
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class157,Hormones and transmitters,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class189
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class158,Penams,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class163
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class159,Cephems,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class163
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class16,Phosphosphingolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class17
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class160,Clavams,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class163
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class161,Carbapenems,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class163
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class162,Monobactams,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class163
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class163,beta-Lactams,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class188
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class164,Streptidines,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class167
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class165,Actinamines,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class167
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class166,2-Deoxystreptamines,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class167
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class167,Aminoglycosides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class188
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class168,Macrolides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class173
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class169,Ansamycins,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class173
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class17,Phospholipids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class25
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class170,Tetracyclines,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class173
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class171,Other polyketides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class173
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class172,Non-ribosomal peptides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class173
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class173,Polyketides and nonribosomal peptides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class188
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class174,4-Quinolones,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class176
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class175,Fluoroquinolones,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class176
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class176,Quinolones,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class188
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class177,Pure sugars,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class179,Amino acid derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class18,Glyceroglycolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class180,Peptide nucleosides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class181,Cycloalkane derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class183,Aromatic compounds,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class184,Aliphatic compounds,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class185,Quinones,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class186,Cyclic lactones,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class188,Antibiotics,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class189
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class19,Glycosphingolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class2,Dicarboxylic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class20,Glycolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class20,Glycolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class25
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class21,Prostaglandins,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class24
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class22,Leukotrienes,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class24
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class23,Thromboxanes,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class24
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class24,Eicosanoids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class25
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class25,Lipids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class189
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class26,Aldoses,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class32
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class27,Ketoses,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class32
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class28,Deoxy sugars,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class32
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class29,Amino sugars,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class32
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class3,Tricarboxylic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class30,Sugar acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class32
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class31,Sugar alcohols,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class32
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class32,Monosaccharides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class39
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class33,Disaccharides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class35
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class34,Tetrasaccharides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class35
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class35,Oligosaccharides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class39
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class36,Homopolysaccharides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class37,Heteropolysaccharides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class38,Polysaccharides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class39
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class39,Carbohydrates,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class189
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class4,2-Oxocarboxylic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class40,Purines,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class42
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class41,Pyrimidines,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class42
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class42,Bases,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class52
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class43,Ribonucleosides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class45
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class44,Deoxyribonucleosides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class45
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class45,Nucleosides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class52
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class46,Ribonucleotides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class48
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class47,Deoxyribonucleotides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class48
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class48,Nucleotides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class52
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class49,"3',5'-Cyclic nuclcleotides",http://nlp_microbe.ccnu.edu.cn/entity#br08001Class51
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class5,3-Oxocarboxylic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class50,"2',3'-Cyclic nucleotides",http://nlp_microbe.ccnu.edu.cn/entity#br08001Class51
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class51,Cyclic nucleotides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class52
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class52,Nucleic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class189
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class53,Dipeptides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class54
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class54,Peptides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class189
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class54,Peptides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class54
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class55,Common amino acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class57
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class56,Other amino acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class57
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class57,Amino acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class156
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class57,Amino acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class54
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class58,Biogenic amines,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class156
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class58,Biogenic amines,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class59,Amines,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class54
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class6,4-Oxocarboxylic acid,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class61,Fat-soluble vitamins,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class63
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class62,Water-soluble vitamins,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class63
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class63,Vitamins,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class66
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class64,Coenzymes,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class65
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class65,Cofactors,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class66
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class66,Vitamins and Cofactors,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class189
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class67,Estrane derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class68
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class68,18-Carbon atoms,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class69,Androstane derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class70
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class7,Hydroxycarboxylic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class70,19-Carbon atoms,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class71,Pregnane derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class72
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class72,21-Carbon atoms,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class73,Cardanolide derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class74
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class74,23-Carbon atoms,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class75,Cholane derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class77
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class76,Bufanolide derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class77
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class77,24-Carbon atoms,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class78,Cholestane derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class81
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class79,Spirostan derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class81
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class8,Carboxylic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class9
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class80,Furostan derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class81
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class81,27-Carbon atoms,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class82,Ergostane derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class84
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class83,Campestane derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class84
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class84,28-Carbon atoms,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class85,Stigmastane derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class87
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class86,Poriferastane derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class87
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class87,29-Carbon atoms,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class88,Gorgostane derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class89
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class89,30-Carbon atoms,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class9,Organic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class189
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90,Steroids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class189
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90,Steroids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class91,Prolactin-releasing peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class92,Thyrotropin-releasing hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class93,Gonadotropin-releasing hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class94,Growth hormone-releasing hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class95,Somatostatin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class96,Corticotropin-releasing hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class97,Gastrin-releasing peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class98,Melanin-concentrating hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class99,Oxytocin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class1,FA0101 Straight chain fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class10,FA0108 Methoxy fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class100,GP03 Glycerophosphoserines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class101,GP0401 Diacylglycerophosphoglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class104
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class102,GP0405 Monoacylglycerophosphoglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class104
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class103,GP0409 Diacylglycerophosphomonoradylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class104
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class104,GP04 Glycerophosphoglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class105,GP0501 Diacylglycerophosphoglycerophosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class106
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class106,GP05 Glycerophosphoglycerophosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class107,GP0601 Diacylglycerophosphoinositols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class109
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class108,GP0605 Monoacylglycerophosphoinositols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class109
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class109,GP06 Glycerophosphoinositols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class11,FA0109 Halogenated fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class110,GP0701 Diacylglycerophosphoinositol monophosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class111
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class111,GP07 Glycerophosphoinositol monophosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class112,GP0801 Diacylglycerophosphoinositol bisphosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class113
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class113,GP08 Glycerophosphoinositol bisphosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class114,GP0901 Diacylglycerophosphoinositol trisphosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class115
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class115,GP09 Glycerophosphoinositol trisphosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class116,GP1001 Diacylglycerophosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class117,"GP1002 1-alkyl,2-acylglycerophosphates",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class118,GP1005 Monoacylglycerophosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class119,GP1006 Monoalkylglycerophosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class12,FA0110 Amino fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class120,GP10 Glycerophosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class121,GP1101 Diacylglyceropyrophosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class122
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class122,GP11 Glyceropyrophosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class123,GP1201 Diacylglycerophosphoglycerophosphodiradylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class125
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class124,GP1202 Diacylglycerophosphoglycerophosphomonoradylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class125
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class125,GP12 Glycerophosphoglycerophosphoglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class126,GP1301 CDP-diacylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class129
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class127,GP1304 CDP-Dialkylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class129
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class128,GP1305 CDP-Monoacylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class129
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class129,GP13 CDP-Glycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class13,FA0111 Cyano fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class130,GP14 Glycosylglycerophospholipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class131,GP1501 Diacylglycerophosphoinositolglycans,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class132
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class132,GP15 Glycerophosphoinositolglycans,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class133,GP1601 Diacylglycerophosphonocholines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class134
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class134,GP16 Glycerophosphonocholines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class135,GP1701 Diacylglycerophosphonoethanolamines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class136
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class136,GP17 Glycerophosphonoethanolamines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class137,GP18 Di-glycerol tetraether phospholipids (caldarchaeols),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class138,GP19 Glycerol-nonitol tetraether phospholipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class139,GP2001 Oxidized glycerophosphocholines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class141
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class14,FA0112 Nitro fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class140,GP2002 Oxidized glycerophosphoethanolamines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class141
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class141,GP20 Oxidized glycerophospholipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142,GP  Glycerophospholipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class354
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class143,SP0101 Sphing-4-enines (Sphingosines),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class151
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class144,SP0102 Sphinganines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class151
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class145,SP0103 4-Hydroxysphinganines (Phytosphingosines),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class151
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class146,SP0104 Sphingoid base homologs and variants,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class151
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class147,SP0105 Sphingoid base 1-phosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class151
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class148,SP0106 Lysosphingomyelins and lysoglycosphingolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class151
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class149,SP0107 N-methylated sphingoid bases,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class151
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class15,FA0113 Thia fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class150,SP0108 Sphingoid base analogs,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class151
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class151,SP01 Sphingoid bases,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class178
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class152,SP0201 N-acylsphingosines (ceramides),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class157
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class153,SP0202 N-acylsphinganines (dihydroceramides),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class157
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class154,SP0203 N-acyl-4-hydroxysphinganines (phytoceramides),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class157
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class155,SP0204 Acylceramides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class157
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class156,SP0205 Ceramide 1-phosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class157
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class157,SP02 Ceramides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class178
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class158,SP0301 Ceramide phosphocholines (sphingomyelins),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class160
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class159,SP0302 Ceramide phosphoethanolamines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class160
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class16,FA0114 Carbocyclic fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class160,SP03 Phosphosphingolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class178
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class161,SP04 Phosphonosphingolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class178
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class162,SP0501 Simple Glc series,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class171
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class163,SP0502 GalNAcb1-3Gala1-4Galb1-4Glc- (Globo series),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class171
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class164,SP0503 GalNAcb1-4Galb1-4Glc- (Ganglio series),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class171
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class165,SP0504 Galb1-3GlcNAcb1-3Galb1-4Glc- (Lacto series),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class171
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class166,SP0505 Galb1-4GlcNAcb1-3Galb1-4Glc- (Neolacto series),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class171
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class167,SP0506 GalNAcb1-3Gala1-3Galb1-4Glc- (Isoglobo series),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class171
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class168,SP0507 GlcNAcb1-2Mana1-3Manb1-4Glc- (Mollu series),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class171
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class169,SP0508 GalNAcb1-4GlcNAcb1-3Manb1-4Glc- (Arthro series),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class171
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class17,FA0115 Heterocyclic fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class170,SP0509 Gal- (Gala series),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class171
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class171,SP05 Neutral glycosphingolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class178
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class172,SP0601 Gangliosides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class175
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class173,SP0602 Sulfoglycosphingolipids (sulfatides),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class175
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class174,SP0603 Glucuronosphingolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class175
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class175,SP06 Acidic glycosphingolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class178
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class176,SP07 Basic glycosphingolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class178
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class177,SP08 Amphoteric glycosphingolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class178
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class178,SP  Sphingolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class354
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class179,ST0101 Cholesterol and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class18,FA0116 Mycolic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class180,ST0102 Cholesteryl esters,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class181,ST0103 Ergosterols and C24-methyl derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class182,ST0104 Stigmasterols and C24-ethyl derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class183,ST0108 Spirostanols and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class184,ST0109 Furospirostanols and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class185,ST0110 Cycloartanols and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class186,ST0112 Cardanolides and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class187,ST0113 Bufanolides and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class188,ST0114 Brassinolides and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class189,ST0115 Solanidines and alkaloid derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class19,FA0117 Dicarboxylic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class190,ST01 Sterols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class209
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class191,ST0201 C18 steroids (estrogens) and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class194
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class192,ST0202 C19 steroids (androgens) and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class194
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class193,"ST0203 C21 steroids (gluco mineralocorticoids, progestogens) and derivatives",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class194
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class194,ST02 Steroids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class209
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class195,ST0301 Vitamin D2 and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class199
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class196,ST0302 Vitamin D3 and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class199
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class197,ST0303 Vitamin D4 and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class199
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class198,ST0304 Vitamin D5 and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class199
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class199,ST03 Secosteroids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class209
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class2,FA0102 Branched fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20,FA01 Fatty Acids and Conjugates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class200,"ST0401 C24 bile acids, alcohols, and derivatives",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class203
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class201,"ST0402 C26 bile acids, alcohols, and derivatives",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class203
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class202,"ST0403 C27 bile acids, alcohols, and derivatives",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class203
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class203,ST04 Bile acids and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class209
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class204,ST0501 Glucuronides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class208
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class205,ST0502 Sulfates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class208
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class206,ST0503 Glycine conjugates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class208
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class207,ST0504 Taurine conjugates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class208
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class208,ST05 Steroid conjugates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class209
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class209,ST  Sterol lipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class354
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class21,FA0201 12-oxophytodienoic acid metabolites,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class24
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class210,PR0101 C5 isoprenoids (hemiterpenes),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class293
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class211,PR010201 Acyclic monoterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class217
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class212,PR010202 Irregular acyclic monoterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class217
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class213,PR010206 Cyclopropane and cyclobutane monoterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class217
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class214,"PR010207 Iridoid, 10-alkyliridoid and secoiridoid monoterpenoids",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class217
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class215,PR010209 Menthane monoterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class217
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class216,PR010212 Bicyclic monoterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class217
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class217,PR0102 C10 isoprenoids (monoterpenes),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class293
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class218,PR010301 Acyclic farnesane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class219,PR010302 Furanoid farnesane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class22,FA0202 jasmonic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class24
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class220,PR010305 Cyclofarnesane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class221,PR010306 Bisabolane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class222,PR010307 Cyclobisabolane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class223,PR010309 Germacrane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class224,PR010311 Humulane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class225,PR010312 Caryophyllane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class226,PR010318 Trichothecane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class227,PR010319 Eudesmane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class228,PR010325 Eremophilane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class229,PR010327 Aristolane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class23,FA0200 Other Octadecanoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class24
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class230,PR010331 Valerane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class231,PR010333 Cadinane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class232,PR010337 Drimane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class233,PR010340 Carabrane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class234,PR010341 Guaiane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class235,PR010342 Pseudoguaiane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class236,PR010344 Cubebane and ivaxillarane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class237,PR010345 Patchoulane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class238,PR010346 Valerenane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class239,PR010350 Longifolane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class24,FA02 Octadecanoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class240,PR010354 Picrotoxane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class241,PR010359 Illudane and protoilludane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class242,PR010364 Botrydial sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class243,PR010365 Spirovetivane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class244,PR010369 Cedrane and isocedrane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class245,PR010370 Zizaane and prezizaane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class246,PR010374 Pentalenane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class247,PR010380 Campherenane and santalane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class248,PR010381 Sativane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class249,PR010383 Copaane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class25,FA0301 Prostaglandins,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class250,PR010386 Thujopsane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class251,PR010388 Gymnomitrane sesquiterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class252,PR0103 C15 isoprenoids (sesquiterpenes),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class293
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class253,PR010401 Acyclic diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class254,PR010403 Labdane and halimane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class255,PR010405 Abietane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class256,PR010406 Cycloaibetiane and Abeoabietaine diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class257,PR010408 Pimarane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class258,PR010410 Cleistanthane and isocleistanthane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class259,PR010412 Podocarpane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class26,FA0302 Leukotrienes,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class260,PR010413 Kaurane and phyllocladane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class261,PR010416 Aphidicolane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class262,PR010417 Gibberellins,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class263,PR010418 Leucothol and grayanotoxane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class264,PR010419 Cembrane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class265,PR010429 Casbane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class266,PR010431 Lathyrane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class267,PR010433 Tigliane and ingenane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class268,PR010435 Fusicoccane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class269,PR010439 Taxane and abeotaxane diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class27,FA0303 Thromboxanes,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class270,PR010447 Pachydictyane and cneorubin diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class271,PR010454 Ginkgolides and Bilobalides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class272,PR0104 C20 isoprenoids (diterpenes),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class293
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class273,PR010501 Acyclic sesterterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class275
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class274,PR010505 Cheilanthane and ophiobolane sesterterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class275
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class275,PR0105 C25 isoprenoids (sesterterpenes),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class293
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class276,PR010601 Acyclic triterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class277,PR010604 Prostostane and fusidane triterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class278,PR010608 Dammarane triterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class279,PR010609 Tirucallane euphane triterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class28,FA0304 Lipoxins,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class280,PR010610 Apotirucallane triterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class281,PR010611 Nortriterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class282,PR010613 Baccharane triterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class283,PR010614 Lupane triterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class284,PR010615 Oleanane triterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class285,"PR010616 Taraxerane, multiflorane, glutinane and friedelane triterpenoids",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class286,PR010617 Pachysanane triterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class287,"PR010618 Taraxastane, ursane and bauerane triterpenoids",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class288,"PR010620 Neohopane, fernane, adianane and filicane triterpenoids",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class289,PR010621 Arborinane and stictane triterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class29,FA0305 Hydroxy hydroperoxyeicosatrienoic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class290,PR0106 C30 isoprenoids (triterpenes),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class293
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class291,PR0107 C40 isoprenoids (tetraterpenes),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class293
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class292,PR0109 Retinoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class293
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class293,PR01 Isoprenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class307
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class294,PR0201 Ubiquinones,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class297
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class295,PR0202 Vitamin E,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class297
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class296,PR0203 Vitamin K,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class297
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class297,PR02 Quinones and hydroquinones,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class307
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class298,PR0301 Bactoprenols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class304
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class299,PR0302 Bactoprenol monophosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class304
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class3,Monounsaturated fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class5
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class30,FA0306 Hydroxy hydroperoxyeicosatetraenoic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class300,PR0303 Bactoprenol diphosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class304
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class301,PR0307 Dolichols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class304
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class302,PR0308 Dolichol monophosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class304
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class303,PR0309 Dolichol diphosphates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class304
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class304,PR03 Polyprenols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class307
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class305,PR04 Hopanoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class307
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class306,PR00 Other Prenol lipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class307
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class307,PR  Prenol lipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class354
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class308,SL0101 Monoacylaminosugars,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class314
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class309,SL0102 Diacylaminosugars,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class314
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class31,FA0307 Hydroxy hydroperoxyeicosapentaenoic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class310,SL0103 Triacylaminosugars,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class314
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class311,SL0104 Tetraacylaminosugars,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class314
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class312,SL0106 Hexaacylaminosugars,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class314
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class313,SL0107 Heptaacylaminosugars,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class314
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class314,SL01 Acylaminosugars,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class317
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class315,SL02 Acylaminosugar glycans,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class317
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class316,SL03 Acyltrehaloses,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class317
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class317,SL  Saccharolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class354
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class318,PK03 Annonaceae acetogenins,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class353
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class319,PK04 Macrolides and lactone polyketides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class353
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class32,FA0308 Epoxyeicosatrienoic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class320,PK05 Ansamycins and related polyketides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class353
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class321,PK06 Plyenes,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class353
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class322,PK07 Linear tetracyclines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class353
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class323,PK08 Angucyclines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class353
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class324,PK09 Polyether antibiotics,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class353
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class325,PK10 Aflatoxins and related substances,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class353
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class326,PK1201 Anthocyanidins,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class327,"PK1202 Flavans, Flavanols and Leucoanthocyanidins",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class328,PK1203 Proanthocyanidins,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class329,PK1204 Biflavonoids and polyflavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class33,FA0309 Hepoxilins,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class330,PK1205 Isoflavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class331,PK1206 Rotenoid flavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class332,PK1207 Pterocarpans,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class333,PK1208 Isoflavans,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class334,PK1209 Coumestan flavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class335,PK1210 Neoflavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class336,PK1211 Flavones and Flavonols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class337,PK1212 Chalcones and dihydrochalcones,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class338,PK1213 Aurone flavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class339,PK1214 Flavanones,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class34,FA0310 Levuglandins,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class340,PK1216 Other Flavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class341,PK12 Flavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class353
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class342,PK1301 Monocyclic aromatic polyketides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class351
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class343,PK1302 Naphthalenes and naphthoquinones,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class351
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class344,PK1304 Anthracenes and phenanthrenes,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class351
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class345,PK1305 Anthracyclinones,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class351
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class346,"PK1306 Dibenzofurans, griseofulvins, dibenzopyrans and xanthones",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class351
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class347,PK1308 Depsides and depsidones,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class351
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class348,"PK1309 Diphenyl ethers, biphenyls, dibenzyls and stilbenes",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class351
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class349,PK1311 Benzopyranoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class351
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class35,FA0311 Isoprostanes,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class350,PK1312 Other aromatic polyketides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class351
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class351,PK13 Aromatic polyketides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class353
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class352,PK14 Non-ribosomal peptide polyketide hybrids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class353
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class353,PK  Polyketides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class354
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class36,FA0312 Clavulones and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class37,FA0300 Other Eicosanoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class38,FA03 Eicosanoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class39,FA04 Docosanoids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class4,Polyunsaturated fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class5
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class40,FA05 Fatty alcohols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class41,FA06 Fatty aldehydes,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class42,FA0701 Wax monoesters,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class50
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class43,FA0702 Wax diesters,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class50
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class44,FA0703 Cyano esters,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class50
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class45,FA0704 Lactones,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class50
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class46,FA0705 Fatty acyl CoAs,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class50
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class47,FA0706 Fatty acyl ACPs,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class50
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class48,FA0707 Fatty acyl carnitines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class50
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class49,FA0708 Fatty acyl adenylates,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class50
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class5,FA0103 Unsaturated fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class50,FA07 Fatty esters,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class51,FA0801 Primary amides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class55
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class52,FA0802 N-acyl amines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class55
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class53,FA0803 Fatty acyl homoserine lactones,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class55
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class54,FA0804 N-acyl ethanolamines (endocannabinoids),http://nlp_microbe.ccnu.edu.cn/entity#br08002Class55
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class55,FA08 Fatty amides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class56,FA09 Fatty nitriles,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class57,FA10 Fatty ethers,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class58,FA11 Hydrocarbons,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class59,FA12 Oxygenated hydrocarbons,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class6,FA0104 Hydroperoxy fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class60,FA1301 Fatty acyl glycosides of mono- and disaccharides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class62
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class61,FA1302 Sophorolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class62
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class62,FA13 Fatty acyl glycosides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class63,FA00 Other Fatty Acyls,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class64,FA  Fatty acyls,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class354
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class65,GL0101 Monoacylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class67
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class66,GL0102 Monoalkylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class67
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class67,GL01 Monoradylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class84
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class68,GL0201 Diacylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class74
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class69,"GL0202 1-alkyl,2-acylglycerols",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class74
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class7,FA0105 Hydroxy fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class70,GL0203 Dialkylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class74
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class71,GL0204 1Z-alkenylacylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class74
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class72,GL0205 Di-glycerol tetraethers,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class74
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class73,GL0206 Di-glycerol tetraether glycans,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class74
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class74,GL02 Diradylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class84
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class75,GL0301 Triacylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class77
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class76,GL0305 Estolides,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class77
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class77,GL03 Triradylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class84
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class78,GL0401 Glycosylmonoacylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class79
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class79,GL04 Glycosylmonoradylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class84
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class8,FA0106 Oxo fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class80,GL0501 Glycosyldiacylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class82
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class81,GL0502 Glycosylalkylacylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class82
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class82,GL05 Glycosyldiradylglycerols,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class84
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class83,GL00 Other Glycerolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class84
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class84,GL  Glycerolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class354
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class85,GP0101 Diacylglycerophosphocholines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class91
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class86,"GP0102 1-alkyl,2-acylglycerophosphocholines",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class91
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class87,"GP0103 1Z-alkenyl,2-acylglycerophosphocholines",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class91
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class88,GP0105 Monoacylglycerophosphocholines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class91
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class89,GP0106 Monoalkylglycerophosphocholines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class91
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class9,FA0107 Epoxy fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class90,GP0107 1Z-alkenylglycerophosphocholines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class91
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class91,GP01 Glycerophosphocholines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class92,GP0201 Diacylglycerophosphoethanolamines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class97
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class93,"GP0202 1-alkyl,2-acylglycerophosphoethanolamines",http://nlp_microbe.ccnu.edu.cn/entity#br08002Class97
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class94,GP0205 Monoacylglycerophosphoethanolamines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class97
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class95,GP0206 Monoalkylglycerophosphoethanolamines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class97
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class96,GP0207 1Z-alkenylglycerophosphoethanolamines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class97
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class97,GP02 Glycerophosphoethanolamines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class142
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class98,GP0301 Diacylglycerophosphoserines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class100
+http://nlp_microbe.ccnu.edu.cn/entity#br08002Class99,GP0305 Monoacylglycerophosphoserines,http://nlp_microbe.ccnu.edu.cn/entity#br08002Class100
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class1,Pyrrolidine alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class4
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class10,Alkaloids derived from nicotinic acid,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class100,Tutinolide,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class102
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class102,Sesquiterpenoids (C15),http://nlp_microbe.ccnu.edu.cn/entity#br08003Class150
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class103,Linear diterpenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class104,Abietanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class105,Aphidicolane,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class106,Cembrenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class107,Clerodanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class108,Daphnanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class109,Gibberellins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class11,Isoquinoline alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class14
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class110,Ginkgolides,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class111,Grayanoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class112,Kaurenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class113,Labdanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class114,Mesotricyclic diterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class115,Pimaranes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class116,Podocarpanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class117,Taxanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class118,Tiglianes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class12,Thiazole alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class14
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120,Diterpenoids (C20),http://nlp_microbe.ccnu.edu.cn/entity#br08003Class150
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class121,Liner triterpenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class131
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class122,Cucurbitanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class131
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class123,Dammarenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class131
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class124,Hopanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class131
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class125,Limonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class131
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class126,Lupanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class131
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class127,Oleananes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class131
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class128,Protostanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class131
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class129,Ursanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class131
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class13,Tyramine derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class14
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class131,Triterpenoids (C30),http://nlp_microbe.ccnu.edu.cn/entity#br08003Class150
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class132,Estrane,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class133,Androstane,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class134,Pregnane,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class135,Cardanolide,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class136,Bufanolide,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class137,Cholestane,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class138,Spirostan,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class139,Furostan,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class14,Alkaloids derived from tyrosine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class140,Ergostane,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class141,Stigmastane,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class142,Cycloartane,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144,Steroids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class150
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class145,Carotenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class147
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class146,Apocarotenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class147
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class147,Carotenoids and apocarotenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class150
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class148,Polyterpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class15,Acridone alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class150,Terpenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class151,Anthrone type,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class153
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class152,Anthraquinone type,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class153
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class153,Anthraquinones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class163
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class154,alpha-Pyrones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class159
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class155,Monocyclic gamma-pyrones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class159
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class156,Chromones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class159
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class157,Naphthopyrones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class159
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class158,Xanthenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class159
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class159,Pyrones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class163
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class16,Indole alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class160,Cannabinoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class161,Phloroglucinols,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class163,Polyketides,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class164,Saturated fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class168
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class165,Unsaturated fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class168
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class166,Polyynes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class168
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class168,Fatty acids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class169
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class169,Fatty acids related compounds,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class17,Quinazoline alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class170,Betacyanins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class173
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class171,Betaxanthins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class173
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class173,Betalains,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class195
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class174,Cyanogenic glucosides derived from phenylalanine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class181
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class175,Cyanogenic glucosides derived from thyrosine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class181
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class176,Cyanogenic glucosides derived from valine or isoleucine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class181
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class177,Cyanogenic glucosides derived from leucine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class181
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class178,Cyanogenic glucosides derived from nonprotein amino acid,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class181
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class179,Cyanogenic glucosides derived from other origin,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class181
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class18,Quinoline alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class181,Cyanogenic glucosides,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class195
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class182,Glucosinolates derived from methionine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class183,Glucosinolates derived from leucine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class184,Glucosinolates derived from isoleucine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class185,Glucosinolates derived from valine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class186,Glucosinolates derived from alanine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class187,Glucosinolates derived from phenylalanine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class188,Glucosinolates derived from tyrosine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class189,Glucosinolates derived from tryptophan,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class190
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class19,Pyrroloindole alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class190,Glucosinolates,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class195
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class191,Amines,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class192,Amides,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class193,Capsaicinoids and derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class195,Amino acid related compounds,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class196,alpha-Naphthoquinones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class197
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class197,Naphthoquinones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class198,Galloyl derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class202
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class199,Gallotannins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class202
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class2,Pyrrolizidine alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class4
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class20,Alkaloids derived from tryptophan and anthranilic acid,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class200,Ellagitannins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class202
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class201,Miscellaneous galloyl derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class202
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class202,Tannins and galloyl derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class203,Neoflavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class21,Imidazole alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class22
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class22,Alkaloids derived from histidine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class23,Acetate derived alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class27
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class24,Phenylalanine derived alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class27
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class25,Terpenoid alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class27
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class26,Steroid alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class27
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class27,Alkaloids derived by amination reactions,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class28,Purine alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class195
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class91
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class131
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class84
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class163
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class150
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class102
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class173
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class168
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class181
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class3,Tropane alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class4
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class31,Alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class32,Aurones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class33,Chalcones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class34,Dihydrochalcones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class35,Flavanones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class36,Flavones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class37,Flavonols,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class38,Dihyroflavonols,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class39,Flavans,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class4,Alkaloids derived from ornithine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class40,Flavan 3-ols,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class41,Flavan 4-ols,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class42,"Flavan 3,4-diols",http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class43,Anthocyanidins and anthocyanins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44,Flavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44,Flavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class45,Isoflavanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class53
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class46,Isoflavanones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class53
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class47,Isoflavones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class53
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class48,3-Arylcoumarins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class53
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class49,Pterocarpans,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class53
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class5,Indolizidine alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class50,Coumestanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class53
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class51,Rotenones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class53
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class52,2-Arylbenzofurans,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class53
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class53,Isoflavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class54,Biflavonoids and polyflavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class57
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class55,Proanthocyanidins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class57
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class56,Diels-Alder adduct of chalcone,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class57
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class57,Complex flavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class59,Caffeate derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class6,Quinolizidine alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class60,Coniferyl alcohol derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class61,Paracoumaryl alcohol derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class62,Sinapate derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class64,Monolignols,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class73
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65,Lignans,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65,Lignans,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class73
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class66,Lignan glycosides,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class67,Neolignans,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class68,Norlignans,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class7,Piperidine alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class70,Coumarins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class73
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class70,Coumarins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class70
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class71,Furanocoumarins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class70
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class73,Phenylpropanoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class74,Stilbenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class80
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class75,Bibenzyls,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class80
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class76,Phenanthrenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class80
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class77,Dihydrophenanthrenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class80
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class78,Miscellaneous stilbenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class80
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class79,"Stilbenoid dimers, stilbenoid oligomers and bis(bibenzyl)s",http://nlp_microbe.ccnu.edu.cn/entity#br08003Class80
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class8,Alkaloids derived from lysine,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class80,Stilbenoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class84
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class81,Diarylheptanoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class82,Zingiber derived compounds,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class84,Shikimate / acetate-malonate pathway derived compounds,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class85,Hemiterpenoids (C5),http://nlp_microbe.ccnu.edu.cn/entity#br08003Class150
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class86,Linear monoterpenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class91
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class87,Cyclic monoterpenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class91
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class88,Iridoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class91
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class89,Secoiridoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class91
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class9,Pyridine alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class10
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class91,Monoterpenoids (C10),http://nlp_microbe.ccnu.edu.cn/entity#br08003Class150
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class92,Farnesenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class102
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class93,Germacrenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class102
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class94,Bisabolanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class102
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class95,Humulenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class102
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class96,Cadinanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class102
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class97,Eudesmanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class102
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class98,Guaianolide,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class102
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class99,Pseudoguaianolide,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class102
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class1,Tachykinin,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class6
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class10,Natriuretic peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class15
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class11,Guanylin,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class15
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class12,Endothelin,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class15
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class13,Urotensin,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class15
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class14,Adrenomedullin,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class15
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class15,Cardiovascular peptides,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class45
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class16,Thyroid peptide hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class19
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class17,parathyroid peptide hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class19
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class18,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class45
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class18,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class19
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class19,Calcium-regulating peptides,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class45
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class2,Neurotensin,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class6
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class20,Anterior pituitary hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class23
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class21,Posterior pituitary hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class23
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class22,Proopiomelanocortin-derived peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class23
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class23,Pituitary hormones,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class45
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class24,Corticotropin-releasing hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class25,Gonadotropin-releasing hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class26,Growth hormone-releasing hormone Somatostatin,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class27,Thyrotropin-releasing hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class28,Prolactin-releasing peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class29,Pituitary adenylate cyclase-activating peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class3,Feeding-related peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class6
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class30,Metastin,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class31
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class31,Hypothalamic hormones,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class45
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class32,Insulin C-peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class36
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class33,Relaxin,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class36
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class34,Glucagon,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class36
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class35,Amylin,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class36
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class36,Pancreatic peptides,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class45
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class37,Placental peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class38
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class38,Gonadal peptides,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class45
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class39,Gut peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class42
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class4,Endogenous opioid peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class6
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class40,Renal peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class42
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class41,Adipocytes secretion peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class42
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class42,Non-endocrine glands secretion peptides,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class45
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class43,Microbicidal and cytotoxic peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class18
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class5,Other neuropeptides,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class6
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class6,Neuropeptides,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class45
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class7,Angiotensin,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class15
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class8,Bradykinin,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class15
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class9,Fibrinopeptide,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class15
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class1,Carbamate pesticides,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class10,Bisphenols,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class13
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class11,Alkylphenols,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class13
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class12,Styrenes,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class13
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class13,Plasticizers and plastics,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class21
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class14,PBDEs,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class15
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class15,Flame retardants,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class21
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class16,PCDDs,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class17,PCDFs,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class18,Non-ortho (coplanar) PCBs,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class19,Mono-ortho PCBs,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class2,Dithiocarbamate pesticides,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class20,Dioxins and dioxin-like compounds,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class21
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class3,Organochlorine pesticides,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class4,Pyrethroid pesticides,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class5,Triazine herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class6,Phenoxy herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class7,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class8
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class8,Pesticides and herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class21
+http://nlp_microbe.ccnu.edu.cn/entity#br08006Class9,Phthalates,http://nlp_microbe.ccnu.edu.cn/entity#br08006Class13
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class1,Aliphatic nitrogen fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class10,Morpholine fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class108,Carbamate insecticide,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class11,Organochlorine fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class12,Organophosphorus fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class125,Fumigants,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class128,Synergists,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class13,Organotin fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class130,Obsolete pesticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class131
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class14,Pyridine fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class15,Pyrimidine fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class16,Quinone fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class17,Strobilurin fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class18,Thiazole fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class130
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class76
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class71
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class83
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class2,Amide fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20,Fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class83
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20,Fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class130
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class21,Amide herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class22,Anilide herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class23,Arsenical herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class24,Benzoic acid herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class25,Bipyridinium herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class26,Carbanilate herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class27,Cyclohexene oxime herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class28,Dinitroaniline herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class29,Diphenyl ether herbicide,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class3,Antibiotic fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class30,Inorganic herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class31,Imidazolinone herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class32,Nitrile herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class33,Nitrophenol herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class34,Organophosphorus herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class35,Phenoxy herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class36,Phenylurea herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class37,Pyrazole herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class38,Pyridine herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class39,Sulfonylurea herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class4,Carbamate fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class40,Thiocarbamate herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class41,Triazine herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class42,Triazinone herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class43,Uracil herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class44,Urea herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46,Herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class83
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46,Herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class130
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class47,Arsenical insecticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class48,Carbamate insecticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class49,Neonicotinoid insecticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class5,Conazole fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class50,Nereistoxin insecticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class51,Organochlorine insecticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class52,Organophosphorus insecticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class53,Phosphoramido insecticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class54,Pyrazole insecticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class55,Pyrethroid insecticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class56,Acaricides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class57,Nematicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59,Insecticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class83
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59,Insecticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class130
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class6,Copper fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class60,Antifeedants,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class65
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class61,Chitin synthesis inhibitors,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class65
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class62,Juvenile hormone mimics,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class65
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class63,Mite growth regulators,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class65
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class64,Moulting hormone agonists,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class65
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class65,Insect growth regulators,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class83
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class65,Insect growth regulators,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class130
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class66,Auxins,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class71
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class67,Cytokinins,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class71
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class68,Growth inhibitors / retardants,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class71
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class69,Growth stimulators,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class71
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class7,Dicarboximide fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class71,Plant growth regulators,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class83
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class71,Plant growth regulators,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class130
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class72,Coumarin rodenticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class76
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class73,Inorganic rodenticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class76
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class74,Organofluorine rodenticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class76
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class76,Rodenticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class83
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class76,Rodenticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class130
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class77,Bird repellent,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class78,Fumigant,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class79,Insect repellents,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class8,Dithiocarbamate fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class80,Molluscacide,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class81,Synergist,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class83,Pesticides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class131
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class9,Inorganic fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class99,Diphenyl ether herbicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
+https://www.kegg.jp/entry/C00002,ATP,
+https://www.kegg.jp/entry/C00003,NAD,
+https://www.kegg.jp/entry/C00006,NADP,
+https://www.kegg.jp/entry/C00008,ADP,
+https://www.kegg.jp/entry/C00010,CoA,
+https://www.kegg.jp/entry/C00014,NH3,
+https://www.kegg.jp/entry/C00015,UDP,
+https://www.kegg.jp/entry/C00016,FAD,
+https://www.kegg.jp/entry/C00018,PLP,
+https://www.kegg.jp/entry/C00019,SAM,
+https://www.kegg.jp/entry/C00020,AMP,
+https://www.kegg.jp/entry/C00021,S-Adenosyl-L-homocysteine,
+https://www.kegg.jp/entry/C00022,Pyruvate; 2-Oxopropanoate,
+https://www.kegg.jp/entry/C00024,Acetyl-CoA,
+https://www.kegg.jp/entry/C00025,Glutamic acid (Glu),
+https://www.kegg.jp/entry/C00026,2-Oxoglutarate,
+https://www.kegg.jp/entry/C00029,UDP-glucose,
+https://www.kegg.jp/entry/C00031,D-Glucose,
+https://www.kegg.jp/entry/C00032,Heme B,
+https://www.kegg.jp/entry/C00033,Acetate; Ethanoate,
+https://www.kegg.jp/entry/C00035,GDP,
+https://www.kegg.jp/entry/C00036,Oxaloacetate; 2-Oxosuccinate,
+https://www.kegg.jp/entry/C00037,Glycine,
+https://www.kegg.jp/entry/C00041,Alanine (Ala),
+https://www.kegg.jp/entry/C00042,Succinate,
+https://www.kegg.jp/entry/C00043,UDP-N-acetyl-D-glucosamine,
+https://www.kegg.jp/entry/C00044,GTP,
+https://www.kegg.jp/entry/C00047,Lysine (Lys),
+https://www.kegg.jp/entry/C00048,Glyoxylate; Oxoacetate,
+https://www.kegg.jp/entry/C00049,Aspartic acid (Asp),
+https://www.kegg.jp/entry/C00051,Glutathione,
+https://www.kegg.jp/entry/C00052,UDP-alpha-D-galactose,
+https://www.kegg.jp/entry/C00053,PAPS,
+https://www.kegg.jp/entry/C00055,CMP,
+https://www.kegg.jp/entry/C00058,Formate; Methanoate,
+https://www.kegg.jp/entry/C00059,Sulfate,
+https://www.kegg.jp/entry/C00061,FMN,
+https://www.kegg.jp/entry/C00062,Arginine (Arg),
+https://www.kegg.jp/entry/C00063,CTP,
+https://www.kegg.jp/entry/C00064,Glutamine (Gln),
+https://www.kegg.jp/entry/C00065,Serine (Ser),
+https://www.kegg.jp/entry/C00068,TPP,
+https://www.kegg.jp/entry/C00072,Ascorbic acid (Vitamin C),
+https://www.kegg.jp/entry/C00073,Methionine (Met),
+https://www.kegg.jp/entry/C00074,Phosphoenolpyruvate,
+https://www.kegg.jp/entry/C00075,UTP,
+https://www.kegg.jp/entry/C00077,L-Ornithine,
+https://www.kegg.jp/entry/C00078,Tryptophan (Trp),
+https://www.kegg.jp/entry/C00079,Phenylalanine (Phe),
+https://www.kegg.jp/entry/C00082,Tyrosine (Tyr),
+https://www.kegg.jp/entry/C00084,Acetaldehyde,
+https://www.kegg.jp/entry/C00085,D-Fructose 6-phosphate,
+https://www.kegg.jp/entry/C00086,Urea,
+https://www.kegg.jp/entry/C00089,Sucrose; Cane sugar,
+https://www.kegg.jp/entry/C00092,D-Glucose 6-phosphate,
+https://www.kegg.jp/entry/C00093,sn-Glycerol 3-phosphate,
+https://www.kegg.jp/entry/C00096,GDP-mannose,
+https://www.kegg.jp/entry/C00097,Cysteine (Cys),
+https://www.kegg.jp/entry/C00099,beta-Alanine,
+https://www.kegg.jp/entry/C00103,D-Glucose 1-phosphate,
+https://www.kegg.jp/entry/C00105,UMP,
+https://www.kegg.jp/entry/C00106,Uracil (Ura),
+https://www.kegg.jp/entry/C00108,Anthranilate,
+https://www.kegg.jp/entry/C00109,2-Oxobutanoate,
+https://www.kegg.jp/entry/C00111,Glycerone phosphate,
+https://www.kegg.jp/entry/C00112,CDP,
+https://www.kegg.jp/entry/C00114,Choline,
+https://www.kegg.jp/entry/C00116,Glycerol,
+https://www.kegg.jp/entry/C00117,D-Ribose 5-phosphate,
+https://www.kegg.jp/entry/C00118,D-Glyceraldehyde 3-phosphate,
+https://www.kegg.jp/entry/C00120,Biotin,
+https://www.kegg.jp/entry/C00121,D-Ribose,
+https://www.kegg.jp/entry/C00122,Fumarate,
+https://www.kegg.jp/entry/C00123,Leucine (Leu),
+https://www.kegg.jp/entry/C00129,Isopentenyl diphosphate,
+https://www.kegg.jp/entry/C00130,IMP,
+https://www.kegg.jp/entry/C00132,Methanol,
+https://www.kegg.jp/entry/C00133,D-Alanine,
+https://www.kegg.jp/entry/C00134,Putrescine,
+https://www.kegg.jp/entry/C00135,Histidine (His),
+https://www.kegg.jp/entry/C00137,myo-Inositol,
+https://www.kegg.jp/entry/C00140,N-Acetyl-D-glucosamine,
+https://www.kegg.jp/entry/C00141,2-Oxoisovalerate,
+https://www.kegg.jp/entry/C00144,GMP,
+https://www.kegg.jp/entry/C00147,Adenine (Ade),
+https://www.kegg.jp/entry/C00148,Proline (Pro),
+https://www.kegg.jp/entry/C00149,Malate; (S)-2-Hydroxybutanediate,
+https://www.kegg.jp/entry/C00152,Asparagine (Asn),
+https://www.kegg.jp/entry/C00153,Nicotinamide (Vitamin B3),
+https://www.kegg.jp/entry/C00155,L-Homocysteine,
+https://www.kegg.jp/entry/C00156,4-Hydroxybenzoate,
+https://www.kegg.jp/entry/C00157,Phosphatidylcholine; Lecithin,
+https://www.kegg.jp/entry/C00158,Citrate,
+https://www.kegg.jp/entry/C00160,Glycolate,
+https://www.kegg.jp/entry/C00163,Propionate; Propanoate,
+https://www.kegg.jp/entry/C00164,Acetoacetate; 3-Oxobutanoate,
+https://www.kegg.jp/entry/C00165,Diacylglycerol,
+https://www.kegg.jp/entry/C00166,Phenylpyruvate,
+https://www.kegg.jp/entry/C00168,Hydroxypyruvate,
+https://www.kegg.jp/entry/C00169,Carbamoyl phosphate,
+https://www.kegg.jp/entry/C00170,5'-Methylthioadenosine,
+https://www.kegg.jp/entry/C00178,Thymine (Thy),
+https://www.kegg.jp/entry/C00179,Agmatine,
+https://www.kegg.jp/entry/C00180,Benzoate,
+https://www.kegg.jp/entry/C00181,D-Xylose,
+https://www.kegg.jp/entry/C00183,Valine (Val),
+https://www.kegg.jp/entry/C00184,Dihydroxyacetone,
+https://www.kegg.jp/entry/C00186,L-Lactate; (S)-2-Hydroxypropanoate,
+https://www.kegg.jp/entry/C00187,Cholesterol,
+https://www.kegg.jp/entry/C00188,Threonine (Thr),
+https://www.kegg.jp/entry/C00189,Ethanolamine,
+https://www.kegg.jp/entry/C00191,D-Glucuronic acid,
+https://www.kegg.jp/entry/C00192,Hydroxylamine,
+https://www.kegg.jp/entry/C00195,N-Acylsphingosine,
+https://www.kegg.jp/entry/C00199,D-Ribulose 5-phosphate,
+https://www.kegg.jp/entry/C00207,Acetone,
+https://www.kegg.jp/entry/C00208,Maltose; Malt sugar,
+https://www.kegg.jp/entry/C00209,Oxalate,
+https://www.kegg.jp/entry/C00212,Adenosine (A),
+https://www.kegg.jp/entry/C00214,Deoxythymidine (dT),
+https://www.kegg.jp/entry/C00217,D-Glutamic acid,
+https://www.kegg.jp/entry/C00218,Methylamine,
+https://www.kegg.jp/entry/C00219,"Arachidonic acid (20:4;5,8,11,14)",
+https://www.kegg.jp/entry/C00227,Acetyl phosphate,
+https://www.kegg.jp/entry/C00230,"3,4-Dihydroxybenzoate",
+https://www.kegg.jp/entry/C00232,Succinate semialdehyde; 4-Oxobutanoate,
+https://www.kegg.jp/entry/C00233,2-Oxoisocaproate,
+https://www.kegg.jp/entry/C00235,Dimethylallyl diphosphate,
+https://www.kegg.jp/entry/C00236,3-Phospho-D-glyceroyl phosphate,
+https://www.kegg.jp/entry/C00239,dCMP,
+https://www.kegg.jp/entry/C00242,Guanine (Gua),
+https://www.kegg.jp/entry/C00243,Lactose; Milk sugar,
+https://www.kegg.jp/entry/C00246,Butyrate; Butanoate,
+https://www.kegg.jp/entry/C00249,Palmitic acid (16:0),
+https://www.kegg.jp/entry/C00250,Pyridoxal (Vitamin B6),
+https://www.kegg.jp/entry/C00253,Nicotinic acid (Vitamin B3),
+https://www.kegg.jp/entry/C00255,Riboflavin,
+https://www.kegg.jp/entry/C00257,D-Gluconic acid,
+https://www.kegg.jp/entry/C00258,D-Glycerate,
+https://www.kegg.jp/entry/C00262,Hypoxanthine,
+https://www.kegg.jp/entry/C00263,L-Homoserine,
+https://www.kegg.jp/entry/C00267,alpha-D-Glucose,
+https://www.kegg.jp/entry/C00272,Tetrahydrobiopterin,
+https://www.kegg.jp/entry/C00275,D-Mannose 6-phosphate,
+https://www.kegg.jp/entry/C00279,D-Erythrose 4-phosphate,
+https://www.kegg.jp/entry/C00280,Androstenedione,
+https://www.kegg.jp/entry/C00286,dGTP,
+https://www.kegg.jp/entry/C00295,Orotate,
+https://www.kegg.jp/entry/C00299,Uridine (U),
+https://www.kegg.jp/entry/C00300,Creatine,
+https://www.kegg.jp/entry/C00307,CDP-choline,
+https://www.kegg.jp/entry/C00309,D-Ribulose,
+https://www.kegg.jp/entry/C00310,D-Xylulose,
+https://www.kegg.jp/entry/C00311,Isocitrate,
+https://www.kegg.jp/entry/C00314,Pyridoxine (Vitamin B6),
+https://www.kegg.jp/entry/C00315,Spermidine,
+https://www.kegg.jp/entry/C00319,Sphing-4-enine,
+https://www.kegg.jp/entry/C00322,2-Oxoadipate,
+https://www.kegg.jp/entry/C00327,L-Citrulline,
+https://www.kegg.jp/entry/C00328,L-Kynurenine,
+https://www.kegg.jp/entry/C00329,D-Glucosamine,
+https://www.kegg.jp/entry/C00330,Deoxyguanosine (dG),
+https://www.kegg.jp/entry/C00334,gamma-Aminobutyric acid,
+https://www.kegg.jp/entry/C00337,(S)-Dihydroorotate,
+https://www.kegg.jp/entry/C00344,Phosphatidylglycerol,
+https://www.kegg.jp/entry/C00345,6-Phospho-D-gluconate,
+https://www.kegg.jp/entry/C00346,Ethanolamine phosphate,
+https://www.kegg.jp/entry/C00350,Phosphatidylethanolamine,
+https://www.kegg.jp/entry/C00352,D-Glucosamine 6-phosphate,
+https://www.kegg.jp/entry/C00355,"3,4-Dihydroxy-L-phenylalanine",
+https://www.kegg.jp/entry/C00357,N-Acetyl-D-glucosamine 6-phosphate,
+https://www.kegg.jp/entry/C00360,dAMP,
+https://www.kegg.jp/entry/C00361,dGDP,
+https://www.kegg.jp/entry/C00362,dGMP,
+https://www.kegg.jp/entry/C00364,dTMP,
+https://www.kegg.jp/entry/C00365,dUMP,
+https://www.kegg.jp/entry/C00366,Urate,
+https://www.kegg.jp/entry/C00369,Starch,
+https://www.kegg.jp/entry/C00376,Retinal,
+https://www.kegg.jp/entry/C00378,Thiamine (Vitamin B1),
+https://www.kegg.jp/entry/C00379,Xylitol,
+https://www.kegg.jp/entry/C00380,Cytosine (Cyt),
+https://www.kegg.jp/entry/C00383,Malonate,
+https://www.kegg.jp/entry/C00385,Xanthine,
+https://www.kegg.jp/entry/C00386,Carnosine,
+https://www.kegg.jp/entry/C00387,Guanosine (G),
+https://www.kegg.jp/entry/C00388,Histamine,
+https://www.kegg.jp/entry/C00389,Quercetin,
+https://www.kegg.jp/entry/C00392,Mannitol,
+https://www.kegg.jp/entry/C00398,Tryptamine,
+https://www.kegg.jp/entry/C00402,D-Aspartic acid,
+https://www.kegg.jp/entry/C00407,Isoleucine (Ile),
+https://www.kegg.jp/entry/C00408,L-Pipecolate,
+https://www.kegg.jp/entry/C00410,Progesterone,
+https://www.kegg.jp/entry/C00416,Phosphatidic acid,
+https://www.kegg.jp/entry/C00417,cis-Aconitate,
+https://www.kegg.jp/entry/C00418,(R)-Mevalonate,
+https://www.kegg.jp/entry/C00422,Triacylglycerol,
+https://www.kegg.jp/entry/C00427,Prostaglandin H2,
+https://www.kegg.jp/entry/C00429,"5,6-Dihydrouracil",
+https://www.kegg.jp/entry/C00431,5-Aminopentanoic acid,
+https://www.kegg.jp/entry/C00436,N-Carbamoylputrescine,
+https://www.kegg.jp/entry/C00437,N-Acetylornithine,
+https://www.kegg.jp/entry/C00438,N-Carbamoyl-L-aspartate,
+https://www.kegg.jp/entry/C00439,N-Formimino-L-glutamate,
+https://www.kegg.jp/entry/C00440,5-Methyltetrahydrofolate,
+https://www.kegg.jp/entry/C00446,alpha-D-Galactose 1-phosphate,
+https://www.kegg.jp/entry/C00448,"trans,trans-Farnesyl diphosphate",
+https://www.kegg.jp/entry/C00449,"N6-(L-1,3-Dicarboxypropyl)-L-lysine",
+https://www.kegg.jp/entry/C00458,dCTP,
+https://www.kegg.jp/entry/C00470,Pectate,
+https://www.kegg.jp/entry/C00473,Retinol,
+https://www.kegg.jp/entry/C00475,Cytidine (C),
+https://www.kegg.jp/entry/C00483,Tyramine,
+https://www.kegg.jp/entry/C00489,Glutarate,
+https://www.kegg.jp/entry/C00493,Shikimate,
+https://www.kegg.jp/entry/C00498,ADP-glucose,
+https://www.kegg.jp/entry/C00499,Allantoate,
+https://www.kegg.jp/entry/C00504,Folic acid (Vitamin B9),
+https://www.kegg.jp/entry/C00507,L-Rhamnose,
+https://www.kegg.jp/entry/C00510,(9Z)-Octadecenoyl-CoA,
+https://www.kegg.jp/entry/C00515,D-Ornithine,
+https://www.kegg.jp/entry/C00523,Androsterone,
+https://www.kegg.jp/entry/C00526,Deoxyuridine (dU),
+https://www.kegg.jp/entry/C00533,Nitric oxide,
+https://www.kegg.jp/entry/C00534,Pyridoxamine (Vitamin B6),
+https://www.kegg.jp/entry/C00535,Testosterone,
+https://www.kegg.jp/entry/C00543,Dimethylamine,
+https://www.kegg.jp/entry/C00544,Homogentisate,
+https://www.kegg.jp/entry/C00547,Noradrenaline,
+https://www.kegg.jp/entry/C00550,Sphingomyelin,
+https://www.kegg.jp/entry/C00559,Deoxyadenosine (dA),
+https://www.kegg.jp/entry/C00565,Trimethylamine,
+https://www.kegg.jp/entry/C00570,CDP-ethanolamine,
+https://www.kegg.jp/entry/C00575,"3',5'-Cyclic AMP",
+https://www.kegg.jp/entry/C00576,Betaine aldehyde,
+https://www.kegg.jp/entry/C00581,Guanidinoacetate,
+https://www.kegg.jp/entry/C00584,Prostaglandin E2,
+https://www.kegg.jp/entry/C00588,Choline phosphate,
+https://www.kegg.jp/entry/C00606,3-Sulfino-L-alanine,
+https://www.kegg.jp/entry/C00624,N-Acetyl-L-glutamate,
+https://www.kegg.jp/entry/C00628,"2,5-Dihydroxybenzoate",
+https://www.kegg.jp/entry/C00632,3-Hydroxyanthranilate,
+https://www.kegg.jp/entry/C00634,Chondroitin 4-sulfate,
+https://www.kegg.jp/entry/C00636,D-Mannose 1-phosphate,
+https://www.kegg.jp/entry/C00639,Prostaglandin F2alpha,
+https://www.kegg.jp/entry/C00643,5-Hydroxy-L-tryptophan,
+https://www.kegg.jp/entry/C00645,N-Acetyl-D-mannosamine,
+https://www.kegg.jp/entry/C00655,Xanthosine 5'-phosphate,
+https://www.kegg.jp/entry/C00666,"LL-2,6-Diaminoheptanedioate",
+https://www.kegg.jp/entry/C00669,gamma-L-Glutamyl-L-cysteine,
+https://www.kegg.jp/entry/C00671,(S)-3-Methyl-2-oxopentanoic acid,
+https://www.kegg.jp/entry/C00695,Cholic acid,
+https://www.kegg.jp/entry/C00696,Prostaglandin D2,
+https://www.kegg.jp/entry/C00712,Oleic acid (18:1;9),
+https://www.kegg.jp/entry/C00718,Amylose,
+https://www.kegg.jp/entry/C00719,Betaine,
+https://www.kegg.jp/entry/C00735,Cortisol,
+https://www.kegg.jp/entry/C00740,D-Serine,
+https://www.kegg.jp/entry/C00745,Nicotine,
+https://www.kegg.jp/entry/C00751,Squalene,
+https://www.kegg.jp/entry/C00761,Coniferin,
+https://www.kegg.jp/entry/C00762,Cortisone,
+https://www.kegg.jp/entry/C00763,D-Proline,
+https://www.kegg.jp/entry/C00777,Retinoate,
+https://www.kegg.jp/entry/C00780,Serotonin,
+https://www.kegg.jp/entry/C00785,Urocanate,
+https://www.kegg.jp/entry/C00788,Adrenaline,
+https://www.kegg.jp/entry/C00791,Creatinine,
+https://www.kegg.jp/entry/C00792,D-Arginine,
+https://www.kegg.jp/entry/C00794,Sorbitol,
+https://www.kegg.jp/entry/C00795,D-Tagatose,
+https://www.kegg.jp/entry/C00800,L-Gulonate,
+https://www.kegg.jp/entry/C00803,Valerate; Pentanoate,
+https://www.kegg.jp/entry/C00805,Salicylate,
+https://www.kegg.jp/entry/C00811,4-Coumarate,
+https://www.kegg.jp/entry/C00814,Biochanin A,
+https://www.kegg.jp/entry/C00823,1-Hexadecanol,
+https://www.kegg.jp/entry/C00828,Menaquinone (Vitamin K2),
+https://www.kegg.jp/entry/C00836,Sphinganine,
+https://www.kegg.jp/entry/C00852,Chlorogenate,
+https://www.kegg.jp/entry/C00855,D-Methionine,
+https://www.kegg.jp/entry/C00857,Deamino-NAD+,
+https://www.kegg.jp/entry/C00860,L-Histidinol,
+https://www.kegg.jp/entry/C00864,Pantothenic acid (Vitamin B5),
+https://www.kegg.jp/entry/C00880,D-Galactonate,
+https://www.kegg.jp/entry/C00881,Deoxycytidine (dC),
+https://www.kegg.jp/entry/C00882,Dephospho-CoA,
+https://www.kegg.jp/entry/C00902,2-Oxohexanoate,
+https://www.kegg.jp/entry/C00903,Cinnamaldehyde,
+https://www.kegg.jp/entry/C00909,Leukotriene A4,
+https://www.kegg.jp/entry/C00931,Porphobilinogen,
+https://www.kegg.jp/entry/C00951,Estradiol-17beta,
+https://www.kegg.jp/entry/C00954,Indole-3-acetate,
+https://www.kegg.jp/entry/C00956,L-2-Aminoadipate,
+https://www.kegg.jp/entry/C00966,2-Dehydropantoate,
+https://www.kegg.jp/entry/C00978,N-Acetylserotonin,
+https://www.kegg.jp/entry/C00979,O-Acetyl-L-serine,
+https://www.kegg.jp/entry/C00984,alpha-D-Galactose,
+https://www.kegg.jp/entry/C00988,2-Phosphoglycolate,
+https://www.kegg.jp/entry/C00989,4-Hydroxybutanoate,
+https://www.kegg.jp/entry/C00993,D-Alanyl-D-alanine,
+https://www.kegg.jp/entry/C01004,N-Methylnicotinate,
+https://www.kegg.jp/entry/C01005,O-Phospho-L-serine,
+https://www.kegg.jp/entry/C01013,3-Hydroxypropanoate,
+https://www.kegg.jp/entry/C01019,L-Fucose,
+https://www.kegg.jp/entry/C01020,6-Hydroxynicotinate,
+https://www.kegg.jp/entry/C01040,"L-Gulono-1,4-lactone",
+https://www.kegg.jp/entry/C01045,N-Formyl-L-glutamate,
+https://www.kegg.jp/entry/C01054,"(S)-2,3-Epoxysqualene",
+https://www.kegg.jp/entry/C01059,"2,5-Dihydroxypyridine",
+https://www.kegg.jp/entry/C01060,"3,5-Diiodo-L-tyrosine",
+https://www.kegg.jp/entry/C01081,Thiamin monophosphate,
+https://www.kegg.jp/entry/C01083,Trehalose,
+https://www.kegg.jp/entry/C01089,(R)-3-Hydroxybutanoate,
+https://www.kegg.jp/entry/C01092,8-Amino-7-oxononanoic acid,
+https://www.kegg.jp/entry/C01103,Orotidine 5'-phosphate,
+https://www.kegg.jp/entry/C01107,(R)-5-Phosphomevalonate,
+https://www.kegg.jp/entry/C01110,5-Amino-2-oxopentanoic acid,
+https://www.kegg.jp/entry/C01112,D-Arabinose 5-phosphate,
+https://www.kegg.jp/entry/C01115,"L-Galactono-1,4-lactone",
+https://www.kegg.jp/entry/C01118,O-Succinyl-L-homoserine,
+https://www.kegg.jp/entry/C01120,Sphinganine 1-phosphate,
+https://www.kegg.jp/entry/C01124,18-Hydroxycorticosterone,
+https://www.kegg.jp/entry/C01134,Pantetheine 4'-phosphate,
+https://www.kegg.jp/entry/C01157,Hydroxyproline,
+https://www.kegg.jp/entry/C01161,"3,4-Dihydroxyphenylacetate",
+https://www.kegg.jp/entry/C01164,7-Dehydrocholesterol,
+https://www.kegg.jp/entry/C01176,17alpha-Hydroxyprogesterone,
+https://www.kegg.jp/entry/C01179,3-(4-Hydroxyphenyl)pyruvate,
+https://www.kegg.jp/entry/C01180,2-Oxo-4-methylthiobutanoic acid,
+https://www.kegg.jp/entry/C01189,Lathosterol,
+https://www.kegg.jp/entry/C01190,Glucosylceramide,
+https://www.kegg.jp/entry/C01194,Phosphatidylinositol,
+https://www.kegg.jp/entry/C01204,myo-Inositol hexakisphosphate,
+https://www.kegg.jp/entry/C01226,"(15Z)-12-Oxophyto-10,15-dienoic acid",
+https://www.kegg.jp/entry/C01227,Dehydroepiandrosterone,
+https://www.kegg.jp/entry/C01234,1-Aminocyclopropane-1-carboxylate,
+https://www.kegg.jp/entry/C01262,Anserine,
+https://www.kegg.jp/entry/C01263,"(6aS,11aS)-3,6a,9-Trihydroxypterocarpan",
+https://www.kegg.jp/entry/C01290,Lactosylceramide,
+https://www.kegg.jp/entry/C01301,"3alpha,7alpha,12alpha-Trihydroxy-5beta-cholestan-26-al",
+https://www.kegg.jp/entry/C01312,Prostaglandin I2,
+https://www.kegg.jp/entry/C01384,Maleic acid,
+https://www.kegg.jp/entry/C01420,Cystine,
+https://www.kegg.jp/entry/C01424,Gallate,
+https://www.kegg.jp/entry/C01454,Toluate,
+https://www.kegg.jp/entry/C01457,Tylosin,
+https://www.kegg.jp/entry/C01477,Apigenin,
+https://www.kegg.jp/entry/C01479,Atropine,
+https://www.kegg.jp/entry/C01487,D-Allose,
+https://www.kegg.jp/entry/C01494,Ferulate,
+https://www.kegg.jp/entry/C01530,Stearic acid (18:0),
+https://www.kegg.jp/entry/C01545,1-Octanal,
+https://www.kegg.jp/entry/C01561,Calcidiol,
+https://www.kegg.jp/entry/C01571,Capric acid (10:0),
+https://www.kegg.jp/entry/C01585,Capronate; Hexanoate,
+https://www.kegg.jp/entry/C01594,Linamarin,
+https://www.kegg.jp/entry/C01595,"Linoleic acid (18:2;9,12)",
+https://www.kegg.jp/entry/C01598,Melatonin,
+https://www.kegg.jp/entry/C01601,Nonanoic acid,
+https://www.kegg.jp/entry/C01606,Phthalate,
+https://www.kegg.jp/entry/C01607,Phytanate,
+https://www.kegg.jp/entry/C01673,Calcitriol (Vitamin D),
+https://www.kegg.jp/entry/C01678,Cysteamine,
+https://www.kegg.jp/entry/C01694,Ergosterol,
+https://www.kegg.jp/entry/C01699,Gibberellin A3,
+https://www.kegg.jp/entry/C01709,Hesperetin,
+https://www.kegg.jp/entry/C01712,Elaidic acid (18:1;9),
+https://www.kegg.jp/entry/C01724,Lanosterol,
+https://www.kegg.jp/entry/C01747,Psychosine,
+https://www.kegg.jp/entry/C01752,Scopoletin,
+https://www.kegg.jp/entry/C01753,Sitosterol,
+https://www.kegg.jp/entry/C01762,Xanthosine,
+https://www.kegg.jp/entry/C01772,trans-2-Hydroxycinnamate,
+https://www.kegg.jp/entry/C01780,Aldosterone,
+https://www.kegg.jp/entry/C01789,Campesterol,
+https://www.kegg.jp/entry/C01796,D-Erythrose,
+https://www.kegg.jp/entry/C01801,Deoxyribose,
+https://www.kegg.jp/entry/C01802,Desmosterol,
+https://www.kegg.jp/entry/C01816,n-Heptadecane,
+https://www.kegg.jp/entry/C01879,Pidolic acid,
+https://www.kegg.jp/entry/C01885,1-Monoacylglycerol,
+https://www.kegg.jp/entry/C01909,Dethiobiotin,
+https://www.kegg.jp/entry/C01921,Glycocholate,
+https://www.kegg.jp/entry/C01933,(S)-2-Aminohexanoic acid,
+https://www.kegg.jp/entry/C01948,1-Pentadecanal,
+https://www.kegg.jp/entry/C01953,Pregnenolone,
+https://www.kegg.jp/entry/C01967,Ubiquinone-9,
+https://www.kegg.jp/entry/C01996,Acetylcholine,
+https://www.kegg.jp/entry/C02045,L-Erythrulose,
+https://www.kegg.jp/entry/C02059,Phylloquinone (Vitamin K1),
+https://www.kegg.jp/entry/C02075,Retinyl ester,
+https://www.kegg.jp/entry/C02076,Sedoheptulose,
+https://www.kegg.jp/entry/C02094,beta-Carotene,
+https://www.kegg.jp/entry/C02140,Corticosterone,
+https://www.kegg.jp/entry/C02165,Leukotriene B4,
+https://www.kegg.jp/entry/C02185,Plastoquinol-1,
+https://www.kegg.jp/entry/C02220,2-Aminomuconate,
+https://www.kegg.jp/entry/C02226,2-Methylmaleate,
+https://www.kegg.jp/entry/C02261,(R)-2-Aminobutanoic acid,
+https://www.kegg.jp/entry/C02265,D-Phenylalanine,
+https://www.kegg.jp/entry/C02273,Digalacturonate,
+https://www.kegg.jp/entry/C02277,1-Dodecanol,
+https://www.kegg.jp/entry/C02283,Glycyrrhetinate,
+https://www.kegg.jp/entry/C02291,L-Cystathionine,
+https://www.kegg.jp/entry/C02305,Phosphocreatine,
+https://www.kegg.jp/entry/C02341,trans-Aconitate,
+https://www.kegg.jp/entry/C02356,(S)-2-Aminobutanoic acid,
+https://www.kegg.jp/entry/C02442,N-Methyltyramine,
+https://www.kegg.jp/entry/C02452,Perillyl alcohol,
+https://www.kegg.jp/entry/C02477,alpha-Tocopherol (Vitamin E),
+https://www.kegg.jp/entry/C02480,"cis,cis-Muconate",
+https://www.kegg.jp/entry/C02483,gamma-Tocopherol,
+https://www.kegg.jp/entry/C02504,alpha-Isopropylmalate,
+https://www.kegg.jp/entry/C02515,3-Iodo-L-tyrosine,
+https://www.kegg.jp/entry/C02528,Chenodeoxycholate,
+https://www.kegg.jp/entry/C02530,Cholesterol ester,
+https://www.kegg.jp/entry/C02533,Dehydrovomifoliol,
+https://www.kegg.jp/entry/C02538,Estrone 3-sulfate,
+https://www.kegg.jp/entry/C02576,Perillyl aldehyde,
+https://www.kegg.jp/entry/C02592,Taurolithocholate,
+https://www.kegg.jp/entry/C02632,2-Methylpropanoate,
+https://www.kegg.jp/entry/C02642,3-Ureidopropionate,
+https://www.kegg.jp/entry/C02656,Pimelate,
+https://www.kegg.jp/entry/C02678,Dodecanedioic acid,
+https://www.kegg.jp/entry/C02679,Lauric acid (12:0),
+https://www.kegg.jp/entry/C02686,Galactosylceramide,
+https://www.kegg.jp/entry/C02714,N-Acetylputrescine,
+https://www.kegg.jp/entry/C02737,Phosphatidylserine,
+https://www.kegg.jp/entry/C02774,4-Hydroxybutanoic acid,
+https://www.kegg.jp/entry/C02838,L-Octanoylcarnitine,
+https://www.kegg.jp/entry/C02862,O-Butanoylcarnitine,
+https://www.kegg.jp/entry/C02916,(S)-Norlaudanosoline,
+https://www.kegg.jp/entry/C02934,3-Dehydrosphinganine,
+https://www.kegg.jp/entry/C02946,4-Acetamidobutanoate,
+https://www.kegg.jp/entry/C02990,L-Palmitoylcarnitine,
+https://www.kegg.jp/entry/C03017,O-Propanoylcarnitine,
+https://www.kegg.jp/entry/C03033,beta-D-Glucuronoside,
+https://www.kegg.jp/entry/C03037,"(+)-Bornane-2,5-dione",
+https://www.kegg.jp/entry/C03082,4-Phospho-L-aspartate,
+https://www.kegg.jp/entry/C03090,5-Phosphoribosylamine,
+https://www.kegg.jp/entry/C03115,Farnesyl triphosphate,
+https://www.kegg.jp/entry/C03145,N-Formylmethionine,
+https://www.kegg.jp/entry/C03205,11-Deoxycorticosterone,
+https://www.kegg.jp/entry/C03226,3-Demethylubiquinone-9,
+https://www.kegg.jp/entry/C03227,3-Hydroxy-L-kynurenine,
+https://www.kegg.jp/entry/C03232,3-Phosphonooxypyruvate,
+https://www.kegg.jp/entry/C03240,6-Deoxyerythronolide B,
+https://www.kegg.jp/entry/C03242,"(8Z,11Z,14Z)-Icosa-8,11,14-trienoic acid",
+https://www.kegg.jp/entry/C03263,Coproporphyrinogen III,
+https://www.kegg.jp/entry/C03283,"L-2,4-Diaminobutanoate",
+https://www.kegg.jp/entry/C03287,L-Glutamyl 5-phosphate,
+https://www.kegg.jp/entry/C03373,Aminoimidazole ribotide,
+https://www.kegg.jp/entry/C03406,L-Argininosuccinate,
+https://www.kegg.jp/entry/C03410,N-Glycoloyl-neuraminate,
+https://www.kegg.jp/entry/C03415,N2-Succinyl-L-ornithine,
+https://www.kegg.jp/entry/C03428,Presqualene diphosphate,
+https://www.kegg.jp/entry/C03492,D-4'-Phosphopantothenate,
+https://www.kegg.jp/entry/C03508,L-2-Amino-3-oxobutanoic acid,
+https://www.kegg.jp/entry/C03539,S-Ribosyl-L-homocysteine,
+https://www.kegg.jp/entry/C03577,20-Hydroxy-leukotriene E4,
+https://www.kegg.jp/entry/C03582,"3,4',5-Trihydroxystilbene",
+https://www.kegg.jp/entry/C03680,4-Imidazolone-5-propanoate,
+https://www.kegg.jp/entry/C03722,"Pyridine-2,3-dicarboxylate",
+https://www.kegg.jp/entry/C03758,Dopamine,
+https://www.kegg.jp/entry/C03794,"N6-(1,2-Dicarboxyethyl)-AMP",
+https://www.kegg.jp/entry/C03824,2-Aminomuconate semialdehyde,
+https://www.kegg.jp/entry/C03912,(S)-1-Pyrroline-5-carboxylate,
+https://www.kegg.jp/entry/C03917,Dihydrotestosterone,
+https://www.kegg.jp/entry/C03972,"2,3,4,5-Tetrahydrodipicolinate",
+https://www.kegg.jp/entry/C03990,Lithocholic acid,
+https://www.kegg.jp/entry/C04036,1-Hexadecanoyl-sn-glycero-3-phosphate,
+https://www.kegg.jp/entry/C04056,"(9Z,11E)-Octadeca-9,11-dienoic acid",
+https://www.kegg.jp/entry/C04076,L-2-Aminoadipate 6-semialdehyde,
+https://www.kegg.jp/entry/C04083,N6-(delta2-Isopentenyl)-adenine,
+https://www.kegg.jp/entry/C04230,2-Lysolecithin,
+https://www.kegg.jp/entry/C04294,5-(2-Hydroxyethyl)-4-methylthiazole,
+https://www.kegg.jp/entry/C04295,Androstenediol,
+https://www.kegg.jp/entry/C04376,5'-Phosphoribosyl-N-formylglycinamide,
+https://www.kegg.jp/entry/C04409,2-Amino-3-carboxymuconate semialdehyde,
+https://www.kegg.jp/entry/C04483,Deoxycholic acid,
+https://www.kegg.jp/entry/C04555,Dehydroepiandrosterone sulfate,
+https://www.kegg.jp/entry/C04640,2-(Formamido)-N1-(5'-phosphoribosyl)acetamidine,
+https://www.kegg.jp/entry/C04643,"3alpha,12alpha-Dihydroxy-7-oxo-5beta-cholanic acid",
+https://www.kegg.jp/entry/C04677,1-(5'-Phosphoribosyl)-5-amino-4-imidazolecarboxamide,
+https://www.kegg.jp/entry/C04685,Prostaglandin A1,
+https://www.kegg.jp/entry/C04717,"(9Z,11E)-(13S)-13-Hydroperoxyoctadeca-9,11-dienoic acid",
+https://www.kegg.jp/entry/C04734,1-(5'-Phosphoribosyl)-5-formamido-4-imidazolecarboxamide,
+https://www.kegg.jp/entry/C04741,Prostaglandin E1,
+https://www.kegg.jp/entry/C04742,15(S)-HETE,
+https://www.kegg.jp/entry/C04785,"(9Z,11E,14Z)-(13S)-13-Hydroperoxyoctadeca-9,11,14-trienoic acid",
+https://www.kegg.jp/entry/C04805,5(S)-HETE,
+https://www.kegg.jp/entry/C04911,GM1,
+https://www.kegg.jp/entry/C05079,Nalidixic acid,
+https://www.kegg.jp/entry/C05122,Taurocholate,
+https://www.kegg.jp/entry/C05138,17alpha-Hydroxypregnenolone,
+https://www.kegg.jp/entry/C05139,16alpha-Hydroxydehydroepiandrosterone,
+https://www.kegg.jp/entry/C05145,3-Aminoisobutyric acid,
+https://www.kegg.jp/entry/C05285,Adrenosterone,
+https://www.kegg.jp/entry/C05290,"19-Hydroxyandrost-4-ene-3,17-dione",
+https://www.kegg.jp/entry/C05298,2-Hydroxyestrone,
+https://www.kegg.jp/entry/C05299,2-Methoxyestrone,
+https://www.kegg.jp/entry/C05300,16alpha-Hydroxyestrone,
+https://www.kegg.jp/entry/C05301,2-Hydroxyestradiol,
+https://www.kegg.jp/entry/C05332,Phenethylamine,
+https://www.kegg.jp/entry/C05345,beta-D-Fructose 6-phosphate,
+https://www.kegg.jp/entry/C05356,5-HPETE,
+https://www.kegg.jp/entry/C05378,"beta-D-Fructose 1,6-bisphosphate",
+https://www.kegg.jp/entry/C05379,Oxalosuccinate,
+https://www.kegg.jp/entry/C05382,Sedoheptulose 7-phosphate,
+https://www.kegg.jp/entry/C05414,Phytofluene,
+https://www.kegg.jp/entry/C05421,cis-Phytoene,
+https://www.kegg.jp/entry/C05432,Lycopene,
+https://www.kegg.jp/entry/C05433,alpha-Carotene,
+https://www.kegg.jp/entry/C05441,Ergocalciferol (Vitamin D2),
+https://www.kegg.jp/entry/C05442,Stigmasterol,
+https://www.kegg.jp/entry/C05443,Cholecalciferol (Vitamin D3),
+https://www.kegg.jp/entry/C05445,"3alpha,7alpha-Dihydroxy-5beta-cholestan-26-al",
+https://www.kegg.jp/entry/C05452,"3alpha,7alpha-Dihydroxy-5beta-cholestane",
+https://www.kegg.jp/entry/C05455,7alpha-Hydroxycholest-4-en-3-one,
+https://www.kegg.jp/entry/C05463,Taurodeoxycholate,
+https://www.kegg.jp/entry/C05464,Glycodeoxycholic acid,
+https://www.kegg.jp/entry/C05465,Taurochenodeoxycholic acid,
+https://www.kegg.jp/entry/C05466,Glycochenodeoxycholic acid,
+https://www.kegg.jp/entry/C05468,5beta-Cyprinolsulfate,
+https://www.kegg.jp/entry/C05470,Tetrahydrocortisone,
+https://www.kegg.jp/entry/C05472,Urocortisol,
+https://www.kegg.jp/entry/C05476,Tetrahydrocorticosterone,
+https://www.kegg.jp/entry/C05488,11-Deoxycortisol,
+https://www.kegg.jp/entry/C05490,11-Dehydrocorticosterone,
+https://www.kegg.jp/entry/C05497,21-Deoxycortisol,
+https://www.kegg.jp/entry/C05528,3-Sulfopyruvate,
+https://www.kegg.jp/entry/C05601,4-Hydroxy-2-oxo-heptandioic acid,
+https://www.kegg.jp/entry/C05625,Rutin,
+https://www.kegg.jp/entry/C05775,alpha-Ribazole,
+https://www.kegg.jp/entry/C05776,Cobalamin(III) (Vitamin B12),
+https://www.kegg.jp/entry/C05847,all-trans-Polyprenyl diphosphate,
+https://www.kegg.jp/entry/C05851,Coumarin,
+https://www.kegg.jp/entry/C05901,"3,3',4'5-Tetrahydroxystilbene",
+https://www.kegg.jp/entry/C05904,Pelargonidin,
+https://www.kegg.jp/entry/C05933,N(omega)-Hydroxyarginine,
+https://www.kegg.jp/entry/C05949,12-Keto-leukotriene B4,
+https://www.kegg.jp/entry/C05950,20-Carboxy-leukotriene B4,
+https://www.kegg.jp/entry/C05952,Leukotriene E4,
+https://www.kegg.jp/entry/C05953,Prostaglandin A2,
+https://www.kegg.jp/entry/C05956,Prostaglandin G2,
+https://www.kegg.jp/entry/C05957,Prostaglandin J2,
+https://www.kegg.jp/entry/C05961,6-Keto-prostaglandin F1alpha,
+https://www.kegg.jp/entry/C05963,Thromboxane B2,
+https://www.kegg.jp/entry/C05964,11-Dehydro-thromboxane B2,
+https://www.kegg.jp/entry/C05966,"(5Z,8Z,11Z,13E)-(15S)-15-Hydroperoxyicosa-5,8,11,13-tetraenoic acid",
+https://www.kegg.jp/entry/C05980,Diphosphatidylglycerol; Cardiolipin,
+https://www.kegg.jp/entry/C05984,2-Hydroxybutanoic acid,
+https://www.kegg.jp/entry/C06007,"(R)-2,3-Dihydroxy-3-methylpentanoate",
+https://www.kegg.jp/entry/C06010,(S)-2-Acetolactate,
+https://www.kegg.jp/entry/C06094,Gibberellin A53,
+https://www.kegg.jp/entry/C06098,Zeaxanthin,
+https://www.kegg.jp/entry/C06099,(+)-Limonene,
+https://www.kegg.jp/entry/C06103,6-Hydroxyhexanoic acid,
+https://www.kegg.jp/entry/C06104,Adipate,
+https://www.kegg.jp/entry/C06123,(2Z)-1-Hexadecenal,
+https://www.kegg.jp/entry/C06124,Sphingosine 1-phosphate,
+https://www.kegg.jp/entry/C06125,Sulfatide,
+https://www.kegg.jp/entry/C06156,alpha-D-Glucosamine 1-phosphate,
+https://www.kegg.jp/entry/C06180,Anabasine,
+https://www.kegg.jp/entry/C06184,N-Methylpelletierine,
+https://www.kegg.jp/entry/C06213,N-Methyltryptamine,
+https://www.kegg.jp/entry/C06315,Lipoxin B4,
+https://www.kegg.jp/entry/C06337,Terephthalate,
+https://www.kegg.jp/entry/C06423,Caprylate; Octanoate,
+https://www.kegg.jp/entry/C06424,Myristic acid (14:0),
+https://www.kegg.jp/entry/C06425,Arachidic acid (20:0),
+https://www.kegg.jp/entry/C06426,"gamma-Linolenic acid (18:3;6,9,12)",
+https://www.kegg.jp/entry/C06427,"alpha-Linolenic acid (18:3;9,12,15)",
+https://www.kegg.jp/entry/C06428,"Eicosapentaenoic acid (20:5;5,8,11,14.17)",
+https://www.kegg.jp/entry/C06429,"Docosahexaenoic acid (22:6;4,7,10,13,16,19)",
+https://www.kegg.jp/entry/C06454,Fosfomycin,
+https://www.kegg.jp/entry/C06469,Neuraminic acid,
+https://www.kegg.jp/entry/C06470,Muramic acid,
+https://www.kegg.jp/entry/C06473,2-Keto-D-gluconic acid,
+https://www.kegg.jp/entry/C06475,Prostaglandin F1alpha,
+https://www.kegg.jp/entry/C06476,Prostaglandin F3alpha,
+https://www.kegg.jp/entry/C06523,Coniine,
+https://www.kegg.jp/entry/C06538,Harmine,
+https://www.kegg.jp/entry/C06561,Naringenin chalcone,
+https://www.kegg.jp/entry/C06563,Genistein,
+https://www.kegg.jp/entry/C06576,p-Cumic alcohol,
+https://www.kegg.jp/entry/C06577,p-Cumic aldehyde,
+https://www.kegg.jp/entry/C06579,"cis-2,3-Dihydroxy-2,3-dihydro-p-cumate",
+https://www.kegg.jp/entry/C06588,Biphenyl,
+https://www.kegg.jp/entry/C06604,Parathion,
+https://www.kegg.jp/entry/C06624,Oxytetracycline,
+https://www.kegg.jp/entry/C06681,Mitomycin,
+https://www.kegg.jp/entry/C06694,Fusidic acid,
+https://www.kegg.jp/entry/C06730,4-Methylcatechol,
+https://www.kegg.jp/entry/C06755,Chloroacetic acid,
+https://www.kegg.jp/entry/C06758,p-Tolualdehyde,
+https://www.kegg.jp/entry/C06956,Digoxin,
+https://www.kegg.jp/entry/C06957,Dihydrotachysterol,
+https://www.kegg.jp/entry/C07086,Phenylacetic acid,
+https://www.kegg.jp/entry/C07276,"Limonene-1,2-diol",
+https://www.kegg.jp/entry/C07480,Theobromine,
+https://www.kegg.jp/entry/C07481,Caffeine,
+https://www.kegg.jp/entry/C07534,17alpha-Ethinyl estradiol,
+https://www.kegg.jp/entry/C07601,Ginkgolide A,
+https://www.kegg.jp/entry/C07605,Bilobalide,
+https://www.kegg.jp/entry/C07606,Hypericin,
+https://www.kegg.jp/entry/C07610,Silymarin,
+https://www.kegg.jp/entry/C07635,Epiandrosterone,
+https://www.kegg.jp/entry/C07667,Gossypol,
+https://www.kegg.jp/entry/C07712,Secalciferol,
+https://www.kegg.jp/entry/C07880,Ursodiol,
+https://www.kegg.jp/entry/C08153,Norgestrel,
+https://www.kegg.jp/entry/C08250,Sophorose,
+https://www.kegg.jp/entry/C08261,Nonanedioic acid,
+https://www.kegg.jp/entry/C08262,3-Methylbutanoic acid,
+https://www.kegg.jp/entry/C08277,Decanedioic acid,
+https://www.kegg.jp/entry/C08278,Suberate,
+https://www.kegg.jp/entry/C08281,Behenic acid (22:0),
+https://www.kegg.jp/entry/C08285,"10,16-Dihydroxyhexadecanoic acid",
+https://www.kegg.jp/entry/C08309,"N,N-Dimethyl-5-methoxytryptamine",
+https://www.kegg.jp/entry/C08316,Erucic acid (22:1;13),
+https://www.kegg.jp/entry/C08320,Lignoceric acid (24:0),
+https://www.kegg.jp/entry/C08322,(Z)-Tetradec-9-enoic acid,
+https://www.kegg.jp/entry/C08323,Nervonic acid (24:1;15),
+https://www.kegg.jp/entry/C08340,Sarmentosin,
+https://www.kegg.jp/entry/C08362,Palmitoleic acid (16:1;9),
+https://www.kegg.jp/entry/C08364,Punicic acid,
+https://www.kegg.jp/entry/C08365,(9Z)-(12R)-Hydroxyoctadecenoic acid,
+https://www.kegg.jp/entry/C08367,(E)-Octadec-11-enoic acid,
+https://www.kegg.jp/entry/C08374,n-Dodecane,
+https://www.kegg.jp/entry/C08491,(-)-Jasmonic acid,
+https://www.kegg.jp/entry/C08538,Betalamic acid,
+https://www.kegg.jp/entry/C08591,beta-Cryptoxanthin,
+https://www.kegg.jp/entry/C08594,Flavoxanthin,
+https://www.kegg.jp/entry/C08596,Fucoxanthin,
+https://www.kegg.jp/entry/C08601,Lutein,
+https://www.kegg.jp/entry/C08617,Asiatic acid,
+https://www.kegg.jp/entry/C08644,Hispidol,
+https://www.kegg.jp/entry/C08694,Lappaconitine,
+https://www.kegg.jp/entry/C08716,Malvidin,
+https://www.kegg.jp/entry/C08760,Glaucarubin,
+https://www.kegg.jp/entry/C08778,Quassin,
+https://www.kegg.jp/entry/C08794,Cucurbitacin B,
+https://www.kegg.jp/entry/C08799,Cucurbitacin H,
+https://www.kegg.jp/entry/C08829,Makisterone B,
+https://www.kegg.jp/entry/C08983,Soyasaponin I,
+https://www.kegg.jp/entry/C09112,Ingenol,
+https://www.kegg.jp/entry/C09126,Genistein 7-O-beta-D-glucoside,
+https://www.kegg.jp/entry/C09183,Sclareol,
+https://www.kegg.jp/entry/C09276,Marmesin,
+https://www.kegg.jp/entry/C09281,Ostruthin,
+https://www.kegg.jp/entry/C09315,Umbelliferone,
+https://www.kegg.jp/entry/C09633,Chamazulene,
+https://www.kegg.jp/entry/C09645,Cuauhtemone,
+https://www.kegg.jp/entry/C09649,alpha-Curcumene,
+https://www.kegg.jp/entry/C09650,"7,4'-Dihydroxy-8-methylflavan",
+https://www.kegg.jp/entry/C09668,Fumagillin,
+https://www.kegg.jp/entry/C09690,alpha-Irone,
+https://www.kegg.jp/entry/C09695,Lacinilene C 7-methyl ether,
+https://www.kegg.jp/entry/C09715,Rishitin,
+https://www.kegg.jp/entry/C09724,"6,8-Diprenylnaringenin",
+https://www.kegg.jp/entry/C09743,Valerenic acid,
+https://www.kegg.jp/entry/C09752,Glabranin,
+https://www.kegg.jp/entry/C09757,7-Hydroxyflavan,
+https://www.kegg.jp/entry/C09802,Verbenalin,
+https://www.kegg.jp/entry/C09808,Phellamurin,
+https://www.kegg.jp/entry/C09822,Cyclohexane-1-carboxylate,
+https://www.kegg.jp/entry/C09827,Pinocembrin,
+https://www.kegg.jp/entry/C09908,Thymol,
+https://www.kegg.jp/entry/C09981,Zearalenone,
+https://www.kegg.jp/entry/C10038,Diosmetin,
+https://www.kegg.jp/entry/C10044,Galangin,
+https://www.kegg.jp/entry/C10056,Demethylbellidifolin,
+https://www.kegg.jp/entry/C10075,Lancerin,
+https://www.kegg.jp/entry/C10164,Picolinic acid,
+https://www.kegg.jp/entry/C10172,Stachydrine,
+https://www.kegg.jp/entry/C10205,Coumestrol,
+https://www.kegg.jp/entry/C10208,Daidzein,
+https://www.kegg.jp/entry/C10216,Daidzin,
+https://www.kegg.jp/entry/C10259,Glepidotin C,
+https://www.kegg.jp/entry/C10271,3'-O-Methylbatatasin III,
+https://www.kegg.jp/entry/C10347,Lycopsamine,
+https://www.kegg.jp/entry/C10359,Petasitenine,
+https://www.kegg.jp/entry/C10453,Eugenol,
+https://www.kegg.jp/entry/C10462,[6]-Gingerol,
+https://www.kegg.jp/entry/C10494,[6]-Shogaol,
+https://www.kegg.jp/entry/C10815,Protoveratrine A,
+https://www.kegg.jp/entry/C11124,Spiroxamine,
+https://www.kegg.jp/entry/C11131,2-Methoxy-estradiol-17beta 3-glucuronide,
+https://www.kegg.jp/entry/C11133,Estrone 3-glucuronide,
+https://www.kegg.jp/entry/C11135,Androsterone 3-glucuronide,
+https://www.kegg.jp/entry/C11196,Methomyl,
+https://www.kegg.jp/entry/C11246,6alpha-Glucuronosylhyodeoxycholate,
+https://www.kegg.jp/entry/C11251,Cholesteryl palmitate,
+https://www.kegg.jp/entry/C11301,Sulfolithocholylglycine,
+https://www.kegg.jp/entry/C11346,"16alpha,17beta-Estriol 17-(beta-D-glucuronide)",
+https://www.kegg.jp/entry/C11378,Coenzyme Q10,
+https://www.kegg.jp/entry/C11379,Cinchonidine,
+https://www.kegg.jp/entry/C11396,"(1R,2R,4R)-Dihydrocarveol",
+https://www.kegg.jp/entry/C11398,"(1R,4R)-Dihydrocarvone",
+https://www.kegg.jp/entry/C11509,3beta-Hydroxy-4beta-methyl-5alpha-cholest-7-ene-4alpha-carbaldehyde,
+https://www.kegg.jp/entry/C11695,"N-(5Z,8Z,11Z,14Z-Eicosatetraenoyl)-ethanolamine",
+https://www.kegg.jp/entry/C11862,Gibberellin A36,
+https://www.kegg.jp/entry/C11873,Kaur-16-en-18-al,
+https://www.kegg.jp/entry/C11918,Maltol,
+https://www.kegg.jp/entry/C11924,Perillic acid,
+https://www.kegg.jp/entry/C11991,L-Olivosyl-oleandolide,
+https://www.kegg.jp/entry/C11995,Neomethymycin,
+https://www.kegg.jp/entry/C12011,DMG-MINO,
+https://www.kegg.jp/entry/C12078,Dehydroabietic acid,
+https://www.kegg.jp/entry/C12081,Soyasaponin II,
+https://www.kegg.jp/entry/C12115,3-Amino-4-hydroxybenzoate,
+https://www.kegg.jp/entry/C12126,N-Acylsphinganine,
+https://www.kegg.jp/entry/C12127,(+)-Gallocatechin,
+https://www.kegg.jp/entry/C12144,4-D-Hydroxysphinganine,
+https://www.kegg.jp/entry/C12246,Protorifamycin I,
+https://www.kegg.jp/entry/C12323,L-4-Hydroxyphenylglycine,
+https://www.kegg.jp/entry/C12525,"5alpha-Androstan-3beta,17beta-diol",
+https://www.kegg.jp/entry/C12621,trans-3-Hydroxycinnamate,
+https://www.kegg.jp/entry/C12891,Acetylspiramycin,
+https://www.kegg.jp/entry/C13624,Bisphenol A,
+https://www.kegg.jp/entry/C13747,"1,7-Dimethylxanthine",
+https://www.kegg.jp/entry/C13802,Prostaglandin D3,
+https://www.kegg.jp/entry/C13809,8-Isoprostaglandin F2alpha,
+https://www.kegg.jp/entry/C13828,"N-(8Z,11Z,14Z-Eicosatrienoyl)-ethanolamine",
+https://www.kegg.jp/entry/C13846,Octadecanamide,
+https://www.kegg.jp/entry/C13856,2-Arachidonoyl-sn-glycerol,
+https://www.kegg.jp/entry/C13870,Tributyrin,
+https://www.kegg.jp/entry/C13916,N-(Tetradecanoyl)-sphing-4-enine,
+https://www.kegg.jp/entry/C14131,Equol,
+https://www.kegg.jp/entry/C14151,delta-Tocopherol,
+https://www.kegg.jp/entry/C14152,beta-Tocopherol,
+https://www.kegg.jp/entry/C14153,alpha-Tocotrienol,
+https://www.kegg.jp/entry/C14154,beta-Tocotrienol,
+https://www.kegg.jp/entry/C14155,gamma-Tocotrienol,
+https://www.kegg.jp/entry/C14156,delta-Tocotrienol,
+https://www.kegg.jp/entry/C14161,Gibberellin A37,
+https://www.kegg.jp/entry/C14175,Diethyl phthalate,
+https://www.kegg.jp/entry/C14211,Butylbenzyl phthalate,
+https://www.kegg.jp/entry/C14313,"3',4',7-Trihydroxyisoflavone",
+https://www.kegg.jp/entry/C14536,Glycitein,
+https://www.kegg.jp/entry/C14662,(E)-4-Nitrostilbene,
+https://www.kegg.jp/entry/C14717,"15-Deoxy-delta-12,14-Prostaglandin J2",
+https://www.kegg.jp/entry/C14748,20-HETE,
+https://www.kegg.jp/entry/C14749,19(S)-HETE,
+https://www.kegg.jp/entry/C14762,"(9Z, 11E)-(13S)-13-Hydroxyoctadeca-9,11-dienoic acid",
+https://www.kegg.jp/entry/C14765,"(9Z,11E)-13-Oxooctadeca-9,11-dienoic acid",
+https://www.kegg.jp/entry/C14766,"(10E,12Z)-9-Oxooctadeca-10,12-dienoic acid",
+https://www.kegg.jp/entry/C14769,"8,9-EET",
+https://www.kegg.jp/entry/C14777,12(S)-HETE,
+https://www.kegg.jp/entry/C14778,16(R)-HETE,
+https://www.kegg.jp/entry/C14781,"15-Hydroxy-11,12-EETA",
+https://www.kegg.jp/entry/C14807,12-OxoETE,
+https://www.kegg.jp/entry/C14825,"(9R,10S)-(12Z)-9,10-Epoxyoctadecenoic acid",
+https://www.kegg.jp/entry/C14826,"(12R,13S)-(9Z)-12,13-Epoxyoctadecenoic acid",
+https://www.kegg.jp/entry/C14827,"(10E,12Z)-(9S)-9-Hydroperoxyoctadeca-10,12-dienoic acid",
+https://www.kegg.jp/entry/C14828,"(12Z)-9,10-Dihydroxyoctadec-12-enoic acid",
+https://www.kegg.jp/entry/C14829,"(9Z)-12,13-Dihydroxyoctadec-9-enoic acid",
+https://www.kegg.jp/entry/C14833,"(10E)-(9S,12S,13S)-9,12,13-Trihydroxyoctadec-10-enoic acid",
+https://www.kegg.jp/entry/C14835,"(11E)-9,10,13-Trihydroxyoctadec-11-enoic acid",
+https://www.kegg.jp/entry/C15441,Cholesteryl linoleate,
+https://www.kegg.jp/entry/C15492,"all-trans-13,14-Dihydroretinol",
+https://www.kegg.jp/entry/C15493,9-cis-Retinoic acid,
+https://www.kegg.jp/entry/C15515,Murideoxycholate,
+https://www.kegg.jp/entry/C15517,Hyodeoxycholate,
+https://www.kegg.jp/entry/C15532,N-Acetyl-L-citrulline,
+https://www.kegg.jp/entry/C15608,Flavone (generic compound),
+https://www.kegg.jp/entry/C15808,4alpha-Methylzymosterol-4-carboxylate,
+https://www.kegg.jp/entry/C15858,"7,9,7',9'-Tetra-cis-lycopene",
+https://www.kegg.jp/entry/C15923,L-Gulose,
+https://www.kegg.jp/entry/C15981,alpha-Cryptoxanthin,
+https://www.kegg.jp/entry/C15988,"(9S,10S)-9,10-Dihydroxyoctadecanoic acid",
+https://www.kegg.jp/entry/C15989,"(9S,10S)-10-Hydroxy-9-(phosphonooxy)octadecanoic acid",
+https://www.kegg.jp/entry/C16150,"(R,S)-Nicotine",
+https://www.kegg.jp/entry/C16161,"(9Z,12Z,15Z)-Octadecatrienoyl-[acp]",
+https://www.kegg.jp/entry/C16162,"(9Z,12Z,15Z)-Octadecatrienoyl-CoA",
+https://www.kegg.jp/entry/C16241,(R)-Lipoic acid,
+https://www.kegg.jp/entry/C16300,"(6Z,9Z,12Z,15Z)-Octadeca-6,9,12,15-tetraenoic acid",
+https://www.kegg.jp/entry/C16321,"(10E,12Z,15Z)-(9S)-9-Hydroperoxyoctadeca-10,12,15-trienoic acid",
+https://www.kegg.jp/entry/C16322,9-Oxononanoic acid,
+https://www.kegg.jp/entry/C16326,"(9S)-(10E,12Z,15Z)-9-Hydroxyoctadecatri-10,12,15-enoic acid",
+https://www.kegg.jp/entry/C16328,trans-2-Enoyl-OPC8-CoA,
+https://www.kegg.jp/entry/C16353,7-Methylxanthine,
+https://www.kegg.jp/entry/C16358,1-Methylxanthine,
+https://www.kegg.jp/entry/C16513,"(7Z,10Z,13Z,16Z,19Z)-Docosa-7,10,13,16,19-pentaenoic acid",
+https://www.kegg.jp/entry/C16522,"(11Z,14Z,17Z)-Icosa-11,14,17-trienoic acid",
+https://www.kegg.jp/entry/C16525,"Icosadienoic acid (20:2;11,14)",
+https://www.kegg.jp/entry/C16526,Icosenoic acid (20:1;11),
+https://www.kegg.jp/entry/C16527,"(7Z,10Z,13Z,16Z)-Docosa-7,10,13,16-tetraenoic acid",
+https://www.kegg.jp/entry/C16532,(15Z)-Tetracosenoyl-CoA,
+https://www.kegg.jp/entry/C16533,"Docosadienoic acid (22:2;13,16)",
+https://www.kegg.jp/entry/C16534,"(13E,16E,19E)-Docosa-13,16,19-trienoic acid",
+https://www.kegg.jp/entry/C16535,Nonadecanoic acid,
+https://www.kegg.jp/entry/C16536,(E)-Heptadec-9-enoic acid,
+https://www.kegg.jp/entry/C16537,Pentadecanoic acid,
+https://www.kegg.jp/entry/C16589,2-Oxosuberate,
+https://www.kegg.jp/entry/C16655,2-n-Propyl-4-oxopentanoic acid,
+https://www.kegg.jp/entry/C16678,all-trans-4-Oxoretinoic acid,
+https://www.kegg.jp/entry/C16930,Chavicol,
+https://www.kegg.jp/entry/C17076,Tridecanoic acid,
+https://www.kegg.jp/entry/C17495,[8]-Gingerol,
+https://www.kegg.jp/entry/C17556,"di-trans,poly-cis-Undecaprenyl phosphate",
+https://www.kegg.jp/entry/C17569,Ubiquinone-8,
+https://www.kegg.jp/entry/C17661,Isodeoxycholate,
+https://www.kegg.jp/entry/C17714,Enanthate; Heptanoate,
+https://www.kegg.jp/entry/C17715,Undecanoic acid,
+https://www.kegg.jp/entry/C18178,Resolvin D1,
+https://www.kegg.jp/entry/C18401,Fosetyl,
+https://www.kegg.jp/entry/C18504,Isoxaben,
+https://www.kegg.jp/entry/C18556,Pyrazoxyfen,
+https://www.kegg.jp/entry/C18663,Monocrotophos,
+https://www.kegg.jp/entry/C18726,Fenpropidin,
+https://www.kegg.jp/entry/C18750,2-Napthyloxyacetic acid,
+https://www.kegg.jp/entry/C18763,Quizalofop,
+https://www.kegg.jp/entry/C18780,Cycloate,
+https://www.kegg.jp/entry/C19569,3-Succinoylpyridine,
+https://www.kegg.jp/entry/C19632,Kojibiose,
+https://www.kegg.jp/entry/C19636,Turanose,
+https://www.kegg.jp/entry/C20639,O-Ureido-L-serine,
+https://www.kegg.jp/entry/C21109,Aminopyrrolnitrin,
+https://www.kegg.jp/entry/C21484,1-Octadecanoyl-sn-glycero-3-phosphoethanolamine,
+https://www.kegg.jp/entry/C21948,"(11Z,14Z,17Z,20Z,23Z)-Hexacosa-11,14,17,20,23-pentaenoic acid",

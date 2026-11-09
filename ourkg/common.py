@@ -18,13 +18,63 @@ NUTRIENT_PREFIX = (r'^(fatty acids|niacin|tocopherols|sugars|amino acids|'
                    r'folate|proximates|minerals|fa|vitamin [a-z0-9\- ]+)\s*[,\-]\s*')
 
 
+# 논문 §3.2 가 명시한 음식 라벨 규칙 (2026-11-09 에 전부 구현).
+#   (1) "splitting the food labels by commas and removing unnecessary words that
+#        may follow the first comma, such as 'ready to drink' appearing after 'milk'"
+#   (2) "exact matching is employed to merge foods with identical labels"
+#   (3) "transform plural words into singular form"
+#   (4) "convert uppercase letters to lowercase"
+# LABEL_MODE=legacy 로 두면 2026-11-08 이전 동작(쉼표 유지·복수 유지)을 쓴다.
+# 민감도 비교용이고 기본값은 paper 다.
+LABEL_MODE = os.environ.get('LABEL_MODE', 'paper')
+
+# (1) 은 **일괄 절단이 아니다.** 논문이 든 예는 "'ready to drink' appearing after
+# 'milk'" 처럼 **불필요한 말**을 지우는 것이고, 논문 자신의 Table 2·3·4 음식명은
+# 쉼표 뒤를 그대로 유지한다 — "Lettuce, Romaine" · "Broccoli, raw" ·
+# "Goose egg, cooked" · "Milk, skim". 첫 쉼표에서 통째로 자르면 그 이름들이
+# 나올 수 없다. 그래서 불필요어 목록을 지우는 방식으로 구현한다.
+# (일괄 절단판은 §13 에 민감도로 기록했다 — A층 지표가 크게 퇴행한다.)
+UNNECESSARY = (r',\s*(ready[ -]to[ -](?:drink|eat|serve|cook)|as purchased|'
+               r'as consumed|includes? [^,]*|not further specified|nfs|'
+               r'unprepared|prepared|from (?:concentrate|dry)|reconstituted|'
+               r'undiluted|diluted[^,]*|commercially prepared|home ?made|'
+               r'all types?|various|unspecified|regular|original)\b')
+
+# 복수 -> 단수. 영어 규칙 최소판이며, 'ss/us/is/os' 로 끝나는 말은 건드리지 않는다
+# (glass, citrus, analysis, potatos 아님). FDC 라벨은 명사구라 이 정도로 충분하다.
+_PLURAL = [
+    (r'\b([a-z]+?)ies\b', r'\1y'),                       # berries -> berry
+    (r'\b([a-z]+?(?:ch|sh|ss|x|z))es\b', r'\1'),          # peaches -> peach
+    (r'\b([a-z]+?o)es\b', r'\1'),                         # tomatoes -> tomato
+    (r"\b([a-z]+?[^siu'])s\b", r'\1'),                    # carrots -> carrot
+                                                           # 소유격 제외: McDONALD'S
+]                                                          # ss/us/is 는 건드리지 않는다
+                                                           # (glass, citrus, analysis)
+
+
+def singularize(series):
+    out = series
+    for pat, rep in _PLURAL:
+        out = out.str.replace(pat, rep, regex=True)
+    return out
+
+
 def normalize_label(series):
-    return (series.astype(str).str.strip().str.lower()
-            .str.replace(NUTRIENT_PREFIX, '', regex=True)
-            .str.replace(r'\s*-\s*[a-z0-9]{6,12}\s*$', '', regex=True)
-            .str.replace(r'\s*\([^)]*\)\s*', ' ', regex=True)
-            .str.replace(r'[\s,]+$', '', regex=True)
-            .str.replace(r'\s+', ' ', regex=True).str.strip())
+    """논문 §3.2 의 음식 라벨 정규화."""
+    s = (series.astype(str).str.strip().str.lower()
+         .str.replace(NUTRIENT_PREFIX, '', regex=True)
+         .str.replace(r'\s*-\s*[a-z0-9]{6,12}\s*$', '', regex=True)   # 브랜드 샘플코드
+         .str.replace(r'\s*\([^)]*\)\s*', ' ', regex=True)           # 괄호 지역표기
+         # 괄호를 지우면 ", , raw" 처럼 빈 쉼표 구간이 남는다. 합쳐 준다.
+         .str.replace(r'\s*,(\s*,)+', ',', regex=True)
+         .str.replace(r'^\s*,\s*', '', regex=True))
+    if LABEL_MODE == 'paper':
+        s = s.str.replace(UNNECESSARY, '', regex=True)                # (1) 불필요어 제거
+    s = (s.str.replace(r'[\s,]+$', '', regex=True)
+         .str.replace(r'\s+', ' ', regex=True).str.strip())
+    if LABEL_MODE == 'paper':
+        s = singularize(s)                                            # (3) 복수 -> 단수
+    return s
 
 
 # FDC food_category (SR Legacy food group) id -> 이름. FDC 배포본 food_category.csv 와 동일.

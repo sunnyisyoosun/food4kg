@@ -418,10 +418,14 @@ def q12_depression_vs_autism(kg):
 
 
 def q13_mental_disorder_list(kg):
-    mental = _mikg_mental_disorders()
+    # 기본은 MiKG 원본 TTL 이다. 다른 KG 로 이 질의를 돌릴 때(ourkg 어댑터 등)
+    # 그 KG 가 mental_disorders() 를 주면 그쪽을 쓴다 — 질의가 평가 대상 KG 를
+    # 거치지 않고 파일을 직접 읽으면 남의 답을 자기 답으로 세게 된다.
+    get = getattr(kg, 'mental_disorders', None)
+    mental, src = (get(), 'KG') if get else (_mikg_mental_disorders(), 'MiKG 원본')
     ok = any('Eating' in x for x in mental) and any('Bipolar' in x for x in mental)
     return ('O' if ok else 'X', 'O' if ok else '-',
-            f'MiKG 의 mentalDisorder 하위 {len(mental)}종: {sorted(mental)}')
+            f'{src} 의 mentalDisorder 하위 {len(mental)}종: {sorted(mental)}')
 
 
 def q14_vitamins_depression(kg):

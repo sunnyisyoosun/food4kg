@@ -107,7 +107,17 @@ def food():
     fn = fn.merge(food[['fdc_id', 'food_name', 'data_type', 'category']], on='fdc_id', how='inner')
     fn['food_key'] = normalize_label(fn['food_name'])
     fn = fn[fn['food_key'].str.len() > 0]
-    print(f'  FDC 항목 {fn["fdc_id"].nunique():,} -> 병합 음식 {fn["food_key"].nunique():,}')
+    n_before, n_after = fn['fdc_id'].nunique(), fn['food_key'].nunique()
+    print(f'  FDC 항목 {n_before:,} -> 병합 음식 {n_after:,} '
+          f'(병합으로 {n_before - n_after:,} 감소)')
+    _link = {'fdc_rows': int(len(food)),
+             'nutrient_mapped': int(len(nid2kegg)),
+             'nutrient_kegg': int(mp['nutrient_kegg'].nunique()),
+             'kegg_rows': int(len(fn)),
+             'kegg_compound': int(fn['kegg'].nunique()),
+             'food_before_merge': int(n_before),
+             'food_after_merge': int(n_after),
+             'min_cov': MIN_COV}
 
     print(f'[5/5] 음식당 compound >= {MIN_COV} 필터')
     long = (fn.groupby(['food_key', 'kegg'], as_index=False)['amount_g'].mean())
@@ -130,6 +140,10 @@ def food():
     meta['food_group'] = [normalize_category(c, n)
                           for c, n in zip(meta['category'], meta['food_name'])]
 
+    _link['food_after_mincov'] = int(long['food_key'].nunique())
+    _link['compound_after_mincov'] = int(long['kegg'].nunique())
+    with open(os.path.join(OUT, 'food_link.json'), 'w') as _fh:
+        json.dump(_link, _fh, indent=1)
     long.to_csv(os.path.join(OUT, 'food_compound_long.csv'), index=False)
     meta.to_csv(os.path.join(OUT, 'foods.csv'), index=False)
     print(f'  음식 {len(meta):,} / compound {long["kegg"].nunique()} / 값 {len(long):,}')
@@ -598,11 +612,11 @@ def kg():
     SAMEAS = NS['owl'] + 'sameAs'
     VALUE = NS['rdf'] + 'value'
 
-    print('[1/5] Food · Category (FDC)')
+    print('[1/6] Food · Category (FDC)')
     foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
     long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
     food_uri = {k: NS['our'] + 'food/' + slug(k) for k in foods['food_key']}
-    cat_uri = {}
+    cat_uri, fine_uri, fine_parent = {}, {}, {}
     for _, r in foods.iterrows():
         u = food_uri[r['food_key']]
         W.t(u, A, NS['ent'] + 'Food', 'FoodData Central')
@@ -611,12 +625,23 @@ def kg():
         W.t(u, NS['our'] + 'dataType', r['data_type'], 'FoodData Central', literal=True)
         c = cat_uri.setdefault(r['food_group'], NS['our'] + 'category/' + slug(r['food_group']))
         W.t(u, SUBCLASS, c, 'FoodData Central')
+        # 세분 카테고리(FDC category) 를 한 층 더 둔다 — §3.2 의 2단 매핑 구조이고,
+        # FoodOn·중국 온톨로지가 붙는 지점도 이 층이다 ([6/6]).
+        if isinstance(r['category'], str) and r['category']:
+            fu = fine_uri.setdefault(r['category'],
+                                     NS['our'] + 'category/' + slug('fine:' + r['category']))
+            W.t(u, SUBCLASS, fu, 'FoodData Central')
+            fine_parent[r['category']] = c
     for name, u in cat_uri.items():
         W.t(u, A, NS['ent'] + 'FoodCategory', 'FoodData Central')
         W.t(u, LABEL, name, 'FoodData Central', literal=True)
-    print(f'  음식 {len(foods):,} / 카테고리 {len(cat_uri)}')
+    for name, u in fine_uri.items():
+        W.t(u, A, NS['ent'] + 'FoodCategory', 'FoodData Central')
+        W.t(u, LABEL, name, 'FoodData Central', literal=True)
+        W.t(u, SUBCLASS, fine_parent[name], 'FoodData Central')
+    print(f'  음식 {len(foods):,} / 상위 카테고리 {len(cat_uri)} / 세분 {len(fine_uri)}')
 
-    print('[2/5] Food → Nutrient 중량 (npq:hasNutrients / hasNutrientWeights)')
+    print('[2/6] Food → Nutrient 중량 (npq:hasNutrients / hasNutrientWeights)')
     for i, (fk, kegg, amt) in enumerate(long.itertuples(index=False), 1):
         fu = food_uri.get(fk)
         if fu is None:
@@ -631,7 +656,7 @@ def kg():
             print(f'\r  {i:,}/{len(long):,}', end='', flush=True)
     print(f'\r  중량 triple {len(long)*4:,}')
 
-    print('[3/5] Compound (KEGG) · depression 관계 (ProMENDA)')
+    print('[3/6] Compound (KEGG) · depression 관계 (ProMENDA)')
     E = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
     DEPRESSION = NS['mesh'] + 'D003865'
     W.t(DEPRESSION, A, NS['ent'] + 'Disease', 'ProMENDA')
@@ -715,7 +740,7 @@ def kg():
         print('  ⚠ compound_evidence.csv 없음 — 근거별 극성은 싣지 않는다 '
               '(python3 ourkg/build.py evidence)')
 
-    print('[4/5] Microbe (NCBI) · compound-microbe (KEGG) · microbe-disease')
+    print('[4/6] Microbe (NCBI) · compound-microbe (KEGG) · microbe-disease')
     mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str})
     for _, r in mic.iterrows():
         u = NS['mic'] + r['taxid']
@@ -745,7 +770,7 @@ def kg():
             if tn and tn != 'nan':
                 W.t(du, NS['our'] + 'meshTree', tn, 'MeSH', literal=True)
 
-    print('[5/5] 신경전달물질 경로 (MiKG)')
+    print('[5/6] 신경전달물질 경로 (MiKG)')
     mn = pd.read_csv(os.path.join(OUT, 'microbe_neurotransmitter.csv'))
     nd = pd.read_csv(os.path.join(OUT, 'neurotransmitter_disease.csv'))
     for _, r in mn.iterrows():
@@ -765,6 +790,251 @@ def kg():
         W.t(du, SUBCLASS, NS['ent'] + 'MentalDisorder', 'MiKG')
         W.t(du, LABEL, r['disease'], 'MiKG', literal=True)
         W.t(nu, NS['mpq'] + 'hasAssociation', du, 'MiKG')
+
+    # ------------------------------------------------------------------
+    print('[6/6] 온톨로지 축 (KEGG brite · FoodOn · 중국 식품 온톨로지 · SNOMED CT)')
+    # 논문 §3.1 이 든 세 축이다. 원본은 레포의 공개 KG 에서 가져온다 — 외부 재수집은
+    # 하지 않는다. 다리(우리 엔티티와의 연결)가 몇 개나 생기는지 함께 센다.
+    FKG = os.path.join(BASE, 'foodkg_triply')
+    cdep = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
+
+    def _ld(fn):
+        with open(os.path.join(FKG, fn)) as fh:
+            return [n for e in json.load(fh) for n in e.get('@graph', [])]
+
+    def _lit(n, key):
+        v = n.get(key)
+        if not v:
+            return None
+        v = v if isinstance(v, list) else [v]
+        x = v[0].get('@value') if isinstance(v[0], dict) else v[0]
+        return x if isinstance(x, str) else None
+
+    onto_link = []
+    FOODON_SA = 'http://www.w3.org/2002/07/owl#sameAs'
+    CN_EN = 'http://wasp.cs.vu.nl/KG#hasEnglishLabel'
+
+    def _norm(x):
+        return re.sub(r'[^a-z]', '', str(x).lower())
+
+    def _variants(x):
+        """온톨로지 라벨 하나에서 매칭용 변형을 만든다.
+        'Soy milk (milk) beverage' -> {soymilkbeverage, soymilk, soymilkmilkbeverage}"""
+        x = str(x)
+        out = {x, re.sub(r'\s*\(.*?\)\s*', ' ', x), x.split(',')[0]}
+        base = re.sub(r'\s*\(.*?\)\s*', ' ', x).strip()
+        for tail in (' beverage', ' drink', ' products', ' product'):
+            if base.lower().endswith(tail):
+                out.add(base[: -len(tail)])
+        return {_norm(v) for v in out if _norm(v)}
+
+    # 우리 쪽 연결 대상: 세분 카테고리(위에서 만든 fine_uri)와 음식 라벨
+    fine_by_label = {k: v for k, v in fine_uri.items()}
+    fine_by_norm, fine_label_by_norm = {}, {}
+    for k, v in fine_uri.items():
+        for var in _variants(k):
+            fine_by_norm.setdefault(var, v)
+            fine_label_by_norm.setdefault(var, k)
+    food_by_norm, food_label_by_norm = {}, {}
+    for _, r in foods.iterrows():
+        first = str(r['food_name']).split(',')[0]
+        for var in _variants(first):
+            food_by_norm.setdefault(var, food_uri[r['food_key']])
+            food_label_by_norm.setdefault(var, first)
+
+    # --- KEGG brite 화합물 분류축
+    # 논문 §3.1 "leveraged the compound ontology from KEGG compounds".
+    # 우리 KEGG 단계는 compound-미생물 경로만 만들었고 분류축이 없었다 —
+    # §5.1 방법 1 의 #14·#15·#16 이 이것 때문에 답하지 못했다.
+    KT = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+    ours_kegg = set(long['kegg'].dropna()) | set(cdep['kegg'].dropna())
+    cls_label, cls_parent, cmp_cls = {}, collections.defaultdict(set), collections.defaultdict(set)
+    for n in _ld('KEGG_Compound.jsonld'):
+        u = n['@id']
+        lab = _lit(n, LABEL)
+        if 'Class' in u:
+            if lab:
+                cls_label[u] = lab
+            for v in n.get(SUBCLASS, []):
+                if isinstance(v, dict) and v.get('@id'):
+                    cls_parent[u].add(v['@id'])
+        elif '/entry/C' in u:
+            kid = u.rsplit('/', 1)[-1]
+            if kid not in ours_kegg:
+                continue
+            if lab:
+                cls_label[u] = lab
+            for v in n.get(KT, []):
+                if isinstance(v, dict) and 'Class' in v.get('@id', ''):
+                    cmp_cls[kid].add(v['@id'])
+    n_br = 0
+    for u, lab in cls_label.items():
+        W.t(u, LABEL, lab, 'KEGG', literal=True)
+        n_br += 1
+    for u, ps in cls_parent.items():
+        for pu in ps:
+            W.t(u, SUBCLASS, pu, 'KEGG')
+            n_br += 1
+    for kid, cs in cmp_cls.items():
+        for cu in cs:
+            W.t(NS['kegg'] + kid, A, cu, 'KEGG')
+            n_br += 1
+    pd.DataFrame([{'class_uri': u, 'label': cls_label.get(u, ''), 'parent_uri': pu}
+                  for u, ps in cls_parent.items() for pu in ps]
+                 + [{'class_uri': u, 'label': l, 'parent_uri': ''}
+                    for u, l in cls_label.items() if u not in cls_parent]
+                 ).to_csv(os.path.join(OUT, 'kegg_class.csv'), index=False)
+    pd.DataFrame([{'kegg': k, 'class_uri': c} for k, cs in cmp_cls.items() for c in cs]
+                 ).to_csv(os.path.join(OUT, 'compound_class.csv'), index=False)
+    print(f'  KEGG brite {n_br:,} triple — 분류 {len(cls_label):,}, '
+          f'분류된 compound {len(cmp_cls)}/{len(ours_kegg)}')
+
+    # --- FoodOn
+    n_fo = n_fo_link = 0
+    cat_sameas = {}
+    for n in _ld('Food_Category.jsonld'):
+        tgt = [v['@id'] for v in n.get(FOODON_SA, []) if 'FOODON' in v.get('@id', '')]
+        lab = _lit(n, LABEL)
+        if tgt and lab:
+            cat_sameas[lab] = tgt[0]
+    OBO = 'http://www.geneontology.org/formats/oboInOwl#'
+    SYN = NS['our'] + 'synonym'
+    fo_alias = collections.defaultdict(set)     # 정규화 이름 -> FoodOn URI
+    fo_label = {}                               # FoodOn URI -> 그쪽 원 라벨
+    for n in _ld('Food_Ontology.jsonld'):
+        u = n['@id']
+        lab = _lit(n, LABEL)
+        if lab:
+            W.t(u, LABEL, lab, 'FoodOn', literal=True)
+            n_fo += 1
+            fo_label[u] = lab
+            for v in _variants(lab):
+                fo_alias[v].add(u)
+        # 동의어도 가져온다 — 라벨만으로는 우리 카테고리와 거의 안 붙는다.
+        for pk in (OBO + 'hasSynonym', OBO + 'hasNarrowSynonym'):
+            for x in (n.get(pk) or []):
+                sv = x.get('@value') if isinstance(x, dict) else x
+                if isinstance(sv, str) and sv:
+                    W.t(u, SYN, sv, 'FoodOn', literal=True)
+                    n_fo += 1
+                    for v in _variants(sv):
+                        fo_alias[v].add(u)
+        for v in n.get(SUBCLASS, []):
+            if isinstance(v, dict) and v.get('@id', '').startswith('http'):
+                W.t(u, SUBCLASS, v['@id'], 'FoodOn')
+                n_fo += 1
+    for lab, fo in cat_sameas.items():
+        tu = fine_by_label.get(lab)
+        if tu:
+            W.t(tu, SAMEAS, fo, 'FoodOn')
+            n_fo += 1
+            n_fo_link += 1
+            onto_link.append({'our': lab, 'kind': 'category',
+                              'onto_label': fo_label.get(fo, lab), 'source': 'FoodOn'})
+    # 공개 KG 의 sameAs 8 건 말고, 라벨·동의어 정규화 일치로도 잇는다.
+    for lab, tu in fine_by_label.items():
+        cand = set().union(*[fo_alias.get(v, set()) for v in _variants(lab)]) or set()
+        for fo in sorted(cand)[:1]:
+            W.t(tu, SAMEAS, fo, 'FoodOn')
+            n_fo += 1
+            n_fo_link += 1
+            onto_link.append({'our': lab, 'kind': 'category',
+                              'onto_label': lab, 'source': 'FoodOn'})
+    print(f'  FoodOn {n_fo:,} triple, 우리 카테고리와 연결 {n_fo_link}')
+
+    # --- 중국 식품 온톨로지
+    n_cn = n_cn_cat = n_cn_food = 0
+    for n in _ld('Food_Chinese.jsonld'):
+        u = n['@id']
+        en = _lit(n, CN_EN)
+        if en:
+            W.t(u, LABEL, en, 'Chinese Food Ontology', literal=True)
+            n_cn += 1
+            vs = _variants(en)
+            ck = next((v for v in vs if v in fine_by_norm), None)
+            fk = next((v for v in vs if v in food_by_norm), None)
+            if ck:
+                W.t(fine_by_norm[ck], SAMEAS, u, 'Chinese Food Ontology')
+                n_cn += 1
+                n_cn_cat += 1
+                onto_link.append({'our': fine_label_by_norm[ck], 'kind': 'category',
+                                  'onto_label': en, 'source': 'Chinese'})
+            elif fk:
+                W.t(food_by_norm[fk], SAMEAS, u, 'Chinese Food Ontology')
+                n_cn += 1
+                n_cn_food += 1
+                onto_link.append({'our': food_label_by_norm[fk], 'kind': 'food',
+                                  'onto_label': en, 'source': 'Chinese'})
+        for v in n.get(SUBCLASS, []):
+            if isinstance(v, dict) and v.get('@id', '').startswith('http'):
+                W.t(u, SUBCLASS, v['@id'], 'Chinese Food Ontology')
+                n_cn += 1
+    print(f'  중국 식품 온톨로지 {n_cn:,} triple, '
+          f'카테고리 연결 {n_cn_cat} / 음식 연결 {n_cn_food}')
+
+    pd.DataFrame(onto_link).to_csv(os.path.join(OUT, 'category_ontology.csv'), index=False)
+    print(f'  온톨로지 ↔ 카테고리/음식 매핑 {len(onto_link)} 건 → category_ontology.csv')
+
+    # --- SNOMED CT
+    # 공개 KG 의 SNOMED 은 Mental_health.jsonld 의 284 노드뿐이고 rdf:value(id 문자열)
+    # 와 MeSH 로의 sameAs 10 건만 있다. **라벨도 상위 클래스도 없다** — 논문 Table 1 이
+    # 적은 4,291,226 triple 은 배포되지 않았다. 넣을 수 있는 것은 이것이 전부다.
+    n_sct = n_sct_link = 0
+    our_dis = {NS['mesh'] + str(x) for x in md['mesh_id'].dropna().unique()}
+    for n in _ld('Mental_health.jsonld'):
+        u = n['@id']
+        if 'ihtsdo' not in u:
+            continue
+        v = _lit(n, VALUE)
+        if v:
+            W.t(u, VALUE, v, 'SNOMED CT', literal=True)
+            n_sct += 1
+        for o in n.get(FOODON_SA, []):
+            if isinstance(o, dict) and o.get('@id', '').startswith('http'):
+                W.t(u, SAMEAS, o['@id'], 'SNOMED CT')
+                n_sct += 1
+                if o['@id'] in our_dis:
+                    n_sct_link += 1
+    print(f'  SNOMED CT {n_sct} triple (id·sameAs 뿐, 라벨·계층 없음), '
+          f'우리 질병과 연결 {n_sct_link}')
+
+    # ------------------------------------------------------------------
+    # 논문 §3.2 Entity linking 대응표. 재현 트랙의 eval/paper_kg_stats.linking()
+    # 이 논문 수치를 **검증**한다면, 여기서는 우리가 **수행한** 링킹을 집계한다.
+    fl = {}
+    _flp = os.path.join(OUT, 'food_link.json')
+    if os.path.exists(_flp):
+        with open(_flp) as _fh:
+            fl = json.load(_fh)
+    rows = [
+        ('food', 'FDC 원본 항목', fl.get('fdc_rows'), '§3.1 34,250 food samples'),
+        ('food', '라벨 병합 전 (KEGG 측정 보유)', fl.get('food_before_merge'), ''),
+        ('food', '라벨 병합 후 (§3.2 exact matching)', fl.get('food_after_merge'),
+         '§3.2 "merge foods with identical labels"'),
+        ('food', f'음식당 compound >= {fl.get("min_cov")} 필터 후', fl.get('food_after_mincov'),
+         '§4.2.1 135 food'),
+        ('food', '세분 카테고리 (FDC category)', len(fine_uri), '§3.2 128 distinct categories'),
+        ('food', '상위 카테고리 (SR food group)', len(cat_uri), ''),
+        ('compound', 'nutrient -> KEGG 매핑', fl.get('nutrient_mapped'), ''),
+        ('compound', '음식 행렬의 KEGG compound', fl.get('compound_after_mincov'),
+         '§3.2 23,212 compounds / §4.2.1 85'),
+        ('compound', 'ProMENDA E 의 KEGG compound', int(cdep['kegg'].nunique()), ''),
+        ('compound', 'KEGG brite 로 분류된 compound', len(cmp_cls), '§3.1 compound ontology'),
+        ('microbe', 'NCBI taxonomy 링크 (taxid)', int(mic['taxid'].nunique()),
+         '§3.2 984,031 gut microbiota'),
+        ('microbe', 'KEGG organism 매칭', int(mic['kegg_org'].notna().sum()), ''),
+        ('disease', 'MeSH 링크', int(md['mesh_id'].nunique()), '§3.2 3,505 mental disorders'),
+        ('disease', 'SNOMED CT 링크', n_sct_link, '배포본에 라벨·계층 없음'),
+        ('ontology', 'FoodOn ↔ 카테고리', n_fo_link, '§3.1 FoodOn'),
+        ('ontology', '중국 온톨로지 ↔ 카테고리', n_cn_cat, '§3.1 Chinese Food Ontology'),
+        ('ontology', '중국 온톨로지 ↔ 음식', n_cn_food, ''),
+    ]
+    ls = pd.DataFrame(rows, columns=['axis', 'item', 'value', 'paper'])
+    ls.to_csv(os.path.join(OUT, 'linking_stats.csv'), index=False)
+    print('\n[링킹] 논문 §3.2 대응 — out/linking_stats.csv')
+    for _, r in ls.iterrows():
+        v = '-' if pd.isna(r['value']) else f'{int(r["value"]):,}'
+        print(f'  {r["axis"]:9s} {r["item"][:36]:38s} {v:>10s}  {r["paper"]}')
 
     W.close()
     print(f'\n총 triple {W.n:,}  →  {OUT_NT}')

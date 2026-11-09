@@ -1,0 +1,18 @@
+axis,item,value,paper
+food,FDC 원본 항목,2101279,"§3.1 34,250 food samples"
+food,라벨 병합 전 (KEGG 측정 보유),1949651,
+food,라벨 병합 후 (§3.2 exact matching),475623,"§3.2 ""merge foods with identical labels"""
+food,음식당 compound >= 20 필터 후,14580,§4.2.1 135 food
+food,세분 카테고리 (FDC category),264,§3.2 128 distinct categories
+food,상위 카테고리 (SR food group),27,
+compound,nutrient -> KEGG 매핑,180,
+compound,음식 행렬의 KEGG compound,130,"§3.2 23,212 compounds / §4.2.1 85"
+compound,ProMENDA E 의 KEGG compound,1412,
+compound,KEGG brite 로 분류된 compound,646,§3.1 compound ontology
+microbe,NCBI taxonomy 링크 (taxid),127,"§3.2 984,031 gut microbiota"
+microbe,KEGG organism 매칭,82,
+disease,MeSH 링크,244,"§3.2 3,505 mental disorders"
+disease,SNOMED CT 링크,1,배포본에 라벨·계층 없음
+ontology,FoodOn ↔ 카테고리,19,§3.1 FoodOn
+ontology,중국 온톨로지 ↔ 카테고리,39,§3.1 Chinese Food Ontology
+ontology,중국 온톨로지 ↔ 음식,169,

@@ -1,0 +1,12 @@
+{
+ "fdc_rows": 2101279,
+ "nutrient_mapped": 180,
+ "nutrient_kegg": 134,
+ "kegg_rows": 10961595,
+ "kegg_compound": 134,
+ "food_before_merge": 1949651,
+ "food_after_merge": 475623,
+ "min_cov": 20,
+ "food_after_mincov": 14580,
+ "compound_after_mincov": 130
+}

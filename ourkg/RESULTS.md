@@ -20,12 +20,13 @@
 | triple | 13,346,991 | **3,168,163** |
 | entity | 1,637,915 | 785,572 |
 | relation | 140 | 30 |
-| 음식 | 34,250 샘플 → 135 사용 | 14,719 (추천 코호트 12,574) |
+| 음식 | 34,250 샘플 → 135 사용 | 14,580 (추천 코호트 12,392) |
 | compound | 85 | 130 |
 | 음식당 측정 compound 중앙값 | 33 | **47** |
 | 우울증 극성이 확정된 compound | 85 (공개 소스로는 69) | 66 |
-| §5.1 방법 2 문헌 검증 | 11 / 15 | **4 / 15** |
-| §4.2.3 Top30 추천군 / Bottom30 비추천군 | 서술 | **22 / 27** (교차 위반 2) |
+| §5.1 방법 1 20문항 (논문 답 재현) | — | **8 / 20** (공개 KG 는 18/20) |
+| §5.1 방법 2 문헌 검증 | 11 / 15 | **1 / 15** (검색어 결함, 아래) |
+| Fig. 5 추천군 Top30 / 비추천군 Bottom30 | 서술 | **22 / 27** (교차 위반 2 = Sweets) |
 | ModiMedDiet Top30 처방군 / extras (빈도 반영) | — | **22 / 1** |
 | 같은 기준에서 ModiMedDiet 로 학습한 E | — | 0.678 — **공개 소스가 이긴다** (§12) |
 | `D = X·e` 만 비교하면 (PCA 무관) | — | 공개 0.520 / 역추정 0.803 / 상한 0.816 (§8) |
@@ -33,8 +34,9 @@
 추천 점수 `D = E × Fᵀ` 에는 미생물이 들어가지 않는다 — 논문 식 (1)(2) 의 정의가
 그렇다. gut-brain 경로를 거치는 compound 만 남겨도 순위 상관이 +0.99 다 (§6).
 
-triple 수가 논문의 1/4 인 것은 온톨로지 축(SNOMED CT 429만, NCBI taxonomy 전체 131만,
-FoodOn·중국 식품 온톨로지 30만)을 통합하지 않았기 때문이다.
+triple 수가 논문의 1/4 인 것은 온톨로지 축 때문이다. FoodOn·중국 식품 온톨로지·KEGG
+brite 는 2026-11-09 에 넣었고(+11만), 남은 격차는 SNOMED CT 429만과 NCBI taxonomy
+전체 131만이다 — 전자는 배포되지 않았고 후자는 정신질환 연관 종만 쓴다.
 **음식-성분 축만 보면 우리 쪽이 더 크다 (314만 vs 233만).**
 
 `evidence` 행은 논문에 대응이 없다 — E 의 근거를 KG 안에서 추적하려고 우리가
@@ -62,13 +64,13 @@ FoodOn·중국 식품 온톨로지 30만)을 통합하지 않았기 때문이다
 | source | 논문 triples | ourkg triples | 비고 |
 |---|---:|---:|---|
 | FoodData Center | 2,332,603 | 3,146,277 | FDC 전체 배포본 사용 |
-| FoodOn | 79,769 | — | 미통합 |
-| Chinese Food Ontology | 215,863 | — | 미통합 |
-| KEGG | 74,286 | 2,384 | compound-미생물 경로만 재계산 |
+| FoodOn | 79,769 | 10,237 | 라벨·subClassOf 만. 카테고리 8 연결 |
+| Chinese Food Ontology | 215,863 | 82,498 | 영어 라벨·subClassOf. 카테고리 20 · 음식 149 연결 |
+| KEGG | 74,286 | 5,890 | compound-미생물 경로 재계산 + brite 분류축 |
 | NCBI taxonomy | 1,306,152 | 590 | 정신질환 연관 127종만 |
 | MENDA | 5,675 | 5,150 (ProMENDA) | 후속판으로 교체 |
 | MiKG | 1,234 | 6,802 | 신경전달물질 경로 포함 |
-| SNOMED CT | 4,291,226 | — | 미통합 |
+| SNOMED CT | 4,291,226 | 285 | 배포본에 id 284 개뿐 — 라벨·계층 없음 |
 | MESH | 261,556 | 5,400 | tree number 만 |
 
 ### 데이터 처리 경로
@@ -137,8 +139,8 @@ MeSH SPARQL / NCBI efetch
 
 | 기준 | 값 |
 |---|---|
-| §4.2.3 Top30 추천군 (어패류·과일·채소) | **22 / 30** |
-| §4.2.3 Bottom30 비추천군 (소시지·베이커리·과자·육류) | **27 / 30** |
+| Fig. 5 하단층 = 추천군 (과일·채소) 이 Top30 에 | **22 / 30** |
+| Fig. 5 상단층 = 비추천군 (베이커리·소고기·소시지·돼지) 이 Bottom30 에 | **27 / 30** |
 | 교차 위반 (비추천군이 Top 에) | **2** |
 | ModiMedDiet Top30 처방군 / extras | **22 / 1** |
 | ModiMedDiet AUC (참고) | 0.592 |
@@ -150,31 +152,358 @@ MeSH SPARQL / NCBI efetch
 > mainly **sausage products**, baked products, and sweets."
 
 채소 16 + 과일 6 = 22/30 이고, 비추천 쪽은 소고기 18 · 소시지 6 · 돼지 3 이다.
-남는 차이는 **어패류가 Top 30 에 없다**는 점이다.
+
+#### 어패류 — "빠진" 것이 아니라 Fig. 5 와 맞는다 (2026-11-09 정정)
+
+예전 판은 이 지표를 "추천군(**어패류**·과일·채소)" 으로 적고 어패류가 Top 30 에 없는
+것을 미달로 봤다. **재현 트랙의 판정과 어긋난 서술이었다.**
+
+논문은 같은 것을 두 군데서 다르게 적는다.
+
+| | 어패류의 위치 |
+|---|---|
+| §4.2.3 **본문** | "recommended foods are mainly **fish and shellfish products**, as well as fruits and vegetables" |
+| **Fig. 5** 피라미드 | **중간 층**(general foods) — 하단(추천)은 채소·과일뿐 |
+
+재현 트랙은 **Fig. 5 를 기준으로 고정**했다(`tools/core.PAPER_REC = {Fruits,
+Vegetables}`, 근거는 `tools/core.py` 주석과 §16.7). 알고리즘 출력에서 직접 그린 그림
+쪽을 따른다는 결정이다. 같은 기준을 여기에도 적용하면 **어패류가 Top 30 에 없는 것이
+올바른 동작**이고, 수치는 22/30 그대로다(채소 16 + 과일 6).
+
+왜 어패류가 밀리는지도 측정했다. 커버리지 문제가 아니다 —
+
+```
+우울증 연결 compound 측정 밀도 (중앙값)
+  어패류 29   채소 29   과일 29        ← 같다
+점수
+  어패류 최고 13.23 (80위)   채소 최고 26.88 (1위)
+```
+
+원인은 **DHA**다. `C06429 Docosahexaenoic acid` 는 우리 E 에서 `direction = -1`
+(pos 12 / neg 34, 28 편, e_shrunk −0.393) 이고, 어패류에 중앙값 0.123 g/100g 로
+몰려 있다 — 채소의 비타민 C(0.0099) 보다 12 배다. 강한 음(−) 성분을 많이 가진 음식군이
+`D = E × Fᵀ` 에서 내려가는 것은 식의 정의 그대로다.
+
+그리고 **논문의 E 도 DHA 를 음(−)으로 적는다** — `eval/gold.py` 의
+`C06429: ('-', 'Docosahexaenoic acid', 'Fig5 PMID 28439746')`. 즉 §4.2.3 본문의
+"어패류 추천" 은 논문 자신의 Fig. 5 · E 부호와 맞지 않는다.
 
 두 평가 기준의 Top-30 측정이 처음으로 같은 방향을 가리킨다 — §4.2.3 추천군 22,
 ModiMedDiet 처방군 22 / extras 1.
 
+교차 위반 2 는 **Sweets 2 종이 Top 30 에 든 것**이다(논문은 비추천군). 반대 방향
+위반(추천군이 Bottom 30 에)은 0 이다.
+
 시각화: `ourkg/out/recommendation.png` (논문 Fig.4(b) 대응 t-SNE)
+
+#### 온톨로지 축을 넣어도 추천은 바뀌지 않는다 (2026-11-09 측정)
+
+FoodOn·중국 식품 온톨로지·KEGG brite·SNOMED 을 넣기 전후로 `recommend` 를 다시 돌려
+비교했다.
+
+```
+md5  8a875c246e8f1e739a6951db6a860015   통합 전
+md5  8a875c246e8f1e739a6951db6a860015   통합 후
+행수 12,480 = 12,480     점수 전부 동일     Top30 겹침 30/30
+```
+
+"비슷" 이 아니라 **동일**하다. 추천 경로가 읽는 것은 `food_compound_long.csv`(영양소
+중량)와 `compound_depression.csv`(E) 뿐이고, 네 소스 중 어느 것도 거기 들어가지
+않는다. 논문 식 (1)(2) 의 정의상 당연하지만, 추측하지 않고 재실행해 확인했다.
+
+### §3.2 충실도 점검과 수정 (2026-11-09)
+
+"논문 §3.2 를 따른다" 고 적어 두고 실제로는 **명시된 규칙 중 둘을 빼먹고 있었다.**
+전수 대조한 결과다.
+
+| 논문 §3.2 가 명시한 규칙 | 수정 전 | 수정 후 |
+|---|:---:|:---:|
+| FDC 고유 식별자 사용 | O | O |
+| "removing unnecessary words that may follow the first comma" | **X** | **O** |
+| "exact matching … merge foods with identical labels" | O | O |
+| "transform plural words into singular form" | **X** | **O** |
+| "convert uppercase letters to lowercase" | O | O |
+| 카테고리 self-defined mapping rules | O | O |
+
+수정 전에는 논문이 든 **바로 그 예시**가 작동하지 않았다 —
+`Milk, whole, ready to drink` 가 그대로 남고 `Tomatoes`/`Tomato` 가 다른 키였다.
+
+#### (1) 은 일괄 절단이 아니다 — 민감도로 확인
+
+처음에는 "splitting the food labels by commas" 를 **첫 쉼표에서 통째로 자르는 것**으로
+구현했다. 결과가 무너졌다.
+
+| | 일괄 절단 | 불필요어만 제거 (채택) |
+|---|---:|---:|
+| 라벨 병합 후 | 303,515 | 475,627 |
+| 추천 코호트 음식 | 2,171 | 12,393 |
+| **Fig. 5 추천군 Top30** | **4/30** | **22/30** |
+| **비추천군 Bottom30** | **8/30** | **27/30** |
+| Top30 주류(Alcoholic Beverages) | 23 | 0 |
+
+A층 지표가 크게 퇴행하므로 §18.9 적용 규칙 2 에 따라 기각이다. 그리고 **논문 자신의
+표가 반증한다** — Table 2·3·4 의 음식명이 쉼표 뒤를 그대로 유지한다.
+
+```
+Lettuce, Romaine · Broccoli, raw · Goose egg, cooked · Milk, skim · Hot dogs, beef
+```
+
+첫 쉼표에서 잘랐다면 이 이름들이 나올 수 없다. 논문이 말한 것은 `'ready to drink'`
+같은 **불필요어 제거**다. 그래서 불필요어 목록(`common.UNNECESSARY`)으로 구현했다.
+
+```
+Milk, whole, ready to drink  ->  milk, whole      (ready to drink 만 제거)
+Lettuce, Romaine             ->  lettuce, romaine (유지)
+Peaches                      ->  peach            (단수화)
+```
+
+#### 구현하면서 만든 버그 둘 — 추천 상위에서 눈에 띄어 잡았다
+
+규칙을 넣고 Top 30 을 보다가 이상한 키가 보였다.
+
+```
+mustard spinach, , raw        ← 쉼표 두 개
+mcdonald'                     ← 소유격이 깨짐
+```
+
+| 버그 | 원인 | 건수 | 수정 |
+|---|---|---:|---|
+| 빈 쉼표 구간 | 괄호 제거(`(tendergreen)`)가 양옆 쉼표를 붙여 놓음 | 66 | `,\s*,` 를 합침 |
+| 소유격 파괴 | 단수화가 `'s` 의 `s` 를 복수형으로 오인 | 7 | 아포스트로피 앞 `s` 제외 |
+
+```
+Mustard spinach, (tendergreen), raw               ->  mustard spinach, raw
+Artichokes, (globe or french), frozen, unprepared ->  artichoke, frozen
+Rice, brown, parboiled, dry, UNCLE BEN'S          ->  rice, brown, parboiled, dry, uncle ben's
+```
+
+수정 후 빈 쉼표 0 건, 소유격 깨짐 1 건(`VEGAN IS BELIEVIN'` — 브랜드명이 실제로
+아포스트로피로 끝난다. 정상).
+
+**남겨 둔 것** — Top 30 의 3·4 위가 `mustard green, cooked, boiled, drained, with salt` /
+`without salt` 로 거의 같은 음식이 두 자리를 차지한다. 소금 유무로 나트륨이 다르니 FDC
+상 별개 항목이고 §3.2 도 합치라고 하지 않는다. 합치는 것은 논문 근거가 없는 C층
+판단이라 손대지 않았다.
+
+#### 수정 전후 — 모든 수치 재측정
+
+| | 수정 전 | 수정 후 |
+|---|---:|---:|
+| 라벨 병합 후 | 482,937 | **475,623** |
+| 음식 (compound ≥ 20) | 14,719 | **14,580** |
+| 추천 코호트 | 12,480 | **12,392** |
+| 총 triple | 3,291,731 | **3,270,143** |
+| Fig. 5 추천군 Top30 / 비추천군 Bottom30 | 22 / 27 | **22 / 27** (동일) |
+| Top30 교차 위반 | 2 | **2** (동일) |
+| **Top30 의 어패류** | **0** | **1** |
+| §5.1 방법 1 | 8/20 | **8/20** (바뀐 문항 0) |
+| §5.1 방법 2 | 4/15 | **1/15** (아래) |
+
+A층·방법 1 은 그대로이고 어패류가 하나 들어왔다. 충실도는 올랐는데 지표는 거의
+움직이지 않는다 — 병합 차이가 7,310 건(1.5%)뿐이기 때문이다.
+
+#### 방법 2 가 4/15 → 1/15 로 떨어진 이유는 링킹이 아니다
+
+표본이 바뀌면서 Diet 행의 음식 이름이 달라졌는데, 그 이름을 **PubMed 검색어로 그대로
+넣고 있다.**
+
+```
+"Mustard greens, cooked, boiled, drained, with salt" and depression  ->  0 건
+"Mustard spinach, (tendergreen), raw" and depression                 ->  0 건
+```
+
+FDC 라벨은 문헌 검색어가 될 수 없다. 논문은 `Lettuce`·`Onion`·`Garlic` 처럼 **일반명**을
+썼다. 방법 2 를 고치려면 검색어를 일반명으로 정규화해야 한다 — 수치 자체보다 이쪽이
+먼저다.
+
+#### 아직 논문 방식이 아닌 두 축
+
+음식 축만 고쳤다. 나머지 둘은 **절차가 아니라 결과를 가져온 상태**이고, 그렇게 적어 둔다.
+
+| 축 | 논문 §3.2 | 우리 |
+|---|---|---|
+| compound | "linked to KEGG **using their labels** … ignores case, singular and plural forms, as well as the word sequence" + 그리스문자 제약 | `setup/nutrient_kegg_map.csv` 사전 매핑표 180 개. 그중 **101 개는 공개 KG 의 `sameAs` 와 값까지 동일**하고 79 개는 자체 추가(지방산) |
+| disease | MeSH·SNOMED 라벨 매칭 | `Disease_Bacteria.jsonld` 의 taxid–MeSH 쌍을 그대로 읽음. SNOMED 없음 |
+
+### 엔티티 링킹 (논문 §3.2) — 우리가 수행한 것
+
+재현 트랙의 `eval/paper_kg_stats.linking()` 이 **논문 수치를 검증**한다면, 여기서는
+우리가 **직접 수행한** 링킹을 집계한다. `ourkg/out/linking_stats.csv`
+(`build.py food` 가 `food_link.json` 에 중간 수치를 남기고 `build.py kg` 가 표로 합친다).
+
+| 축 | 항목 | 값 | 논문 대응 |
+|---|---|---:|---|
+| food | FDC 원본 항목 | 2,101,279 | §3.1 34,250 food samples |
+| food | 라벨 병합 전 (KEGG 측정 보유) | 1,949,651 | |
+| food | **라벨 병합 후** (§3.2 exact matching) | **482,937** | "merge foods with identical labels" |
+| food | 음식당 compound ≥ 20 필터 후 | 14,719 | §4.2.1 135 food |
+| food | 세분 카테고리 (FDC category) | 265 | §3.2 128 distinct categories |
+| food | 상위 카테고리 (SR food group) | 27 | |
+| compound | nutrient → KEGG 매핑 | 180 | |
+| compound | 음식 행렬의 KEGG compound | 130 | §3.2 23,212 / §4.2.1 85 |
+| compound | ProMENDA E 의 KEGG compound | 1,412 | |
+| compound | KEGG brite 로 분류된 compound | 646 | §3.1 compound ontology |
+| microbe | NCBI taxonomy 링크 (taxid) | 127 | §3.2 984,031 gut microbiota |
+| microbe | KEGG organism 매칭 | 82 | |
+| disease | MeSH 링크 | 244 | §3.2 3,505 mental disorders |
+| disease | SNOMED CT 링크 | 1 | 배포본에 라벨·계층 없음 |
+| ontology | FoodOn ↔ 카테고리 | 19 | §3.1 FoodOn |
+| ontology | 중국 온톨로지 ↔ 카테고리 / 음식 | 39 / 172 | §3.1 Chinese Food Ontology |
+
+#### 병합이 실제로 일어난다 — 75%
+
+```
+1,949,651  →  482,937        (1,466,714 감소, 75.2%)
+```
+
+§3.2 의 핵심인 exact matching 병합이 작동한다. `foods.csv` 만 보면 `fdc_id` 14,719 =
+`food_key` 14,719 라 **병합이 0 인 것처럼 보이는데**, 그건 `음식당 compound ≥ 20`
+필터가 병합 **뒤에** 걸려 대표 항목만 남기 때문이다. 중간 수치를 산출물에 남기지
+않았던 탓이고, 이 표를 만든 이유다.
+
+#### 논문과의 규모 차이
+
+음식 축은 논문(1,220,480)보다 **크다**(1,949,651 → 482,937). FDC 배포본 전체를 쓰고
+branded_food 까지 포함하기 때문이다. 반대로 compound 축은 논문(23,212)보다 훨씬
+**작다**(130) — 우리는 FDC 가 **측정값으로 보고한 영양소**만 KEGG 에 링크하고,
+논문처럼 KEGG compound 전체를 싣지 않는다. 미생물 축(127 vs 984,031)도 같은 이유로,
+정신질환 연관 종만 남긴다.
+
+즉 **규모가 아니라 범위를 달리 잡은 것**이고, 그 선택이 §4.2 추천의 입력 밀도를
+논문보다 높인다(음식당 측정 compound 중앙값 47 vs 33).
 
 ## 4. 평가 — 논문 §5.1
 
 ### 방법 1 (human annotation) — Supplement Table 1 의 20문항
 
 논문은 전문가 3인과 대조해 정확도 0.95 / 0.90 / 0.95 를 보고한다. 전문가 답변 자체가
-공개되지 않았으므로(`eval/m1.py` 서두 참조) 이 수치는 재현 대상이 아니다. 대신 우리 KG 가
-각 측면을 답할 축을 갖췄는지를 집계한다. `ourkg/out/eval_method1.csv`
+공개되지 않았으므로(`eval/m1.py` 서두) 그 수치는 재현 대상이 아니다.
 
-| 측면 | 문항 수 | 판정 | 근거 |
-|---|---:|:---:|---|
-| weight calculation | 3 | O | 성분 중량 768,157건 (g/100g) |
-| compounds categories | 3 | O | KEGG compound 130 |
-| compounds in food and gut | 4 | O | FDC 성분 + KEGG compound-미생물 |
-| bacteria taxonomy | 3 | O | NCBI taxonomy 127종, 학명·rank·계통 갱신 |
-| food categories | 4 | △ | FDC SR 27군만. FoodOn·중국 식품 온톨로지 미통합 |
-| disease classification | 3 | △ | MeSH tree number 만. SNOMED CT 미통합 |
+**2026-11-06 변경.** 예전 판은 측면(aspect)마다 "축이 있는가" 를 손으로 O/△ 로 적고
+20문항이 그 판정을 상속했다. 그건 답변 **가능성**이지 답이 아니었다 — "완전 답변 13 /
+부분 7" 은 실제로 답을 맞혔다는 뜻이 전혀 아니다. 이제 `eval/m1.py` 의 **질의 함수
+20개를 그대로 재사용**해 우리 KG 에서 답을 뽑고 논문 답과 대조한다. `m1.KG` 를 상속해
+적재만 우리 산출물로 바꾼 어댑터(`OurKG`)를 쓰므로 질의는 한 줄도 다르지 않다.
 
-완전 답변 **13** / 부분 **7** / 불가 **0**
+| | 값 |
+|---|---|
+| 논문 답 재현 | **8 / 20** (온톨로지 축 통합 전 5) |
+| 재현 + 타당 | 8 / 20 |
+| 전문가 전원동의 16문항 중 | 6 |
+| 같은 질의를 공개 KG 에 돌리면 (`eval/m1.py`) | 18 / 20 |
+
+#13(정신질환 목록)은 원래 질의가 MiKG 원본 TTL 을 **파일에서 직접** 읽어 평가 대상 KG 를
+거치지 않았다. 그대로 두면 공개 KG 의 답을 우리 답으로 세게 된다. `m1.q13` 이 KG 가
+`mental_disorders()` 를 주면 그쪽을 쓰도록 고쳤고, 어댑터는 우리
+`microbe_disease_mikg.csv` 에서 공급한다. 공개 KG 쪽은 함수가 없어 기존 경로를 그대로
+타므로 18/20 은 바뀌지 않는다. **양쪽 분모가 20 으로 같다.**
+
+#### 온톨로지 축 통합 (2026-11-09)
+
+논문 §3.1 의 9개 소스 중 빠져 있던 넷을 레포의 공개 KG 에서 가져와 넣었다. 외부
+재수집은 하지 않는다. 연결 지점을 만들려고 **세분 카테고리 층**(음식 → FDC category →
+food_group)도 새로 두었다 — 논문 §3.2 의 2단 매핑 구조다.
+
+| 소스 | 추가 triple | 우리 엔티티와의 연결 | 방법 1 효과 |
+|---|---:|---|---|
+| 중국 식품 온톨로지 | 82,540 | 카테고리 39 · 음식 172 | **0 문항** |
+| FoodOn | 21,723 | 카테고리 19 | **0 문항** |
+| KEGG brite 분류축 | 3,506 | compound 646/1,469 분류 | **+3 문항** (#14 #15 #16) |
+| SNOMED CT | 285 | 질병 1 | **0 문항** |
+
+총 triple 3,168,163 → 3,291,731.
+
+#### 각 소스의 **원 라벨**로 맞췄다
+
+처음에는 라벨을 우리 쪽 이름으로 기록해 매핑이 `our == onto_label` 이 돼 버려 아무
+정보도 늘지 않았다. 세 가지를 고쳤다.
+
+1. **FoodOn 동의어를 가져온다** — `hasSynonym` 3,504 · `hasNarrowSynonym` 2,535.
+   라벨(3,607)만으로는 우리 카테고리와 거의 안 붙는다.
+2. **매핑에 그쪽 원 라벨을 적는다** — `Melons → melon plant`, `Carrots → carrot plant`,
+   `Lamb, goat, game → lamb`. 230 건 중 198 건이 우리 라벨과 다르다.
+3. **괄호·꼬리말 변형으로 매칭한다** — `Soy milk (milk) beverage` → `soy milk`.
+
+연결이 FoodOn 8→19, 중국 카테고리 20→39 · 음식 149→172 로 늘었다. 어댑터도 이 라벨을
+`cats()` 에 달아 질의가 볼 수 있게 했다(`category_ontology.csv`).
+
+**그래도 방법 1 은 8/20 그대로다.** 품질은 올랐지만 막힌 문항이 요구하는 이름이 애초에
+없기 때문이다 — 아래가 그 측정이다.
+
+**FoodOn·중국 온톨로지가 0 인 이유는 측정했다.** 막힌 문항이 요구하는 카테고리 이름이
+두 온톨로지 어디에도 없다.
+
+```
+라벨 + 동의어 전수 (FoodOn 14,809 · 중국 16,091)
+  "milk substitute" (#2)  → FoodOn 0건,  중국 0건
+  "baby food"       (#3)  → FoodOn 0건,  중국 0건
+  "soy milk"              → FoodOn 0건,  중국 2건 "Soy milk (milk) beverage"
+```
+
+중국 온톨로지는 두유를 **beverage** 로 분류하지만, #2 가 요구하는 이름은
+`Milk substitutes`(구 WWEIA 명칭)이고 그 문자열은 어디에도 없다.
+
+FDC/WWEIA 어휘이기 때문이다. 추천 점수에도 영향이 없다 — `D = E × Fᵀ` 의 입력은
+영양소 중량과 E 인데 두 온톨로지에는 중량이 없다.
+
+**SNOMED 이 0 인 이유**: 공개 KG 의 SNOMED 은 `Mental_health.jsonld` 의 284 노드뿐이고
+`rdf:value`(id 문자열)와 `sameAs` 10 건만 있다. **라벨도 상위 클래스도 없다.** 논문
+Table 1 이 적은 4,291,226 triple 은 배포되지 않았다. 그래서 #12(Mood / developmental
+상위 분류)는 여전히 답하지 못한다 — 공개 KG 도 못 하는 문항이다.
+
+**KEGG brite 는 효과가 있었다.** 통합 뒤 어댑터에서 두 가지를 더 고쳐야 실제로 작동했다.
+
+1. compound 라벨을 **KEGG 원 라벨**로 쓴다. 우리 ProMENDA 이름 `Thiamine` 은 KEGG 의
+   `Thiamine (Vitamin B1)` 에서 괄호 표기를 잃어, 질의가 `'Vitamin'` 으로 거르면 전부
+   떨어졌다.
+2. `nut2kegg` 를 음식 행렬의 compound **전부**로 채운다. 8 종만 넣었더니 q15 가 볼
+   성분이 없어 alkaloid 가 빈 목록이었다.
+
+#### 여기서 멈춘 이유 — #6·#7 은 넣으면 순환이다
+
+남은 KEGG 문항 #6·#7 은 **compound→미생물 대사 경로**를 묻는다. 공개 KG 의
+`KEGG_Compound_Bacteria.jsonld` 를 그대로 가져오면 바로 맞출 수 있다. 하지만 그건
+**평가가 검증하려는 대상 자체를 논문에서 복사해 오는 것**이다. q13 이 MiKG 원본 파일을
+직접 읽어 공개 KG 의 답을 우리 답으로 세던 것과 같은 오류다.
+
+경계는 이렇게 둔다.
+
+| 가져와도 되는 것 | 가져오면 안 되는 것 |
+|---|---|
+| **참조 데이터** — 분류 체계, 온톨로지 계층 (KEGG brite, FoodOn, 중국, SNOMED) | **발견 데이터** — 평가가 묻는 관계 (compound-미생물 경로, 미생물-질병 연관) |
+
+`ourkg` 의 compound-미생물 축은 KEGG REST 에서 compound → EC → KO → organism 으로
+**직접 유도**한 것이고(59 compound × 82 taxa), 논문보다 좁다. 그 좁음이 측정 결과다.
+
+#### 재현 못 한 12문항의 내역
+
+| 사유 | 문항 | 성격 |
+|---|---|---|
+| compound→미생물 대사 경로가 얇다 | #6 (#7 △) | 직접 유도의 한계. 논문 것을 복사하면 순환 |
+| FDC 카테고리·명명 어휘가 바뀜 | #2 #3 | 두유는 `Plant-based milk`, baby food 는 `Baby Toddler ..., Stage 1` |
+| FDC 스냅샷 값이 다름 | #4 | peach pie folate 논문 0.046 vs ourkg 0.0255 |
+| 음식 라벨 부재 ("Egg whites") | #8 | 코호트 차이. 공개 KG 도 △ |
+| SNOMED 라벨·계층이 배포되지 않음 | #12 | 공개 KG 도 X |
+| **논문 답 자체가 결함** | **#5 #9 #10** | **실패가 아니라 교정** |
+
+마지막 줄이 중요하다. #5 는 논문 답 `retinol 0.127 (milk)` 이 실제로는
+**"Ricotta cheese, whole milk"**, `0.702 (yogurt)` 가 **"Cereal (Kellogg's Special K
+Fruit & Yogurt)"** 에 붙은 것이다 — 부분 문자열 매칭 산물이라 공개 KG 에서도
+`valid=X` 다. #9·#10 은 논문 Query 1 의 미결합 `?unit` 결함이 만들어 낸
+"달걀 값 + 아무 음식 값" 조합을 그대로 재연하는 문항이다(`eval/m1.py` 의 `_mixed_diet`).
+우리 KG 는 중량 노드를 음식에 묶어 두었으므로 그런 조합이 **존재하지 않는다.**
+논문 답을 재현하지 못하는 것이 올바른 동작이다.
+
+반대로 #18(대장균 계통)은 예전 판에서 측면 단위로 O 였는데 실제 질의로는 어댑터를
+고치기 전까지 틀렸다 — `bpar` 를 taxid 가 아니라 이름으로 키잉했기 때문이다. 측면
+집계로는 이런 오류가 드러나지 않는다.
+
+#### 단위
+
+우리 long 표는 g, 공개 KG 는 FDC 원 단위(mg/µg)다. 공통 음식에서 잰 배율은
+lysine·retinol·vitc·potassium·b12 모두 10³ 이었다(중앙값 747~1335, 흩어짐은 FDC
+스냅샷 차이). 어댑터는 ×1000 으로 맞춘다. 8종 중 citric(C00158)·B-6 는 우리
+long 표에 없어 축이 7/8 이다.
 
 ### 방법 2 (문헌 논증) — 추론 15건 PubMed 검증
 
@@ -1308,9 +1637,11 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ## 16. 한계
 
-- **식품 온톨로지 미통합** — FoodOn·중국 식품 온톨로지가 없어 음식 분류가 FDC SR 27군에
-  머문다. 논문의 128 카테고리 체계와 대응되지 않는다.
-- **SNOMED CT 미통합** — 질환 분류는 MeSH tree number 만 쓴다.
+- **식품 온톨로지를 넣어도 분류 질문이 풀리지 않는다** (2026-11-09 통합 완료).
+  FoodOn·중국 식품 온톨로지를 넣었으나 논문이 요구하는 카테고리 이름("Milk substitutes",
+  "Baby Foods")이 두 온톨로지 어디에도 없다. FDC/WWEIA 어휘이기 때문이다.
+- **SNOMED CT 는 넣을 실체가 없다** — 배포본에 라벨·계층 없는 id 284 개뿐이다.
+  #12(Mood / developmental 상위 분류)는 공개 KG 도 답하지 못한다.
 - **미생물-정신질환이 얇다** — 공개 `Disease_Bacteria` 에서 MeSH F03 으로 걸러지는 관계는
   115건(질환 6종)뿐이고 우울증은 1건이다. MiKG 원본 경로로 406쌍을 보태도 논문이 말한
   1,234 에 못 미친다.

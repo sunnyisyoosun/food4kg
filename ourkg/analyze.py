@@ -336,9 +336,10 @@ def evaluate():
     """06 — 논문 §4.1 쿼리와 §5.1 두 평가법을 우리 KG 에 적용.
 
     A. §4.1 Query 1·2·3 을 ourkg.nt 위에서 SPARQL 로 실행 (Table 2·3·4 대응)
-    B. §5.1 방법 1 — Supplement Table 1 의 20문항을 우리 KG 가 답할 수 있는지
-       측면(aspect)별로 집계. 전문가 3인이 없으므로 정확도 0.95/0.90/0.95 자체는
-       재현 대상이 아니다(eval/m1.py 서두와 같은 이유). 답변 가능성만 본다.
+    B. §5.1 방법 1 — Supplement Table 1 의 20문항을 우리 KG 에 **직접 질의**해
+       논문 답과 대조한다. eval/m1.py 의 질의 20개를 그대로 재사용하고(m1.KG 상속),
+       적재만 우리 산출물로 바꾼다. 전문가 3인이 없으므로 정확도 0.95/0.90/0.95
+       자체는 재현 대상이 아니다(eval/m1.py 서두와 같은 이유).
     C. §5.1 방법 2 — 우리 KG 가 만든 추론 15건을 PubMed 로 검증.
        논문은 수작업 검색이었다. 여기서는 E-utilities 로 같은 판정(1/-1/0)을 자동화한다.
        1 = 두 엔티티가 함께 나오는 논문이 있음, 0 = 없음.
@@ -442,41 +443,179 @@ def evaluate():
     # ======================================================================
     if 'B' in PART:
         import paper_data
+        sys.path.insert(0, os.path.join(BASE, 'eval'))
+        import m1
 
-        print('\n[B] §5.1 방법 1 — 20문항 답변 가능성')
-        foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
-        long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
-        E = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
-        mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str})
-        md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
+        print('\n[B] §5.1 방법 1 — 20문항을 우리 KG 에 직접 질의')
+        # 예전 판은 측면(aspect)마다 '축이 있는가' 를 손으로 O/△ 로 적고 20문항이
+        # 그것을 상속했다. 그건 답변 **가능성**이지 답이 아니다. 이제 eval/m1.py 의
+        # 20개 질의 함수를 그대로 재사용해 **답을 뽑아 논문 답과 대조**한다.
+        # m1.KG 를 상속하고 적재만 우리 산출물로 바꾼다 — 질의 20개는 손대지 않는다.
 
-        # 측면별로 우리 KG 가 그 질문 유형을 답하는 데 필요한 축을 갖고 있는가
-        # 논문의 여섯 측면별로, 우리 KG 가 그 질문 유형을 답할 축을 갖췄는가.
-        # 온톨로지 축(FoodOn·중국 식품 온톨로지·SNOMED CT)은 통합하지 않았으므로
-        # 분류 계층을 요구하는 두 측면은 부분 답변(△)이다.
-        HAVE = {
-            'food categories': ('△', f'FDC {len(foods):,} 음식 / SR 27군. '
-                                     'FoodOn·Chinese Food Ontology 미통합이라 '
-                                     '온톨로지 계층 질문은 답하지 못한다'),
-            'weight calculation': ('O', f'성분 중량 {len(long):,} 건 (g/100g)'),
-            'compounds categories': ('O', f'KEGG compound {long["kegg"].nunique()}'),
-            'compounds in food and gut': ('O', 'FDC 성분 + KEGG compound-미생물 경로'),
-            'bacteria taxonomy': ('O', f'NCBI taxonomy {len(mic)} 종 (학명·계통·rank 갱신)'),
-            'disease classification': ('△', f'MeSH tree number {md.mesh_id.nunique()} 질환. '
-                                            'SNOMED CT 미통합'),
-        }
+        # m1.NUT 는 FDC nutrient_id 로 되어 있고 우리 long 표는 KEGG 로 되어 있다.
+        NUT2KEGG = {1214: 'C00047', 1190: 'C00504', 1105: 'C00473',
+                    1032: 'C00158', 1162: 'C00072', 1092: 'C00238',
+                    1178: 'C05776', 1175: None}      # 1175 B-6 는 KEGG 대응이 없다
+        # 우리 long 표는 g, 공개 KG 는 FDC 원 단위(mg/µg)다. 공통 음식에서 잰
+        # 배율은 공통 음식에서 재어 모두 10^3 이었다 (ourkg/RESULTS.md 방법 1).
+        G_TO_FDC = 1000.0
+
+        class OurKG(m1.KG):
+            def __init__(self):
+                dd = collections.defaultdict
+                foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
+                long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+                mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str})
+                md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'),
+                                 dtype={'taxid': str})
+                cm = pd.read_csv(os.path.join(OUT, 'compound_microbe.csv'),
+                                 dtype={'taxid': str})
+                cd = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
+
+                self.food = dict(zip(foods.fdc_id, foods.food_name))
+                key2fdc = dict(zip(foods.food_key, foods.fdc_id))
+                long = long.assign(fdc=long.food_key.map(key2fdc))
+
+                # nut2kegg 는 '음식 성분으로 측정된 compound' 집합이다 (q15 가
+                # .values() 로 쓴다). 공개 KG 는 Food_Nutrient 의 sameAs 전부를 담으므로
+                # 우리도 음식 행렬의 compound 전부를 넣는다 — 8종만 넣으면 안 된다.
+                self.w = dd(dict)
+                self.nut2kegg = {i: k for i, k in enumerate(sorted(set(long.kegg.dropna())))}
+                for nid, kegg in NUT2KEGG.items():
+                    if kegg is None:
+                        continue
+                    sub = long[long.kegg == kegg]
+                    self.w[nid] = {int(f): v * G_TO_FDC
+                                   for f, v in zip(sub.fdc, sub.amount_g)
+                                   if pd.notna(f)}
+
+                # 카테고리: FDC 세분류 → SR 27군 두 층 + 온톨로지 라벨.
+                self.f2c, self.clab, self.csub = dd(set), {}, dd(set)
+                fine_uri_lbl = {}
+                _nrm = lambda x: re.sub(r'[^a-z]', '', str(x).lower())
+                food_by_first = {}
+                for fdc, nm in zip(foods.fdc_id, foods.food_name):
+                    food_by_first.setdefault(_nrm(str(nm).split(',')[0]), int(fdc))
+                for fdc, cat, grp in zip(foods.fdc_id, foods.category, foods.food_group):
+                    for lv, val in (('cat', cat), ('grp', grp)):
+                        if pd.isna(val):
+                            continue
+                        u = f'ourkg:{lv}/{val}'
+                        self.clab[u] = str(val)
+                        if lv == 'cat':
+                            fine_uri_lbl[str(val)] = u
+                        if lv == 'cat':
+                            self.f2c[int(fdc)].add(u)
+                            if pd.notna(grp):
+                                self.csub[u].add(f'ourkg:grp/{grp}')
+                        else:
+                            self.f2c[int(fdc)].add(u)
+
+                # 온톨로지(FoodOn·중국)가 붙은 카테고리·음식에는 그쪽 라벨도
+                # 카테고리로 달아 준다. 안 그러면 통합해 놓고 질의가 못 본다.
+                ol = os.path.join(OUT, 'category_ontology.csv')
+                if os.path.exists(ol):
+                    o = pd.read_csv(ol)
+                    label2fine = {k: v for k, v in fine_uri_lbl.items()}
+                    for our, kind, onto_lab, src in zip(o['our'], o['kind'],
+                                                        o['onto_label'], o['source']):
+                        if not isinstance(onto_lab, str):
+                            continue
+                        u = f'onto:{src}/{onto_lab}'
+                        self.clab[u] = onto_lab
+                        if kind == 'category' and our in label2fine:
+                            self.csub[label2fine[our]].add(u)
+                        elif kind == 'food':
+                            fu = food_by_first.get(_nrm(our))
+                            if fu is not None:
+                                self.f2c[fu].add(u)
+
+                # KEGG brite 분류축. m1.KG 와 같은 형태로 맞춘다 —
+                #   klab   전체 URI -> 라벨 (compound 는 kegg entry URI)
+                #   ksub   클래스 URI -> 상위 클래스 URI
+                #   ktype  bare compound id -> 클래스 URI
+                KEGG_URI = 'https://www.kegg.jp/entry/'
+                self.klab = {}
+                self.ksub, self.ktype = dd(set), dd(set)
+                kc = os.path.join(OUT, 'kegg_class.csv')
+                cc = os.path.join(OUT, 'compound_class.csv')
+                if os.path.exists(kc):
+                    k1 = pd.read_csv(kc)
+                    # KEGG 원 라벨이 먼저다. 우리 ProMENDA 이름("Thiamine")은 KEGG 라벨
+                    # ("Thiamine (Vitamin B1)")의 괄호 표기를 잃어서, 질의가 'Vitamin'
+                    # 으로 거르면 전부 떨어진다.
+                    for u, lab, par in zip(k1.class_uri, k1.label, k1.parent_uri):
+                        if pd.notna(lab):
+                            self.klab[u] = lab
+                        if isinstance(par, str) and par:
+                            self.ksub[u].add(par)
+                for k, n in zip(cd.kegg, cd.name):       # KEGG 라벨이 없을 때만 보충
+                    if pd.notna(n):
+                        self.klab.setdefault(KEGG_URI + k, n)
+                if os.path.exists(cc):
+                    k2 = pd.read_csv(cc)
+                    for kid, cu in zip(k2.kegg, k2.class_uri):
+                        self.ktype[kid].add(cu)
+
+                self.bname = dict(zip(mic.taxid, mic.name))
+                self.b2c = dd(set)
+                for t, k in zip(cm.taxid, cm.kegg):
+                    self.b2c[t].add(k)
+                self.b2d, self.dlab = dd(set), {}
+                for t, mid, dis in zip(md.taxid, md.mesh_id, md.disease):
+                    self.b2d[t].add(mid)
+                    self.dlab[mid] = dis
+                self.menda = set(cd.kegg)
+
+                # MiKG 유래 정신질환 목록 — 우리 산출물에서 직접 준다.
+                # 이게 없으면 q13 이 MiKG 원본 TTL 을 읽어 공개 KG 의 답을 낸다.
+                mikg = pd.read_csv(os.path.join(OUT, 'microbe_disease_mikg.csv'))
+                self._mental = sorted(set(mikg.disease.dropna()))
+
+                # 계통: microbes.csv 의 lineage 로 부모 사슬을 만든다.
+                # 공개 KG 의 bpar 는 taxid -> taxid 다. 우리 lineage 는 이름뿐이라
+                # 상위 분류군은 이름을 그대로 노드 id 로 쓰고 bname 에 등록한다.
+                self.bpar = {}
+                for t, lin in zip(mic.taxid, mic.lineage):
+                    if pd.isna(lin):
+                        continue
+                    chain = [x.strip() for x in str(lin).split(';') if x.strip()]
+                    if not chain:
+                        continue
+                    self.bpar[t] = chain[-1]          # taxid -> 최근접 상위 (이름 노드)
+                    for i in range(len(chain) - 1, 0, -1):
+                        self.bpar[chain[i]] = chain[i - 1]
+                        self.bname.setdefault(chain[i], chain[i])
+                    self.bname.setdefault(chain[0], chain[0])
+
+            def mental_disorders(self):
+                return self._mental
+
+        kg = OurKG()
+        print(f'  적재: 음식 {len(kg.food):,}  영양소축 {len(kg.w)}/8  '
+              f'세균 {len(kg.bname)}  질환 {len(kg.dlab)}')
+
         rows = []
-        for no, q, aspect, ans, v0, v1, v2 in paper_data.TABLE1:
-            key = next((k for k in HAVE if k == aspect.lower().strip()), None)
-            mark, why = HAVE.get(key, ('?', f'측면 미분류: {aspect}'))
-            rows.append({'no': no, 'aspect': aspect, 'question': q,
-                         'paper_answer': ans, 'ourkg': mark, 'basis': why,
-                         'expert_consensus': int(v0 + v1 + v2 == 3)})
+        for t in m1.M1:
+            try:
+                rep, val, why = m1.QUERY[t['no']](kg)
+            except Exception as e:                      # 축이 없으면 그대로 기록한다
+                rep, val, why = 'X', 'X', f'{type(e).__name__}: {e}'
+            rows.append({'no': t['no'], 'aspect': t['attribute'],
+                         'question': t['question'], 'paper_answer': t['paper_answer'],
+                         'ourkg_reproduced': rep, 'ourkg_valid': val, 'note': why,
+                         'expert_consensus': int(t['consensus'])})
         b = pd.DataFrame(rows)
         b.to_csv(os.path.join(OUT, 'eval_method1.csv'), index=False)
-        print(b.groupby(['aspect', 'ourkg']).size().to_string())
-        print(f"  답변 가능 {int((b.ourkg == 'O').sum())}/20, 부분 {int((b.ourkg == '△').sum())}, "
-              f"불가 {int((b.ourkg == 'X').sum())}")
+        n = int((b.ourkg_reproduced != '-').sum())
+        rep = int((b.ourkg_reproduced == 'O').sum())
+        both = int(((b.ourkg_reproduced == 'O') & (b.ourkg_valid == 'O')).sum())
+        con = b[(b.expert_consensus == 1) & (b.ourkg_reproduced != '-')]
+        print(f'  논문 답 재현 {rep}/{n}   재현+타당 {both}/{n}   '
+              f'전문가 전원동의 {len(con)}문항 중 '
+              f'{int((con.ourkg_reproduced == "O").sum())}')
+        print(f'  (공개 KG 를 같은 질의로 돌리면 18/20 — eval/m1.py)')
+        print(b.groupby(['aspect', 'ourkg_reproduced']).size().to_string())
 
     # ======================================================================
     if 'C' in PART:

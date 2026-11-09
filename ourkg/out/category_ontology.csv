@@ -1,0 +1,228 @@
+our,kind,onto_label,source
+"Lamb, goat, game",category,lamb,FoodOn
+Shellfish,category,shellfish,FoodOn
+Pizza,category,pizza,FoodOn
+Melons,category,melon plant,FoodOn
+Carrots,category,carrot plant,FoodOn
+Broccoli,category,broccoli plant,FoodOn
+Cabbage,category,cabbage plant,FoodOn
+Onions,category,onion plant,FoodOn
+Shellfish,category,Shellfish,FoodOn
+"Lamb, goat, game",category,"Lamb, goat, game",FoodOn
+"Bean, pea, legume dishes",category,"Bean, pea, legume dishes",FoodOn
+"Lamb, Veal, and Game Products",category,"Lamb, Veal, and Game Products",FoodOn
+Pizza,category,Pizza,FoodOn
+Fish,category,Fish,FoodOn
+"Chicken, whole pieces",category,"Chicken, whole pieces",FoodOn
+Rice,category,Rice,FoodOn
+Corn,category,Corn,FoodOn
+"Turkey, duck, other poultry",category,"Turkey, duck, other poultry",FoodOn
+Macaroni and cheese,category,Macaroni and cheese,FoodOn
+Corn,category,corn,Chinese
+Wheat,food,wheat,Chinese
+Corn,category,corn,Chinese
+Millet,food,millet,Chinese
+Barley,food,barley,Chinese
+Buckwheat,food,buckwheat,Chinese
+Potato,food,potato,Chinese
+Potato,food,potato,Chinese
+Cassava,food,cassava,Chinese
+Sweet potato,food,sweet potato,Chinese
+Sunflower seeds,food,sunflower seeds,Chinese
+Soybean,food,soy bean,Chinese
+Green peas,food,green peas,Chinese
+Sugar,food,Sugar,Chinese
+Celery,food,celery,Chinese
+Spinach,category,spinach,Chinese
+Parsley,food,parsley,Chinese
+Fennel,food,fennel,Chinese
+Cauliflower,food,cauliflower,Chinese
+Cauliflower,food,cauliflower,Chinese
+Broccoli,category,broccoli,Chinese
+Carrot,food,carrot,Chinese
+Carrot,food,carrot,Chinese
+Taro,food,taro,Chinese
+Yam,food,yam,Chinese
+Burdock,food,burdock,Chinese
+Melon,food,Melon,Chinese
+Cucumber,food,cucumber,Chinese
+Squash,food,squash,Chinese
+Balsam-pear (bitter gourd),food,balsam pear,Chinese
+Gourd,food,gourd,Chinese
+Chayote,food,chayote,Chinese
+Soybean,food,soybean,Chinese
+Green pepper,food,green pepper,Chinese
+Chili,food,chili,Chinese
+Tomato products,food,tomato,Chinese
+Lettuce,food,lettuce,Chinese
+Lettuce,food,Lettuce (cabbage),Chinese
+Garlic,food,garlic,Chinese
+Garlic,food,garlic,Chinese
+Lotus root,food,lotus root,Chinese
+Cress,food,cress,Chinese
+Bean sprouts,food,bean sprouts,Chinese
+Asparagus,food,asparagus,Chinese
+Okra,food,okra,Chinese
+Chicory beverage,food,chicory,Chinese
+Mushroom,food,mushroom,Chinese
+Fennel,food,Fennel,Chinese
+Pineapple,category,pineapple (Ananas sativus),Chinese
+Arrowroot,food,arrowroot,Chinese
+Lemon grass (citronella),food,Lemon grass,Chinese
+Fruit,food,"Fruit (garden, fruit)",Chinese
+Apple,food,apple,Chinese
+Pear,food,pear,Chinese
+Pear,food,pear,Chinese
+Pear,food,pear,Chinese
+Orange,food,orange,Chinese
+Orange,food,orange,Chinese
+Banana,food,banana,Chinese
+Mango,food,mango,Chinese
+Fig,food,fig,Chinese
+Avocado,food,avocado,Chinese
+Guava,food,guava,Chinese
+Mangosteen,food,mangosteen,Chinese
+Starfruit,food,star fruit,Chinese
+Dragon fruit,food,dragon fruit,Chinese
+Watermelon,food,watermelon,Chinese
+Cantaloupe,food,cantaloupe,Chinese
+Persimmon,food,persimmon,Chinese
+Peach,food,peach,Chinese
+Plum,food,plum,Chinese
+Apricot,food,apricot,Chinese
+Plum,food,plum,Chinese
+Coconut,food,coconut,Chinese
+Tea,category,tea,Chinese
+Tea,category,tea,Chinese
+Pepper,food,pepper,Chinese
+Pepper,food,pepper,Chinese
+Spices,food,spices,Chinese
+Thyme,food,thyme,Chinese
+Chrysanthemum,food,chrysanthemum,Chinese
+Rhubarb,food,"Rhubarb, seed yellow",Chinese
+Bamboo shoots,food,Bamboo shoots,Chinese
+Passion fruit,food,Passion fruit,Chinese
+Goat,food,goat,Chinese
+"Lamb, goat, game",category,lamb,Chinese
+"Turkey, duck, other poultry",category,Turkey,Chinese
+Ostrich,food,ostrich,Chinese
+Quail,food,quail,Chinese
+Egg,food,egg,Chinese
+Duck egg,food,duck egg,Chinese
+Duck egg,food,Duck egg,Chinese
+Quail egg,food,quail egg,Chinese
+Thyme,food,thyme,Chinese
+Pheasant,food,pheasant,Chinese
+Rabbit,food,rabbit,Chinese
+cod,food,cod(Gadus morrhua),Chinese
+salmon,food,Salmon (SEA),Chinese
+salmon,food,salmon,Chinese
+Lobster,food,lobster,Chinese
+Shrimp,food,shrimp,Chinese
+catfish,food,catfish,Chinese
+salmon,food,Salmon (fresh water),Chinese
+Crayfish,food,Crayfish (crayfish),Chinese
+Semolina,food,semolina,Chinese
+Corn flour,food,Corn flour,Chinese
+Rye flour,food,Rye flour,Chinese
+Buckwheat flour,food,Buckwheat flour,Chinese
+Sorghum flour,food,Sorghum flour,Chinese
+Rice,category,rice,Chinese
+Millet,food,millet,Chinese
+Oats (Includes foods for USDA's Food Distribution Program),food,oats,Chinese
+Potato,food,"Potato, beans, related plant products",Chinese
+Potato chips,category,potato chips,Chinese
+Tapioca,food,Tapioca,Chinese
+Tapioca,food,tapioca,Chinese
+Chestnuts,food,chestnuts,Chinese
+"Beef, excludes ground",category,"Beef, lamb meal",Chinese
+Sesame oil,food,Sesame oil,Chinese
+Olive oil,food,Olive oil,Chinese
+Cottonseed oil,food,Cottonseed oil,Chinese
+Margarine,category,Margarine (margarine),Chinese
+Shortening,food,Shortening (cake oil),Chinese
+Coconut oil,food,Coconut oil,Chinese
+Sugar,food,"Sugar, processed sugar and sugar products",Chinese
+Molasses,food,molasses,Chinese
+Duck,food,Duck.,Chinese
+Goose,food,Goose.,Chinese
+"Turkey, duck, other poultry",category,Turkey.,Chinese
+Poultry Products,category,"Poultry, fat",Chinese
+Gravy,food,gravy,Chinese
+Bacon,category,Bacon products,Chinese
+Corned beef,food,Corned beef products,Chinese
+Caviar,food,caviar,Chinese
+Jellyfish,food,jelly fish,Chinese
+Fish oil,food,"Fish oil, fat",Chinese
+Fish oil,food,fish oil products,Chinese
+Pickles,food,pickles,Chinese
+Kimchi,food,kimchi,Chinese
+TOMATO JUICE,food,Tomato juice,Chinese
+Fruit,food,"Fruit, nuts, processed goods",Chinese
+Peanut butter,food,peanut butter,Chinese
+Baked Products,category,"Baked, fried nuts and nut processing",Chinese
+Cornstarch,food,cornstarch,Chinese
+Tapioca,food,tapioca,Chinese
+Vermicelli,food,vermicelli,Chinese
+"Bean, pea, legume dishes",category,bean products,Chinese
+Egg,food,egg products,Chinese
+"Cake, Cookie & Cupcake Mixes",category,cake,Chinese
+Bread,food,bread,Chinese
+Shortening bread,food,Shortening bread,Chinese
+Cookie,food,cookie,Chinese
+Cookies,food,cookies,Chinese
+"Chips, Pretzels & Snacks",category,chips,Chinese
+Confectionery Products,category,"Confectionery, chocolates, preserves, and similar foods",Chinese
+Candy,category,candy,Chinese
+Chocolate,category,chocolate,Chinese
+MILK CHOCOLATE,food,milk chocolate,Chinese
+Chocolate,category,chocolate,Chinese
+Candy,category,candy,Chinese
+Prune,food,prune,Chinese
+Prune,food,prune,Chinese
+Rice,category,"Rice, flour, semi-finished products",Chinese
+Macaroni,food,macaroni,Chinese
+Rice cake,food,rice cake,Chinese
+Butter oil,food,butter oil,Chinese
+Cheese,category,Cheese (cheese),Chinese
+cottage cheese,food,cottage cheese,Chinese
+Tomato products,food,"Tomato, canned tomato paste",Chinese
+Bamboo shoots,food,Bamboo shoots,Chinese
+Sauce,food,sauce,Chinese
+Sauce,food,Sauce,Chinese
+Tomato sauce,food,TomatoSauce,Chinese
+Mayonnaise,category,mayonnaise,Chinese
+Mayonnaise,category,mayonnaise,Chinese
+Sauce,food,sauce,Chinese
+Mustard,food,mustard,Chinese
+Ice cream,food,ice cream,Chinese
+Ice cream bar,food,ice cream bar,Chinese
+Pectin,food,"Pectin, pectin, and pectin esters",Chinese
+Pectin,food,pectin,Chinese
+Beverage,food,"Beverage, wine and alcohol",Chinese
+Alcohol,category,alcohol,Chinese
+Beer,category,beer,Chinese
+Wine,category,wine,Chinese
+Wine,category,wine,Chinese
+Other Drinks,category,"Other drinks, spirits",Chinese
+Soft drink,food,soft drink,Chinese
+Carbonated beverage,food,Carbonated beverage (soda water),Chinese
+Fruit juice,food,Fruit juice (pulp),Chinese
+Vegetable juice,category,Vegetable juice (pulp),Chinese
+Squash,food,squash,Chinese
+Fruit,food,fruit beverage,Chinese
+Soy milk,food,Soy milk (milk),Chinese
+Soy milk,food,Soy milk (milk) beverage,Chinese
+Almond milk,food,Almond milk (milk),Chinese
+Tea,category,Tea beverage (tea soup),Chinese
+Fruit juice,food,"Fruit juice, tea drinks and fruit tea drinks",Chinese
+Coffee,category,coffee,Chinese
+Cocoa,food,cocoa,Chinese
+Sports drink,food,sports drink,Chinese
+Other Drinks,category,other drinks,Chinese
+Tea,category,Tea products,Chinese
+Beverage,food,"Beverage, wine and alcohol special raw materials",Chinese
+Rice paper,food,rice paper,Chinese
+Rice paper,food,rice paper,Chinese
+Squash,food,squash,Chinese
+Cracker,food,cracker,Chinese
