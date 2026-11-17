@@ -716,10 +716,45 @@ def evaluate():
             if len(sample) == 15:
                 break
 
+        def _evidence_or(ev):
+            """근거 물질 이름 -> OR 확장 구절.
+
+            KG 의 물질 표기와 문헌 표기가 어긋나 3항 공출현이 0 이 되는 경우가
+            많았다. 논문 Table 5 의 Diet 7 건은 3항에서 전멸했는데, 근거가
+            `L-Threonine`/`Threonine`(같은 물질을 따로 씀)·`Ascorbate`(문헌은
+            ascorbic acid)·`alpha-Tocopherol` 처럼 표기 문제였다. 그래서
+            **별도 기준을 만들지 않고 3항 쿼리 안에서** 이름만 넓힌다.
+            기준은 그대로 둘(3항/2항)이고, 우리 15 건과 논문 15 건에 같이 적용한다.
+
+              - 입체·염·위치 접두어 제거: L- D- DL- alpha- beta- gamma- delta-
+                cis- trans-, 그리고 11Z- 처럼 숫자로 시작하는 locant
+              - 산/음이온 호환: -ate <-> -ic acid (ascorbate <-> ascorbic acid)
+            """
+            base = str(ev).strip()
+            out = [base]
+            stripped = re.sub(r'^(?:[0-9]+[A-Za-z]?-|L-|D-|DL-|alpha-|beta-|'
+                              r'gamma-|delta-|cis-|trans-)+', '', base,
+                              flags=re.I).strip()
+            if stripped and stripped.lower() != base.lower():
+                out.append(stripped)
+            for t in list(out):
+                m = re.match(r'^(.*?)ate$', t, flags=re.I)
+                if m and len(m.group(1)) > 2:
+                    out.append(m.group(1) + 'ic acid')
+                m = re.match(r'^(.*?)ic acid$', t, flags=re.I)
+                if m and len(m.group(1)) > 2:
+                    out.append(m.group(1) + 'ate')
+            seen, uniq = set(), []
+            for t in out:
+                if t.lower() not in seen:
+                    seen.add(t.lower())
+                    uniq.append(t)
+            return '(' + ' OR '.join(f'"{t}"' for t in uniq) + ')'
+
         def pubmed(terms, extra=None):
             q = ' AND '.join(f'"{t}"' for t in terms if t)
             if extra:
-                q += f' AND "{extra}"'
+                q += f' AND {_evidence_or(extra)}'
             r = S.get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi',
                       params={'db': 'pubmed', 'term': q, 'retmax': 3, 'retmode': 'json'},
                       timeout=60)

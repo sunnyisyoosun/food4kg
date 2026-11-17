@@ -5,7 +5,7 @@ no,question,attributes,ourkg,pubmed,term_used,term_level,n_hits_with_evidence,n_
 3,"Beerwurst, pork and beef and depression",Diet recommendation,Palmitic acid,,Beerwurst,0,0,0,0
 4,Autistic disorder and Cognition disorders,Complication,Bacillus mycoides,,Autistic disorder,0,0,658,0
 5,Personality disorder and Sleep disorders,Complication,Klebsiella pneumoniae,,Personality disorder,0,0,56,0
-6,Jam and depression,Diet recommendation,11Z-Eicosenoic acid,,Jam,0,0,192,0
+6,Jam and depression,Diet recommendation,11Z-Eicosenoic acid,,Jam,0,0,193,0
 7,Bipolar disorder and Sex behavior disorder,Complication,Streptococcus thermophilus,,Bipolar disorder,0,0,842,0
 8,"Lettuce, cos or romaine, raw and depression",Diet recommendation,L-Lysine,,Lettuce,0,0,16,0
 9,Anxiety disorders and Personality disorder,Complication,Lactobacillus paracasei,,Anxiety disorders,0,0,1472,0
@@ -13,4 +13,4 @@ no,question,attributes,ourkg,pubmed,term_used,term_level,n_hits_with_evidence,n_
 11,"Beverages, FUZE, orange mango, fortified with vitamins A, C, E, B6 and depression",Diet recommendation,Ascorbic acid,15880960;12062570,Beverages,0,2,484,1
 12,Autistic disorder and Sleep disorders,Complication,Escherichia,,Autistic disorder,0,0,115,0
 13,"McDONALD'S, Bacon Ranch Salad without chicken and depression",Diet recommendation,Sucrose,,Bacon,1,0,137,0
-14,Sex behavior disorder and Sleep disorders,Complication,Clostridium ramosum,,Sex behavior disorder,0,0,368,0
+14,Sex behavior disorder and Sleep disorders,Complication,Clostridium ramosum,,Sex behavior disorder,0,0,369,0
