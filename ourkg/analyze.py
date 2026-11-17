@@ -716,12 +716,11 @@ def evaluate():
             if len(sample) == 15:
                 break
 
-        # 근거 물질 이름을 넓혀 보는 시도는 걷어냈다 (2026-11-17).
-        # 논문 Table 5 의 Diet 7 건이 3항에서 0/7 이라 표기 문제(L-Threonine 과
-        # Threonine 을 따로 씀, Ascorbate vs ascorbic acid, alpha-Tocopherol)를
-        # 의심했다. 입체·염·locant 접두어 제거와 -ate <-> -ic acid 를 OR 로 묶어
-        # 재 봤더니 **30 행 전부 수치가 같았다.** 3항이 0 인 것은 검색어가 아니라
-        # 기준 때문이다. 효과 0 인 분기를 남기지 않는다 — RESULTS §4.3.
+        # 판정은 '두 엔티티 + KG 가 댄 근거' 세 항의 공출현(3항)으로 하고, 두 항만의
+        # 공출현(2항)도 같이 적는다. 2항만 쓰면 anxiety+depression 이 19 만 건이라
+        # 아무것도 검증하지 못한다. 근거 물질 이름을 넓혀 보는(L-/alpha- 접두어 제거,
+        # -ate <-> -ic acid OR 확장) 시도는 30 행 전부 수치가 같아 걷어냈다 — 3항이
+        # 0 인 것은 검색어가 아니라 기준 때문이다 (RESULTS §4.3).
         def pubmed(terms, extra=None):
             q = ' AND '.join(f'"{t}"' for t in terms if t)
             if extra:
@@ -736,63 +735,69 @@ def evaluate():
             except Exception:
                 return 0, []
 
-        rows = []
-        for i, inf in enumerate(sample, 1):
-            # 판정은 '두 엔티티 + KG 가 댄 근거' 세 항이 모두 함께 나오는 논문이
-            # 있는가로 한다. 질환 이름 두 개만으로 검색하면 anxiety+depression 처럼
-            # 1만 건이 나와 아무것도 검증하지 못한다(그 수치는 참고용으로만 남긴다).
-            ladder = inf.get('ladder') or [inf['terms'][0]]
-            n = n_pair = 0
-            ids, used, level = [], inf['terms'][0], 0
-            for lv, term in enumerate(ladder):
-                terms = [term] + inf['terms'][1:]
-                n, ids = pubmed(terms, inf['evidence'])
-                n_pair, _ = pubmed(terms)
-                used, level = term, lv
-                if n:
+        def judge(terms, evidence, ladder=None):
+            """한 건을 3항·2항 두 자로 잰다. 음식명은 일반명 사다리를 올리며 재시도.
+            우리 15 건과 논문 자신의 15 건을 **같은 함수로** 잰다."""
+            ids, n3, n2, term, lv = [], 0, 0, terms[0], 0
+            for lv, term in enumerate(ladder or terms[:1]):
+                n3, ids = pubmed([term] + terms[1:], evidence)
+                n2, _ = pubmed([term] + terms[1:])
+                if n3:
                     break
-            rows.append({'no': i - 1, 'question': inf['q'], 'attributes': inf['type'],
-                         'ourkg': inf['evidence'], 'pubmed': ';'.join(ids[:2]),
-                         'term_used': used, 'term_level': level,
-                         'n_hits_with_evidence': n, 'n_hits_pair_only': n_pair,
-                         'result': 1 if n else 0})
-            print(f"  {i:2d}. {inf['q'][:44]:46s} {inf['evidence'][:20]:22s} "
-                  f"[{used[:14]:16s}] 근거포함={n:5d}  두항만={n_pair:6d}"
-                  f"  -> {'1' if n else '0'}")
-        t5 = pd.DataFrame(rows)
-        t5.to_csv(os.path.join(OUT, 'eval_method2.csv'), index=False)
-        # --- 같은 자로 재기. 우리 기준(3항 공출현)을 **논문 자신의 15건**에 적용해
-        # 보정값을 얻는다. 이것 없이 "우리 x/15 vs 논문 11/15" 를 비교하면 자가 다르다.
+            return {'evidence': evidence, 'pubmed': ';'.join(ids[:2]),
+                    'term_used': term, 'term_level': lv,
+                    'n_hits_with_evidence': n3, 'n_hits_pair_only': n2,
+                    'result': 1 if n3 else 0}
+
+        # 우리 15 건과 논문 15 건을 한 루프에서 잰다 — (라벨, 질문, 분야, 근거,
+        # 검색어, 사다리, 논문판정). 보정값이 자의 차이가 아니라 대상의 차이가 되게.
         from paper_data import TABLE5 as _PT5
-        cal = []
-        for _no, _q, _attr, _ev, _pmid, _res in _PT5:
-            _a, _b = [x.strip() for x in _q.split(' and ')]
-            _n3, _ = pubmed([_a, _b], _ev)
-            _n2, _ = pubmed([_a, _b])
-            cal.append({'no': _no, 'attributes': _attr, 'question': _q,
-                        'evidence': _ev, 'paper_result': _res,
-                        'n_hits_with_evidence': _n3, 'n_hits_pair_only': _n2})
-        cdf = pd.DataFrame(cal)
-        cdf.to_csv(os.path.join(OUT, 'eval_method2_calibration.csv'), index=False)
+        cases = [('ourkg', i['q'], i['type'], i['evidence'], i['terms'],
+                  i.get('ladder'), None) for i in sample]
+        cases += [('paper', q, at, ev, [x.strip() for x in q.split(' and ')], None, rs)
+                  for _n, q, at, ev, _p, rs in _PT5]
+        rows = []
+        for who, q, attr, ev, terms, ladder, pres in cases:
+            r = judge(terms, ev, ladder)
+            r.update(who=who, question=q, attributes=attr, paper_result=pres)
+            rows.append(r)
+            print(f"  [{who:5s}] {q[:40]:42s} {ev[:20]:22s} "
+                  f"[{r['term_used'][:14]:16s}] 근거포함={r['n_hits_with_evidence']:5d}"
+                  f"  두항만={r['n_hits_pair_only']:6d}  -> {r['result']}")
+        all_rows = pd.DataFrame(rows)
 
-        up = int((t5.term_level > 0).sum())
-        print(f"\n  확인됨(1) {int((t5.result == 1).sum())}/15, "
+        # 두 파일은 **같은 스키마**다. 열을 따로 고르지 않는다 — 보정값은 우리 자를
+        # 논문 15 건에 그대로 댄 것이라, 같은 열로 나란히 읽히는 게 맞다.
+        def dump(who, name):
+            d = all_rows[all_rows.who == who].reset_index(drop=True)
+            d.insert(0, 'no', d.index)
+            d.to_csv(os.path.join(OUT, name), index=False)
+            return d
+
+        t5 = dump('ourkg', 'eval_method2.csv')
+        cdf = dump('paper', 'eval_method2_calibration.csv')
+
+        print(f"\n  확인됨(1) {int(t5.result.sum())}/15, "
               f"미확인(0) {int((t5.result == 0).sum())}/15   "
-              f"(논문 Table 5: 11 / 3 / 반대 1)")
-        print(f"  일반명으로 올려서 맞은 것 {up}건, 근거 물질 고유 "
-              f"{t5.ourkg.nunique()}종 (전판 15건 중 4건이 같은 물질이었다)")
-        o3 = int((t5.n_hits_with_evidence > 0).sum())
-        o2 = int((t5.n_hits_pair_only > 0).sum())
-        c3 = int((cdf.n_hits_with_evidence > 0).sum())
-        c2 = int((cdf.n_hits_pair_only > 0).sum())
-        print()
-        print('  같은 자로 — 기준별 비교')
-        print(f'    {"기준":22s}{"우리 15건":>10s}{"논문 15건":>12s}')
-        print(f'    {"3항 공출현(엄격)":22s}{o3:>8d}/15{c3:>10d}/15')
-        print(f'    {"2항 공출현(논문에 가까움)":22s}{o2:>8d}/15{c2:>10d}/15')
-        print(f'    논문이 보고한 값: 11/15 (confirmed) — 2항 기준과 비슷하다')
-        print('    → 엄격 기준으로는 논문 자신도 거의 통과하지 못한다.')
-
+              f"(논문 Table 5: 11 / 3 / 반대 1).  일반명으로 올려서 맞은 것 "
+              f"{int((t5.term_level > 0).sum())}건, 근거 물질 고유 "
+              f"{t5.evidence.nunique()}종")
+        # 자 둘을 한 표로 — 각 자가 몇 건을 통과시키는지, 그리고 그 자가 논문
+        # 자신의 라벨(confirmed 11 / non-confirmed 4)을 가르는지. 둘 다 못 가른다:
+        # 2항은 non-confirmed 도 3/4 통과, 3항은 confirmed 중 1/11 통과 (RESULTS §4.3).
+        conf = cdf.paper_result == 1
+        print('\n  같은 자로 — 기준별 비교 (논문 보고값 11/15 는 2항에 가깝다)')
+        print(f'    {"기준":24s}{"우리15":>7s}{"논문15":>8s}'
+              f'{"confirmed":>11s}{"non-conf":>10s}')
+        for lbl, col in [('3항 공출현(엄격)', 'n_hits_with_evidence'),
+                         ('2항 공출현(느슨)', 'n_hits_pair_only')]:
+            hit = cdf[col] > 0
+            print(f'    {lbl:24s}{int((t5[col] > 0).sum()):>4d}/15'
+                  f'{int(hit.sum()):>5d}/15'
+                  f'{int((hit & conf).sum()):>8d}/{int(conf.sum())}'
+                  f'{int((hit & ~conf).sum()):>7d}/{int((~conf).sum())}')
+        print('    → 엄격 기준으로는 논문 자신도 1/15 다. 2항은 논문 값에 가깝지만'
+              ' non-confirmed 도 통과시켜 판별력이 없다.')
 
 def compare():
     """E 를 만드는 방식들을 같은 기준으로 나란히 비교한다.

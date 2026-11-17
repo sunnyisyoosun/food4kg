@@ -1,16 +1,16 @@
-no,attributes,question,evidence,paper_result,n_hits_with_evidence,n_hits_pair_only
-0,Complication,Autistic disorder and depression,Bifidobacterium longum,1,0,1020
-1,Complication,Parkinson disorder and depression,Streptococcus mutans,1,0,4
-2,Complication,Learning disabilities and autism,Escherichia coli,1,0,893
-3,Complication,Anxiety and depression,Escherichia coli,1,40,194413
-4,Complication,Bipolar disorder and depression,Lactobacillus plantarum,1,0,21563
-5,Complication,Learning disabilities and depression,Bacillus cereus,0,0,634
-6,Complication,Parkinson disorder and autism,Lactobacillus reuteri,0,0,0
-7,Complication,Alzheimer Disease and autism,Bacteroides fragilis,1,0,1448
-8,Diet recommendation,Garlic and Alzheimer Disease,Threonine,1,0,69
-9,Diet recommendation,Milk and Learning disabilities,alpha-Tocopherol,0,0,28
-10,Diet recommendation,Egg products and depression,Cystine,-1,0,1
-11,Diet recommendation,Coffee and parkinson disorder,Threonine,1,0,0
-12,Diet recommendation,Lettuce and anxiety,Nicotinic acid,1,0,6
-13,Diet recommendation,Sweets and depression,L-Threonine,1,0,123
-14,Diet recommendation,Onion and depression,Ascorbate,1,0,32
+no,evidence,pubmed,term_used,term_level,n_hits_with_evidence,n_hits_pair_only,result,who,question,attributes,paper_result
+0,Bifidobacterium longum,,Autistic disorder,0,0,1020,0,paper,Autistic disorder and depression,Complication,1.0
+1,Streptococcus mutans,,Parkinson disorder,0,0,4,0,paper,Parkinson disorder and depression,Complication,1.0
+2,Escherichia coli,,Learning disabilities,0,0,893,0,paper,Learning disabilities and autism,Complication,1.0
+3,Escherichia coli,42816272;42203173,Anxiety,0,40,194413,1,paper,Anxiety and depression,Complication,1.0
+4,Lactobacillus plantarum,,Bipolar disorder,0,0,21563,0,paper,Bipolar disorder and depression,Complication,1.0
+5,Bacillus cereus,,Learning disabilities,0,0,634,0,paper,Learning disabilities and depression,Complication,0.0
+6,Lactobacillus reuteri,,Parkinson disorder,0,0,0,0,paper,Parkinson disorder and autism,Complication,0.0
+7,Bacteroides fragilis,,Alzheimer Disease,0,0,1448,0,paper,Alzheimer Disease and autism,Complication,1.0
+8,Threonine,,Garlic,0,0,69,0,paper,Garlic and Alzheimer Disease,Diet recommendation,1.0
+9,alpha-Tocopherol,,Milk,0,0,28,0,paper,Milk and Learning disabilities,Diet recommendation,0.0
+10,Cystine,,Egg products,0,0,1,0,paper,Egg products and depression,Diet recommendation,-1.0
+11,Threonine,,Coffee,0,0,0,0,paper,Coffee and parkinson disorder,Diet recommendation,1.0
+12,Nicotinic acid,,Lettuce,0,0,6,0,paper,Lettuce and anxiety,Diet recommendation,1.0
+13,L-Threonine,,Sweets,0,0,123,0,paper,Sweets and depression,Diet recommendation,1.0
+14,Ascorbate,,Onion,0,0,32,0,paper,Onion and depression,Diet recommendation,1.0

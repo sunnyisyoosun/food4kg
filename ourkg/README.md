@@ -170,8 +170,10 @@ Energy drink (HFCS) / Butternut squash.
 (논문이 한 것)이고 자동화로 대체되지 않는다. 모드·설정 선택에는 §4.2.3 서술과
 ModiMedDiet 외부 정답셋을 쓴다.
 
-판정 세부는 `out/eval_method2.csv` 에 `term_used`·`term_level`(일반명 사다리를 몇
-단계 올렸는가)과 함께 있다.
+판정 세부는 `out/eval_method2.csv`(우리 15건)와 `out/eval_method2_calibration.csv`
+(논문 15건)에 있다. **두 파일은 같은 스키마**다 — 같은 `judge()` 로 재고 `term_used`·
+`term_level`(일반명 사다리를 몇 단계 올렸는가)까지 같이 적는다. 보정값은 우리 자를
+논문 15건에 그대로 댄 것이라 나란히 읽혀야 한다.
 
 ## 설계 결정 (실행 전에 고정, 결과를 보고 고르지 않았다)
 
