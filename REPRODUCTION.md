@@ -3536,6 +3536,57 @@ Fig 4(c) 85 중 KEGG 해소   58/85  ->  73/85   (alias 적용 시)
 남은 12 건(미네랄 10 · Fructose · Galactose)은 재현되지 않는다 — 배포된 KEGG
 서브셋에 해당 라벨 자체가 없다.
 
+### 17.31 Query 1 교정판 — 논문 Table 2 는 8~82 배 과대하다 (2026-11-09)
+
+§17.2 에서 "Table 2 의 값이 올바른 합의 30~70 배" 라고 적었는데, 그건 Python 으로
+우회 계산한 추정이었다. 이번에 **교정판 SPARQL 을 직접 실행**해 확정했다.
+
+#### 고친 것은 한 줄이다
+
+```sparql
+?milk pq:hasNutrientWeights ?milkunit .     ← 원문에 없던 줄
+```
+
+원문 Supplement Query 1 은 `?milkunit` 을 `?nutrient` 에만 묶는다. 그래서 결과의
+`milkweight` 가 **"그 성분을 가진 아무 음식"** 의 값이 되고, 질문("milk 와 egg
+혼합식")과 맞지 않는다.
+
+나머지 차이는 **실행 가능하게 만들기 위한 순서**다. 선택도가 가장 높은 `?nutrient`
+를 먼저 묶지 않으면 중간 결과가 폭발해 끝나지 않는다 — 처음 시도는 그대로 두고
+돌렸다가 중단했다.
+
+#### 결과 (행당 약 6 분, 8/8 행 모두 결과가 나온다)
+
+| egg | milk | 논문 | 교정 | 과대 배율 |
+|---|---|---:|---|---:|
+| Potato salad with egg | MILK, 1% | 0.082 | 0.0006~0.001 | **82.0** |
+| Roll, egg bread | Soy milk, light | 0.082 | 0.0011 | 74.5 |
+| Egg omelet or scrambled egg | Milk, skim | 0.071 | 0.001~0.0015 | 47.3 |
+| Egg, whole, boiled or poached | Yogurt, coconut milk | 6.602 | 0.165 | 40.0 |
+| Egg, whole, fried with butter | Milk, whole | 6.591 | 0.204~0.227 | 29.0 |
+| Goose egg, cooked | Milk, skim | 0.074 | 0.0043~0.0045 | 16.4 |
+| Shrimp-egg patty | Chocolate milk | 6.766 | 0.337~0.463 | 14.6 |
+| Shrimp-egg patty | Almond milk, sweetened | 2.656 | 0.326 | **8.1** |
+
+```
+과대 배율  최소 8.1 / 중앙 34.5 / 최대 82.0      8/8 행 모두 과대
+```
+
+#### 논문 결론에 미치는 영향
+
+§4.1.2 는 이렇게 쓴다.
+
+> "approximately **0.08 mg of vitamin B12** can be absorbed from mixed diets containing
+> milk and potato salad with eggs … the WHO recommends a daily intake of **0.0024 mg**
+> … these mixed diets **can meet the basic vitamin B12 intake** recommended for adults"
+
+교정값은 **0.0006~0.001 mg** 이다. WHO 권장 0.0024 mg 의 **1/4~1/2** 에 그친다.
+즉 Case Study 1 의 결론 — "이 혼합식으로 B12 1 일 권장량을 충족한다" — 은
+**뒤집힌다.**
+
+재계산: `python3 eval/paper_sparql.py q1fixed` (약 50 분). 값은
+`eval/paper_sparql.TABLE2_FIXED` 에 적어 두고 `table2()` 가 매 실행 출력한다.
+
 ## 18. 개선 방안 (논문 근거 기준)
 
 재현(§1~17)과 **코드·수치를 섞지 않는다.** 아래는 전부 논문이 스스로 적은 내용을 근거로

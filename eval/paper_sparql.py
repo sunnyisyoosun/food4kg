@@ -221,6 +221,28 @@ where {
     filter regex(?foodname,"^(Peaches|MILK, 2%%|Hot dogs, beef)","i")
 }"""
 
+# 논문 Supplement Query 1 의 교정판.
+# 의미상 고친 것은 **한 줄**이다 — `?milk pq:hasNutrientWeights ?milkunit`.
+# 원문은 ?milkunit 을 ?nutrient 에만 묶어 milkweight 가 '그 성분을 가진 아무 음식'
+# 의 값이 된다. 나머지 차이는 실행 가능하게 만들기 위한 **순서**다: 선택도가 가장
+# 높은 ?nutrient 를 먼저 묶지 않으면 중간 결과가 폭발해 끝나지 않는다.
+# 교정 전 값은 8~82 배 과대하다 (REPRODUCTION §17.2·§17.31).
+Q1_FIXED = """select ?eggname ?milkname ?nutrientname ?eggweight ?milkweight
+where {
+    ?nutrient rdfs:label ?nutrientname ;
+              pq:hasNutrientWeights ?eggunit ;
+              pq:hasNutrientWeights ?milkunit .
+    ?egg  pq:hasNutrientWeights ?eggunit  ; rdfs:label ?eggname .
+    ?milk pq:hasNutrientWeights ?milkunit ; rdfs:label ?milkname .
+    ?eggunit  rdf:value ?eggweight .
+    ?milkunit rdf:value ?milkweight .
+    filter(?nutrientname = "%(nut)s")
+    filter(?egg != ?nutrient && ?milk != ?nutrient)
+    filter(strstarts(lcase(?eggname),  "%(egg)s"))
+    filter(strstarts(lcase(?milkname), "%(milk)s"))
+}"""
+
+
 TABLE2 = [  # (egg, milk, nutrient label, 논문 값 mg/200g)
     ('Potato salad with egg', 'MILK, 1%', 'Vitamin B-12', 0.082),
     ('Egg omelet or scrambled egg', 'Milk, skim', 'Vitamin B-12', 0.071),
@@ -231,6 +253,21 @@ TABLE2 = [  # (egg, milk, nutrient label, 논문 값 mg/200g)
     ('Shrimp-egg patty', 'Almond milk, sweetened', 'Vitamin B-6', 2.656),
     ('Egg, whole, boiled or poached', 'Yogurt, coconut milk', 'Vitamin B-6', 6.602),
 ]
+# Q1_FIXED 를 Table 2 의 8 행에 돌린 결과 (2026-11-09, 행당 약 6 분).
+# (egg, milk, 논문 값, 교정 최소, 교정 최대). 매 실행 재계산하기엔 느려서 적어 둔다 —
+# 재계산은 `python3 eval/paper_sparql.py q1fixed`.
+TABLE2_FIXED = [
+    ('Potato salad with egg', 'MILK, 1%', 0.082, 0.0006, 0.001),
+    ('Egg omelet or scrambled egg', 'Milk, skim', 0.071, 0.001, 0.0015),
+    ('Goose egg, cooked', 'Milk, skim', 0.074, 0.0043, 0.0045),
+    ('Roll, egg bread', 'Soy milk, light', 0.082, 0.0011, 0.0011),
+    ('Egg, whole, fried with butter', 'Milk, whole', 6.591, 0.204, 0.227),
+    ('Shrimp-egg patty', 'Chocolate milk', 6.766, 0.337, 0.463),
+    ('Shrimp-egg patty', 'Almond milk, sweetened', 2.656, 0.326, 0.326),
+    ('Egg, whole, boiled or poached', 'Yogurt, coconut milk', 6.602, 0.165, 0.165),
+]
+
+
 TABLE3 = [  # (food 패턴, compound 패턴, 논문 mg/100g, bacteria)
     ('FLOUR, SOY', 'Glutam', 8870, 'Enterococcus faecalis'),
     ('Broccoli, raw', 'Glycine', 89, 'Enterococcus faecalis'),
@@ -327,6 +364,18 @@ def table2(S):
               f'{true[0]:g}~{true[-1]:g}  | 논문 값 = '
               + (f'달걀 {src[0]:g} + "{src[2][:30]}" {src[1]:g}' if src else '조합 없음'))
     print(f'  논문 값이 "달걀 + 다른 음식" 으로 나오는 행: {hit}/{len(TABLE2)}')
+
+    # 교정판 Q1_FIXED 로 얻은 올바른 값. ?milk 에 ?milkunit 을 묶은 것뿐이다.
+    print('\n  교정판 Q1_FIXED — 논문 값은 모두 과대하다')
+    rat = []
+    for egg, milk, paper, lo, hi in TABLE2_FIXED:
+        r = paper / hi
+        rat.append(r)
+        print(f'    {egg[:27]:29s}+{milk[:20]:22s} 논문 {paper:<7g} 교정 {lo:g}~{hi:g}'
+              f'  {r:5.1f}배')
+    rat.sort()
+    print(f'    과대 배율: 최소 {rat[0]:.1f} / 중앙 {(rat[3]+rat[4])/2:.1f} / '
+          f'최대 {rat[-1]:.1f}  (8/8 행 모두 과대)')
     return hit
 
 
@@ -503,7 +552,14 @@ def main():
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1 and sys.argv[1] == 'replaceable':
+    if len(sys.argv) > 1 and sys.argv[1] == 'q1fixed':
+        _S = Store()
+        for _e, _m, _n, _p in [(a, b, c, d) for a, b, c, d in TABLE2]:
+            _r = _S.q(Q1_FIXED % dict(nut=_n, egg=_e.lower(), milk=_m.lower()))
+            _t = sorted({round(float(x[3]) + float(x[4]), 4) for x in _r}) or [float('nan')]
+            print(f'{_e[:28]:30s}+{_m[:20]:22s} {len(_r):4d}행 '
+                  f'교정 {_t[0]:g}~{_t[-1]:g}  논문 {_p:g}', flush=True)
+    elif len(sys.argv) > 1 and sys.argv[1] == 'replaceable':
         _S = Store()
         replaceable(_S)
     else:
