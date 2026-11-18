@@ -531,6 +531,13 @@ def evaluate():
                             if fu is not None:
                                 self.f2c[fu].add(u)
 
+                # 질환 상위 분류 (out/disease_tree.csv) — #12 가 쓰는 축.
+                self.dtree = {}
+                _dt = os.path.join(OUT, 'disease_tree.csv')
+                if os.path.exists(_dt):
+                    for _d, _a in pd.read_csv(_dt)[['disease', 'ancestor']].dropna().values:
+                        self.dtree.setdefault(str(_d), set()).add(str(_a))
+
                 # FoodOn 축 — 음식의 클래스와 조상을 모두 카테고리로 단다.
                 import foodon_match as _fm
                 _k2f = dict(zip(foods.food_key, foods.fdc_id))

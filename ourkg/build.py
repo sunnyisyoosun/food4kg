@@ -1060,6 +1060,37 @@ def kg():
             n_fo_link += 1
             onto_link.append({'our': lab, 'kind': 'category',
                               'onto_label': lab, 'source': 'FoodOn'})
+    # 질환 상위 분류 — MeSH 트리. 논문은 SNOMED CT 로 이 축을 세웠다고 하지만
+    # 배포본에는 id 284 개뿐이고 라벨·계층이 없다(§5.1 방법 1 #12). 우리는 이미
+    # 트리 번호를 갖고 있었고, 번호는 접두를 자르면 조상이 된다
+    # (F03.600.300.375 < F03.600.300 < F03.600 Mood Disorders < F03 Mental Disorders).
+    # 번호 -> 기술어 이름은 MeSH SPARQL 로 받아 ourkg/cache/mesh_tree.json 에 둔다.
+    _mtp = os.path.join(BASE, 'ourkg', 'cache', 'mesh_tree.json')
+    n_tree = 0
+    if os.path.exists(_mtp):
+        _MT = json.load(open(_mtp))
+        _rows = []
+        for _mid, _dis, _tns in md[['mesh_id', 'disease', 'tree_numbers']].dropna(
+                subset=['tree_numbers']).drop_duplicates().values:
+            _du = NS['mesh'] + str(_mid)
+            for _t in str(_tns).split(';'):
+                _p = _t.strip().split('.')
+                for _i in range(1, len(_p)):          # 자기 자신은 뺀다
+                    _a = _MT.get('.'.join(_p[:_i]))
+                    if not _a or _a['mesh_id'] == _mid:
+                        continue
+                    W.t(_du, SUBCLASS, NS['mesh'] + _a['mesh_id'], 'MeSH tree')
+                    W.t(NS['mesh'] + _a['mesh_id'], LABEL, _a['label'], 'MeSH tree',
+                        literal=True)
+                    n_tree += 2
+                    _rows.append({'mesh_id': _mid, 'disease': _dis,
+                                  'tree_number': _t.strip(), 'ancestor_tree': '.'.join(_p[:_i]),
+                                  'ancestor_mesh': _a['mesh_id'], 'ancestor': _a['label']})
+        pd.DataFrame(_rows).drop_duplicates().to_csv(
+            os.path.join(OUT, 'disease_tree.csv'), index=False)
+        print(f'  MeSH 트리 상위 분류: {n_tree:,} triple '
+              f'(질환 {len({r["mesh_id"] for r in _rows})}종)')
+
     # OLS 로 받은 FoodOn 축(out/food_foodon.csv)도 KG 에 쓴다. CSV 에만 두면
     # §4.1 SPARQL 평가가 못 본다 — 배포 subset 은 soy milk 가 없고 계층도 끊겨 있다.
     _fop = os.path.join(OUT, 'food_foodon.csv')

@@ -435,11 +435,26 @@ def _mikg_mental_disorders():
 
 
 def q12_depression_vs_autism(kg):
-    # 공개 KG 에는 SNOMED CT 계층이 없다 (Mental_health.jsonld 는 SCT ID 와 sameAs 뿐,
-    # MESH_Disease.jsonld 는 C 트리만). 논문이 출처로 든 MiKG 에도 mentalDisorder
-    # 한 단계밖에 없어 Mood / developmental 구분을 답할 수 없다.
-    return ('X', '-', 'Mood disorder / developmental disorder 같은 상위 분류는 SNOMED CT '
-                      '계층에만 있다. MiKG 는 mental disorder 한 단계뿐. 답할 수 없음')
+    """#12 — 두 질환의 상위 분류가 다른가.
+
+    논문 답은 Depression(Mood disorder) / Autistic disorder(developmental disorder)
+    다. 배포 KG 에는 이 축이 없다 — Mental_health.jsonld 는 SCT ID 와 sameAs 뿐,
+    MESH_Disease.jsonld 는 C 트리만이고, MiKG 는 mentalDisorder 한 단계뿐이다.
+    `kg.dtree` 를 갖춘 KG 에서만 답한다 (ourkg 는 MeSH F 트리로 세웠다).
+    """
+    tree = getattr(kg, 'dtree', None)
+    if not tree:
+        return ('X', '-', '상위 분류 축이 없다. 배포 KG 는 SCT id 와 C 트리뿐이고 '
+                          'MiKG 는 mental disorder 한 단계다')
+    pick = lambda pat: {a for d, anc in tree.items()
+                        if re.search(pat, d, re.I) for a in anc}
+    dep, aut = pick(r'depress'), pick(r'autis|pervasive development')
+    mood = {a for a in dep if re.search(r'mood|affective|depress', a, re.I)}
+    dev = {a for a in aut if re.search(r'development|neurodevelopment', a, re.I)}
+    ok = bool(mood and dev and mood != dev)
+    return ('O' if ok else 'X', 'O' if ok else 'X',
+            f'우울증 상위 {sorted(mood)[:2]} / 자폐 상위 {sorted(dev)[:2]}'
+            if ok else f'우울증 {sorted(dep)[:3]} / 자폐 {sorted(aut)[:3]}')
 
 
 def q13_mental_disorder_list(kg):

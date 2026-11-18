@@ -495,7 +495,7 @@ branded_food 까지 포함하기 때문이다. 반대로 compound 축은 논문(
 | #6 citric acid | `setup/nutrient_kegg_map.csv` 가 FDC nutrient 477 중 **212 만** 덮는다. 유기산·폴리페놀 계열(acetic·benzoic·chlorogenic·citric·fumaric…)이 통째로 없다 | 원인 확정. 매핑표를 채워도 `Adlercreutzia` 의 C00158 대사 경로가 KEGG 에 없어 △ 가 한계다 |
 | #2 soy milk | 배포 KG 는 `Beverages > Milk substitutes`. 우리는 SR `Legumes`(10) 와 WWEIA 1902 `Plant-based milk`(4) 다 | 카테고리 **이름**은 정규식으로 받게 고쳤지만 여전히 X — 우리 축에는 soy milk 가 Beverages **아래**에 없다. 이름 문제가 아니라 축 문제다. 억지로 Beverages 로 옮기지 않는다 |
 | #5 retinol · #10 B6 | 논문 답이 Query 1 결함으로 틀렸음을 §17.31 에서 입증 · B-6 는 우리가 기각 | 고치지 않는다 |
-| #12 | SNOMED CT 상위 분류 | 배포본에 없어 불가 |
+| #12 | SNOMED CT 상위 분류가 필요하다고 봤다 | **틀렸다 — MeSH 트리에 있다. 아래** |
 
 **질의를 고칠 때 공개 KG 가 18/20·타당 13/20 그대로인 것을 확인했다** — 우리 쪽만
 유리해지는 변경이 아니다.
@@ -607,6 +607,42 @@ FDC 가 거의 측정하지 않아 못 쓴다**는 증거다.
 
 **그래서 `#6` 은 여기서 결론이 난다.** 매핑해도 추천 행렬에 쓸 수 없고, 게다가
 `Adlercreutzia equolifaciens` 의 C00158 대사 경로가 KEGG 에 없다.
+
+#### ★ SNOMED CT 의 대체 축은 MeSH 트리였다 — `#12` 가 열린다
+
+`#12`("우울증과 자폐의 차이")를 두 번 **"SNOMED CT 계층에만 있어 불가능"** 으로
+닫았다. 틀렸다. 논문 답인 `Mood disorder` / `developmental disorder` 는 **MeSH F
+트리의 이름**이고, 우리는 그 트리 번호를 **이미 갖고 있었다.**
+
+```
+D003865 Major Depressive Disorder   F03.600.300.375
+  < F03.600.300  Depressive Disorder
+  < F03.600      Mood Disorders               ← 논문 답
+  < F03          Mental Disorders
+
+D001321 Autism                      F03.625.164.113.500
+  < F03.625.164  Child Development Disorders, Pervasive
+  < F03.625      Neurodevelopmental Disorders ← 논문 답
+```
+
+번호는 **접두를 자르면 조상**이 되고, 번호 → 기술어 이름은 MeSH SPARQL 로 받는다
+(`ourkg/cache/mesh_tree.json`, 트리 번호 1,227 개). FoodOn 때와 같은 '공개 API +
+캐시' 방식이다. 우리는 번호만 들고 **이름으로 펼치지 않고** 있었다.
+
+결과: `out/disease_tree.csv` 2,351 행 · 질환 **242 종**, KG 에 **4,702 triple**
+(`mesh:Dxxxxxx rdfs:subClassOf mesh:Dyyyyyy` + 상위 라벨). KG 총계 3,459,231 →
+**3,463,933**.
+
+`q12` 도 X 하드코딩을 걷어내고 **실제 질의**로 바꿨다 — `kg.dtree` 가 있는 KG 에서만
+답하고, 없으면 그 사실을 적는다. **배포 KG 는 여전히 X 다**(`Mental_health.jsonld`
+는 SCT id 와 sameAs 뿐, `MESH_Disease.jsonld` 는 C 트리만, MiKG 는 mentalDisorder
+한 단계). 공개 KG 18/20 · 타당 13/20 그대로임을 확인했다.
+
+**방법 1 재현 11 → 12/20, 타당 9 → 10/20.** 두 기준은 변동 없다(23/1 · 추천군 21 ·
+비추천군 26 · 위반 0) — 질환 축은 `F` 를 건드리지 않는다.
+
+**다만 이것은 SNOMED CT 429 만 triple 을 대체하지 않는다.** 메운 것은 `#12` 가
+요구하는 **정신질환 상위 분류 축**이고, 규모 격차는 그대로다.
 
 #### ★ FoodOn 축을 OLS 에서 받아 붙인다 — `#2` 가 열린다
 
