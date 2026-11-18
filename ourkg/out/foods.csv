@@ -41,9 +41,9 @@ food_key,fdc_id,food_name,data_type,category,n_compound,food_group
 12oz 12pk raspberry lime seltzer,2331275,12OZ 12PK RASPBERRY LIME SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
 12oz 12pk rubyred grapefruit seltzer,2330934,12OZ 12PK RUBYRED GRAPEFRUIT SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
 12oz 4-6pks variety seltzer,2331183,12OZ 4-6PKS VARIETY SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
-12oz 4pk orange cream classic,2753025,12OZ 4PK ORANGE CREAM CLASSIC,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Dairy and Egg Products
-12oz 4pk rootbeer classic,2753023,12OZ 4PK ROOTBEER CLASSIC,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-12oz 4pk vanilla cream classic,2753024,12OZ 4PK VANILLA CREAM CLASSIC,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Dairy and Egg Products
+12oz 4pk orange cream classic,2753025,12OZ 4PK ORANGE CREAM CLASSIC,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Dairy and Egg Products
+12oz 4pk rootbeer classic,2753023,12OZ 4PK ROOTBEER CLASSIC,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+12oz 4pk vanilla cream classic,2753024,12OZ 4PK VANILLA CREAM CLASSIC,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Dairy and Egg Products
 12oz 6pk can caffeine free cola,2331477,12OZ 6PK CANS CAFFEINE FREE COLA,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
 12oz 6pk can capecod diet cranberry dry,2331191,12OZ 6PK CANS CAPECOD DIET CRANBERRY DRY,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Finfish and Shellfish Products
 12oz 6pk can cranberry lime seltzer,2331667,12OZ 6PK CANS CRANBERRY LIME SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
@@ -64,32 +64,32 @@ food_key,fdc_id,food_name,data_type,category,n_compound,food_group
 12oz 6pk diet pink grapefruit dry,2331022,12OZ 6PK DIET PINK GRAPEFRUIT DRY,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
 12oz 6pk orange vanilla seltzer,2331126,12OZ 6PK ORANGE VANILLA SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
 12oz 8-4pks variety seltzer,2331328,12OZ 8-4PKS VARIETY SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
-12oz 8pk blood orange lemonade seltzer,2753013,12OZ 8PK BLOOD ORANGE LEMONADE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk blueberry lemonade seltzer,2753004,12OZ 8PK BLUEBERRY LEMONADE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk can diet orange dry,2753044,12OZ 8PK CAN DIET ORANGE DRY,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk can diet pink grapefruit dry,2753010,12OZ 8PK CAN DIET PINK GRAPEFRUIT DRY,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk can orange dry,2753076,12OZ 8PK CAN ORANGE DRY,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk can pink grapefruit dry,2753011,12OZ 8PK CAN PINK GRAPEFRUIT DRY,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk coconut limeade seltzer,2753073,12OZ 8PK COCONUT LIMEADE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Nut and Seed Products
-12oz 8pk lime seltzer,2753007,12OZ 8PK Lime Seltzer,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-12oz 8pk mango limeade seltzer,2753005,12OZ 8PK MANGO LIMEADE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-12oz 8pk original seltzer,2753008,12OZ 8PK Original Seltzer,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-12oz 8pk pineapple grapefruit seltzer,2753026,12OZ 8PK PINEAPPLE GRAPEFRUIT SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk pineapple lemonade seltzer,2753045,12OZ 8PK PINEAPPLE LEMONADE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk raspberry lemonade seltzer,2753029,12OZ 8PK RASPBERRY LEMONADE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk raspberry lime seltzer,2753009,12OZ 8PK RASPBERRY LIME SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk ruby red grapefruit seltzer,2753006,12OZ 8PK Ruby Red Grapefruit Seltzer,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk starfruit lemonade seltzer,2753003,12OZ 8PK STARFRUIT LEMONADE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk strawberry lemonade seltzer,2753002,12OZ 8PK STRAWBERRY LEMONADE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk strawberry sunrise seltzer,2753027,12OZ 8PK STRAWBERRY SUNRISE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz 8pk tart cherry limeade seltzer,2753042,12OZ 8PK TART CHERRY LIMEADE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
+12oz 8pk blood orange lemonade seltzer,2753013,12OZ 8PK BLOOD ORANGE LEMONADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk blueberry lemonade seltzer,2753004,12OZ 8PK BLUEBERRY LEMONADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk can diet orange dry,2753044,12OZ 8PK CAN DIET ORANGE DRY,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk can diet pink grapefruit dry,2753010,12OZ 8PK CAN DIET PINK GRAPEFRUIT DRY,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk can orange dry,2753076,12OZ 8PK CAN ORANGE DRY,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk can pink grapefruit dry,2753011,12OZ 8PK CAN PINK GRAPEFRUIT DRY,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk coconut limeade seltzer,2753073,12OZ 8PK COCONUT LIMEADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Nut and Seed Products
+12oz 8pk lime seltzer,2753007,12OZ 8PK Lime Seltzer,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+12oz 8pk mango limeade seltzer,2753005,12OZ 8PK MANGO LIMEADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+12oz 8pk original seltzer,2753008,12OZ 8PK Original Seltzer,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+12oz 8pk pineapple grapefruit seltzer,2753026,12OZ 8PK PINEAPPLE GRAPEFRUIT SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk pineapple lemonade seltzer,2753045,12OZ 8PK PINEAPPLE LEMONADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk raspberry lemonade seltzer,2753029,12OZ 8PK RASPBERRY LEMONADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk raspberry lime seltzer,2753009,12OZ 8PK RASPBERRY LIME SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk ruby red grapefruit seltzer,2753006,12OZ 8PK Ruby Red Grapefruit Seltzer,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk starfruit lemonade seltzer,2753003,12OZ 8PK STARFRUIT LEMONADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk strawberry lemonade seltzer,2753002,12OZ 8PK STRAWBERRY LEMONADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk strawberry sunrise seltzer,2753027,12OZ 8PK STRAWBERRY SUNRISE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz 8pk tart cherry limeade seltzer,2753042,12OZ 8PK TART CHERRY LIMEADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
 12oz can blood orange lemonade seltzer,2331302,12OZ CAN BLOOD ORANGE LEMONADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
 12oz can blueberry lemonade seltzer,2331686,12OZ CAN BLUEBERRY LEMONADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
 12oz can coconut limeade seltzer,2331234,12OZ CAN COCONUT LIMEADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Nut and Seed Products
-12oz can cranberry lime seltzer,2754432,12OZ CANS CRANBERRY LIME SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
+12oz can cranberry lime seltzer,2754432,12OZ CANS CRANBERRY LIME SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
 12oz can diet orange dry,2331472,12OZ CAN DIET ORANGE DRY,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
 12oz can diet pink grapefruit dry,2331265,12OZ CAN DIET PINK GRAPEFRUIT DRY,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
-12oz can lime seltzer,2754433,12OZ  CANS LIME SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
+12oz can lime seltzer,2754433,12OZ  CANS LIME SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
 12oz can mango limeade seltzer,2330851,12OZ CAN MANGO LIMEADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
 12oz can orange dry,2331520,12OZ CAN ORANGE DRY,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
 12oz can original seltzer,2331569,12OZ Can Original Seltzer,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
@@ -104,21 +104,21 @@ food_key,fdc_id,food_name,data_type,category,n_compound,food_group
 12oz can tart cherry limeade seltzer,2330815,12OZ CAN TART CHERRY LIMEADE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
 12oz lime seltzer,2330856,12OZ Lime Seltzer,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
 12oz orange cream classic,2331367,12OZ ORANGE CREAM CLASSIC,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Dairy and Egg Products
-12oz orange vanilla seltzer,2754431,12OZ ORANGE VANILLA SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
+12oz orange vanilla seltzer,2754431,12OZ ORANGE VANILLA SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
 12oz rootbeer classic,2330861,12OZ ROOTBEER CLASSIC,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
 12oz ruby red grapefruit seltzer,2331312,12OZ Ruby Red Grapefruit Seltzer,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
 12oz sleek can 4-6pks winter variety seltzer,2331648,12OZ SLEEK CAN 4-6PKS WINTER VARIETY SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
-12oz sleek can 6pk blackberry mango punch seltzer,2753039,12OZ SLEEK CAN 6PK BLACKBERRY MANGO PUNCH SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz sleek can 6pk concord clementine seltzer,2753036,12OZ SLEEK CAN 6PK CONCORD CLEMENTINE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-12oz sleek can 6pk cranberry bramble seltzer,2753030,12OZ SLEEK CAN 6PK CRANBERRY BRAMBLE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz sleek can 6pk ginger peach seltzer,2753037,12OZ SLEEK CAN 6PK GINGER PEACH SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-12oz sleek can 6pk pomegranate apple seltzer,2753035,12OZ SLEEK CAN 6PK POMEGRANATE APPLE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz sleek can 6pk prickly pear & citrus seltzer,2753032,12OZ SLEEK CAN 6PK PRICKLY PEAR & CITRUS SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-12oz sleek can 6pk raspberry rose seltzer,2753040,12OZ SLEEK CAN 6PK RASPBERRY ROSE SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz sleek can 6pk strawberry margarita seltzer,2753038,12OZ SLEEK CAN 6PK STRAWBERRY MARGARITA SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-12oz sleek can 6pk tropical cherry seltzer,2753033,12OZ SLEEK CAN 6PK TROPICAL CHERRY SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-12oz sleek can 6pk upside down plum seltzer,2753031,12OZ SLEEK CAN 6PK UPSIDE DOWN PLUM SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-12oz sleek can 6pk watermelon mojito seltzer,2753034,12OZ SLEEK CAN 6PK WATERMELON MOJITO SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
+12oz sleek can 6pk blackberry mango punch seltzer,2753039,12OZ SLEEK CAN 6PK BLACKBERRY MANGO PUNCH SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz sleek can 6pk concord clementine seltzer,2753036,12OZ SLEEK CAN 6PK CONCORD CLEMENTINE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+12oz sleek can 6pk cranberry bramble seltzer,2753030,12OZ SLEEK CAN 6PK CRANBERRY BRAMBLE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz sleek can 6pk ginger peach seltzer,2753037,12OZ SLEEK CAN 6PK GINGER PEACH SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+12oz sleek can 6pk pomegranate apple seltzer,2753035,12OZ SLEEK CAN 6PK POMEGRANATE APPLE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz sleek can 6pk prickly pear & citrus seltzer,2753032,12OZ SLEEK CAN 6PK PRICKLY PEAR & CITRUS SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+12oz sleek can 6pk raspberry rose seltzer,2753040,12OZ SLEEK CAN 6PK RASPBERRY ROSE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz sleek can 6pk strawberry margarita seltzer,2753038,12OZ SLEEK CAN 6PK STRAWBERRY MARGARITA SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+12oz sleek can 6pk tropical cherry seltzer,2753033,12OZ SLEEK CAN 6PK TROPICAL CHERRY SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+12oz sleek can 6pk upside down plum seltzer,2753031,12OZ SLEEK CAN 6PK UPSIDE DOWN PLUM SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+12oz sleek can 6pk watermelon mojito seltzer,2753034,12OZ SLEEK CAN 6PK WATERMELON MOJITO SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
 12oz sleek can blackberry mango punch seltzer,2331193,12OZ SLEEK CAN BLACKBERRY MANGO PUNCH SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
 12oz sleek can concord clementine seltzer,2330869,12OZ SLEEK CAN CONCORD CLEMENTINE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
 12oz sleek can cranberry bramble seltzer,2331112,12OZ SLEEK CAN CRANBERRY BRAMBLE SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
@@ -133,13 +133,13 @@ food_key,fdc_id,food_name,data_type,category,n_compound,food_group
 12oz vanilla cream classic,2331320,12OZ VANILLA CREAM CLASSIC,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Dairy and Egg Products
 14-day meal replacement system,553595,14-DAY MEAL REPLACEMENT SYSTEM,branded_food,Meal Replacement Supplements,20,"Meals, Entrees, and Side Dishes"
 "14-day meal replacement system, chocolate",1803648,"14-DAY MEAL REPLACEMENT SYSTEM, CHOCOLATE ",branded_food,Meal Replacement Supplements,20,Sweets
-16.9oz 6pk blackcherry seltzer,2753012,16.9OZ 6PK BLACKCHERRY SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-16.9oz 6pk cranberry lime seltzer,2752995,16.9OZ 6PK CRANBERRY LIME SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-16.9oz 6pk lemon seltzer,2752997,16.9OZ 6PK LEMON SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-16.9oz 6pk lime seltzer,2752996,16.9OZ 6PK LIME SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-16.9oz 6pk original seltzer,2753001,16.9OZ 6PK ORIGINAL SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-16.9oz 6pk raspberry lime seltzer,2752999,16.9OZ 6PK RASPBERRY LIME SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-16.9oz 6pk ruby red grapefruit seltzer,2753000,16.9OZ 6PK RUBY RED GRAPEFRUIT SELTZER,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
+16.9oz 6pk blackcherry seltzer,2753012,16.9OZ 6PK BLACKCHERRY SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+16.9oz 6pk cranberry lime seltzer,2752995,16.9OZ 6PK CRANBERRY LIME SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+16.9oz 6pk lemon seltzer,2752997,16.9OZ 6PK LEMON SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+16.9oz 6pk lime seltzer,2752996,16.9OZ 6PK LIME SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+16.9oz 6pk original seltzer,2753001,16.9OZ 6PK ORIGINAL SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+16.9oz 6pk raspberry lime seltzer,2752999,16.9OZ 6PK RASPBERRY LIME SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+16.9oz 6pk ruby red grapefruit seltzer,2753000,16.9OZ 6PK RUBY RED GRAPEFRUIT SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
 16.9oz bottle black cherry seltzer,2331219,16.9OZ BOTTLE BLACK CHERRY SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
 16.9oz bottle lemon seltzer,2330943,16.9OZ BOTTLE LEMON SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
 16.9oz bottle lime seltzer,2331410,16.9OZ BOTTLE LIME SELTZER,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
@@ -288,8 +288,8 @@ food_key,fdc_id,food_name,data_type,category,n_compound,food_group
 3-2-1 plan shake,555370,3-2-1 PLAN SHAKES,branded_food,Weight Control,21,Beverages
 "3-2-1 plan shake, rich chocolate royale",1935897,"3-2-1 PLAN SHAKES, RICH CHOCOLATE ROYALE",branded_food,Other Frozen Desserts,21,Sweets
 "30 g protein high protein shake, cake batter delight, cake batter delight",2192390,"30 G PROTEIN HIGH PROTEIN SHAKE, CAKE BATTER DELIGHT, CAKE BATTER DELIGHT",branded_food,"Energy, Protein & Muscle Recovery Drinks",22,Baked Products
-7.5 oz 6pk can diet tonic water,2753028,7.5 OZ 6PK CANS Diet Tonic Water,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-7.5 oz 6pk can half & half,2753041,7.5 oz 6pk Cans Half & Half,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
+7.5 oz 6pk can diet tonic water,2753028,7.5 OZ 6PK CANS Diet Tonic Water,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+7.5 oz 6pk can half & half,2753041,7.5 oz 6pk Cans Half & Half,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
 7.5 oz can club soda,2331080,7.5 OZ CAN Club Soda,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
 7.5 oz can cranberry lime seltzer,2330961,7.5 OZ CAN Cranberry Lime Seltzer,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
 7.5 oz can diet gingerale,2331106,7.5 OZ CAN Diet Gingerale,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
@@ -303,18 +303,18 @@ food_key,fdc_id,food_name,data_type,category,n_compound,food_group
 7.5 oz can orange dry,2330896,7.5 OZ CAN Orange Dry,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
 7.5 oz can original seltzer,2331467,7.5 OZ CAN Original Seltzer,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
 7.5 oz can pink grapefruit dry,2331443,7.5 OZ CAN Pink Grapefruit Dry,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Fruits and Fruit Juices
-7.5oz 6pk can club soda,2753014,7.5OZ 6PK CANS Club Soda,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-7.5oz 6pk can cranberry lime seltzer,2752998,7.5OZ 6PK CANS Cranberry Lime Seltzer,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-7.5oz 6pk can diet gingerale,2752990,7.5OZ 6PK CANS Diet Gingerale,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-7.5oz 6pk can diet orange dry,2752991,7.5OZ 6PK CANS Diet Orange Dry,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-7.5oz 6pk can diet pink grapefruit dry,2752993,7.5OZ 6PK CANS Diet Pink Grapefruit Dry,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-7.5oz 6pk can ginger ale,2752989,7.5OZ 6PK CANS Ginger Ale,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-7.5oz 6pk can lemon seltzer,2752986,7.5OZ 6PK CANS Lemon Seltzer,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-7.5oz 6pk can lime seltzer,2752988,7.5OZ 6PK CANS Lime Seltzer,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-7.5oz 6pk can orange dry,2752992,7.5OZ 6PK CANS Orange Dry,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-7.5oz 6pk can original seltzer,2752987,7.5OZ 6PK CANS Original Seltzer,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
-7.5oz 6pk can pink grapefruit dry,2752994,7.5OZ 6PK CANS Pink Grapefruit Dry,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Fruits and Fruit Juices
-7.5oz 6pk can tonic water,2753015,7.5oz 6PK Cans Tonic Water,branded_food,Non Alcoholic Beverages - Ready to Drink,24,Alcoholic Beverages
+7.5oz 6pk can club soda,2753014,7.5OZ 6PK CANS Club Soda,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+7.5oz 6pk can cranberry lime seltzer,2752998,7.5OZ 6PK CANS Cranberry Lime Seltzer,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+7.5oz 6pk can diet gingerale,2752990,7.5OZ 6PK CANS Diet Gingerale,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+7.5oz 6pk can diet orange dry,2752991,7.5OZ 6PK CANS Diet Orange Dry,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+7.5oz 6pk can diet pink grapefruit dry,2752993,7.5OZ 6PK CANS Diet Pink Grapefruit Dry,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+7.5oz 6pk can ginger ale,2752989,7.5OZ 6PK CANS Ginger Ale,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+7.5oz 6pk can lemon seltzer,2752986,7.5OZ 6PK CANS Lemon Seltzer,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+7.5oz 6pk can lime seltzer,2752988,7.5OZ 6PK CANS Lime Seltzer,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+7.5oz 6pk can orange dry,2752992,7.5OZ 6PK CANS Orange Dry,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+7.5oz 6pk can original seltzer,2752987,7.5OZ 6PK CANS Original Seltzer,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
+7.5oz 6pk can pink grapefruit dry,2752994,7.5OZ 6PK CANS Pink Grapefruit Dry,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Fruits and Fruit Juices
+7.5oz 6pk can tonic water,2753015,7.5oz 6PK Cans Tonic Water,branded_food,Non Alcoholic Beverages  Ready to Drink,24,Alcoholic Beverages
 7.5oz can tonic water,2331632,7.5oz Can Tonic Water,branded_food,Non Alcoholic Beverages  Ready to Drink,25,Alcoholic Beverages
 "8g grass-fed protein organic nutritional shake, chocolate, chocolate",2587343,"8G GRASS-FED PROTEIN ORGANIC NUTRITIONAL SHAKE, CHOCOLATE, CHOCOLATE",branded_food,"Energy, Protein & Muscle Recovery Drinks",21,Sweets
 abalone,2706337,Abalone,survey_fndds_food,Shellfish,48,Finfish and Shellfish Products
@@ -442,11 +442,11 @@ almond butter,2707533,Almond butter,survey_fndds_food,Nuts and seeds,49,Dairy an
 "almond butter, creamy",2262074,"Almond butter, creamy",foundation_food,Nut and Seed Products,43,Nut and Seed Products
 "almond butter, lower sodium",2707534,"Almond butter, lower sodium",survey_fndds_food,Nuts and seeds,48,Dairy and Egg Products
 almond chicken,2706797,Almond chicken,survey_fndds_food,Stir-fry and soy-based sauce mixtures,48,Poultry Products
-almond milk,2705410,"Almond milk, NFS",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
-"almond milk, chocolate",2705408,"Almond milk, chocolate",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+almond milk,2705410,"Almond milk, NFS",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
+"almond milk, chocolate",2705408,"Almond milk, chocolate",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 "almond milk, refrigerated, unsweetened",2643944,"almond milk, refrigerated, unsweetened",sub_sample_food,Unknown,45,Dairy and Egg Products
-"almond milk, sweetened",2705407,"Almond milk, sweetened",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
-"almond milk, unsweetened",2705409,"Almond milk, unsweetened",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+"almond milk, sweetened",2705407,"Almond milk, sweetened",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
+"almond milk, unsweetened",2705409,"Almond milk, unsweetened",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 "almond milk, unsweetened, plain, refrigerated",2257045,"Almond milk, unsweetened, plain, refrigerated",foundation_food,Beverages,45,Beverages
 "almond milk, unsweetened, plain, shelf stable",1750338,"Almond milk, unsweetened, plain, shelf stable",foundation_food,Beverages,78,Beverages
 almond oil,2710181,Almond oil,survey_fndds_food,Salad dressings and vegetable oils,48,Nut and Seed Products
@@ -1030,7 +1030,7 @@ barley malt flour,169740,Barley malt flour,sr_legacy_food,Cereal Grains and Past
 "barley, hulled",170283,"Barley, hulled",sr_legacy_food,Cereal Grains and Pasta,67,Cereal Grains and Pasta
 "barley, pearled, cooked",170285,"Barley, pearled, cooked",sr_legacy_food,Cereal Grains and Pasta,68,Cereal Grains and Pasta
 "barley, pearled, raw",170284,"Barley, pearled, raw",sr_legacy_food,Cereal Grains and Pasta,68,Cereal Grains and Pasta
-"barq's red creme soda can, 12 fl oz",2703150,"Barq's Red Creme Soda Can, 12 fl oz",branded_food,Non Alcoholic Beverages - Ready to Drink,23,Alcoholic Beverages
+"barq's red creme soda can, 12 fl oz",2703150,"Barq's Red Creme Soda Can, 12 fl oz",branded_food,Non Alcoholic Beverages  Ready to Drink,23,Alcoholic Beverages
 basbousa,2708045,Basbousa,survey_fndds_food,Cakes and pies,48,Baked Products
 "basil, fresh",172232,"Basil, fresh",sr_legacy_food,Spices and Herbs,83,Spices and Herbs
 "basil, raw",2709780,"Basil, raw",survey_fndds_food,Not included in a food category,48,Unclassified
@@ -4706,7 +4706,7 @@ chocolate milk,2705466,"Chocolate milk, NFS",survey_fndds_food,"Flavored milk, l
 chocolate milk drink,2705517,Chocolate milk drink,survey_fndds_food,Milk shakes and other dairy drinks,48,Dairy and Egg Products
 "chocolate milk, fat free",2705469,"Chocolate milk, fat free (skim)",survey_fndds_food,"Flavored milk, nonfat",48,Dairy and Egg Products
 "chocolate milk, low fat",2705470,"Chocolate milk, low fat (1%)",survey_fndds_food,"Flavored milk, lowfat",48,Dairy and Egg Products
-"chocolate milk, nesquik, made with non-dairy milk",2705478,"Chocolate milk, Nesquik, made with non-dairy milk",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+"chocolate milk, nesquik, made with non-dairy milk",2705478,"Chocolate milk, Nesquik, made with non-dairy milk",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 "chocolate milk, nesquik, ns as to type of milk",2705477,"Chocolate milk, Nesquik, NS as to type of milk",survey_fndds_food,"Flavored milk, reduced fat",48,Dairy and Egg Products
 "chocolate milk, reduced fat",2705468,"Chocolate milk, reduced fat (2%)",survey_fndds_food,"Flavored milk, reduced fat",48,Dairy and Egg Products
 "chocolate milk, reduced sugar",2705471,"Chocolate milk, reduced sugar, NFS",survey_fndds_food,"Flavored milk, lowfat",48,Dairy and Egg Products
@@ -4850,10 +4850,10 @@ cocktail sauce,2709753,Cocktail sauce,survey_fndds_food,Tomato-based condiments,
 "cocoa, dry powder, hi-fat or breakfast, processed with alkali",170657,"Cocoa, dry powder, hi-fat or breakfast, processed with alkali",sr_legacy_food,Sweets,48,Sweets
 "cocoa, dry powder, unsweetened",169593,"Cocoa, dry powder, unsweetened",sr_legacy_food,Sweets,68,Sweets
 "cocoa, dry powder, unsweetened, processed with alkali",169594,"Cocoa, dry powder, unsweetened, processed with alkali",sr_legacy_food,Sweets,68,Sweets
-"coconut cream, canned, sweetened",2707571,"Coconut cream, canned, sweetened",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+"coconut cream, canned, sweetened",2707571,"Coconut cream, canned, sweetened",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 "coconut flavored complete nutrition drink, coconut",1983404,"COCONUT FLAVORED COMPLETE NUTRITION DRINK, COCONUT",branded_food,Other Drinks,21,Nut and Seed Products
-coconut milk,2705413,Coconut milk,survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
-"coconut milk, used in cooking",2707568,"Coconut milk, used in cooking",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+coconut milk,2705413,Coconut milk,survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
+"coconut milk, used in cooking",2707568,"Coconut milk, used in cooking",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 coconut oil,2710182,Coconut oil,survey_fndds_food,Salad dressings and vegetable oils,48,Nut and Seed Products
 "coconut water, sweetened",2707573,"Coconut water, sweetened",survey_fndds_food,Fruit drinks,48,Sweets
 "coconut water, unsweetened",2707572,"Coconut water, unsweetened",survey_fndds_food,Fruit drinks,48,Sweets
@@ -7491,20 +7491,20 @@ hormel pillow pak sliced turkey pepperoni,174593,Hormel Pillow Pak Sliced Turkey
 horseradish,173472,"Horseradish, prepared",sr_legacy_food,Spices and Herbs,51,Spices and Herbs
 horseradish sauce,2710174,Horseradish sauce,survey_fndds_food,Mustard and other condiments,48,"Soups, Sauces, and Gravies"
 hot chocolate / cocoa,2705472,"Hot chocolate / cocoa, NFS",survey_fndds_food,"Flavored milk, lowfat",48,Dairy and Egg Products
-"hot chocolate / cocoa, dry mix , made with non-dairy milk",2705486,"Hot chocolate / cocoa, dry mix , made with non-dairy milk",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+"hot chocolate / cocoa, dry mix , made with non-dairy milk",2705486,"Hot chocolate / cocoa, dry mix , made with non-dairy milk",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 "hot chocolate / cocoa, dry mix, made with lowfat or fat free milk",2705485,"Hot chocolate / cocoa, dry mix, made with lowfat (1%) or fat free (skim) milk",survey_fndds_food,"Flavored milk, nonfat",48,Dairy and Egg Products
 "hot chocolate / cocoa, dry mix, made with water",2705483,"Hot chocolate / cocoa, dry mix, made with water",survey_fndds_food,"Flavored milk, nonfat",48,Dairy and Egg Products
 "hot chocolate / cocoa, dry mix, made with water, with whipped cream",2705487,"Hot chocolate / cocoa, dry mix, made with water, with whipped cream",survey_fndds_food,"Flavored milk, reduced fat",48,Dairy and Egg Products
 "hot chocolate / cocoa, dry mix, made with whole or reduced fat milk",2705484,"Hot chocolate / cocoa, dry mix, made with whole or reduced fat (2%) milk",survey_fndds_food,"Flavored milk, reduced fat",48,Dairy and Egg Products
 "hot chocolate / cocoa, dry mix, reduced sugar, made with lowfat or fat free milk",2705492,"Hot chocolate / cocoa, dry mix, reduced sugar, made with lowfat (1%) or fat free (skim) milk",survey_fndds_food,"Flavored milk, nonfat",48,Dairy and Egg Products
-"hot chocolate / cocoa, dry mix, reduced sugar, made with non-dairy milk",2705494,"Hot chocolate / cocoa, dry mix, reduced sugar, made with non-dairy milk",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+"hot chocolate / cocoa, dry mix, reduced sugar, made with non-dairy milk",2705494,"Hot chocolate / cocoa, dry mix, reduced sugar, made with non-dairy milk",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 "hot chocolate / cocoa, dry mix, reduced sugar, made with water",2705488,"Hot chocolate / cocoa, dry mix, reduced sugar, made with water",survey_fndds_food,"Flavored milk, nonfat",48,Dairy and Egg Products
 "hot chocolate / cocoa, dry mix, reduced sugar, made with whole or reduced fat milk",2705489,"Hot chocolate / cocoa, dry mix, reduced sugar, made with whole or reduced fat (2%) milk",survey_fndds_food,"Flavored milk, reduced fat",48,Dairy and Egg Products
 "hot chocolate / cocoa, made with lowfat or fat free milk",2705474,"Hot chocolate / cocoa, made with lowfat (1%) or fat free (skim) milk",survey_fndds_food,"Flavored milk, nonfat",48,Dairy and Egg Products
-"hot chocolate / cocoa, made with non-dairy milk",2705475,"Hot chocolate / cocoa, made with non-dairy milk",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+"hot chocolate / cocoa, made with non-dairy milk",2705475,"Hot chocolate / cocoa, made with non-dairy milk",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 "hot chocolate / cocoa, made with whole or reduced fat milk",2705473,"Hot chocolate / cocoa, made with whole or reduced fat (2%) milk",survey_fndds_food,"Flavored milk, reduced fat",48,Dairy and Egg Products
 "hot chocolate / cocoa, reduced sugar, made with lowfat or fat free milk",2705493,"Hot chocolate / cocoa, reduced sugar, made with lowfat (1%) or fat free (skim) milk",survey_fndds_food,"Flavored milk, nonfat",48,Dairy and Egg Products
-"hot chocolate / cocoa, reduced sugar, made with non-dairy milk",2705490,"Hot chocolate / cocoa, reduced sugar, made with non-dairy milk",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+"hot chocolate / cocoa, reduced sugar, made with non-dairy milk",2705490,"Hot chocolate / cocoa, reduced sugar, made with non-dairy milk",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 "hot chocolate / cocoa, reduced sugar, made with whole or reduced fat milk",2705491,"Hot chocolate / cocoa, reduced sugar, made with whole or reduced fat (2%) milk",survey_fndds_food,"Flavored milk, reduced fat",48,Dairy and Egg Products
 "hot chocolate / cocoa, with whipped cream",2705476,"Hot chocolate / cocoa, with whipped cream",survey_fndds_food,"Flavored milk, reduced fat",48,Dairy and Egg Products
 "hot chocolate energy bar, hot chocolate",2029850,"HOT CHOCOLATE ENERGY BARS, HOT CHOCOLATE",branded_food,"Snack, Energy & Granola Bars",22,Sweets
@@ -7883,19 +7883,19 @@ kellogg's raisin bran cereal 13.7oz,2519019,Kellogg's Raisin Bran Cereal 13.7oz,
 kellogg's raisin bran cereal 18.7oz,2519018,Kellogg's Raisin Bran Cereal 18.7oz,branded_food,Processed Cereal Products,20,Breakfast Cereals
 kellogg's raisin bran cereal 56oz 4ct,2518849,Kellogg's Raisin Bran Cereal 56oz 4ct,branded_food,Processed Cereal Products,20,Breakfast Cereals
 kellogg's special k protein liquid chocolate mocha 10fl oz,2518847,Kellogg's Special K Protein Liquids Chocolate Mocha 10fl oz,branded_food,Non Alcoholic Beverages  Ready to Drink,23,Sweets
-kellogg's special k protein liquid chocolate mocha 40fl oz,2753086,Kellogg's Special K Protein Liquids Chocolate Mocha 40fl oz,branded_food,Non Alcoholic Beverages - Ready to Drink,21,Sweets
+kellogg's special k protein liquid chocolate mocha 40fl oz,2753086,Kellogg's Special K Protein Liquids Chocolate Mocha 40fl oz,branded_food,Non Alcoholic Beverages  Ready to Drink,21,Sweets
 kellogg's special k protein liquid french vanilla 10fl oz,2518830,Kellogg's Special K Protein Liquids French Vanilla 10fl oz,branded_food,Non Alcoholic Beverages  Ready to Drink,23,Alcoholic Beverages
-kellogg's special k protein liquid french vanilla 40fl oz,2753092,Kellogg's Special K Protein Liquids French Vanilla 40fl oz,branded_food,Non Alcoholic Beverages - Ready to Drink,21,Alcoholic Beverages
+kellogg's special k protein liquid french vanilla 40fl oz,2753092,Kellogg's Special K Protein Liquids French Vanilla 40fl oz,branded_food,Non Alcoholic Beverages  Ready to Drink,21,Alcoholic Beverages
 kellogg's special k protein liquid milk chocolate 10fl oz,2518828,Kellogg's Special K Protein Liquids Milk Chocolate 10fl oz,branded_food,Non Alcoholic Beverages  Ready to Drink,23,Dairy and Egg Products
-kellogg's special k protein liquid milk chocolate 40fl oz,2753093,Kellogg's Special K Protein Liquids Milk Chocolate 40fl oz,branded_food,Non Alcoholic Beverages - Ready to Drink,21,Dairy and Egg Products
+kellogg's special k protein liquid milk chocolate 40fl oz,2753093,Kellogg's Special K Protein Liquids Milk Chocolate 40fl oz,branded_food,Non Alcoholic Beverages  Ready to Drink,21,Dairy and Egg Products
 kellogg's special k protein liquid raspberry cheesecake 10fl oz,757134,Kellogg's Special K Protein Liquids Raspberry Cheesecake 10fl oz,branded_food,Drinks Flavoured - Ready to Drink,23,Dairy and Egg Products
 kellogg's special k protein liquid rich chocolate 10fl oz,2518831,Kellogg's Special K Protein Liquids Rich Chocolate 10fl oz,branded_food,Non Alcoholic Beverages  Ready to Drink,23,Sweets
-kellogg's special k protein liquid rich chocolate 40fl oz,2753090,Kellogg's Special K Protein Liquids Rich Chocolate 40fl oz,branded_food,Non Alcoholic Beverages - Ready to Drink,21,Sweets
+kellogg's special k protein liquid rich chocolate 40fl oz,2753090,Kellogg's Special K Protein Liquids Rich Chocolate 40fl oz,branded_food,Non Alcoholic Beverages  Ready to Drink,21,Sweets
 kellogg's special k protein liquid strawberry 10fl oz,2518829,Kellogg's Special K Protein Liquids Strawberry 10fl oz,branded_food,Non Alcoholic Beverages  Ready to Drink,23,Fruits and Fruit Juices
-kellogg's special k protein liquid strawberry 40fl oz,2753094,Kellogg's Special K Protein Liquids Strawberry 40fl oz,branded_food,Non Alcoholic Beverages - Ready to Drink,21,Fruits and Fruit Juices
+kellogg's special k protein liquid strawberry 40fl oz,2753094,Kellogg's Special K Protein Liquids Strawberry 40fl oz,branded_food,Non Alcoholic Beverages  Ready to Drink,21,Fruits and Fruit Juices
 kellogg's special k protein liquid strawberry banana 10fl oz,2220033,Kellogg's Special K Protein Liquids Strawberry Banana 10fl oz,branded_food,Non Alcoholic Beverages  Ready to Drink,23,Fruits and Fruit Juices
 kellogg's special k protein liquid vanilla cappuccino 10fl oz,2518846,Kellogg's Special K Protein Liquids Vanilla Cappuccino 10fl oz,branded_food,Non Alcoholic Beverages  Ready to Drink,23,Alcoholic Beverages
-kellogg's special k protein liquid vanilla cappuccino 40fl oz,2753087,Kellogg's Special K Protein Liquids Vanilla Cappuccino 40fl oz,branded_food,Non Alcoholic Beverages - Ready to Drink,21,Alcoholic Beverages
+kellogg's special k protein liquid vanilla cappuccino 40fl oz,2753087,Kellogg's Special K Protein Liquids Vanilla Cappuccino 40fl oz,branded_food,Non Alcoholic Beverages  Ready to Drink,21,Alcoholic Beverages
 "kellogg's, k protein shake, strawberry, strawberry",652220,"KELLOGG'S, K PROTEIN SHAKE, STRAWBERRY, STRAWBERRY",branded_food,"Energy, Protein & Muscle Recovery Drinks",20,Fruits and Fruit Juices
 "kellogg's, special k, protein shake, french vannila, french vanilla",726786,"KELLOGG'S, SPECIAL K, PROTEIN SHAKE, FRENCH VANNILA, FRENCH VANILLA",branded_food,"Energy, Protein & Muscle Recovery Drinks",20,Beverages
 "kellogg's, special k, protein shake, strawberry banana, strawberry banana",662066,"KELLOGG'S, SPECIAL K, PROTEIN SHAKE, STRAWBERRY BANANA, STRAWBERRY BANANA",branded_food,"Energy, Protein & Muscle Recovery Drinks",20,Fruits and Fruit Juices
@@ -9215,7 +9215,7 @@ new zealand protein smoothie powder,1466932,NEW ZEALAND PROTEIN SMOOTHIE POWDER,
 "new zealand spinach, cooked, boiled, drained, without salt",168441,"New Zealand spinach, cooked, boiled, drained, without salt",sr_legacy_food,Vegetables and Vegetable Products,32,Vegetables and Vegetable Products
 "new zealand spinach, raw",168440,"New Zealand spinach, raw",sr_legacy_food,Vegetables and Vegetable Products,32,Vegetables and Vegetable Products
 "no sugar added milk chocolate flavored protein breakfast shake, no sugar added milk chocolate",1913136,"NO SUGAR ADDED MILK CHOCOLATE FLAVORED PROTEIN BREAKFAST SHAKE, NO SUGAR ADDED MILK CHOCOLATE",branded_food,Breakfast Drinks,20,Dairy and Egg Products
-non-dairy milk,2705403,"Non-dairy milk, NFS",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+non-dairy milk,2705403,"Non-dairy milk, NFS",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 noodle pudding,2708949,Noodle pudding,survey_fndds_food,"Pasta mixed dishes, excludes macaroni and cheese",48,Dairy and Egg Products
 "noodle with vegetable in tomato-based sauce, diet frozen meal",2709140,"Noodles with vegetables in tomato-based sauce, diet frozen meal",survey_fndds_food,"Pasta mixed dishes, excludes macaroni and cheese",48,Dairy and Egg Products
 "noodle, chinese, cellophane or long rice , dehydrated",174258,"Noodles, chinese, cellophane or long rice (mung beans), dehydrated",sr_legacy_food,Legumes and Legume Products,68,Legumes and Legume Products
@@ -9446,7 +9446,7 @@ oat & maple high protein shake,807427,OATS & MAPLE HIGH PROTEIN SHAKE,branded_fo
 "oat bran, cooked",168873,"Oat bran, cooked",sr_legacy_food,Cereal Grains and Pasta,46,Cereal Grains and Pasta
 "oat bran, raw",168872,"Oat bran, raw",sr_legacy_food,Cereal Grains and Pasta,75,Cereal Grains and Pasta
 "oat flour, partially debranned",169741,"Oat flour, partially debranned",sr_legacy_food,Cereal Grains and Pasta,54,Cereal Grains and Pasta
-oat milk,2705412,Oat milk,survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+oat milk,2705412,Oat milk,survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 "oat milk, refrigerated, unsweetened",2643965,"oat milk, refrigerated, unsweetened",sub_sample_food,Unknown,47,Dairy and Egg Products
 "oat milk, unsweetened, plain, refrigerated",2257046,"Oat milk, unsweetened, plain, refrigerated",foundation_food,Beverages,47,Beverages
 "oat, raw",2708489,"Oats, raw",survey_fndds_food,Not included in a food category,48,Unclassified
@@ -11794,7 +11794,7 @@ rice dessert or salad with fruit,2709091,Rice dessert or salad with fruit,survey
 rice dressing,2709089,Rice dressing,survey_fndds_food,Rice mixed dishes,48,Cereal Grains and Pasta
 "rice flour, brown",168898,"Rice flour, brown",sr_legacy_food,Cereal Grains and Pasta,47,Cereal Grains and Pasta
 "rice flour, white, unenriched",169714,"Rice flour, white, unenriched",sr_legacy_food,Cereal Grains and Pasta,68,Cereal Grains and Pasta
-rice milk,2705411,Rice milk,survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+rice milk,2705411,Rice milk,survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 "rice mix, cheese flavor, dry mix",169778,"Rice mix, cheese flavor, dry mix, unprepared",sr_legacy_food,"Meals, Entrees, and Side Dishes",61,"Meals, Entrees, and Side Dishes"
 "rice mix, white and wild, flavored",168964,"Rice mix, white and wild, flavored, unprepared",sr_legacy_food,"Meals, Entrees, and Side Dishes",75,"Meals, Entrees, and Side Dishes"
 "rice noodle, cooked",168914,"Rice noodles, cooked",sr_legacy_food,Cereal Grains and Pasta,68,Cereal Grains and Pasta
@@ -13050,11 +13050,11 @@ soy chip,2707434,Soy chips,survey_fndds_food,"Tortilla, corn, other chips",48,Ba
 "soy flour, full-fat, roasted",174274,"Soy flour, full-fat, roasted",sr_legacy_food,Legumes and Legume Products,67,Legumes and Legume Products
 "soy flour, low-fat",172444,"Soy flour, low-fat",sr_legacy_food,Legumes and Legume Products,71,Legumes and Legume Products
 "soy meal, defatted, raw",172445,"Soy meal, defatted, raw",sr_legacy_food,Legumes and Legume Products,45,Legumes and Legume Products
-"soy milk, chocolate",2705406,"Soy milk, chocolate",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+"soy milk, chocolate",2705406,"Soy milk, chocolate",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 "soy milk, refrigerated, sweetened",2643912,"soy milk, refrigerated, sweetened",sub_sample_food,Unknown,47,Dairy and Egg Products
-"soy milk, sweetened",2705404,"Soy milk, sweetened",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+"soy milk, sweetened",2705404,"Soy milk, sweetened",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 "soy milk, sweetened, plain, refrigerated",2257044,"Soy milk, sweetened, plain, refrigerated",foundation_food,Legumes and Legume Products,47,Legumes and Legume Products
-"soy milk, unsweetened",2705405,"Soy milk, unsweetened",survey_fndds_food,Plant-based milk,48,Dairy and Egg Products
+"soy milk, unsweetened",2705405,"Soy milk, unsweetened",survey_fndds_food,Plant Based Milk,48,Dairy and Egg Products
 "soy milk, unsweetened, plain, shelf stable",1750337,"Soy milk, unsweetened, plain, shelf stable",foundation_food,Legumes and Legume Products,105,Legumes and Legume Products
 soy nut,2707433,Soy nuts,survey_fndds_food,"Beans, peas, legumes",48,Legumes and Legume Products
 soy nut butter,2707545,Soy nut butter,survey_fndds_food,Soy and meat-alternative products,48,Dairy and Egg Products
@@ -13486,8 +13486,8 @@ sugar substitute and sugar blend,2710262,Sugar substitute and sugar blend,survey
 "summer squash, yellow, raw",2709807,"Summer squash, yellow, raw",survey_fndds_food,Other vegetables and combinations,48,Vegetables and Vegetable Products
 sun-dried tomato,2709727,Sun-dried tomatoes,survey_fndds_food,Tomatoes,48,Vegetables and Vegetable Products
 sun-maid natural seedless small baking raisin 30 lb case,2443781,Sun-Maid Natural Seedless Small Baking Raisins 30 lb Case,branded_food,Fruit  Prepared/Processed,20,Nut and Seed Products
-sun-maid raisin juice concentrate 5 gallon pail,2732974,Sun-Maid Raisin Juice Concentrate 5 Gallon Pail,branded_food,Fruit - Prepared/Processed,20,Fruits and Fruit Juices
-sun-maid raisin juice concentrate 5 gallon resealable pail,2758398,Sun-Maid Raisin Juice Concentrate 5 Gallon Resealable Pail,branded_food,Fruit - Prepared/Processed,20,Fruits and Fruit Juices
+sun-maid raisin juice concentrate 5 gallon pail,2732974,Sun-Maid Raisin Juice Concentrate 5 Gallon Pail,branded_food,Fruit  Prepared/Processed,20,Fruits and Fruit Juices
+sun-maid raisin juice concentrate 5 gallon resealable pail,2758398,Sun-Maid Raisin Juice Concentrate 5 Gallon Resealable Pail,branded_food,Fruit  Prepared/Processed,20,Fruits and Fruit Juices
 sunflower & kale,2170614,SUNFLOWER & KALE,branded_food,Pre-Packaged Fruit & Vegetables,20,Fruits and Fruit Juices
 sunflower oil,2710192,Sunflower oil,survey_fndds_food,Salad dressings and vegetable oils,48,Vegetables and Vegetable Products
 sunflower seed,2707585,"Sunflower seeds, NFS",survey_fndds_food,Nuts and seeds,50,Nut and Seed Products
@@ -14853,16 +14853,16 @@ yuca fry,2709565,Yuca fries,survey_fndds_food,Fried vegetables,48,Vegetables and
 "zee zee applesauce cup, cherry extraordinary, 4.5 oz.",2233683,"Zee Zees Applesauce Cup, Cherry Extraordinary, 4.5 oz.",branded_food,Fruit  Prepared/Processed,25,Fruits and Fruit Juices
 "zee zee applesauce cup, cherry, unsweetened, 4.5 oz.",2233682,"Zee Zees Applesauce Cup, Cherry, Unsweetened, 4.5 oz.",branded_food,Fruit  Prepared/Processed,25,Sweets
 "zee zee applesauce cup, cinnamon, 4.5 oz.",2233576,"Zee Zees Applesauce Cup, Cinnamon, 4.5 oz.",branded_food,Fruit  Prepared/Processed,25,Fruits and Fruit Juices
-"zee zee applesauce cup, cinnamon, no added sugar, 4.5 oz.",2722988,"Zee Zees Applesauce Cup, Cinnamon, No Added Sugar, 4.5 oz.",branded_food,Fruit - Prepared/Processed,24,Sweets
+"zee zee applesauce cup, cinnamon, no added sugar, 4.5 oz.",2722988,"Zee Zees Applesauce Cup, Cinnamon, No Added Sugar, 4.5 oz.",branded_food,Fruit  Prepared/Processed,24,Sweets
 "zee zee applesauce cup, cinnamon, unsweetened, 4.5 oz.",2330876,"Zee Zees Applesauce Cup, Cinnamon, Unsweetened, 4.5 oz.",branded_food,Fruit  Prepared/Processed,25,Sweets
 "zee zee applesauce cup, mango peach, unsweetened, 4.5 oz.",2330977,"Zee Zees Applesauce Cup, Mango Peach, Unsweetened, 4.5 oz.",branded_food,Fruit  Prepared/Processed,25,Sweets
 "zee zee applesauce cup, mixed fruit, 4.5 oz.",2233672,"Zee Zees Applesauce Cup, Mixed Fruit, 4.5 oz.",branded_food,Fruit  Prepared/Processed,25,Fruits and Fruit Juices
 "zee zee applesauce cup, peach, unsweetened, 4.5 oz.",2331009,"Zee Zees Applesauce Cup, Peach, Unsweetened, 4.5 oz.",branded_food,Fruit  Prepared/Processed,25,Sweets
 "zee zee applesauce cup, rock'n blue raspberry, 4.5 oz.",2223385,"Zee Zees Applesauce Cup, Rock'n Blue Raspberry, 4.5 oz.",branded_food,Fruit  Prepared/Processed,22,Fruits and Fruit Juices
-"zee zee applesauce cup, straw banana, no added sugar, 4.5 oz.",2736814,"Zee Zees Applesauce Cup, Straw Banana, No Added Sugar, 4.5 oz.",branded_food,Fruit - Prepared/Processed,24,Sweets
+"zee zee applesauce cup, straw banana, no added sugar, 4.5 oz.",2736814,"Zee Zees Applesauce Cup, Straw Banana, No Added Sugar, 4.5 oz.",branded_food,Fruit  Prepared/Processed,24,Sweets
 "zee zee applesauce cup, straw banana, unsweetened, 4.5 oz.",2233667,"Zee Zees Applesauce Cup, Straw Banana, Unsweetened, 4.5 oz.",branded_food,Fruit  Prepared/Processed,25,Sweets
 "zee zee applesauce cup, strawberry banana, 4.5 oz.",2233617,"Zee Zees Applesauce Cup, Strawberry Banana, 4.5 oz.",branded_food,Fruit  Prepared/Processed,25,Fruits and Fruit Juices
-"zee zee applesauce cup, strawberry, no added sugar, 4.5 oz.",2722669,"Zee Zees Applesauce Cup, Strawberry, No Added Sugar, 4.5 oz.",branded_food,Fruit - Prepared/Processed,24,Sweets
+"zee zee applesauce cup, strawberry, no added sugar, 4.5 oz.",2722669,"Zee Zees Applesauce Cup, Strawberry, No Added Sugar, 4.5 oz.",branded_food,Fruit  Prepared/Processed,24,Sweets
 "zee zee applesauce cup, strawberry, unsweetened, 4.5 oz.",2233645,"Zee Zees Applesauce Cup, Strawberry, Unsweetened, 4.5 oz.",branded_food,Fruit  Prepared/Processed,25,Sweets
 "zee zee applesauce cup, super sour apple, 4.5 oz.",2233752,"Zee Zees Applesauce Cup, Super Sour Apple, 4.5 oz.",branded_food,Fruit  Prepared/Processed,25,Fruits and Fruit Juices
 "zee zee applesauce cup, unsweetened, 4.5 oz.",2331321,"Zee Zees Applesauce Cup, Original, Unsweetened, 4.5 oz.",branded_food,Fruit  Prepared/Processed,25,Sweets
@@ -14874,12 +14874,12 @@ yuca fry,2709565,Yuca fries,survey_fndds_food,Fried vegetables,48,Vegetables and
 "zee zee fruit cup, tropical mixed fruit, 4.5oz.",2525790,"Zee Zees Fruit Cup, Tropical Mixed Fruit, 4.5oz.",branded_food,Fruit  Prepared/Processed,25,Fruits and Fruit Juices
 "zee zee shelf stable yogurt cup, strawberry, 4.0oz",2719051,"Zee Zees Shelf Stable Yogurt Cup, Strawberry, 4.0oz",branded_food,Yogurt/Yogurt Substitutes,24,Dairy and Egg Products
 "zee zee shelf stable yogurt cup, vanilla, 4.0oz",2719050,"Zee Zees Shelf Stable Yogurt Cup, Vanilla, 4.0oz",branded_food,Yogurt/Yogurt Substitutes,24,Dairy and Egg Products
-"zee zee, applesauce cup, banana, no added sugar, 4.5oz",2716634,"Zee Zees, Applesauce Cup, Banana, No Added Sugar, 4.5oz",branded_food,Fruit - Prepared/Processed,24,Sweets
-"zee zee, applesauce cup, birthday cake, no added sugar, 4.5oz",2716129,"Zee Zees, Applesauce Cup, Birthday Cake, No Added Sugar, 4.5oz",branded_food,Fruit - Prepared/Processed,24,Baked Products
-"zee zee, applesauce cup, cherry, no added sugar, 4.5oz",2716152,"Zee Zees, Applesauce Cup, Cherry, No Added Sugar, 4.5oz",branded_food,Fruit - Prepared/Processed,24,Sweets
-"zee zee, applesauce cup, pink lemonade, no added sugar, i/w, 4.5 oz",2716935,"Zee Zees, Applesauce Cup, Pink Lemonade, No Added Sugar, I/W, 4.5 oz",branded_food,Fruit - Prepared/Processed,24,Sweets
-"zee zee, applesauce cup, wild watermelon, no added sugar, 4.5oz",2716128,"Zee Zees, Applesauce Cup, Wild Watermelon, No Added Sugar, 4.5oz",branded_food,Fruit - Prepared/Processed,24,Sweets
-"zee zee, fruit cup, aloha diced pear, 4.5oz",2724389,"Zee Zees, Fruit Cup, Aloha Diced Pears, 4.5oz",branded_food,Fruit - Prepared/Processed,23,Fruits and Fruit Juices
+"zee zee, applesauce cup, banana, no added sugar, 4.5oz",2716634,"Zee Zees, Applesauce Cup, Banana, No Added Sugar, 4.5oz",branded_food,Fruit  Prepared/Processed,24,Sweets
+"zee zee, applesauce cup, birthday cake, no added sugar, 4.5oz",2716129,"Zee Zees, Applesauce Cup, Birthday Cake, No Added Sugar, 4.5oz",branded_food,Fruit  Prepared/Processed,24,Baked Products
+"zee zee, applesauce cup, cherry, no added sugar, 4.5oz",2716152,"Zee Zees, Applesauce Cup, Cherry, No Added Sugar, 4.5oz",branded_food,Fruit  Prepared/Processed,24,Sweets
+"zee zee, applesauce cup, pink lemonade, no added sugar, i/w, 4.5 oz",2716935,"Zee Zees, Applesauce Cup, Pink Lemonade, No Added Sugar, I/W, 4.5 oz",branded_food,Fruit  Prepared/Processed,24,Sweets
+"zee zee, applesauce cup, wild watermelon, no added sugar, 4.5oz",2716128,"Zee Zees, Applesauce Cup, Wild Watermelon, No Added Sugar, 4.5oz",branded_food,Fruit  Prepared/Processed,24,Sweets
+"zee zee, fruit cup, aloha diced pear, 4.5oz",2724389,"Zee Zees, Fruit Cup, Aloha Diced Pears, 4.5oz",branded_food,Fruit  Prepared/Processed,23,Fruits and Fruit Juices
 "zero carb protein 25 gram powder, creamy vanilla, creamy vanilla",2180222,"ZERO CARB PROTEIN 25 GRAMS POWDER, CREAMY VANILLA, CREAMY VANILLA",branded_food,"Energy, Protein & Muscle Recovery Drinks",21,Dairy and Egg Products
 "zero carb protein powder, cooky & cream, cooky & cream",2506251,"ZERO CARB PROTEIN POWDER, COOKIES & CREAM, COOKIES & CREAM",branded_food,"Energy, Protein & Muscle Recovery Drinks",21,Dairy and Egg Products
 "zucchini, pickled",2710104,"Zucchini, pickled",survey_fndds_food,"Olives, pickles, pickled vegetables",48,Vegetables and Vegetable Products

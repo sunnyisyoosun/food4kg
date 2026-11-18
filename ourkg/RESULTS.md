@@ -604,6 +604,36 @@ FDC 가 거의 측정하지 않아 못 쓴다**는 증거다.
 **그래서 `#6` 은 여기서 결론이 난다.** 매핑해도 추천 행렬에 쓸 수 없고, 게다가
 `Adlercreutzia equolifaciens` 의 C00158 대사 경로가 KEGG 에 없다.
 
+#### 카테고리 철자 통합 — FDC 가 같은 카테고리를 셋으로 쪼개 놓았다
+
+브랜드 자유문자열 `food_category_id` 는 FDC 안에서 **구분자가 세 가지**다.
+
+```
+'Meat/Poultry/Other Animals  Prepared/Processed'   9,935   공백 둘
+'Meat/Poultry/Other Animals - Prepared/Processed'  7,978   하이픈
+'Meat/Poultry/Other Animals – Prepared/Processed'    380   en dash
+```
+
+**16 개 카테고리 51,108 항목**이 이렇게 갈려 있었다. 우리 버그가 아니라 FDC
+데이터의 결함인데 그대로 받아 쓰고 있었다.
+
+구두점·대소문자를 지운 키로 묶고 그 안에서 **가장 많이 쓰인 철자**를 대표로
+삼는다 — 표시용 라벨을 새로 지어내지 않는다. **WWEIA 카테고리를 붙인 뒤에**
+돌려야 한다(먼저 돌리면 나중에 붙는 WWEIA 철자가 통합을 비켜 간다 — 실제로
+`Plant-based milk` 하나가 그렇게 남았다).
+
+결과: **29 개 철자 병합**, 세분 카테고리 266 → **265**, `foods.csv` 의 중복 쌍
+3 → **0**. 어휘가 다른 두 출처도 묶인다 — WWEIA `Plant-based milk` 과 브랜드
+`Plant Based Milk` 이 한 카테고리가 되어 soy milk 가 흩어지지 않는다.
+
+F 행렬은 영향이 없고(음식 14,886 · compound 130 · 값 779,094 그대로) 두 기준도
+**기준선과 완전히 같다**(23/1 · 추천군 22 · 비추천군 26 · 위반 2). 방법 1 도
+10/20 · 타당 9/20 그대로다.
+
+**`#2` soy milk 는 여전히 X 다.** 카테고리가 한 덩어리로 모였지만 그 카테고리가
+`Beverages` **아래**에 있지 않다. 이름 문제가 아니라 축 문제라는 진단이 그대로
+확인된 셈이다.
+
 #### 집계 규칙 — 평균을 버리고 대표 측정치를 고른다
 
 한 KEGG 에 FDC nutrient 가 여럿 붙는다(엽산은 DFE·total·food·folic acid 넷).

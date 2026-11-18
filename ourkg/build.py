@@ -62,6 +62,7 @@ def food():
         cat_num.isna(), None)
     food['category'] = food['category'].fillna('Unknown')
 
+
     # FNDDS(survey_fndds_food)는 food.csv 에 food_category_id 가 없다. 카테고리는
     # survey_fndds_food.csv 의 wweia_category_number 에 있다 (FDC survey 배포본).
     # 이것을 붙이지 않으면 FNDDS 음식 545종이 전부 Unclassified 가 되고, 그 안에
@@ -80,6 +81,26 @@ def food():
     else:
         print('  ⚠ survey_fndds_food.csv / wweia_food_category.csv 없음 — '
               'FNDDS 음식은 이름 규칙으로만 분류된다')
+
+    # 브랜드 자유문자열 카테고리는 FDC 안에서 **구분자가 세 가지**다 — 공백 둘,
+    # 하이픈, en dash. 같은 카테고리가 셋으로 쪼개진다:
+    #   'Fruit  Prepared/Processed' 1,532 · 'Fruit - …' 695 · 'Fruit – …' 44
+    # 16 개 카테고리 51,108 항목이 이렇게 갈려 있었다. **WWEIA 적용 뒤에** 돌려야
+    # 한다 — 먼저 돌리면 나중에 붙는 WWEIA 철자가 통합을 비켜 간다. 구두점·대소문자를 지운
+    # 키로 묶고, 그 안에서 **가장 많이 쓰인 철자**를 대표로 삼는다(표시용 라벨을
+    # 지어내지 않는다). WWEIA 의 'Plant-based milk' 와 브랜드의 'Plant Based Milk'
+    # 처럼 어휘가 달라도 같은 키면 묶인다 — §5.1 방법 1 #2 의 soy milk 가 이 경우다.
+    _ckey = lambda x: re.sub(r'\s+', ' ', re.sub(r'[^a-z0-9/&]+', ' ', str(x).lower())).strip()
+    _vc = food['category'].value_counts()
+    _canon, _seen = {}, {}
+    for _name, _n in _vc.items():
+        _k = _ckey(_name)
+        if _k not in _seen:                      # value_counts 는 빈도 내림차순
+            _seen[_k] = _name
+        _canon[_name] = _seen[_k]
+    _merged = sum(1 for a, b in _canon.items() if a != b)
+    food['category'] = food['category'].map(_canon).fillna(food['category'])
+    print(f'  카테고리 철자 통합: {_merged} 개 철자 -> 대표 철자로 병합')
 
     food = food.rename(columns={'description': 'food_name'})
 
