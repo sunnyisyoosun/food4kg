@@ -729,13 +729,32 @@ def evaluate():
                r'relat)|failed to|did not (differ|associat)|unrelated')
         ABS_K = int(os.environ.get('ABS_K', '20'))      # 읽을 초록 수
 
+        # 음식 행에는 **식이 맥락**을 함께 요구한다. 이게 없으면 "mustard oil 로
+        # 내장통증을 유발했다"(자극제)나 우울증 병력이 적힌 증례 보고가 +1 로 잡힌다.
+        DIET = (r'diet|dietary|intake|consum|ingest|eating|nutrition|food|meal|'
+                r'supplement|feeding|serving|beverage|drink')
+        # 동형이의어 — 'inbreeding depression'(근친교배 약세)·'ST-segment
+        # depression' 은 우울증이 아니다. 이런 수식어가 붙은 문장은 버린다.
+        HOMOGRAPH = (r'(inbreeding|outbreeding|st[- ]segment|spreading|respiratory|'
+                     r'economic|freezing[- ]point|bone marrow|immunosuppress)\s+'
+                     r'depress')
+
         def _stem(t):
-            """엔티티 이름 -> 문장에서 찾을 접두 패턴. 'Autistic disorder' -> autis"""
+            """엔티티 이름 -> 문장에서 찾을 패턴. 어간을 자르지 않고 **온전한
+            단어**로 맞추되 복수·소유격만 허용한다. 전에는 접두 몇 글자로 잘라
+            (Mustard -> musta) 무관한 단어까지 걸렸다."""
             t = re.sub(r'\b(disorder|disorders|disease|diseases|products|total)\b',
                        '', t, flags=re.I)
             w = [x for x in re.split(r'\W+', t.strip()) if len(x) > 2]
-            b = max(w, key=len).lower() if w else ''
-            return re.escape(b[:max(5, len(b) - 3)]) if b else None
+            if not w:
+                return None
+            b = re.escape(max(w, key=len).lower())
+            # autistic/autism 처럼 어미가 갈리는 질환명은 공통 어간까지만 쓴다.
+            for a, stem in (('autis', 'autis'), ('depress', 'depress'),
+                            ('anxi', 'anxi'), ('schizo', 'schizo')):
+                if b.startswith(a):
+                    return stem + r'\w*'
+            return rf'\b{b}(s|es|\'s)?\b'
 
         def _eutils(cgi, **params):
             r = S.get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/' + cgi,
@@ -760,13 +779,16 @@ def evaluate():
             for m in re.finditer(r'<PubmedArticle>.*?</PubmedArticle>', txt, re.S):
                 a = m.group(0)
                 pid = re.search(r'<PMID[^>]*>(\d+)</PMID>', a)
+                # 증례 보고는 한 사람의 병력 나열이라 연관의 근거가 못 된다.
+                if 'Case Reports' in a:
+                    continue
                 if pid:
                     docs[pid.group(1)] = re.sub(r'<[^>]+>', ' ', ' '.join(
                         re.findall(r'<ArticleTitle[^>]*>(.*?)</ArticleTitle>', a, re.S)
                         + re.findall(r'<AbstractText[^>]*>(.*?)</AbstractText>', a, re.S)))
             return n, ids, docs
 
-        def judge(terms, evidence, ladder=None):
+        def judge(terms, evidence, ladder=None, diet=False):
             """한 건을 초록 판독으로 판정한다 (1 / 0 / -1).
 
             음식명은 일반명 사다리를 올리며 재시도한다. 우리 15 건과 논문 자신의
@@ -785,6 +807,10 @@ def evaluate():
                         if not (pa and pb and re.search(pa, low)
                                 and re.search(pb, low)):
                             continue
+                        if re.search(HOMOGRAPH, low):
+                            continue        # 우울증이 아닌 'depression'
+                        if diet and not re.search(DIET, low):
+                            continue        # 음식 행은 식이 맥락이 있어야 센다
                         if re.search(NEG, low):
                             neg += 1
                         elif re.search(ASSOC, low):
@@ -805,7 +831,7 @@ def evaluate():
                   for _n, q, at, ev, _p, rs in _PT5]
         rows = []
         for who, q, attr, ev, terms, ladder, pres in cases:
-            r = judge(terms, ev, ladder)
+            r = judge(terms, ev, ladder, diet=str(attr).startswith('Diet'))
             r.update(who=who, question=q, attributes=attr, paper_result=pres)
             rows.append(r)
             print(f"  [{who:5s}] {q[:40]:42s} [{r['term_used'][:14]:16s}] "

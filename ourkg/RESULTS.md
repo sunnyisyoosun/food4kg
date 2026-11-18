@@ -663,22 +663,33 @@ long 표에 없어 축이 7/8 이다.
 
 논문 15 건을 우리 자로 재면 **11/15** 가 통과한다. 논문이 보고한 값도 11/15 다.
 
-#### 다만 우리 15 건의 13/15 는 부풀려져 있다
+#### 어간 매칭이 느슨해 위양성이 있었다 — 고쳤다
 
-같은 자로 우리 추론 15 건은 13/15 가 나오는데, **이 숫자를 논문의 11/15 와
-나란히 두면 안 된다.** 인용문(`quote` 열)을 읽어 보면 위양성이 보인다.
+처음 판에서는 우리 15 건이 13/15 였는데 인용문을 읽으니 근거가 아니었다.
+`Mustard greens × depression` 이 *"mustard oil 로 내장통증을 유발했다"* 는
+자극제 실험으로, `Pork × depression` 이 우울증 병력이 적힌 증례 보고로 잡혔다.
+세 가지가 겹친 문제다.
 
-- `Mustard greens … and depression` → 잡힌 문장이 *"To investigate the role for
-  GCH-1 in visceral pain…"* 이다. mustard **oil** 을 통증 유발제로 쓴 실험이지
-  식이가 아니다.
-- `Pork, cured, shoulder … and depression` → 우울증 병력이 적힌 **증례 보고**다.
+| 문제 | 고친 방법 |
+|---|---|
+| 어간을 몇 글자로 잘라 매칭 (`Mustard` → `musta`) | **온전한 단어**로 맞춘다. 복수·소유격만 허용 (`\bmustard(s\|es\|'s)?\b`). autistic/autism 처럼 어미가 갈리는 질환명만 공통 어간 |
+| 음식이 식이가 아닌 맥락으로 등장 (자극제·시약) | 음식 행은 문장에 **식이 맥락**(`diet\|intake\|consum\|…`)이 함께 있어야 센다 |
+| `inbreeding depression`(근친교배 약세)을 우울증으로 셈 | 동형이의어 수식어 목록으로 그 문장을 버린다 (`st-segment`·`spreading`·`respiratory` 등도) |
+| 증례 보고를 연관의 근거로 셈 | `PublicationType` 이 `Case Reports` 인 논문을 뺀다 |
 
-원인은 음식 이름의 어간 매칭이 느슨한 것이다(`Mustard` → `musta`). 논문 15 건은
-질환-질환 쌍이 많아 이 문제가 드러나지 않았다. **판별력 0.83 은 논문의 라벨
-분포에서 잰 값이고, 우리 Diet 행에는 그대로 적용되지 않는다.**
+**논문 15 건의 판별력은 0.83 그대로다**(10/11 vs 1/4). 우리 15 건은 13 → **9/15
+(+1 9 · 0 5 · −1 1)** 로 내려갔고, 남은 +1 의 인용문이 실제 근거로 바뀌었다.
 
-그래서 `quote` 열을 산출물에 넣었다 — 사람이 근거 문장을 바로 볼 수 있게.
-방법 2 는 이제 **지표가 아니라 검수 도구**다.
+```
+Pork       11859715: high monthly pork consumption (OR = 1.608) ...
+Beverages  30419536: Sugar-sweetened beverages consumption and the risk of
+                     depression: A meta-analysis ...
+Lettuce    26445711: spinach, lettuce, chicory, and squash (vegetables) ...
+```
+
+숫자가 내려간 것이 개선이다 — 13 중 4 건이 근거 없는 통과였다. 그래도 이 9/15 를
+논문의 11/15 와 **순위처럼 비교하지는 않는다.** 판별력은 논문의 라벨 분포에서 잰
+값이고, `quote`·`sent_assoc`·`sent_negative` 로 사람이 검수하는 용도다.
 
 #### 그 0/7 은 표기 문제가 아니었다
 
