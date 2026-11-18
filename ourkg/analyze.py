@@ -452,19 +452,18 @@ def evaluate():
         # 20개 질의 함수를 그대로 재사용해 **답을 뽑아 논문 답과 대조**한다.
         # m1.KG 를 상속하고 적재만 우리 산출물로 바꾼다 — 질의 20개는 손대지 않는다.
 
-        # m1.NUT 는 FDC nutrient_id 로 되어 있고 우리 long 표는 KEGG 로 되어 있다.
-        NUT2KEGG = {1214: 'C00047', 1190: 'C00504', 1105: 'C00473',
-                    1032: 'C00158', 1162: 'C00072', 1092: 'C00238',
-                    1178: 'C05776', 1175: None}      # 1175 B-6 는 KEGG 대응이 없다
-        # 우리 long 표는 g, 공개 KG 는 FDC 원 단위(mg/µg)다. 공통 음식에서 잰
-        # 배율은 공통 음식에서 재어 모두 10^3 이었다 (ourkg/RESULTS.md 방법 1).
+        # 질의는 FDC nutrient 를 id 로 묻는다. 전에는 그것을 KEGG 로 접어 F 층
+        # (food_compound_long)에서 찾았는데, F 는 KEGG 당 **대표 측정치 하나**만
+        # 남긴 표라 "Folate, DFE"(1190)·"Vitamin B-6"(1175) 같은 질문이 요구하는
+        # 값을 잃었다. 이제 KG 층(food_compound_kg)에서 nutrient_id 로 바로 찾는다.
+        # 우리 표는 g, 공개 KG 는 FDC 원 단위(mg/µg)다. 공통 음식에서 잰
+        # 배율은 모두 10^3 이었다 (ourkg/RESULTS.md 방법 1).
         G_TO_FDC = 1000.0
 
         class OurKG(m1.KG):
             def __init__(self):
                 dd = collections.defaultdict
                 foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
-                long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
                 mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str})
                 md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'),
                                  dtype={'taxid': str})
@@ -474,20 +473,17 @@ def evaluate():
 
                 self.food = dict(zip(foods.fdc_id, foods.food_name))
                 key2fdc = dict(zip(foods.food_key, foods.fdc_id))
-                long = long.assign(fdc=long.food_key.map(key2fdc))
 
-                # nut2kegg 는 '음식 성분으로 측정된 compound' 집합이다 (q15 가
-                # .values() 로 쓴다). 공개 KG 는 Food_Nutrient 의 sameAs 전부를 담으므로
-                # 우리도 음식 행렬의 compound 전부를 넣는다 — 8종만 넣으면 안 된다.
+                # 성분 중량과 nutrient -> KEGG 는 **KG 층**에서 온다. 공개 KG 의
+                # nut2kegg 와 같은 뜻(FDC nutrient id -> KEGG)이 되도록 nutrient_id
+                # 를 키로 쓴다 — 전에는 인덱스를 키로 둬 이름만 같고 뜻이 달랐다.
                 self.w = dd(dict)
-                self.nut2kegg = {i: k for i, k in enumerate(sorted(set(long.kegg.dropna())))}
-                for nid, kegg in NUT2KEGG.items():
-                    if kegg is None:
-                        continue
-                    sub = long[long.kegg == kegg]
-                    self.w[nid] = {int(f): v * G_TO_FDC
-                                   for f, v in zip(sub.fdc, sub.amount_g)
-                                   if pd.notna(f)}
+                _kg = pd.read_csv(os.path.join(OUT, 'food_compound_kg.csv')).assign(
+                    fdc=lambda d: d.food_key.map(key2fdc)).dropna(subset=['fdc'])
+                self.nut2kegg = dict(zip(_kg.nutrient_id, _kg.kegg))
+                for _nid, _g in _kg.groupby('nutrient_id'):
+                    self.w[int(_nid)] = {int(f): v * G_TO_FDC
+                                         for f, v in zip(_g.fdc, _g.amount_g)}
 
                 # 카테고리: FDC 세분류 → SR 27군 두 층 + 온톨로지 라벨.
                 self.f2c, self.clab, self.csub = dd(set), {}, dd(set)

@@ -106,8 +106,25 @@ def food():
 
     food = food.rename(columns={'description': 'food_name'})
 
+    # 논문은 KG 의 compound(§3.2 23,212)와 추천 행렬 F 의 compound(§4.2.1 85)를
+    # **분리**한다. 우리는 둘을 한 표로 쓰고 있었고, 그래서 "F 에 넣으면 추천이
+    # 무너지는 성분"이 KG 에서도 통째로 빠졌다 — §5.1 방법 1 #4·#6·#10 이 그래서
+    # 막혔다. 스트리밍은 **확장 매핑**(후보 94 종 포함)으로 넓게 받고, F 는 뒤에서
+    # `setup/nutrient_kegg_map.csv` 로 좁힌다. F 는 정의상 바뀌지 않는다.
+    _cand = os.path.join(BASE, 'setup', 'nutrient_kegg_candidates.csv')
+    kg_nid2kegg, kg_nid2name = dict(nid2kegg), dict(nid2name)
+    if os.path.exists(_cand):
+        _c = pd.read_csv(_cand)
+        kg_nid2kegg.update(dict(zip(_c['nutrient_id'], _c['kegg'])))
+        kg_nid2name.update(dict(zip(_c['nutrient_id'], _c['nutrient_name'])))
+    # F 에서 일부러 뺀 성분도 KG 에는 둔다 — Vitamin B-6 는 넣으면 추천이 무너져
+    # 기각했지만(§4.3) 질의는 답할 수 있어야 한다. KEGG 대응이 없는 것이 아니다.
+    kg_nid2kegg.setdefault(1175, 'C00314')
+    kg_nid2name.setdefault(1175, 'Vitamin B-6')
+    print(f'  KG 층 매핑 {len(kg_nid2kegg)} (F 층 {len(nid2kegg)})')
+
     print(f'[3/5] food_nutrient.csv 스트리밍 (KEGG 매핑 행만, 단위 g 환산)')
-    keep = set(nid2kegg)
+    keep = set(kg_nid2kegg)
     parts = []
     rows = 0
     for ch in pd.read_csv(os.path.join(FDC_RAW, 'food_nutrient.csv'), chunksize=CHUNK,
@@ -120,7 +137,7 @@ def food():
     print()
     fn = pd.concat(parts, ignore_index=True)
     del parts
-    fn['kegg'] = fn['nutrient_id'].map(nid2kegg)
+    fn['kegg'] = fn['nutrient_id'].map(kg_nid2kegg)
     fn['unit'] = fn['nutrient_id'].map(nid2unit)
     fn['amount_g'] = pd.to_numeric(fn['amount'], errors='coerce') * fn['unit'].map(UNIT_TO_G).fillna(1.0)
     fn = fn.dropna(subset=['amount_g'])
@@ -142,6 +159,10 @@ def food():
              'food_before_merge': int(n_before),
              'food_after_merge': int(n_after),
              'min_cov': MIN_COV}
+
+    # --- KG 층: 성분별 측정치를 **그대로** 둔다 (대표 선택·F 제한 없음).
+    # 질의는 FDC nutrient 를 이름으로 묻는다("Folate, DFE", "Vitamin B-6").
+    _kg_fn = fn.assign(nutrient_name=fn['nutrient_id'].map(kg_nid2name)).copy()
 
     # 한 KEGG 에 FDC nutrient 가 여럿 붙는다 (Folate 는 DFE·total·food·folic acid
     # 넷). 전에는 **평균**을 냈는데 서로 다른 것을 재는 값이라 어느 쪽도 아닌
@@ -168,6 +189,7 @@ def food():
             r += 2
         return r
 
+    fn = fn[fn['nutrient_id'].isin(nid2kegg)]          # 여기서부터 F 층
     fn['rank'] = fn['nutrient_id'].map(_nut_rank)
     fn = fn[fn['rank'] == fn.groupby(['food_key', 'kegg'])['rank'].transform('min')]
 
@@ -227,6 +249,19 @@ def food():
     with open(os.path.join(OUT, 'food_link.json'), 'w') as _fh:
         json.dump(_link, _fh, indent=1)
     long.to_csv(os.path.join(OUT, 'food_compound_long.csv'), index=False)
+    # KG 층은 **대표 항목의 값**을 쓴다. foods.csv 는 큐레이션 순위(_PRIORITY)로
+    # 대표 fdc_id 를 고르는데 값만 라벨 전체 평균이면 둘이 어긋난다 — 'Pie, peach'
+    # 는 대표가 SR legacy(DFE 46 µg)인데 FNDDS(42)와 평균 내 44 가 됐다(방법 1 #4).
+    _rep = dict(zip(meta['food_key'], meta['fdc_id']))
+    _kg_fn = _kg_fn[_kg_fn['food_key'].isin(keep_food)]
+    _kg_fn = _kg_fn[_kg_fn['fdc_id'] == _kg_fn['food_key'].map(_rep)]
+    _kgc = (_kg_fn.groupby(['food_key', 'nutrient_id', 'nutrient_name', 'kegg'],
+                           as_index=False)['amount_g'].mean())
+    _kgc.to_csv(os.path.join(OUT, 'food_compound_kg.csv'), index=False)
+    _link['kg_compound'] = int(_kgc['kegg'].nunique())
+    _link['kg_nutrient'] = int(_kgc['nutrient_id'].nunique())
+    print(f'  KG 층: compound {_link["kg_compound"]} · nutrient {_link["kg_nutrient"]} '
+          f'· 값 {len(_kgc):,}  (F 층 compound {long["kegg"].nunique()})')
     meta.to_csv(os.path.join(OUT, 'foods.csv'), index=False)
     print(f'  음식 {len(meta):,} / compound {long["kegg"].nunique()} / 값 {len(long):,}')
     print(f'  음식당 compound 중앙값 {meta["n_compound"].median():.1f} '
