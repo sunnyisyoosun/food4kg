@@ -1,0 +1,95 @@
+nutrient_id,nutrient_name,kegg,foods_measured,coverage_pct
+1176,Biotin,C00120,983,6.56
+1181,Inositol,C00137,46,0.31
+1032,Citric acid,C00158,29,0.19
+1039,Malic acid,C00149,29,0.19
+1294,Beta-sitostanol,C19644,25,0.17
+1041,Oxalic acid,C00209,24,0.16
+1044,Quinic acid,C00296,24,0.16
+1284,Ergosterol,C01694,13,0.09
+2059,Vitamin D4,C18192,13,0.09
+2057,Ergothioneine,C05570,13,0.09
+2069,Glutathione,C00051,13,0.09
+1234,Taurine,C00245,12,0.08
+1287,Brassicasterol,C08813,12,0.08
+2058,Beta-glucan,C00551,12,0.08
+1289,Campestanol,C15787,12,0.08
+1340,Daidzein,C10208,9,0.06
+2050,Genistin,C09126,9,0.06
+1341,Genistein,C06563,9,0.06
+2049,Daidzin,C10216,9,0.06
+2051,Glycitin,C16195,9,0.06
+1043,Pyruvic acid,C00022,9,0.06
+1078,Xylitol,C00379,5,0.03
+1077,Stachyose,C01613,2,0.01
+1233,Glutamine,C00303,2,0.01
+2063,Verbascose,C08252,2,0.01
+1076,Raffinose,C00492,2,0.01
+1081,Ribose,C08353,1,0.01
+1029,Chelidonic acid,C08476,0,0.0
+1028,Benzoic acid,C00180,0,0.0
+1016,Amylopectin,C00317,0,0.0
+1065,Glycogen,C00182,0,0.0
+1056,Sorbitol,C00794,0,0.0
+1055,Mannitol,C00392,0,0.0
+1054,Piperine,C03882,0,0.0
+1048,Ursolic acid,C08988,0,0.0
+1047,Tartaric acid,C00898,0,0.0
+1046,Succinic acid,C00042,0,0.0
+1045,Salicylic acid,C00805,0,0.0
+1042,Phytic acid,C01204,0,0.0
+1037,Isocitric acid,C00311,0,0.0
+1038,Lactic acid,C01432,0,0.0
+1040,Oxaloacetic acid,C00036,0,0.0
+1033,Fumaric acid,C00122,0,0.0
+1034,Galacturonic acid,C08348,0,0.0
+1035,Gallic acid,C01424,0,0.0
+1036,Glycolic acid,C00160,0,0.0
+1017,Pectin,C00714,0,0.0
+1026,Acetic acid,C00033,0,0.0
+1022,Cellulose,C00760,0,0.0
+1019,Pentosan,C06016,0,0.0
+1031,Cinnamic acid,C10438,0,0.0
+1030,Chlorogenic acid,C00852,0,0.0
+1193,Tetrahydrofolic acid (THF),C00101,0,0.0
+1083,Theophylline,C07130,0,0.0
+1207,Vanillic acid,C06672,0,0.0
+1206,Tyrosol,C06044,0,0.0
+1205,Gentisic acid,C00628,0,0.0
+1203,Ellagic acid,C10788,0,0.0
+1202,p-Coumaric acid,C00811,0,0.0
+1201,Caffeic acid,C01197,0,0.0
+1080,Lignin,C05615,0,0.0
+1074,Xylose,C01394,0,0.0
+1357,Delphinidin,C05908,0,0.0
+1349,Cyanidin,C05905,0,0.0
+1346,Coumestrol,C10205,0,0.0
+1345,Formononetin,C00858,0,0.0
+1344,Biochanin A,C00814,0,0.0
+1342,Glycitein,C14536,0,0.0
+1231,Asparagine,C16438,0,0.0
+1297,Alpha-spinasterol,C08840,0,0.0
+1358,Malvidin,C08716,0,0.0
+1359,Pelargonidin,C05904,0,0.0
+1360,Peonidin,C08726,0,0.0
+1361,Petunidin,C08727,0,0.0
+1364,Catechin,C17590,0,0.0
+1373,Eriodictyol,C05631,0,0.0
+1374,Hesperetin,C01709,0,0.0
+1375,Isosakuranetin,C05334,0,0.0
+1384,Sinensetin,C10186,0,0.0
+1383,Nobiletin,C10112,0,0.0
+1382,Luteolin,C01514,0,0.0
+1381,Diosmetin,C10038,0,0.0
+1380,Chrysoeriol,C04293,0,0.0
+1379,Apigenin,C01477,0,0.0
+1377,Naringenin,C00509,0,0.0
+1376,Liquiritigenin,C09762,0,0.0
+1403,Inulin,C03323,0,0.0
+1399,Mannose,C00159,0,0.0
+1392,Theogallin,C10834,0,0.0
+1391,Quercetin,C00389,0,0.0
+1390,Myricetin,C10107,0,0.0
+1388,Kaempferol,C05903,0,0.0
+1387,Isorhamnetin,C10084,0,0.0
+1385,Tangeretin,C10190,0,0.0
