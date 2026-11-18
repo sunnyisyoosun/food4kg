@@ -546,6 +546,14 @@ def run(kg=None):
     return pd.DataFrame(rows)
 
 
+# 논문 답 자체가 Supplement Query 1 의 미결합 ?unit 결함으로 틀린 문항.
+# 교정판 SPARQL 로 Table 2 의 8 행이 모두 8~82 배 과대임을 확인했다
+# (REPRODUCTION.md §17.2 · §17.31). 이 문항들은 '재현 O' 가 나와도 그것은
+# **논문의 결함을 재연한 것**이지 KG 가 옳은 답을 낸 것이 아니다. 분모에서
+# 빼지는 않되 — 분모를 우리가 고치면 비교가 흔들린다 — 몇 건인지 늘 같이 적는다.
+PAPER_DEFECT = {5, 9, 10}
+
+
 def summary(df):
     """scorecard 가 쓰는 집계값."""
     n = len(df)
@@ -572,6 +580,7 @@ def summary(df):
         valid_fail=int(vc.get('X', 0)),
         valid_na=int(vc.get('-', 0)),
         both=int(((df.reproduced == 'O') & (df.valid == 'O')).sum()),
+        artifact=int(((df.reproduced == 'O') & df.no.isin(PAPER_DEFECT)).sum()),
         by_aspect=by_aspect,
         paper_accuracy=PAPER_ACCURACY,
         transcript_accuracy=transcript_accuracy(),
@@ -700,6 +709,10 @@ def report(df=None, save=True):
           + (f' / 판정 제외 {s["valid_na"]}' if s['valid_na'] else '')
           + f'   (전체 {s["n"]})')
     print(f'  재현되고 타당한 문항: {s["both"]}/{s["n"]}')
+    if s['artifact']:
+        print(f'    ※ 재현 {s["reproduced"]} 중 {s["artifact"]} 건은 논문 Query 1 '
+              f'결함을 재연한 것이다 (#{" #".join(str(n) for n in sorted(PAPER_DEFECT))} '
+              f'중). 주지표는 재현+타당 쪽이다.')
     print()
     print('  전문가 판정(V0/V1/V2) 기준 분리')
     print('    전문가 답은 공개되지 않았다. V=1,1,1 인 문항만 "논문 답 = 전문가 답"이 확정된다.')

@@ -611,6 +611,10 @@ def evaluate():
         rep = int((b.ourkg_reproduced == 'O').sum())
         both = int(((b.ourkg_reproduced == 'O') & (b.ourkg_valid == 'O')).sum())
         con = b[(b.expert_consensus == 1) & (b.ourkg_reproduced != '-')]
+        _art = int(((b.ourkg_reproduced == 'O') & b.no.isin(m1.PAPER_DEFECT)).sum())
+        if _art:
+            print(f'  ※ 재현 {rep} 중 {_art} 건은 논문 Query 1 결함을 재연한 것이다'
+                  f' — 주지표는 재현+타당 쪽이다 (eval/m1.PAPER_DEFECT)')
         print(f'  논문 답 재현 {rep}/{n}   재현+타당 {both}/{n}   '
               f'전문가 전원동의 {len(con)}문항 중 '
               f'{int((con.ourkg_reproduced == "O").sum())}')
