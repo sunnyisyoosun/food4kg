@@ -716,41 +716,88 @@ def evaluate():
             if len(sample) == 15:
                 break
 
-        # 판정은 '두 엔티티 + KG 가 댄 근거' 세 항의 공출현(3항)으로 하고, 두 항만의
-        # 공출현(2항)도 같이 적는다. 2항만 쓰면 anxiety+depression 이 19 만 건이라
-        # 아무것도 검증하지 못한다. 근거 물질 이름을 넓혀 보는(L-/alpha- 접두어 제거,
-        # -ate <-> -ic acid OR 확장) 시도는 30 행 전부 수치가 같아 걷어냈다 — 3항이
-        # 0 인 것은 검색어가 아니라 기준 때문이다 (RESULTS §4.3).
-        def pubmed(terms, extra=None):
-            q = ' AND '.join(f'"{t}"' for t in terms if t)
-            if extra:
-                q += f' AND "{extra}"'
-            r = S.get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi',
-                      params={'db': 'pubmed', 'term': q, 'retmax': 3, 'retmode': 'json'},
-                      timeout=60)
+        # 판정은 **초록 판독**이다 — 논문이 수작업으로 한 것을 efetch 로 자동화한다.
+        # 두 엔티티가 한 문장에 함께 나오고 연관 표현이 있으면 +1, 부정이면 -1.
+        # 논문 Table 5 15 건으로 세 자를 재어 고른 것이다 (confirmed 11 / non-conf 4):
+        #   3항(두 엔티티+근거 물질) 1/11 vs 0/4 · 2항 10/11 vs 3/4 · 초록 10/11 vs 1/4
+        # 색인 공출현 두 자는 버렸다. 상세는 RESULTS §4.3.
+        ASSOC = (r'associat|correlat|linked|relationship|risk|comorbid|predict|'
+                 r'effect|influenc|contribut|increas|decreas|reduc|improv|'
+                 r'protect|prevalen')
+        NEG = (r'\bno\s+(significant\s+)?(association|correlation|relationship|'
+               r'difference|effect)|not\s+(significantly\s+)?(associat|correlat|'
+               r'relat)|failed to|did not (differ|associat)|unrelated')
+        ABS_K = int(os.environ.get('ABS_K', '20'))      # 읽을 초록 수
+
+        def _stem(t):
+            """엔티티 이름 -> 문장에서 찾을 접두 패턴. 'Autistic disorder' -> autis"""
+            t = re.sub(r'\b(disorder|disorders|disease|diseases|products|total)\b',
+                       '', t, flags=re.I)
+            w = [x for x in re.split(r'\W+', t.strip()) if len(x) > 2]
+            b = max(w, key=len).lower() if w else ''
+            return re.escape(b[:max(5, len(b) - 3)]) if b else None
+
+        def _eutils(cgi, **params):
+            r = S.get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/' + cgi,
+                      params=dict(db='pubmed', **params), timeout=120)
             time.sleep(0.4)
+            return r
+
+        def search_read(terms):
+            """색인 검색 + 상위 ABS_K 편의 제목·초록. (적중 수, PMID, 본문)"""
+            q = ' AND '.join(f'"{t}"' for t in terms if t)
             try:
-                d = r.json()['esearchresult']
-                return int(d['count']), d.get('idlist', [])
+                d = _eutils('esearch.fcgi', term=q, retmax=ABS_K, retmode='json',
+                            sort='relevance').json()['esearchresult']
+                n, ids = int(d['count']), d.get('idlist', [])
             except Exception:
-                return 0, []
+                return 0, [], {}
+            if not ids:
+                return n, [], {}
+            txt = _eutils('efetch.fcgi', id=','.join(ids), retmode='xml',
+                          rettype='abstract').text
+            docs = {}
+            for m in re.finditer(r'<PubmedArticle>.*?</PubmedArticle>', txt, re.S):
+                a = m.group(0)
+                pid = re.search(r'<PMID[^>]*>(\d+)</PMID>', a)
+                if pid:
+                    docs[pid.group(1)] = re.sub(r'<[^>]+>', ' ', ' '.join(
+                        re.findall(r'<ArticleTitle[^>]*>(.*?)</ArticleTitle>', a, re.S)
+                        + re.findall(r'<AbstractText[^>]*>(.*?)</AbstractText>', a, re.S)))
+            return n, ids, docs
 
         def judge(terms, evidence, ladder=None):
-            """한 건을 3항·2항 두 자로 잰다. 음식명은 일반명 사다리를 올리며 재시도.
-            우리 15 건과 논문 자신의 15 건을 **같은 함수로** 잰다."""
-            ids, n3, n2, term, lv = [], 0, 0, terms[0], 0
+            """한 건을 초록 판독으로 판정한다 (1 / 0 / -1).
+
+            음식명은 일반명 사다리를 올리며 재시도한다. 우리 15 건과 논문 자신의
+            15 건을 **같은 함수로** 잰다 — 보정값이 자의 차이가 아니라 대상의
+            차이가 되도록.
+            """
+            pb = _stem(terms[1] if len(terms) > 1 else '')
+            n = pos = neg = 0
+            ids, docs, term, lv, ex = [], {}, terms[0], 0, ''
             for lv, term in enumerate(ladder or terms[:1]):
-                n3, ids = pubmed([term] + terms[1:], evidence)
-                n2, _ = pubmed([term] + terms[1:])
-                if n3:
+                n, ids, docs = search_read([term] + terms[1:])
+                pa, pos, neg = _stem(term), 0, 0
+                for pid, body in docs.items():
+                    for sent in re.split(r'(?<=[.!?])\s+', body):
+                        low = sent.lower()
+                        if not (pa and pb and re.search(pa, low)
+                                and re.search(pb, low)):
+                            continue
+                        if re.search(NEG, low):
+                            neg += 1
+                        elif re.search(ASSOC, low):
+                            pos += 1
+                            ex = ex or f'{pid}: {sent.strip()[:90]}'
+                if pos or neg:
                     break
             return {'evidence': evidence, 'pubmed': ';'.join(ids[:2]),
                     'term_used': term, 'term_level': lv,
-                    'n_hits_with_evidence': n3, 'n_hits_pair_only': n2,
-                    'result': 1 if n3 else 0}
+                    'n_hits_pair_only': n, 'n_abstracts': len(docs),
+                    'sent_assoc': pos, 'sent_negative': neg, 'quote': ex,
+                    'result': 1 if pos > neg else (-1 if neg > pos else 0)}
 
-        # 우리 15 건과 논문 15 건을 한 루프에서 잰다 — (라벨, 질문, 분야, 근거,
-        # 검색어, 사다리, 논문판정). 보정값이 자의 차이가 아니라 대상의 차이가 되게.
         from paper_data import TABLE5 as _PT5
         cases = [('ourkg', i['q'], i['type'], i['evidence'], i['terms'],
                   i.get('ladder'), None) for i in sample]
@@ -761,9 +808,10 @@ def evaluate():
             r = judge(terms, ev, ladder)
             r.update(who=who, question=q, attributes=attr, paper_result=pres)
             rows.append(r)
-            print(f"  [{who:5s}] {q[:40]:42s} {ev[:20]:22s} "
-                  f"[{r['term_used'][:14]:16s}] 근거포함={r['n_hits_with_evidence']:5d}"
-                  f"  두항만={r['n_hits_pair_only']:6d}  -> {r['result']}")
+            print(f"  [{who:5s}] {q[:40]:42s} [{r['term_used'][:14]:16s}] "
+                  f"색인={r['n_hits_pair_only']:6d} 초록={r['n_abstracts']:3d} "
+                  f"연관문장={r['sent_assoc']:3d} 부정={r['sent_negative']:2d}"
+                  f"  -> {r['result']:+d}")
         all_rows = pd.DataFrame(rows)
 
         # 두 파일은 **같은 스키마**다. 열을 따로 고르지 않는다 — 보정값은 우리 자를
@@ -777,27 +825,23 @@ def evaluate():
         t5 = dump('ourkg', 'eval_method2.csv')
         cdf = dump('paper', 'eval_method2_calibration.csv')
 
-        print(f"\n  확인됨(1) {int(t5.result.sum())}/15, "
-              f"미확인(0) {int((t5.result == 0).sum())}/15   "
-              f"(논문 Table 5: 11 / 3 / 반대 1).  일반명으로 올려서 맞은 것 "
-              f"{int((t5.term_level > 0).sum())}건, 근거 물질 고유 "
-              f"{t5.evidence.nunique()}종")
-        # 자 둘을 한 표로 — 각 자가 몇 건을 통과시키는지, 그리고 그 자가 논문
-        # 자신의 라벨(confirmed 11 / non-confirmed 4)을 가르는지. 둘 다 못 가른다:
-        # 2항은 non-confirmed 도 3/4 통과, 3항은 confirmed 중 1/11 통과 (RESULTS §4.3).
+        # 같은 자를 논문 자신의 15 건에 대어 판별력을 본다 (confirmed 11 /
+        # non-confirmed 4). 색인 공출현 두 자는 여기서 떨어졌다 — RESULTS §4.3.
         conf = cdf.paper_result == 1
-        print('\n  같은 자로 — 기준별 비교 (논문 보고값 11/15 는 2항에 가깝다)')
-        print(f'    {"기준":24s}{"우리15":>7s}{"논문15":>8s}'
-              f'{"confirmed":>11s}{"non-conf":>10s}')
-        for lbl, col in [('3항 공출현(엄격)', 'n_hits_with_evidence'),
-                         ('2항 공출현(느슨)', 'n_hits_pair_only')]:
-            hit = cdf[col] > 0
-            print(f'    {lbl:24s}{int((t5[col] > 0).sum()):>4d}/15'
-                  f'{int(hit.sum()):>5d}/15'
-                  f'{int((hit & conf).sum()):>8d}/{int(conf.sum())}'
-                  f'{int((hit & ~conf).sum()):>7d}/{int((~conf).sum())}')
-        print('    → 엄격 기준으로는 논문 자신도 1/15 다. 2항은 논문 값에 가깝지만'
-              ' non-confirmed 도 통과시켜 판별력이 없다.')
+        hit = cdf.result == 1
+        tp, fn = int((hit & conf).sum()), int((~hit & conf).sum())
+        fp, tn = int((hit & ~conf).sum()), int((~hit & ~conf).sum())
+        bal = (tp / max(tp + fn, 1) + tn / max(tn + fp, 1)) / 2
+        print(f"\n  확인(+1) {int((t5.result == 1).sum())}/15, "
+              f"미확인(0) {int((t5.result == 0).sum())}/15, "
+              f"반대(-1) {int((t5.result == -1).sum())}/15"
+              f"   (논문 Table 5: 11 / 3 / 1)")
+        print(f"  일반명으로 올려서 맞은 것 {int((t5.term_level > 0).sum())}건, "
+              f"근거 물질 고유 {t5.evidence.nunique()}종")
+        print('\n  같은 자로 — 논문 15 건에 대었을 때의 판별력')
+        print(f'    confirmed {tp}/{tp + fn} 통과 · non-confirmed {fp}/{fp + tn} 통과'
+              f'   균형정확도 {bal:.2f}')
+        print('    (색인 공출현: 3항 1/11 vs 0/4 = 0.55, 2항 10/11 vs 3/4 = 0.58)')
 
 def compare():
     """E 를 만드는 방식들을 같은 기준으로 나란히 비교한다.

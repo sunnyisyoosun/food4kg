@@ -1,16 +1,16 @@
-no,evidence,pubmed,term_used,term_level,n_hits_with_evidence,n_hits_pair_only,result,who,question,attributes,paper_result
-0,Bifidobacterium longum,,Autistic disorder,0,0,1020,0,paper,Autistic disorder and depression,Complication,1.0
-1,Streptococcus mutans,,Parkinson disorder,0,0,4,0,paper,Parkinson disorder and depression,Complication,1.0
-2,Escherichia coli,,Learning disabilities,0,0,893,0,paper,Learning disabilities and autism,Complication,1.0
-3,Escherichia coli,42816272;42203173,Anxiety,0,40,194413,1,paper,Anxiety and depression,Complication,1.0
-4,Lactobacillus plantarum,,Bipolar disorder,0,0,21563,0,paper,Bipolar disorder and depression,Complication,1.0
-5,Bacillus cereus,,Learning disabilities,0,0,634,0,paper,Learning disabilities and depression,Complication,0.0
-6,Lactobacillus reuteri,,Parkinson disorder,0,0,0,0,paper,Parkinson disorder and autism,Complication,0.0
-7,Bacteroides fragilis,,Alzheimer Disease,0,0,1448,0,paper,Alzheimer Disease and autism,Complication,1.0
-8,Threonine,,Garlic,0,0,69,0,paper,Garlic and Alzheimer Disease,Diet recommendation,1.0
-9,alpha-Tocopherol,,Milk,0,0,28,0,paper,Milk and Learning disabilities,Diet recommendation,0.0
-10,Cystine,,Egg products,0,0,1,0,paper,Egg products and depression,Diet recommendation,-1.0
-11,Threonine,,Coffee,0,0,0,0,paper,Coffee and parkinson disorder,Diet recommendation,1.0
-12,Nicotinic acid,,Lettuce,0,0,6,0,paper,Lettuce and anxiety,Diet recommendation,1.0
-13,L-Threonine,,Sweets,0,0,123,0,paper,Sweets and depression,Diet recommendation,1.0
-14,Ascorbate,,Onion,0,0,32,0,paper,Onion and depression,Diet recommendation,1.0
+no,evidence,pubmed,term_used,term_level,n_hits_pair_only,n_abstracts,sent_assoc,sent_negative,quote,result,who,question,attributes,paper_result
+0,Bifidobacterium longum,37781978;37030965,Autistic disorder,0,1020,20,12,0,"40048080: In the context of autism, there is evidence supporting the efficacy of DBT for ED, life-th",1,paper,Autistic disorder and depression,Complication,1.0
+1,Streptococcus mutans,34982207;27059320,Parkinson disorder,0,4,4,1,0,"27059320: Impairment in reversal learning has been linked to multiple psychiatric outcomes, includin",1,paper,Parkinson disorder and depression,Complication,1.0
+2,Escherichia coli,38929285;15165430,Learning disabilities,0,893,19,7,0,15165430: In this article a short overview is given of the relationship between autism and learning ,1,paper,Learning disabilities and autism,Complication,1.0
+3,Escherichia coli,31083878;32002932,Anxiety,0,194445,20,41,1,31083878: Meta-analyses and systematic reviews have shown that these interventions can improve sympt,1,paper,Anxiety and depression,Complication,1.0
+4,Lactobacillus plantarum,28503106;31311335,Bipolar disorder,0,21564,20,25,0,"31311335: Bipolar depression is associated with considerable burden of illness, high suicide risk, a",1,paper,Bipolar disorder and depression,Complication,1.0
+5,Bacillus cereus,30556689;39171222,Learning disabilities,0,634,20,6,0,16512079: Depression among students with learning disabilities: assessing the risk.,1,paper,Learning disabilities and depression,Complication,0.0
+6,Lactobacillus reuteri,,Parkinson disorder,0,0,0,0,0,,0,paper,Parkinson disorder and autism,Complication,0.0
+7,Bacteroides fragilis,33184495;31753762,Alzheimer Disease,0,1448,18,9,0,31753762: Increasing clinical and preclinical evidence implicates the microbiome as a possible key s,1,paper,Alzheimer Disease and autism,Complication,1.0
+8,Threonine,35805955;16395514,Garlic,0,69,20,8,0,"35805955: In light of these effects, garlic and its components have been examined in experimental mo",1,paper,Garlic and Alzheimer Disease,Diet recommendation,1.0
+9,alpha-Tocopherol,32567677;29274129,Milk,0,28,20,0,0,,0,paper,Milk and Learning disabilities,Diet recommendation,0.0
+10,Cystine,38107103,Egg products,0,1,1,0,0,,0,paper,Egg products and depression,Diet recommendation,-1.0
+11,Threonine,,Coffee,0,0,0,0,0,,0,paper,Coffee and parkinson disorder,Diet recommendation,1.0
+12,Nicotinic acid,34880927;30709646,Lettuce,0,6,6,1,0,"34880927: Weekly consumption of fruits, tomatoes, salads and lettuce, together with &#x395;motional/",1,paper,Lettuce and anxiety,Diet recommendation,1.0
+13,L-Threonine,31657605;43010283,Sweets,0,123,20,14,0,40960743: Is sweets consumption associated with depression?,1,paper,Sweets and depression,Diet recommendation,1.0
+14,Ascorbate,36876591;34270028,Onion,0,32,20,7,0,"29178012: In view of anxiolytic, antidepressant and memory strengthen properties of Allium cepa (AC;",1,paper,Onion and depression,Diet recommendation,1.0
