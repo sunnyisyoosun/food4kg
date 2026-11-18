@@ -740,20 +740,27 @@ def evaluate():
                      r'depress')
 
         def _stem(t):
-            """엔티티 이름 -> 문장에서 찾을 패턴. 어간을 자르지 않고 **온전한
-            단어**로 맞추되 복수·소유격만 허용한다. 전에는 접두 몇 글자로 잘라
-            (Mustard -> musta) 무관한 단어까지 걸렸다."""
+            """엔티티 이름 -> 문장에서 찾을 패턴.
+
+            어간을 몇 글자로 자르지 않는다(Mustard -> musta 가 무관한 단어까지
+            걸렸다). 여러 단어 이름은 **구(句)로** 맞춘다 — 사이에 한 단어까지만
+            허용한다. 가장 긴 단어 하나만 쓰면 `Sex behavior disorder` 가
+            "REM sleep **behavior** disorder" 를 잡는다. 논문 15 건으로 재어
+            판별력 0.83 이 유지되는 것을 확인하고 넣었다 (RESULTS §4.3).
+            """
             t = re.sub(r'\b(disorder|disorders|disease|diseases|products|total)\b',
                        '', t, flags=re.I)
-            w = [x for x in re.split(r'\W+', t.strip()) if len(x) > 2]
+            w = [x.lower() for x in re.split(r'\W+', t.strip()) if len(x) > 2]
             if not w:
                 return None
-            b = re.escape(max(w, key=len).lower())
+            if len(w) > 1:
+                return r'\b' + r'(?:\W+\w+){0,1}\W+'.join(
+                    re.escape(x) + r'\w*' for x in w) + r'\b'
+            b = re.escape(w[0])
             # autistic/autism 처럼 어미가 갈리는 질환명은 공통 어간까지만 쓴다.
-            for a, stem in (('autis', 'autis'), ('depress', 'depress'),
-                            ('anxi', 'anxi'), ('schizo', 'schizo')):
+            for a in ('autis', 'depress', 'anxi', 'schizo'):
                 if b.startswith(a):
-                    return stem + r'\w*'
+                    return a + r'\w*'
             return rf'\b{b}(s|es|\'s)?\b'
 
         def _eutils(cgi, **params):
@@ -797,10 +804,12 @@ def evaluate():
             """
             pb = _stem(terms[1] if len(terms) > 1 else '')
             n = pos = neg = 0
-            ids, docs, term, lv, ex = [], {}, terms[0], 0, ''
+            ids, docs, term, lv = [], {}, terms[0], 0
+            best = (10 ** 9, '')
             for lv, term in enumerate(ladder or terms[:1]):
                 n, ids, docs = search_read([term] + terms[1:])
                 pa, pos, neg = _stem(term), 0, 0
+                best = (10 ** 9, '')
                 for pid, body in docs.items():
                     for sent in re.split(r'(?<=[.!?])\s+', body):
                         low = sent.lower()
@@ -815,13 +824,24 @@ def evaluate():
                             neg += 1
                         elif re.search(ASSOC, low):
                             pos += 1
-                            ex = ex or f'{pid}: {sent.strip()[:90]}'
+                            # 인용문은 **첫 매치가 아니라** 두 엔티티가 가장 가까이
+                            # 붙은 문장으로 고른다. 첫 매치를 쓰면 "psychedelics 가
+                            # 담배·섭식… 을 개선" 처럼 두 질환이 나열에만 같이 든
+                            # 문장이 걸린다. 가까울수록 둘을 **서로** 말한 문장이다.
+                            m1, m2 = re.search(pa, low), re.search(pb, low)
+                            lo, hi = sorted([m1.start(), m2.start()])
+                            if hi - lo < best[0]:
+                                # 문장 앞 90 자가 아니라 **매치 주변**을 보여준다.
+                                # 앞을 자르면 정작 두 엔티티가 나온 대목이 잘린다.
+                                w = sent.strip()[max(0, lo - 30):hi + 60]
+                                best = (hi - lo, f'{pid}: …{w}…' if lo > 30
+                                        else f'{pid}: {w}…')
                 if pos or neg:
                     break
             return {'evidence': evidence, 'pubmed': ';'.join(ids[:2]),
                     'term_used': term, 'term_level': lv,
                     'n_hits_pair_only': n, 'n_abstracts': len(docs),
-                    'sent_assoc': pos, 'sent_negative': neg, 'quote': ex,
+                    'sent_assoc': pos, 'sent_negative': neg, 'quote': best[1],
                     'result': 1 if pos > neg else (-1 if neg > pos else 0)}
 
         from paper_data import TABLE5 as _PT5

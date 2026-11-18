@@ -677,17 +677,45 @@ long 표에 없어 축이 7/8 이다.
 | `inbreeding depression`(근친교배 약세)을 우울증으로 셈 | 동형이의어 수식어 목록으로 그 문장을 버린다 (`st-segment`·`spreading`·`respiratory` 등도) |
 | 증례 보고를 연관의 근거로 셈 | `PublicationType` 이 `Case Reports` 인 논문을 뺀다 |
 
-**논문 15 건의 판별력은 0.83 그대로다**(10/11 vs 1/4). 우리 15 건은 13 → **9/15
-(+1 9 · 0 5 · −1 1)** 로 내려갔고, 남은 +1 의 인용문이 실제 근거로 바뀌었다.
+여기에 두 가지를 더 했다. **여러 단어 이름은 구(句)로** 맞춘다(사이에 한 단어까지).
+가장 긴 단어 하나만 쓰면 `Sex behavior disorder` 가 "REM sleep **behavior**
+disorder" 를 잡는다. 그리고 **인용문을 두 엔티티가 가장 가까이 붙은 문장의 매치
+주변**으로 고른다 — 첫 매치의 문장 앞 90 자를 쓰면 정작 두 엔티티가 나온 대목이
+잘려 근거가 약해 보인다.
+
+**논문 15 건의 판별력은 네 번의 수정 내내 0.83 그대로다**(10/11 vs 1/4).
+우리 15 건은 13 → **8/15** 로 내려갔고, 남은 +1 의 인용문이 실제 근거로 바뀌었다.
 
 ```
-Pork       11859715: high monthly pork consumption (OR = 1.608) ...
-Beverages  30419536: Sugar-sweetened beverages consumption and the risk of
-                     depression: A meta-analysis ...
-Lettuce    26445711: spinach, lettuce, chicory, and squash (vegetables) ...
+Pork        …high monthly pork consumption (OR = 1.608)…
+Beverages   …association between sugar-sweetened beverages (SSBs) and depression…
+Bipolar     Is increased sexual behavior a symptom of bipolar disorder in children…
+Anx × Pers  Patterns of anxiety and personality disorder comorbidity.
 ```
 
-숫자가 내려간 것이 개선이다 — 13 중 4 건이 근거 없는 통과였다. 그래도 이 9/15 를
+숫자가 내려간 것이 개선이다 — 13 중 5 건이 근거 없는 통과였다.
+
+#### 질환 쌍 제약은 재어 보고 기각했다
+
+`Personality disorder × Sleep disorders` 의 인용문이 아직 약하다 — 여러 질환이
+**나열된** 문장이다. 그래서 질환 쌍에만 거는 제약 둘을 논문 15 건으로 쟀다.
+
+| 변형 | confirmed | non-conf | 균형정확도 |
+|---|---:|---:|---:|
+| **제약 없음 (현재)** | **10/11** | 1/4 | **0.83** |
+| + 나열 제외 (두 엔티티 사이에 동사가 없으면 버림) | 8/11 | 1/4 | 0.74 |
+| + 쌍 전용 cue (`comorbid\|co-occur\|…` 만, 치료 효과 제외) | 9/11 | 1/4 | 0.78 |
+| + 둘 다 | 8/11 | 1/4 | 0.74 |
+
+**둘 다 참을 떨어뜨리기만 한다.** 나열 문장을 버리면 `Alzheimer × autism` 같은
+실제 confirmed 가 같이 날아간다 — 공통 기전을 다루는 리뷰가 질환을 나열하기
+때문이다. 기각하고, 대신 인용문으로 사람이 보게 둔다.
+
+참고로 위양성으로 보이던 `Learning disabilities × depression`(논문 라벨 0)의
+인용문은 *"Depression among students with learning disabilities"* 다. 문헌이
+실제로 있고, 논문이 0 으로 둔 쪽이 보수적이었을 수 있다.
+
+그래도 이 8/15 를
 논문의 11/15 와 **순위처럼 비교하지는 않는다.** 판별력은 논문의 라벨 분포에서 잰
 값이고, `quote`·`sent_assoc`·`sent_negative` 로 사람이 검수하는 용도다.
 
