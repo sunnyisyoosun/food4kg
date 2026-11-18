@@ -113,6 +113,12 @@ def food():
     # `setup/nutrient_kegg_map.csv` 로 좁힌다. F 는 정의상 바뀌지 않는다.
     _cand = os.path.join(BASE, 'setup', 'nutrient_kegg_candidates.csv')
     kg_nid2kegg, kg_nid2name = dict(nid2kegg), dict(nid2name)
+    # 단위는 FDC nutrient.csv 가 정본이다. 매핑표(F 층)만 보면 후보 성분의 단위가
+    # NaN -> fillna(1.0) 이 되어 **mg 를 g 로 취급**한다 (citric acid 가 1,740 g/100g
+    # 으로 나왔다). KG 층을 넓히면서 같이 넓혀야 하는 표다.
+    _nut = pd.read_csv(os.path.join(FDC_RAW, 'nutrient.csv'))
+    kg_nid2unit = dict(zip(_nut['id'], _nut['unit_name']))
+    kg_nid2unit.update(nid2unit)
     if os.path.exists(_cand):
         _c = pd.read_csv(_cand)
         kg_nid2kegg.update(dict(zip(_c['nutrient_id'], _c['kegg'])))
@@ -138,7 +144,7 @@ def food():
     fn = pd.concat(parts, ignore_index=True)
     del parts
     fn['kegg'] = fn['nutrient_id'].map(kg_nid2kegg)
-    fn['unit'] = fn['nutrient_id'].map(nid2unit)
+    fn['unit'] = fn['nutrient_id'].map(kg_nid2unit)
     fn['amount_g'] = pd.to_numeric(fn['amount'], errors='coerce') * fn['unit'].map(UNIT_TO_G).fillna(1.0)
     fn = fn.dropna(subset=['amount_g'])
     print(f'  KEGG 측정값 {len(fn):,} 행, compound {fn["kegg"].nunique()}')

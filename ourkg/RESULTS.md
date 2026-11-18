@@ -648,8 +648,34 @@ KG 층은 **대표 항목의 값**을 쓰도록 고쳤다(`F` 층은 논문 §3.
 논문이 `milk` 를 라벨 부분 문자열로 찾아 리코타 치즈를 우유로 잡았다는 것을
 이제 우리 KG 로 **재현해 보일 수 있다**(§4.1 Query 결함 3).
 
-남은 X 셋은 `#6`(FDC 가 우리 코호트에서 citric acid 를 8 개 음식만 측정),
-`#5`·`#10`(둘 다 `PAPER_DEFECT`) 이다.
+#### `#6` citric acid — 단위 버그를 찾았고, 문항은 못 연다
+
+`#6` 을 다시 보다 **KG 층의 단위가 1000 배 틀린 것**을 찾았다. `nutrient_name` 의
+NaN 은 고치면서 같은 표의 `unit` 을 빠뜨려, 새로 넣은 후보 94 종 전부가
+`fillna(1.0)` 으로 **mg 를 g 로** 취급하고 있었다.
+
+```
+Raspberries, raw  citric acid  1,740,000 mg  ->  1,740 mg
+Pineapple, raw                   685,400     ->    685.4
+```
+
+단위는 `fdc_raw/nutrient.csv`(정본)에서 가져오고 F 매핑표 값으로 덮어쓴다.
+질의가 조용히 1000 배 틀린 값을 쓰고 있었으므로 문항과 무관하게 고쳐야 할 결함이다.
+
+**문항 자체는 열 수 없다.** 논문 답 309 는 실재한다 —
+`fdc_id 2004671 GRAPE JUICE, WHITE, FROM CONCENTRATE …` = 309.0 mg. 그런데
+FDC 전체에서 citric acid 측정은 **172 항목뿐이고 전부 `foundation`·`sub_sample`**
+이다. `sub_sample_food` 는 특정 성분만 재는 시료라 성분 수가 적어
+`MIN_COV >= 20` 을 못 넘긴다. 우리 코호트의 grape juice 9 종에 white/purple 은
+하나도 없고, citric 을 가진 음식은 **5 종**(바나나·파인애플·라즈베리·딸기)뿐이다.
+
+성분 프로파일이 풍부한 항목(SR legacy·FNDDS)은 citric acid 를 재지 않고, citric
+acid 를 가진 항목은 프로파일이 빈약하다 — **FDC 데이터의 성격**이다. `MIN_COV` 를
+낮추면 들어오지만 그것은 문항 하나를 위해 코호트 정의를 바꾸는 일이라 하지 않는다.
+게다가 값이 맞아도 `Adlercreutzia equolifaciens` 의 C00158 대사 경로가 KEGG 에
+없어 △ 가 한계다.
+
+남은 X 셋은 `#6`(위), `#5`·`#10`(둘 다 `PAPER_DEFECT`) 이다.
 
 #### ★ SNOMED CT 의 대체 축은 MeSH 트리였다 — `#12` 가 열린다
 
