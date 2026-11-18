@@ -32,6 +32,7 @@ Sunflower seeds,food,sunflower seeds,Chinese
 Soybean,food,soy bean,Chinese
 Green peas,food,green peas,Chinese
 Sugar,food,Sugar,Chinese
+Arrowhead,food,arrowhead,Chinese
 Celery,food,celery,Chinese
 Spinach,category,spinach,Chinese
 Parsley,food,parsley,Chinese
@@ -53,7 +54,7 @@ Chayote,food,chayote,Chinese
 Soybean,food,soybean,Chinese
 Green pepper,food,green pepper,Chinese
 Chili,food,chili,Chinese
-Tomato products,food,tomato,Chinese
+TOMATO,food,tomato,Chinese
 Lettuce,food,lettuce,Chinese
 Lettuce,food,Lettuce (cabbage),Chinese
 Garlic,food,garlic,Chinese
@@ -65,8 +66,11 @@ Asparagus,food,asparagus,Chinese
 Okra,food,okra,Chinese
 Chicory beverage,food,chicory,Chinese
 Mushroom,food,mushroom,Chinese
+Jew's ear,food,Jew's-ear,Chinese
 Fennel,food,Fennel,Chinese
 Pineapple,category,pineapple (Ananas sativus),Chinese
+CARNATION,food,carnation,Chinese
+CARNATION,food,carnation,Chinese
 Arrowroot,food,arrowroot,Chinese
 Lemon grass (citronella),food,Lemon grass,Chinese
 Fruit,food,"Fruit (garden, fruit)",Chinese
@@ -186,7 +190,7 @@ Rice cake,food,rice cake,Chinese
 Butter oil,food,butter oil,Chinese
 Cheese,category,Cheese (cheese),Chinese
 cottage cheese,food,cottage cheese,Chinese
-Tomato products,food,"Tomato, canned tomato paste",Chinese
+TOMATO,food,"Tomato, canned tomato paste",Chinese
 Bamboo shoots,food,Bamboo shoots,Chinese
 Sauce,food,sauce,Chinese
 Sauce,food,Sauce,Chinese
@@ -195,6 +199,7 @@ Mayonnaise,category,mayonnaise,Chinese
 Mayonnaise,category,mayonnaise,Chinese
 Sauce,food,sauce,Chinese
 Mustard,food,mustard,Chinese
+NUTRITION DRINK,food,"Nutrition, health food",Chinese
 Ice cream,food,ice cream,Chinese
 Ice cream bar,food,ice cream bar,Chinese
 Pectin,food,"Pectin, pectin, and pectin esters",Chinese

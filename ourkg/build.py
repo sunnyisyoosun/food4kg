@@ -1060,7 +1060,32 @@ def kg():
             n_fo_link += 1
             onto_link.append({'our': lab, 'kind': 'category',
                               'onto_label': lab, 'source': 'FoodOn'})
-    print(f'  FoodOn {n_fo:,} triple, 우리 카테고리와 연결 {n_fo_link}')
+    # OLS 로 받은 FoodOn 축(out/food_foodon.csv)도 KG 에 쓴다. CSV 에만 두면
+    # §4.1 SPARQL 평가가 못 본다 — 배포 subset 은 soy milk 가 없고 계층도 끊겨 있다.
+    _fop = os.path.join(OUT, 'food_foodon.csv')
+    n_fo_ols = 0
+    if os.path.exists(_fop):
+        _d = pd.read_csv(_fop)
+        _obo = 'http://purl.obolibrary.org/obo/'
+        _uri = lambda oid: _obo + str(oid).replace(':', '_')
+        for _oid, _lab in _d[['foodon', 'foodon_label']].drop_duplicates().values:
+            if isinstance(_lab, str):
+                W.t(_uri(_oid), LABEL, _lab, 'FoodOn/OLS', literal=True)
+                n_fo_ols += 1
+        _cls = _d[_d.rel == 'class'].set_index('food_key')['foodon'].to_dict()
+        for _fk, _oid in _cls.items():
+            _fu = food_uri.get(_fk)
+            if _fu:
+                W.t(_fu, SAMEAS, _uri(_oid), 'FoodOn/OLS')
+                n_fo_ols += 1
+        for _fk, _g in _d[_d.rel == 'ancestor'].groupby('food_key'):
+            _c = _cls.get(_fk)
+            if _c:
+                for _a in _g['foodon'].unique():
+                    W.t(_uri(_c), SUBCLASS, _uri(_a), 'FoodOn/OLS')
+                    n_fo_ols += 1
+    print(f'  FoodOn {n_fo:,} triple, 우리 카테고리와 연결 {n_fo_link}'
+          f' · OLS 축 {n_fo_ols:,} triple')
 
     # --- 중국 식품 온톨로지
     n_cn = n_cn_cat = n_cn_food = 0
@@ -1145,7 +1170,10 @@ def kg():
         ('microbe', 'KEGG organism 매칭', int(mic['kegg_org'].notna().sum()), ''),
         ('disease', 'MeSH 링크', int(md['mesh_id'].nunique()), '§3.2 3,505 mental disorders'),
         ('disease', 'SNOMED CT 링크', n_sct_link, '배포본에 라벨·계층 없음'),
-        ('ontology', 'FoodOn ↔ 카테고리', n_fo_link, '§3.1 FoodOn'),
+        ('ontology', 'FoodOn ↔ 카테고리 (배포 KG 부분집합)', n_fo_link, '§3.1 FoodOn'),
+        ('ontology', 'FoodOn 클래스 링크 (음식, OLS)', fl.get('foodon_food'),
+         '배포 subset 에 없는 계층 — foodon_match.py'),
+        ('ontology', 'FoodOn 고유 클래스 (OLS)', fl.get('foodon_class'), ''),
         ('ontology', '중국 온톨로지 ↔ 카테고리', n_cn_cat, '§3.1 Chinese Food Ontology'),
         ('ontology', '중국 온톨로지 ↔ 음식', n_cn_food, ''),
     ]

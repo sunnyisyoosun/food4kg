@@ -17,7 +17,7 @@
 
 | | 논문 (2023) | ourkg |
 |---|---|---|
-| triple | 13,346,991 | **3,168,163** |
+| triple | 13,346,991 | **3,459,231** |
 | entity | 1,637,915 | 785,572 |
 | relation | 140 | 30 |
 | 음식 | 34,250 샘플 → 135 사용 | 14,886 (추천 코호트 12,420) |
@@ -38,7 +38,7 @@
 triple 수가 논문의 1/4 인 것은 온톨로지 축 때문이다. FoodOn·중국 식품 온톨로지·KEGG
 brite 는 2026-11-09 에 넣었고(+11만), 남은 격차는 SNOMED CT 429만과 NCBI taxonomy
 전체 131만이다 — 전자는 배포되지 않았고 후자는 정신질환 연관 종만 쓴다.
-**음식-성분 축만 보면 우리 쪽이 더 크다 (314만 vs 233만).**
+**음식-성분 축만 보면 우리 쪽이 더 크다 (321만 vs 233만).**
 
 `evidence` 행은 논문에 대응이 없다 — E 의 근거를 KG 안에서 추적하려고 우리가
 추가한 축이다 (§5 끝).
@@ -51,21 +51,25 @@ brite 는 2026-11-09 에 넣었고(+11만), 남은 격차는 SNOMED CT 429만과
 
 | source | relation | entity | triples |
 |---|---:|---:|---:|
-| FoodData Central | 9 | 783,035 | 3,146,277 |
+| FoodData Central | 9 | 794,404 | 3,206,541 |
+| FoodOn/OLS | 3 | 10,452 | 119,841 |
+| Chinese Food Ontology | 3 | 49,865 | 82,542 |
+| FoodOn | 4 | 6,592 | 21,723 |
+| KEGG | 5 | 2,932 | 8,797 |
 | MiKG | 6 | 1,060 | 6,802 |
 | MeSH | 2 | 245 | 5,400 |
 | ProMENDA | 6 | 1,289 | 5,150 |
-| KEGG | 3 | 213 | 2,384 |
 | evidence | 15 | 278 | 1,560 |
 | NCBI taxonomy | 5 | 210 | 590 |
-| **Total** | **30** | **785,572** | **3,168,163** |
+| SNOMED CT | 2 | 294 | 285 |
+| **Total** | **31** | **857,317** | **3,459,231** |
 
 논문 Table 1 과 대조:
 
 | source | 논문 triples | ourkg triples | 비고 |
 |---|---:|---:|---|
-| FoodData Center | 2,332,603 | 3,146,277 | FDC 전체 배포본 사용 |
-| FoodOn | 79,769 | 10,237 | 라벨·subClassOf 만. 카테고리 8 연결 |
+| FoodData Center | 2,332,603 | 3,206,541 | FDC 전체 배포본 사용 |
+| FoodOn | 79,769 | **141,564** | 배포 subset 21,723 + **OLS 축 119,841** (음식 8,165 · 클래스 1,096) |
 | Chinese Food Ontology | 215,863 | 82,498 | 영어 라벨·subClassOf. 카테고리 20 · 음식 149 연결 |
 | KEGG | 74,286 | 5,890 | compound-미생물 경로 재계산 + brite 분류축 |
 | NCBI taxonomy | 1,306,152 | 590 | 정신질환 연관 127종만 |
@@ -2172,7 +2176,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 | 파일 | 내용 |
 |---|---|
-| `out/ourkg.nt` | RDF N-Triples 3,168,163 |
+| `out/ourkg.nt` | RDF N-Triples 3,459,231 |
 | `out/kg_stats.csv` | 논문 Table 1 대응 통계 |
 | `out/foods.csv` | 음식 14,719 (fdc_id, 카테고리, 측정 compound 수) |
 | `out/food_compound_long.csv` | 음식 × compound 중량 768,157 (g/100g) |
