@@ -129,6 +129,15 @@ FDC_CATEGORY = {
 }
 
 
+def normkey(x, keep='a-z0-9 '):
+    """이름 비교용 키. 구두점을 공백으로 지우고 소문자·공백 정규화.
+
+    카테고리 철자 통합(build), 음식 이름 대조(analyze), FoodOn 매칭
+    (foodon_match)이 전부 같은 규칙을 쓴다.
+    """
+    return re.sub(r'\s+', ' ', re.sub(f'[^{keep}]+', ' ', str(x).lower())).strip()
+
+
 def kegg_map():
     """nutrient_id -> KEGG (논문/매핑표 ID 그대로).
 

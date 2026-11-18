@@ -29,7 +29,7 @@ import hashlib
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (BASE, OUT, FDC_RAW, UNIT_TO_G, FDC_CATEGORY, cached_get, kegg_rest,
-                    normalize_label, normalize_category, kegg_map)
+                    normalize_label, normalize_category, kegg_map, normkey)
 
 
 def food():
@@ -93,11 +93,10 @@ def food():
     # 키로 묶고, 그 안에서 **가장 많이 쓰인 철자**를 대표로 삼는다(표시용 라벨을
     # 지어내지 않는다). WWEIA 의 'Plant-based milk' 와 브랜드의 'Plant Based Milk'
     # 처럼 어휘가 달라도 같은 키면 묶인다 — §5.1 방법 1 #2 의 soy milk 가 이 경우다.
-    _ckey = lambda x: re.sub(r'\s+', ' ', re.sub(r'[^a-z0-9/&]+', ' ', str(x).lower())).strip()
     _vc = food['category'].value_counts()
     _canon, _seen = {}, {}
     for _name, _n in _vc.items():
-        _k = _ckey(_name)
+        _k = normkey(_name, 'a-z0-9/&')
         if _k not in _seen:                      # value_counts 는 빈도 내림차순
             _seen[_k] = _name
         _canon[_name] = _seen[_k]
@@ -209,33 +208,19 @@ def food():
     _linked = int(sum(1 for w in _wc if pd.notna(w) and str(int(w)) in _sr))
     print(f'  WWEIA -> SR 군 큐레이션 링크 적용: {_linked:,} 음식')
 
-    # --- FoodOn 축: 음식 -> FoodOn 클래스 -> 조상 계층 (ourkg/cache, foodon_match.py)
-    _fo_t = os.path.join(BASE, 'ourkg', 'cache', 'foodon_terms.json')
-    _fo_a = os.path.join(BASE, 'ourkg', 'cache', 'foodon_ancestors.json')
-    if os.path.exists(_fo_t) and os.path.exists(_fo_a):
-        import foodon_match as _fm
-        _T = json.load(open(_fo_t)); _A = json.load(open(_fo_a))
-        _idx = _fm.build_index(_T)
-        _rows = []
-        for _fk, _nm in zip(meta['food_key'], meta['food_name']):
-            _oid = _fm.match(_nm, _idx)
-            if not _oid:
-                continue
-            _rows.append({'food_key': _fk, 'foodon': _oid,
-                          'foodon_label': _T[_oid]['label'], 'rel': 'class'})
-            for _a in _A.get(_oid, []):
-                _rows.append({'food_key': _fk, 'foodon': _a['id'],
-                              'foodon_label': _a['label'], 'rel': 'ancestor'})
-        _fo = pd.DataFrame(_rows)
-        _fo.to_csv(os.path.join(OUT, 'food_foodon.csv'), index=False)
-        _nf = _fo[_fo.rel == 'class'].food_key.nunique()
-        print(f'  FoodOn 축: 음식 {_nf:,} / {len(meta):,} '
-              f'({_nf / len(meta):.1%}) · 클래스 {_fo[_fo.rel == "class"].foodon.nunique():,} '
-              f'· 조상 포함 링크 {len(_fo):,}')
-        _link['foodon_food'] = int(_nf)
-        _link['foodon_class'] = int(_fo[_fo.rel == 'class'].foodon.nunique())
-    else:
+    # FoodOn 축 — 매칭·조상 로직은 foodon_match.py 한 곳에 있다.
+    import foodon_match as _fm
+    _fo = _fm.link_table(meta)
+    if _fo is None:
         print('  ⚠ FoodOn 캐시 없음 — ourkg/cache/foodon_*.json')
+    else:
+        _fo.to_csv(os.path.join(OUT, 'food_foodon.csv'), index=False)
+        _cls = _fo[_fo.rel == 'class']
+        _link['foodon_food'] = int(_cls.food_key.nunique())
+        _link['foodon_class'] = int(_cls.foodon.nunique())
+        print(f'  FoodOn 축: 음식 {_link["foodon_food"]:,} / {len(meta):,} '
+              f'({_link["foodon_food"] / len(meta):.1%}) · 클래스 '
+              f'{_link["foodon_class"]:,} · 조상 포함 링크 {len(_fo):,}')
 
     _link['food_after_mincov'] = int(long['food_key'].nunique())
     _link['compound_after_mincov'] = int(long['kegg'].nunique())

@@ -11,9 +11,9 @@
   · `black or white pepper product` 제외 — 동의어 `pepper` 로 피망이 후추가 된다
 커버리지: 음식 8,165 / 14,886 (54.9%), 클래스 1,096.
 """
-import json,re
-BASE='/home/yoosun/food_recom_w_paper'
-base=lambda s: re.sub(r'\s+',' ',re.sub(r'[^a-z0-9 ]',' ',str(s).lower())).strip()
+import json, os, re
+import pandas as pd
+from common import OUT, BASE, normkey as base
 SING=lambda b: ' '.join(re.sub(r'(?<=[a-z]{2})s$','',w) for w in b.split())
 SAFE=lambda b: not re.search(r'\b[a-z0-9]\b', b)
 EFSA=re.compile(r'^\d{4,6}\s*-\s')
@@ -41,3 +41,29 @@ def match(name, idx):
         for lvl,k in keyset(c):
             if (lvl,k) in idx: return idx[(lvl,k)]
     return None
+
+
+def link_table(meta):
+    """음식 -> FoodOn 클래스 + 조상 (build.py 가 out/food_foodon.csv 로 쓴다)."""
+    d = os.path.join(BASE, 'ourkg', 'cache')
+    try:
+        T = json.load(open(os.path.join(d, 'foodon_terms.json')))
+        A = json.load(open(os.path.join(d, 'foodon_ancestors.json')))
+    except FileNotFoundError:
+        return None
+    idx, rows = build_index(T), []
+    for fk, nm in zip(meta['food_key'], meta['food_name']):
+        oid = match(nm, idx)
+        if oid:
+            rows.append((fk, oid, T[oid]['label'], 'class'))
+            rows += [(fk, a['id'], a['label'], 'ancestor') for a in A.get(oid, [])]
+    return pd.DataFrame(rows, columns=['food_key', 'foodon', 'foodon_label', 'rel'])
+
+
+def labels_by_food():
+    """food_key -> FoodOn 라벨 집합 (analyze.py 의 카테고리 축)."""
+    p = os.path.join(OUT, 'food_foodon.csv')
+    if not os.path.exists(p):
+        return {}
+    d = pd.read_csv(p).dropna(subset=['foodon_label'])
+    return d.groupby('food_key')['foodon_label'].apply(set).to_dict()

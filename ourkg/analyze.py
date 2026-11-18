@@ -492,7 +492,8 @@ def evaluate():
                 # 카테고리: FDC 세분류 → SR 27군 두 층 + 온톨로지 라벨.
                 self.f2c, self.clab, self.csub = dd(set), {}, dd(set)
                 fine_uri_lbl = {}
-                _nrm = lambda x: re.sub(r'[^a-z]', '', str(x).lower())
+                from common import normkey as _nk
+                _nrm = lambda x: _nk(x, 'a-z').replace(' ', '')
                 food_by_first = {}
                 for fdc, nm in zip(foods.fdc_id, foods.food_name):
                     food_by_first.setdefault(_nrm(str(nm).split(',')[0]), int(fdc))
@@ -530,25 +531,17 @@ def evaluate():
                             if fu is not None:
                                 self.f2c[fu].add(u)
 
-                # FoodOn 축 (out/food_foodon.csv). 음식 -> 클래스 -> 조상까지 모두
-                # 카테고리로 단다. 배포 KG 의 Food_Ontology.jsonld 는 부분집합이라
-                # soy milk 가 없고 상위 라벨도 빠져 있었다 — ourkg/foodon_match.py.
-                fo = os.path.join(OUT, 'food_foodon.csv')
-                if os.path.exists(fo):
-                    _fo = pd.read_csv(fo)
-                    _k2f = dict(zip(foods.food_key, foods.fdc_id))
-                    _n = 0
-                    for _fk, _lab in zip(_fo['food_key'], _fo['foodon_label']):
-                        if not isinstance(_lab, str):
-                            continue
-                        _fdc = _k2f.get(_fk)
-                        if _fdc is None:
-                            continue
-                        u = f'onto:FoodOn/{_lab}'
-                        self.clab[u] = _lab
-                        self.f2c[int(_fdc)].add(u)
+                # FoodOn 축 — 음식의 클래스와 조상을 모두 카테고리로 단다.
+                import foodon_match as _fm
+                _k2f = dict(zip(foods.food_key, foods.fdc_id))
+                _n = 0
+                for _fk, _labs in _fm.labels_by_food().items():
+                    _fdc = _k2f.get(_fk)
+                    for _lab in (_labs if _fdc is not None else ()):
+                        self.clab[f'onto:FoodOn/{_lab}'] = _lab
+                        self.f2c[int(_fdc)].add(f'onto:FoodOn/{_lab}')
                         _n += 1
-                    print(f'  FoodOn 카테고리 링크 {_n:,}')
+                print(f'  FoodOn 카테고리 링크 {_n:,}')
 
                 # KEGG brite 분류축. m1.KG 와 같은 형태로 맞춘다 —
                 #   klab   전체 URI -> 라벨 (compound 는 kegg entry URI)
@@ -787,36 +780,32 @@ def evaluate():
                     return a + r'\w*'
             return rf'\b{b}(s|es|\'s)?\b'
 
-        def _eutils(cgi, **params):
-            r = S.get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/' + cgi,
-                      params=dict(db='pubmed', **params), timeout=120)
-            time.sleep(0.4)
-            return r
-
         def search_read(terms):
-            """색인 검색 + 상위 ABS_K 편의 제목·초록. (적중 수, PMID, 본문)"""
+            """색인 검색 + 상위 ABS_K 편의 제목·초록. (적중 수, PMID, 본문)
+            증례 보고는 한 사람의 병력 나열이라 연관의 근거가 못 되므로 뺀다."""
+            def eu(cgi, **kw):
+                r = S.get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/' + cgi,
+                          params=dict(db='pubmed', **kw), timeout=120)
+                time.sleep(0.4)
+                return r
             q = ' AND '.join(f'"{t}"' for t in terms if t)
             try:
-                d = _eutils('esearch.fcgi', term=q, retmax=ABS_K, retmode='json',
-                            sort='relevance').json()['esearchresult']
+                d = eu('esearch.fcgi', term=q, retmax=ABS_K, retmode='json',
+                       sort='relevance').json()['esearchresult']
                 n, ids = int(d['count']), d.get('idlist', [])
             except Exception:
                 return 0, [], {}
             if not ids:
                 return n, [], {}
-            txt = _eutils('efetch.fcgi', id=','.join(ids), retmode='xml',
-                          rettype='abstract').text
+            txt = eu('efetch.fcgi', id=','.join(ids), retmode='xml',
+                     rettype='abstract').text
             docs = {}
             for m in re.finditer(r'<PubmedArticle>.*?</PubmedArticle>', txt, re.S):
-                a = m.group(0)
-                pid = re.search(r'<PMID[^>]*>(\d+)</PMID>', a)
-                # 증례 보고는 한 사람의 병력 나열이라 연관의 근거가 못 된다.
-                if 'Case Reports' in a:
-                    continue
-                if pid:
+                a, pid = m.group(0), re.search(r'<PMID[^>]*>(\d+)</PMID>', m.group(0))
+                if pid and 'Case Reports' not in a:
                     docs[pid.group(1)] = re.sub(r'<[^>]+>', ' ', ' '.join(
-                        re.findall(r'<ArticleTitle[^>]*>(.*?)</ArticleTitle>', a, re.S)
-                        + re.findall(r'<AbstractText[^>]*>(.*?)</AbstractText>', a, re.S)))
+                        re.findall(r'<(?:ArticleTitle|AbstractText)[^>]*>(.*?)'
+                                   r'</(?:ArticleTitle|AbstractText)>', a, re.S)))
             return n, ids, docs
 
         def judge(terms, evidence, ladder=None, diet=False):
