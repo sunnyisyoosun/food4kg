@@ -303,10 +303,16 @@ def q00_lysine_fruits(kg):
 
 
 def _beverage_subclass(pat, key):
-    """#1, #2 — Beverages 아래 특정 하위 카테고리에 속하는가."""
+    """#1, #2 — Beverages 아래 특정 하위 카테고리에 속하는가.
+
+    `key` 는 **정규식**이다. 카테고리 이름은 KG 마다 다른데 문항이 묻는 것은
+    이름이 아니라 소속이다 — 배포 KG 의 "Milk substitutes" 를 FDC 는 WWEIA
+    1902 "Plant-based milk" 로 부른다. 어느 한쪽 철자를 박으면 다른 KG 가
+    사실을 갖고 있어도 X 가 된다.
+    """
     def run(kg):
         by = collections.Counter(' / '.join(sorted(kg.cats(f))) for f in kg.foods(pat))
-        good = lambda c: 'Beverages' in c and key in c
+        good = lambda c: 'Beverages' in c and re.search(key, c, re.I)
         n_ok = sum(n for c, n in by.items() if good(c))
         other = [(c, n) for c, n in by.most_common() if not good(c)]
         return ('O' if n_ok else 'X',
@@ -317,15 +323,23 @@ def _beverage_subclass(pat, key):
 
 
 # 라벨 부분 문자열로 찾으면 'cola' 가 'Chocolate' 에 걸린다. 콜라는 접두로 찾는다.
-q01_cola_category = _beverage_subclass(r'^Soft drink, cola', 'oft drinks')
-q02_soymilk_category = _beverage_subclass(r'soy ?milk', 'Milk substitutes')
+q01_cola_category = _beverage_subclass(r'^Soft drink, cola', r'soft drinks?')
+q02_soymilk_category = _beverage_subclass(
+    r'soy ?milk', r'milk substitut|plant[- ]based milk')
 
 
 def q03_baby_food(kg):
-    baby = kg.foods(r'baby food')
-    ok = bool(kg.foods(r'^Carrots, baby food')) and bool(kg.foods(r'^Plums, baby food'))
+    """#3 — 이유식 목록에 carrots·plums 가 있는가.
+
+    라벨 철자가 KG 마다 다르다. 배포 KG 는 "Carrots, baby food", FDC SR 은
+    "Babyfood, carrots, toddler" 로 쓴다. 문항은 철자가 아니라 그 음식이
+    이유식으로 있는지를 묻는다.
+    """
+    baby = kg.foods(r'baby ?food')
+    has = lambda w: bool([f for f in baby if re.search(w, kg.food[f], re.I)])
+    ok = has(r'carrot') and has(r'plum')
     return ('O' if ok else 'X', 'O' if ok else 'X',
-            f'baby food {len(baby)}종, Carrots·Plums 포함')
+            f'baby food {len(baby)}종, carrots {has("carrot")} · plums {has("plum")}')
 
 
 def q04_peach_pie_folate(kg):

@@ -1,8 +1,8 @@
 no,attribute,question,paper_answer,query,vsum,consensus,reproduced,valid,evidence
 0,food categories,Lists of fruits which contains Lysine,"Melons, oranges, strawberries, etc",q00_lysine_fruits,3,True,O,△,Lysine>0 인 과일 10종에 melons·oranges 포함. strawberries 는 Lysine 기록 4건이 전부 0
-1,food categories,The food categories of the cola,"Soft drinks, beverages",run,3,True,O,O,"Beverages 아래 ""oft drinks"" 계열에 속하는 음식 9개"
-2,food categories,The food categories of the soy milk,"Milk substitutes, beverages",run,3,True,O,△,"Beverages 아래 ""Milk substitutes"" 계열에 속하는 음식 6개. 같은 이름의 다른 카테고리 음식도 있다: [('Legumes and Legume Products', 2222)]"
-3,food categories,The lists of baby food,"Carrots(baby food), plums(baby food), etc",q03_baby_food,3,True,O,O,"baby food 225종, Carrots·Plums 포함"
+1,food categories,The food categories of the cola,"Soft drinks, beverages",run,3,True,O,O,"Beverages 아래 ""soft drinks?"" 계열에 속하는 음식 9개"
+2,food categories,The food categories of the soy milk,"Milk substitutes, beverages",run,3,True,O,△,"Beverages 아래 ""milk substitut|plant[- ]based milk"" 계열에 속하는 음식 6개. 같은 이름의 다른 카테고리 음식도 있다: [('Legumes and Legume Products', 2222)]"
+3,food categories,The lists of baby food,"Carrots(baby food), plums(baby food), etc",q03_baby_food,3,True,O,O,"baby food 225종, carrots True · plums True"
 4,compounds in food and gut,The weight of folate that peach pie can provides in gut,0.046mg/100g,q04_peach_pie_folate,3,True,O,O,"Pie, peach, two crust 의 Folate, DFE = 0.046"
 5,compounds in food and gut,The difference of retinol between milk and yogurt,"0.127mg/100g milk, 0.702mg/100g yogurt",q05_retinol_milk_yogurt,3,True,O,X,"0.127 = ""Ricotta cheese, whole milk - NFY1216UY"", 0.702 = ""Cereal (Kellogg's Special K Fruit & Yogurt)"" — 라벨 부분 문자열 매칭. 실제 Milk, whole 0.020~0.059, Yogurt 0.000~0.205"
 6,compounds in food and gut,The weight of citric acid can Adlercreutzia equolifaciens taken from grape juice,309mg/100g,run,3,True,O,O,"""GRAPE JUICE, WHITE, FROM CONCENTRATE WITH "" = 309, Adlercreutzia equolifaciens 의 C00158 대사 경로 있음"

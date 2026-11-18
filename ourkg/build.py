@@ -119,6 +119,34 @@ def food():
              'food_after_merge': int(n_after),
              'min_cov': MIN_COV}
 
+    # 한 KEGG 에 FDC nutrient 가 여럿 붙는다 (Folate 는 DFE·total·food·folic acid
+    # 넷). 전에는 **평균**을 냈는데 서로 다른 것을 재는 값이라 어느 쪽도 아닌
+    # 수가 된다 — Pie, peach 의 엽산이 DFE 46 / total 29 / food 4 의 평균 26.3 이
+    # 됐다. 대표 측정치 하나를 규칙으로 고른다.
+    #   · IU 는 질량이 아니다 (비타민 D 1 IU = 0.025 µg). 질량 측정치가 있으면 그쪽
+    #   · DFE·RAE 는 **등가 환산값**이라 뒤로 — DFE = food folate + 1.7 x folic
+    #     acid, RAE 는 카로티노이드를 접은 값이다. F 는 '그 KEGG 화합물의 중량'
+    #     이므로 기본 측정치(Folate, total · Retinol)를 쓴다. 논문은 Table 2 에서
+    #     DFE 를 화합물 중량처럼 썼지만(§5.1 방법 1 #4) 그 혼동을 따라가지 않는다.
+    #   · 'added' · 'label entry' · ', food' · 이성질체 분해값은 뒤로
+    def _nut_rank(nid):
+        n = str(nid2name.get(nid, '')).lower()
+        r = 5 if nid2unit.get(nid) == 'IU' else 0
+        if re.search(r'\badded\b|label entry|\bfrom \b', n):
+            r += 4
+        if n.startswith(('cis-', 'trans-')):
+            r += 3
+        if re.search(r'\bdfe\b|\brae\b', n):
+            r += 2
+        elif re.search(r'\btotal\b', n):
+            r -= 1
+        if re.search(r', food\b', n):
+            r += 2
+        return r
+
+    fn['rank'] = fn['nutrient_id'].map(_nut_rank)
+    fn = fn[fn['rank'] == fn.groupby(['food_key', 'kegg'])['rank'].transform('min')]
+
     print(f'[5/5] 음식당 compound >= {MIN_COV} 필터')
     long = (fn.groupby(['food_key', 'kegg'], as_index=False)['amount_g'].mean())
     cov = long.groupby('food_key')['kegg'].nunique()
