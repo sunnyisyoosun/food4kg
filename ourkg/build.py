@@ -209,6 +209,34 @@ def food():
     _linked = int(sum(1 for w in _wc if pd.notna(w) and str(int(w)) in _sr))
     print(f'  WWEIA -> SR 군 큐레이션 링크 적용: {_linked:,} 음식')
 
+    # --- FoodOn 축: 음식 -> FoodOn 클래스 -> 조상 계층 (ourkg/cache, foodon_match.py)
+    _fo_t = os.path.join(BASE, 'ourkg', 'cache', 'foodon_terms.json')
+    _fo_a = os.path.join(BASE, 'ourkg', 'cache', 'foodon_ancestors.json')
+    if os.path.exists(_fo_t) and os.path.exists(_fo_a):
+        import foodon_match as _fm
+        _T = json.load(open(_fo_t)); _A = json.load(open(_fo_a))
+        _idx = _fm.build_index(_T)
+        _rows = []
+        for _fk, _nm in zip(meta['food_key'], meta['food_name']):
+            _oid = _fm.match(_nm, _idx)
+            if not _oid:
+                continue
+            _rows.append({'food_key': _fk, 'foodon': _oid,
+                          'foodon_label': _T[_oid]['label'], 'rel': 'class'})
+            for _a in _A.get(_oid, []):
+                _rows.append({'food_key': _fk, 'foodon': _a['id'],
+                              'foodon_label': _a['label'], 'rel': 'ancestor'})
+        _fo = pd.DataFrame(_rows)
+        _fo.to_csv(os.path.join(OUT, 'food_foodon.csv'), index=False)
+        _nf = _fo[_fo.rel == 'class'].food_key.nunique()
+        print(f'  FoodOn 축: 음식 {_nf:,} / {len(meta):,} '
+              f'({_nf / len(meta):.1%}) · 클래스 {_fo[_fo.rel == "class"].foodon.nunique():,} '
+              f'· 조상 포함 링크 {len(_fo):,}')
+        _link['foodon_food'] = int(_nf)
+        _link['foodon_class'] = int(_fo[_fo.rel == 'class'].foodon.nunique())
+    else:
+        print('  ⚠ FoodOn 캐시 없음 — ourkg/cache/foodon_*.json')
+
     _link['food_after_mincov'] = int(long['food_key'].nunique())
     _link['compound_after_mincov'] = int(long['kegg'].nunique())
     with open(os.path.join(OUT, 'food_link.json'), 'w') as _fh:

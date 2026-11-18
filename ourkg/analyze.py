@@ -530,6 +530,26 @@ def evaluate():
                             if fu is not None:
                                 self.f2c[fu].add(u)
 
+                # FoodOn 축 (out/food_foodon.csv). 음식 -> 클래스 -> 조상까지 모두
+                # 카테고리로 단다. 배포 KG 의 Food_Ontology.jsonld 는 부분집합이라
+                # soy milk 가 없고 상위 라벨도 빠져 있었다 — ourkg/foodon_match.py.
+                fo = os.path.join(OUT, 'food_foodon.csv')
+                if os.path.exists(fo):
+                    _fo = pd.read_csv(fo)
+                    _k2f = dict(zip(foods.food_key, foods.fdc_id))
+                    _n = 0
+                    for _fk, _lab in zip(_fo['food_key'], _fo['foodon_label']):
+                        if not isinstance(_lab, str):
+                            continue
+                        _fdc = _k2f.get(_fk)
+                        if _fdc is None:
+                            continue
+                        u = f'onto:FoodOn/{_lab}'
+                        self.clab[u] = _lab
+                        self.f2c[int(_fdc)].add(u)
+                        _n += 1
+                    print(f'  FoodOn 카테고리 링크 {_n:,}')
+
                 # KEGG brite 분류축. m1.KG 와 같은 형태로 맞춘다 —
                 #   klab   전체 URI -> 라벨 (compound 는 kegg entry URI)
                 #   ksub   클래스 URI -> 상위 클래스 URI

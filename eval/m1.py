@@ -302,17 +302,19 @@ def q00_lysine_fruits(kg):
             f'strawberries 는 Lysine 기록 {len(straw)}건이 전부 0')
 
 
-def _beverage_subclass(pat, key):
-    """#1, #2 — Beverages 아래 특정 하위 카테고리에 속하는가.
+def _beverage_subclass(pat, key, parent=r'beverage'):
+    """#1, #2 — 상위군(기본: 음료) 아래 특정 하위 카테고리에 속하는가.
 
-    `key` 는 **정규식**이다. 카테고리 이름은 KG 마다 다른데 문항이 묻는 것은
-    이름이 아니라 소속이다 — 배포 KG 의 "Milk substitutes" 를 FDC 는 WWEIA
-    1902 "Plant-based milk" 로 부른다. 어느 한쪽 철자를 박으면 다른 KG 가
-    사실을 갖고 있어도 X 가 된다.
+    `key` 와 `parent` 모두 **정규식**이고 대소문자를 가리지 않는다. 카테고리
+    이름은 KG 마다 다른데 문항이 묻는 것은 이름이 아니라 소속이다.
+      배포 KG   "Beverages" > "Milk substitutes"
+      FDC/WWEIA "Plant Based Milk" (1902, MILK AND DAIRY 아래)
+      FoodOn    "beverage food product" > "plant derived beverage" > "soybean milk"
+    어느 한쪽 철자를 박으면 다른 KG 가 사실을 갖고 있어도 X 가 된다.
     """
     def run(kg):
         by = collections.Counter(' / '.join(sorted(kg.cats(f))) for f in kg.foods(pat))
-        good = lambda c: 'Beverages' in c and re.search(key, c, re.I)
+        good = lambda c: re.search(parent, c, re.I) and re.search(key, c, re.I)
         n_ok = sum(n for c, n in by.items() if good(c))
         other = [(c, n) for c, n in by.most_common() if not good(c)]
         return ('O' if n_ok else 'X',
@@ -324,8 +326,10 @@ def _beverage_subclass(pat, key):
 
 # 라벨 부분 문자열로 찾으면 'cola' 가 'Chocolate' 에 걸린다. 콜라는 접두로 찾는다.
 q01_cola_category = _beverage_subclass(r'^Soft drink, cola', r'soft drinks?')
+# FoodOn 은 'milk substitute' 라는 상위를 두지 않고 plant milk 를
+# `plant derived beverage` 로 묶는다. 같은 개념이므로 함께 인정한다.
 q02_soymilk_category = _beverage_subclass(
-    r'soy ?milk', r'milk substitut|plant[- ]based milk')
+    r'soy ?milk', r'milk substitut|plant[- ]based milk|plant derived beverage')
 
 
 def q03_baby_food(kg):

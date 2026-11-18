@@ -24,4 +24,5 @@ analyse/p5_foodname.txt
 # ourkg.nt 470MB, food_compound_long.csv 48MB. `ourkg/run_all.py` 로 재생성한다.
 ourkg/out/ourkg.nt
 ourkg/out/food_compound_long.csv
+ourkg/out/food_foodon.csv
 ourkg/cache/

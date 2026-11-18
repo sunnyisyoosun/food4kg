@@ -604,6 +604,59 @@ FDC 가 거의 측정하지 않아 못 쓴다**는 증거다.
 **그래서 `#6` 은 여기서 결론이 난다.** 매핑해도 추천 행렬에 쓸 수 없고, 게다가
 `Adlercreutzia equolifaciens` 의 C00158 대사 경로가 KEGG 에 없다.
 
+#### ★ FoodOn 축을 OLS 에서 받아 붙인다 — `#2` 가 열린다
+
+`#2` 를 "축 문제" 로 닫기 전에 **상위 분류가 어디엔가 있는지** 더 찾았다. 세 군데를
+봤고 답은 세 번째에 있었다.
+
+| 출처 | soy milk 를 뭐라고 분류하나 | 쓸 수 있나 |
+|---|---|---|
+| FDC/WWEIA 2021-2023 | `1902 Plant-based milk` (MILK AND DAIRY > Plant-based Dairy) | 음료 아님 |
+| 배포 KG `Food_Category.jsonld` | `1404 Milk substitutes` → `14 Beverages` | **1404 가 FDC 2026 에 없다** |
+| **FoodOn (OLS)** | `soybean milk` < `soybean beverage` < `plant derived beverage` < **`beverage food product`** | **된다** |
+
+USDA 문서로 확인한 것 — [2021-2023 변경표](https://www.ars.usda.gov/ARSUserFiles/80400530/pdf/2123/WWEIA%20Food%20Category%20Changes%20between%20survey%20cyles%20%202021-2023.pdf)
+는 `1404 Milk substitutes` 를 **Deleted**, `1902 Plant-based milk` 를 **New** 로
+적는다. 같은 표에 **Renamed** 항목(`2806`)이 따로 있으므로 USDA 는 둘을 구분해
+쓴다 — **개명이 아니다.** 그래서 `1902 → 14 Beverages` 를 우리가 잇는 것은
+근거 없는 추정이고, 하지 않았다.
+
+대신 **논문이 쓴다고 한 FoodOn**(§3.1)을 제대로 붙였다. 배포 KG 의
+`Food_Ontology.jsonld` 는 12,913 노드짜리 **부분집합**이라 `soy milk` 가 없고,
+있는 항목조차 상위 노드의 라벨이 빠져 **계층이 끊겨** 있다(`cashew milk` 의 부모
+`FOODON_00001688` 이 ID 만 존재). 우리 FoodOn triple 이 10,237(논문 79,769)이던
+이유다.
+
+EBI OLS 에서 FOODON 클래스 **28,685** 개와 매칭된 클래스의 조상 계층을 받아
+`ourkg/cache/` 에 캐시한다(KEGG·NCBI·MeSH 와 같은 방식). 규칙은
+`ourkg/foodon_match.py` 한 곳에 있고 **이름 일치만** 쓴다.
+
+**커버리지를 올리며 찾은 함정 셋을 전부 막았다.**
+
+| 단계 | 커버리지 | 막은 것 |
+|---|---:|---|
+| 정확 일치만 | 44.4% | — |
+| + 공백 무시 | 46.0% | 한 글자 토큰이 있는 라벨은 제외 — 색소 `Green S` 가 `greens` 로 무너진다 |
+| + 복수형 | 56.0% | — |
+| **− EFSA·모호 클래스** | **54.9%** | `40330 - fried or extruded cereal…`(동의어 `snacks`), `black or white pepper product`(동의어 `pepper` 로 피망이 후추가 된다) |
+
+중간에 넣었던 "FoodOn 라벨이 질의보다 좁으면 버린다" 가드는 **역효과라 폐기했다** —
+`Babyfood`(214)·`Soymilk`(7) 같은 정답을 자르면서 정작 `Peppers` 는 동의어 경로로
+통과시켰다.
+
+결과: **음식 8,165 / 14,886 (54.9%) · 클래스 1,096 · 조상 포함 링크 117,554**
+(`out/food_foodon.csv`). 꼬리 쪽 소수 클래스도 표본 검수했다 — `Tahini→tahini`,
+`Tofu→tofu (raw)`, `Papad→poppadum`, `Sugar-apples→custard apple fruit`.
+
+**질의도 어휘 중립으로 고쳤다.** `_beverage_subclass` 가 상위군을 `'Beverages' in c`
+로 **배포 KG 철자 그대로** 요구하고 있었다. 정규식·대소문자 무시로 바꿨고,
+FoodOn 이 `milk substitute` 상위를 두지 않고 plant milk 를 `plant derived
+beverage` 로 묶으므로 그것도 같은 개념으로 인정한다.
+
+**`#2` 가 O 가 됐다 — 재현 10 → 11/20.** 공개 KG 는 18/20 · 타당 13/20 그대로이고
+(우리 쪽만 유리해지는 변경이 아니다) 두 기준도 변동 없다(23/1 · 추천군 21 ·
+비추천군 26 · 위반 0) — FoodOn 은 `F` 를 건드리지 않는다.
+
 #### ★ 상위 식품군을 이름 추정에서 큐레이션 링크로 바꾼다
 
 `#2` soy milk 를 "축 문제" 로 결론 낸 뒤 원본을 더 찾아보니, **상위 분류가 배포

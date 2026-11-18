@@ -7,6 +7,8 @@
  "food_before_merge": 1949668,
  "food_after_merge": 475626,
  "min_cov": 20,
+ "foodon_food": 8165,
+ "foodon_class": 1096,
  "food_after_mincov": 14886,
  "compound_after_mincov": 130
 }
