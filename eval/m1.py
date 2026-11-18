@@ -363,11 +363,18 @@ q07_lettuce_ascorbic = _food_compound_bacteria(
 def q08_potassium_rank(kg):
     K = kg.w[NUT['potassium']]
     top = sorted(K, key=K.get, reverse=True)[:3]
+
+    def mx(pat):
+        """논문 답의 음식군 최대값. 라벨 공간이 달라 0 건일 수 있다 — 그때는
+        '그 이름이 없다' 가 답이지 크래시가 아니다. ourkg 는 §3.2 로 라벨을
+        병합해서 공개 KG 의 "Egg whites" 같은 이름이 그대로 있지 않다."""
+        v = kg.vals('potassium', pat)
+        return f'{v[-1]:g}' if v else '라벨 없음'
+
     return ('△', '△',
             f'순위 범위가 문항에 없다. KG 전체 1~3위는 {[kg.food[f][:22] for f in top]}. '
-            f'Beans 최대 {kg.vals("potassium", "^Beans")[-1]:g}, Egg whites '
-            f'{kg.vals("potassium", "Egg whites")[-1]:g}, Almonds '
-            f'{kg.vals("potassium", "Almond")[-1]:g}')
+            f'Beans 최대 {mx("^Beans")}, Egg whites {mx("Egg whites|Egg, white")}, '
+            f'Almonds {mx("Almond")}')
 
 
 def _mixed_diet(nut, tgt, first, real):

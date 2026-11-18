@@ -113,9 +113,9 @@ nutrient_id,nutrient_name,nutrient_unit,nutrient_kegg
 1213,Leucine,G,C16439
 1214,Lysine,G,C00047
 1216,Cystine,G,C01420
-1110,"Vitamin D (D2 + D3), International Units",IU,0
+1110,"Vitamin D (D2 + D3), International Units",IU,C05443
 1180,"Choline, total",MG,C00114
-1114,Vitamin D (D2 + D3),UG,0
+1114,Vitamin D (D2 + D3),UG,C05443
 1198,Betaine,MG,C00719
 1314,MUFA 16:1 c,G,C08362
 1183,Vitamin K (Menaquinone-4),UG,C00828
