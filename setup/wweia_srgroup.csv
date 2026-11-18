@@ -1,0 +1,119 @@
+wweia_code,wweia_label,sr_group_code,sr_group
+1002,"Milk, whole",1,Dairy and Egg Products
+1004,"Milk, reduced fat",1,Dairy and Egg Products
+1006,"Milk, lowfat",1,Dairy and Egg Products
+1008,"Milk, nonfat",1,Dairy and Egg Products
+1202,"Flavored milk, whole",1,Dairy and Egg Products
+1204,"Flavored milk, reduced fat",1,Dairy and Egg Products
+1206,"Flavored milk, lowfat",1,Dairy and Egg Products
+1208,"Flavored milk, nonfat",1,Dairy and Egg Products
+1402,Milk shakes and other dairy drinks,1,Dairy and Egg Products
+1404,Milk substitutes,14,Beverages
+1602,Cheese,1,Dairy and Egg Products
+1604,Cottage/ricotta cheese,1,Dairy and Egg Products
+1820,"Yogurt, regular",1,Dairy and Egg Products
+1822,"Yogurt, Greek",1,Dairy and Egg Products
+2002,"Beef, excludes ground",13,Beef Products
+2004,Ground beef,13,Beef Products
+2006,Pork,10,Pork Products
+2202,"Chicken, whole pieces",5,Poultry Products
+2204,"Chicken patties, nuggets and tenders",5,Poultry Products
+2206,"Turkey, duck, other poultry",5,Poultry Products
+2402,Fish,15,Finfish and Shellfish Products
+2404,Shellfish,15,Finfish and Shellfish Products
+2502,Eggs and omelets,1,Dairy and Egg Products
+2604,Bacon,10,Pork Products
+2606,Frankfurters,7,Sausages and Luncheon Meats
+2608,Sausages,7,Sausages and Luncheon Meats
+2802,"Beans, peas, legumes",16,Legumes and Legume Products
+2804,Nuts and seeds,12,Nut and Seed Products
+2806,Processed soy products,16,Legumes and Legume Products
+3004,Poultry mixed dishes,5,Poultry Products
+3102,"Bean, pea, legume dishes",16,Legumes and Legume Products
+3104,Vegetable dishes,11,Vegetables and Vegetable Products
+3402,Fried rice and lo/chow mein,20,Cereal Grains and Pasta
+3406,"Egg rolls, dumplings, sushi",25,Restaurant Foods
+3602,Pizza,18,Baked Products
+3704,Chicken/turkey sandwiches (single code),5,Poultry Products
+3802,Soups,6,"Soups, Sauces, and Gravies"
+4002,Rice,20,Cereal Grains and Pasta
+4004,"Pasta, noodles, cooked grains",20,Cereal Grains and Pasta
+4202,Yeast breads,18,Baked Products
+4204,Rolls and buns,18,Baked Products
+4206,Bagels and English muffins,18,Baked Products
+4402,"Biscuits, muffins, quick breads",18,Baked Products
+4404,"Pancakes, waffles, French toast",18,Baked Products
+4804,Grits and other cooked cereals,20,Cereal Grains and Pasta
+5008,Pretzels/snack mix,18,Baked Products
+5202,"Crackers, excludes saltines",18,Baked Products
+5204,Saltine crackers,18,Baked Products
+5402,Cereal bars,20,Cereal Grains and Pasta
+5502,Cakes and pies,18,Baked Products
+5504,Cookies and brownies,18,Baked Products
+5506,"Doughnuts, sweet rolls, pastries",18,Baked Products
+5702,Candy containing chocolate,19,Sweets
+5704,Candy not containing chocolate,19,Sweets
+6002,Apples,9,Fruits and Fruit Juices
+6004,Bananas,9,Fruits and Fruit Juices
+6006,Grapes,9,Fruits and Fruit Juices
+6008,Peaches and nectarines,9,Fruits and Fruit Juices
+6009,Strawberries,9,Fruits and Fruit Juices
+6011,Blueberries and other berries,9,Fruits and Fruit Juices
+6012,Citrus fruits,9,Fruits and Fruit Juices
+6016,Dried fruits,9,Fruits and Fruit Juices
+6018,Other fruits and fruit salads,9,Fruits and Fruit Juices
+6020,Pears,9,Fruits and Fruit Juices
+6022,Pineapple,9,Fruits and Fruit Juices
+6024,Mango and papaya,9,Fruits and Fruit Juices
+6402,Tomatoes,11,Vegetables and Vegetable Products
+6404,Carrots,11,Vegetables and Vegetable Products
+6406,Other red and orange vegetables,11,Vegetables and Vegetable Products
+6407,Broccoli,11,Vegetables and Vegetable Products
+6409,Spinach,11,Vegetables and Vegetable Products
+6410,Lettuce and lettuce salads,11,Vegetables and Vegetable Products
+6411,Other dark green vegetables,11,Vegetables and Vegetable Products
+6412,String beans,11,Vegetables and Vegetable Products
+6413,Cabbage,11,Vegetables and Vegetable Products
+6414,Onions,11,Vegetables and Vegetable Products
+6416,Corn,11,Vegetables and Vegetable Products
+6418,Other starchy vegetables,11,Vegetables and Vegetable Products
+6420,Other vegetables and combinations,11,Vegetables and Vegetable Products
+6430,Fried vegetables,11,Vegetables and Vegetable Products
+6489,Vegetables on a sandwich,11,Vegetables and Vegetable Products
+7002,Citrus juice,9,Fruits and Fruit Juices
+7004,Apple juice,9,Fruits and Fruit Juices
+7006,Other fruit juice,9,Fruits and Fruit Juices
+7008,Vegetable juice,11,Vegetables and Vegetable Products
+7102,Diet soft drinks,14,Beverages
+7104,Diet sport and energy drinks,14,Beverages
+7106,Other diet drinks,14,Beverages
+7202,Soft drinks,14,Beverages
+7204,Fruit drinks,14,Beverages
+7206,Sport and energy drinks,14,Beverages
+7208,Nutritional beverages,14,Beverages
+7220,Smoothies and grain drinks,14,Beverages
+7302,Coffee,14,Beverages
+7304,Tea,14,Beverages
+7502,Beer,14,Beverages
+7504,Wine,14,Beverages
+7506,Liquor and cocktails,14,Beverages
+7802,Flavored or carbonated water,14,Beverages
+7804,Enhanced or fortified water,14,Beverages
+8002,Butter and animal fats,4,Fats and Oils
+8004,Margarine,4,Fats and Oils
+8006,"Cream cheese, sour cream, whipped cream",1,Dairy and Egg Products
+8010,Mayonnaise,6,"Soups, Sauces, and Gravies"
+8402,Tomato-based condiments,6,"Soups, Sauces, and Gravies"
+8404,Soy-based condiments,16,Legumes and Legume Products
+8406,Mustard and other condiments,2,Spices and Herbs
+8408,"Olives, pickles, pickled vegetables",11,Vegetables and Vegetable Products
+8410,"Pasta sauces, tomato-based",6,"Soups, Sauces, and Gravies"
+8412,"Dips, gravies, other sauces",6,"Soups, Sauces, and Gravies"
+8802,Sugars and honey,19,Sweets
+8806,"Jams, syrups, toppings",6,"Soups, Sauces, and Gravies"
+9002,Baby food: cereals,20,Cereal Grains and Pasta
+9004,Baby food: fruit,9,Fruits and Fruit Juices
+9006,Baby food: vegetable,11,Vegetables and Vegetable Products
+9010,Baby food: yogurt,1,Dairy and Egg Products
+9202,Baby juice,9,Fruits and Fruit Juices
+9802,Protein and nutritional powders,1,Dairy and Egg Products

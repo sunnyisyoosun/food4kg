@@ -61,6 +61,7 @@ def food():
     food.loc[food['category'].isna(), 'category'] = food['food_category_id'].where(
         cat_num.isna(), None)
     food['category'] = food['category'].fillna('Unknown')
+    food['wweia_code'] = pd.NA
 
 
     # FNDDS(survey_fndds_food)는 food.csv 에 food_category_id 가 없다. 카테고리는
@@ -77,6 +78,8 @@ def food():
         food = food.merge(sf[['fdc_id', 'wweia']], on='fdc_id', how='left')
         hit = food['wweia'].notna() & (food['category'] == 'Unknown')
         food.loc[hit, 'category'] = food.loc[hit, 'wweia']
+        food.loc[hit, 'wweia_code'] = sf.set_index('fdc_id')['wweia_category_number'] \
+            .reindex(food.loc[hit, 'fdc_id']).astype('Int64').values
         print(f'  FNDDS WWEIA 카테고리 적용: {int(hit.sum()):,} 항목')
     else:
         print('  ⚠ survey_fndds_food.csv / wweia_food_category.csv 없음 — '
@@ -125,7 +128,8 @@ def food():
     print(f'  KEGG 측정값 {len(fn):,} 행, compound {fn["kegg"].nunique()}')
 
     print('[4/5] 라벨 병합 (논문 §3.2 exact matching)')
-    fn = fn.merge(food[['fdc_id', 'food_name', 'data_type', 'category']], on='fdc_id', how='inner')
+    fn = fn.merge(food[['fdc_id', 'food_name', 'data_type', 'category', 'wweia_code']],
+                  on='fdc_id', how='inner')
     fn['food_key'] = normalize_label(fn['food_name'])
     fn = fn[fn['food_key'].str.len() > 0]
     n_before, n_after = fn['fdc_id'].nunique(), fn['food_key'].nunique()
@@ -186,8 +190,24 @@ def food():
                  data_type=('data_type', 'first'), category=('category', 'first')))
     meta['n_compound'] = cov.reindex(meta.index).astype(int)
     meta = meta.reset_index()
-    meta['food_group'] = [normalize_category(c, n)
-                          for c, n in zip(meta['category'], meta['food_name'])]
+    # 세분 카테고리 -> 상위 식품군. WWEIA 4 자리 코드에는 **큐레이션된 SR 군 링크**가
+    # 있다(`setup/wweia_srgroup.csv`, 배포 KG Food_Category.jsonld 에서 추출한 118 개).
+    # 앞 2 자리가 상위인 접두 규칙이 아니다 — 재 보니 일치 1 / 불일치 117 이다.
+    # 링크가 있으면 그것을 쓰고, 없으면 기존 이름 규칙으로 떨어뜨린다.
+    _sr = {}
+    _srp = os.path.join(BASE, 'setup', 'wweia_srgroup.csv')
+    if os.path.exists(_srp):
+        _srdf = pd.read_csv(_srp, dtype={'wweia_code': str})
+        _sr = dict(zip(_srdf['wweia_code'], _srdf['sr_group']))
+    _wcode = (_sel.sort_values('_prio').groupby('food_key')['wweia_code'].first()
+              if 'wweia_code' in _sel.columns else pd.Series(dtype=object))
+    _wc = _wcode.reindex(meta['food_key']).values
+    meta['food_group'] = [
+        _sr.get(str(int(w)), normalize_category(c, n)) if pd.notna(w)
+        else normalize_category(c, n)
+        for w, c, n in zip(_wc, meta['category'], meta['food_name'])]
+    _linked = int(sum(1 for w in _wc if pd.notna(w) and str(int(w)) in _sr))
+    print(f'  WWEIA -> SR 군 큐레이션 링크 적용: {_linked:,} 음식')
 
     _link['food_after_mincov'] = int(long['food_key'].nunique())
     _link['compound_after_mincov'] = int(long['kegg'].nunique())

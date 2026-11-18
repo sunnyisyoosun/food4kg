@@ -604,6 +604,60 @@ FDC 가 거의 측정하지 않아 못 쓴다**는 증거다.
 **그래서 `#6` 은 여기서 결론이 난다.** 매핑해도 추천 행렬에 쓸 수 없고, 게다가
 `Adlercreutzia equolifaciens` 의 C00158 대사 경로가 KEGG 에 없다.
 
+#### ★ 상위 식품군을 이름 추정에서 큐레이션 링크로 바꾼다
+
+`#2` soy milk 를 "축 문제" 로 결론 낸 뒤 원본을 더 찾아보니, **상위 분류가 배포
+KG 안에 있었다.** `Food_Category.jsonld` 에 WWEIA 4 자리 코드 → SR 식품군 링크가
+**118 개** 들어 있다.
+
+```
+1404 Milk substitutes  → 14 Beverages        ← #2 가 요구하는 바로 그 링크
+1002 Milk, whole       →  1 Dairy and Egg Products
+```
+
+접두 규칙이 아니다 — 4 자리의 앞 2 자리가 상위와 맞는지 세어 보니 **일치 1 /
+불일치 117** 이다. 손으로 이은 링크이고, 논문 §3.2 의 "self-defined mapping
+rules" 가 이것으로 보인다. SR 군 이름 18 종은 우리 `FDC_CATEGORY` 와 **어휘가
+완전히 일치**해서 변환 없이 붙는다. `setup/wweia_srgroup.csv` 로 고정했다.
+
+그때까지 우리 `food_group` 은 **음식 이름 정규식**으로 추정하고 있었다
+(`cheese|milk|yogurt|…` → Dairy). 이제 WWEIA 코드에 링크가 있으면 그것을 쓰고,
+없으면 이름 규칙으로 떨어뜨린다. **3,343 음식**에 적용됐고 **1,131 음식(7.6%)의
+군이 바뀌었다.**
+
+| 줄어든 군 | | 늘어난 군 | |
+|---|---:|---|---:|
+| Dairy and Egg Products | −267 | Beverages | +272 |
+| Fast Foods | −214 | Baked Products | +222 |
+| Sweets | −124 | Vegetables and Vegetable Products | +156 |
+| Alcoholic Beverages | −83 | Soups, Sauces, and Gravies | +86 |
+
+이동 방향이 **이름 규칙의 알려진 오분류를 바로잡는 쪽**이다. `Dairy → Baked
+Products` 62 건과 `Dairy → Vegetables` 49 건은 `cheese|milk|cream` 규칙이 크림
+수프·치즈 빵을 끌어가던 것이고, `Fast Foods → Baked Products` 133 건은
+`pizza|burger|sandwich` 규칙이 빵류를 패스트푸드로 보내던 것이다.
+
+**채점은 ModiMedDiet 동일(23/1), §4.2.3 은 추천군 22 → 21 · 위반 2 → 0 이다.**
+Top 30 의 **순서는 전혀 바뀌지 않았고**(`F` 가 그대로다) 군 소속만 5 건 바뀐다.
+
+| # | 음식 | 전 → 후 | 판정 |
+|---:|---|---|---|
+| 7 | Fruit juice **drink** | Fruits and Fruit Juices → Beverages | 추천군 → — |
+| 10 | Caramel dip, light | Sweets → Soups, Sauces, and Gravies | **위반 → —** |
+| 20 | Jam | Sweets → Soups, Sauces, and Gravies | **위반 → —** |
+| 27·28 | Tomato juice, 100% | Fruits and Fruit Juices → Vegetables | 추천군 유지 |
+
+추천군이 1 내려간 것은 **분류가 정확해진 결과다.** `Fruit juice drink` 는 100%
+주스가 아니라 가당 음료이고, Top 30 의 다른 항목(`Orange juice, 100%` 등)과 달리
+과일군에 둘 이유가 없다. 거꾸로 딥·잼 두 건이 거짓 위반에서 벗어났다.
+
+**`#2` 는 그래도 X 다.** WWEIA 가 `1404 Milk substitutes` 를 `1902 Plant-based
+milk` 으로 **개명**했는데, 우리 FDC 2026 배포본에는 1404 가 없고 배포 KG(2022)
+에는 1902 가 없다. 그래서 어느 원본에도 `1902 → 14` 링크가 없다. 우리가 이으면
+개명 사실을 USDA 문서로 확인하지 않은 **추정**을 넣는 것이고, 그것은 문항 하나를
+열기 위해 링크를 지어내는 일이다. 하지 않는다. 우리 WWEIA 172 코드 중 링크가
+있는 것은 **116 개**이고 1902 는 그 밖의 56 개에 속한다.
+
 #### 카테고리 철자 통합 — FDC 가 같은 카테고리를 셋으로 쪼개 놓았다
 
 브랜드 자유문자열 `food_category_id` 는 FDC 안에서 **구분자가 세 가지**다.
