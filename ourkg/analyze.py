@@ -478,12 +478,15 @@ def evaluate():
                 # nut2kegg 와 같은 뜻(FDC nutrient id -> KEGG)이 되도록 nutrient_id
                 # 를 키로 쓴다 — 전에는 인덱스를 키로 둬 이름만 같고 뜻이 달랐다.
                 self.w = dd(dict)
-                _kg = pd.read_csv(os.path.join(OUT, 'food_compound_kg.csv')).assign(
-                    fdc=lambda d: d.food_key.map(key2fdc)).dropna(subset=['fdc'])
+                _kg = pd.read_csv(os.path.join(OUT, 'food_compound_kg.csv'))
+                # KG 층은 F 코호트(MIN_COV>=20) 밖 음식도 담는다. 그 음식들도
+                # 질의 대상이므로 self.food 에 등록한다 — 안 하면 KG 에 넣어 놓고
+                # 질의가 못 본다 (방법 1 #6 의 grape juice 가 그 경우였다).
+                self.food.update(dict(zip(_kg.fdc_id, _kg.food_name)))
                 self.nut2kegg = dict(zip(_kg.nutrient_id, _kg.kegg))
                 for _nid, _g in _kg.groupby('nutrient_id'):
                     self.w[int(_nid)] = {int(f): v * G_TO_FDC
-                                         for f, v in zip(_g.fdc, _g.amount_g)}
+                                         for f, v in zip(_g.fdc_id, _g.amount_g)}
 
                 # 카테고리: FDC 세분류 → SR 27군 두 층 + 온톨로지 라벨.
                 self.f2c, self.clab, self.csub = dd(set), {}, dd(set)

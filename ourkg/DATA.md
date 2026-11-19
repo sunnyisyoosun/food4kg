@@ -1,0 +1,224 @@
+# ourkg — 어떤 데이터를 어떻게 썼나
+
+각 축이 **어디서 왔고 · 어떻게 받았고 · 무엇을 뽑았고 · 무엇과 이었고 · 무엇을
+못 하는지**를 적는다. 수치는 `out/linking_stats.csv` 가 정본이고 여기 적은 값은
+2026-11-19 빌드 기준이다.
+
+설계 결정의 **이유**는 `README.md`, 실험과 기각 기록은 `RESULTS.md` 에 있다.
+
+---
+
+## 한눈에
+
+| 축 | 소스 | 받는 법 | 우리 규모 |
+|---|---|---|---|
+| 음식·성분 | FoodData Central | 로컬 덤프 `fdc_raw/` | 항목 2,101,279 → 병합 475,769 |
+| compound | KEGG | REST + 캐시 | KG 층 154 · F 층 130 |
+| 음식 온톨로지 | FoodOn | **EBI OLS API** + 캐시 | 클래스 1,096 · 음식 8,165 |
+| 음식 카테고리 | FDC SR / WWEIA | 로컬 덤프 | 세분 265 · 상위 27 |
+| 우울증-대사물 | ProMENDA | 로컬 xlsx | 레코드 22,519 → compound 1,412 |
+| 미생물 | NCBI taxonomy | efetch + 캐시 | 127 taxid |
+| compound-미생물 | KEGG REST | REST + 캐시 | 2,124 링크 · compound 59 |
+| compound-미생물 (예측) | **VMH / AGORA** | REST + 캐시 | 아래 — 검증 중 |
+| 미생물-정신질환 | MiKG 원본 TTL | 로컬 ttl | 406 쌍 |
+| 질환 분류 | MeSH | **SPARQL** + 캐시 | 링크 244 · 트리 1,227 |
+| 질환 식별자 | SNOMED CT | MiKG xref | 63 (배포본 자체는 1) |
+
+---
+
+## 1. 음식·성분 — FoodData Central (FDC)
+
+- **받는 법**: USDA 전체 배포본(CSV)을 `fdc_raw/` 에 둔다. 네트워크로 받지 않는다.
+  - `food.csv` 219 MB · `food_nutrient.csv` 1.79 GB · `nutrient.csv`
+  - `survey_fndds_food.csv`, `wweia_food_category.csv` — FNDDS 음식의 카테고리
+- **뽑는 것**: 2,710 만 행을 스트리밍하며 KEGG 로 매핑되는 nutrient 행만 보관.
+- **단위**: `nutrient.csv` 가 정본이다. 매핑표만 보면 새로 넣은 성분의 단위가
+  `NaN → 1.0` 이 되어 **mg 를 g 로** 취급한다(citric acid 가 1,740 g/100g 으로
+  나왔다). `UNIT_TO_G` 로 g 환산하되 **IU 는 질량이 아니다** — 질량 측정치가
+  있으면 그쪽을 쓴다(비타민 D 1 IU = 0.025 µg).
+- **라벨 병합**: 논문 §3.2 "splitting the food labels by commas … exact matching".
+  2,101,279 → **475,769**.
+- **대표 항목**: 라벨을 공유하는 FDC 항목 중 큐레이션 순위로 하나를 고른다
+  (`foundation > sr_legacy > survey_fndds > … > branded`). **값도 그 항목의 값**을
+  쓴다 — 대표는 A 로 적고 값은 전체 평균을 쓰면 어긋난다.
+
+### KG 층과 F 층을 나눈다
+
+논문은 KG 의 compound(§3.2 23,212)와 추천 행렬 `F` 의 compound(§4.2.1 85)를
+분리한다. 우리도 나눈다 — 한 표로 쓰면 "`F` 에 넣으면 추천이 무너지는 성분"이
+KG 에서도 사라진다.
+
+| | 산출물 | 내용 | 규모 |
+|---|---|---|---|
+| **KG 층** | `out/food_compound_kg.csv` | 성분별 측정치 **그대로** (`nutrient_id` 유지) | 음식 15,347 · nutrient 202 · compound 154 |
+| **F 층** | `out/food_compound_long.csv` | KEGG 당 **대표 측정치 하나** | 음식 14,886 · compound 130 |
+
+- 스트리밍은 **확장 매핑**(기본 182 + 후보 94 + B-6)으로 넓게 받고 `F` 는 뒤에서
+  `setup/nutrient_kegg_map.csv` 로 좁힌다.
+- `F` 의 대표 측정치 규칙: IU 는 뒤로, **DFE·RAE 는 등가 환산값이라 뒤로**
+  (DFE = food folate + 1.7 × folic acid), `added`·`label entry`·`, food`·
+  이성질체 분해값은 뒤로. `F` 가 재는 것은 **그 KEGG 화합물의 중량**이다.
+- `Vitamin B-6`(C00314)는 **KG 층에만** 둔다. KEGG 대응이 없어서가 아니라 `F` 에
+  넣으면 추천이 무너져 기각했다 (RESULTS §4.3).
+
+---
+
+## 2. compound — KEGG
+
+- **매핑표**: `setup/nutrient_kegg_map.csv` (FDC nutrient_id → KEGG). 182 행.
+- **후보**: `setup/nutrient_kegg_candidates.csv` — FDC 미매핑 nutrient 를 KEGG REST
+  `find/compound` 로 **이름 정확 일치**만 조회해 얻은 94 종. **F 에는 넣지 않는다**
+  (넣으면 두 기준이 무너진다, RESULTS §4.3). KG 층에만 쓴다.
+- **brite 분류축**: `br08001`·`br08002`·`br08005` 를 REST 로 받아 744 compound 분류.
+- **캐시**: `cache/kegg_*.txt`
+
+---
+
+## 3. 음식 온톨로지 — FoodOn (EBI OLS)
+
+논문 §3.1 이 FoodOn 을 쓴다고 하지만, 배포 KG 의 `Food_Ontology.jsonld` 는
+**12,913 노드짜리 부분집합**이라 `soy milk` 가 없고 상위 노드의 라벨조차 빠져
+계층이 끊겨 있다. 그래서 **EBI OLS** 에서 직접 받는다.
+
+- **받는 법**: `https://www.ebi.ac.uk/ols4/api/ontologies/foodon/…`
+  - 클래스 전수 → `cache/foodon_terms.json` (**28,685**)
+  - 매칭된 클래스의 `hierarchicalAncestors` → `cache/foodon_ancestors.json` (1,123)
+- **매칭 규칙**: `foodon_match.py`. **이름 일치만** 쓴다. 검수로 함정 셋을 막았다.
+  - 공백 무시는 **한 글자 토큰이 없을 때만** — 색소 `Green S` 가 `greens` 로 무너진다
+  - EFSA FoodEx2 코드 클래스(`40330 - …`) 제외 — 동의어 `snacks` 로 걸린다
+  - `black or white pepper product` 제외 — 동의어 `pepper` 로 피망이 후추가 된다
+- **결과**: 음식 **8,165 / 14,886 (54.9%)** · 클래스 1,096 · 조상 포함 링크 117,554
+  (`out/food_foodon.csv`, KG 에 119,841 triple)
+
+---
+
+## 4. 음식 카테고리 — FDC SR / WWEIA
+
+- **철자 통합**: 브랜드 자유문자열 카테고리는 FDC 안에서 **구분자가 세 가지**다
+  (공백 둘 · 하이픈 · en dash). 16 개 카테고리 51,108 항목이 갈려 있었다.
+  구두점·대소문자를 지운 키로 묶고 **가장 많이 쓰인 철자를 대표**로 삼는다.
+  라벨을 새로 지어내지 않는다. **WWEIA 적용 뒤에** 돌려야 한다.
+- **상위 식품군**: WWEIA 4 자리 → SR 식품군 링크 **118 개**를 배포 KG
+  `Food_Category.jsonld` 에서 추출해 `setup/wweia_srgroup.csv` 로 고정했다.
+  접두 규칙이 **아니다**(앞 2 자리 일치 1 / 불일치 117). 3,343 음식에 적용된다.
+  그 전까지 `food_group` 은 **음식 이름 정규식**으로 추정하고 있었다.
+
+---
+
+## 5. 우울증-대사물 — ProMENDA
+
+- **받는 법**: Pu et al. (2024) 보충자료 `41398_2024_2948_MOESM3_ESM.xlsx` (로컬)
+- **규모**: 22,519 레코드 / 995 연구 → KEGG compound **1,412**
+- **극성**: `e_shrunk = (pos − neg) / (pos + neg + K)`, `K = 10`.
+  `K` 민감도는 2026-11-18 에 처음 쟀다 — `K=0`(축소 없음)이 ModiMedDiet 처방군
+  7/30 인데 `K=10·20` 이 23/30 으로 평탄한 꼭대기다 (RESULTS §5).
+
+---
+
+## 6. 미생물 — NCBI taxonomy
+
+- **받는 법**: `efetch.fcgi` 로 taxid 의 학명·rank·lineage 를 **현재 값**으로 갱신.
+  `cache/ncbi_taxonomy.json`
+- **규모**: **127 taxid** (논문 322,917). 정신질환 연관 종만 쓴다 —
+  **가장 얇은 축이고 gut-brain 경로 전체를 제약한다.**
+
+---
+
+## 7. compound-미생물 — KEGG REST
+
+- **경로**: `compound → EC → KO → organism`. KEGG organism 에 매칭된 균 **82/127**.
+- **규모**: **2,124 링크 · compound 59 · 미생물 82** (`out/compound_microbe.csv`)
+- **한계**: KEGG 는 유전체가 등록된 균만 담는다. `Adlercreutzia equolifaciens` 의
+  citric acid 경로, `Bifidobacterium longum` 의 ascorbic acid 경로가 없어
+  §5.1 방법 1 `#6`·`#7` 이 △ 에 머문다.
+
+---
+
+## 8. compound-미생물 (예측) — VMH / AGORA
+
+논문이 related work 로 **언급만 하고 쓰지 않은** 소스다. 우리 병목(7번)을
+메우려고 받는다.
+
+- **엔드포인트**: `https://www.vmh.life/api/public/…`
+  - SPARQL `…/sparql` — 미생물 10,000 · 대사물 7,060 (`cache/vmh_microbes.csv`,
+    `vmh_metabolites.csv`)
+  - REST `…/getMicrobeHandler?id=<균주명>` — 그 균의 `rxnData`·`metData`
+    (레거시 `rxnsinmiccont`·`metsinmiccont` 의 대체. 모델 파일을 받을 필요가 없다)
+- **이어붙이는 법**: `metData.abbreviation` → `vmh_metabolites.abbr` → **`kegg`**.
+  미생물은 **`ncbiId`** 로 우리 taxid 와 직결된다.
+- **겹침**: 우리 미생물 127 중 **67 taxid**, compound 154 중 **88 종**.
+- **레이트 리밋**: **100 req/hr**. 페이싱(38 초 간격)과 이어받기(균마다 즉시
+  append)를 넣어야 한다 — 안 넣었다가 31 분을 날렸다.
+- **균주 선택**: VMH 는 같은 taxid 에 균주를 여럿 둔다(309 건). **taxid 당 한
+  균주**만 받는다(이름 순으로 결정적). 같은 종의 대사 재구성은 대동소이하다.
+- ⚠ **AGORA 는 유전체에서 추론한 대사 능력이지 실측이 아니다.** KG 에 넣을 때
+  출처를 `VMH/AGORA` 로 따로 달아 MiKG 의 `A/B/C` 근거나 ProMENDA 실측과
+  섞이지 않게 한다.
+
+> **상태**: 받는 중. 커버리지 확정 전이라 `linking_stats.csv` 에 아직 없다.
+
+---
+
+## 9. 미생물-정신질환 — MiKG 원본 TTL
+
+배포 KG 의 `Disease_Bacteria` 만으로는 정신질환 관계가 얇다(F03 6 종, 우울증 1 건).
+MiKG(Liu et al. 2021) **원본 TTL**(2,465 triple)을 직접 읽는다.
+
+- **경로**: 미생물 → 신경전달물질 → 정신질환. 두 statement 를 이어 **406 쌍**.
+- **2026-11-19 에 네 가지를 더 뽑았다** — 그 전에는 세 술어만 썼다.
+
+| 술어 | 수 | 뽑은 것 |
+|---|---:|---|
+| `hasEvidenceLevel` | 82 | 근거 등급 **A 4 · B 21 · C 47** |
+| `hasRegulation` | 14 | 방향 **Promote 13 · Inhibit 1** |
+| `hasMapID` | 56 | KEGG pathway — **90 링크 · 경로 56 종** |
+| `owl:sameAs` | 114 | **SNOMED 63 · MeSH 51** |
+
+`hasMapID` 는 statement 가 아니라 **별도 `KEGG_pathway` 노드**에 달려 신경전달물질과
+이어진다. 산출물 `out/mikg_xref.csv`, `out/neurotransmitter_pathway.csv`.
+
+---
+
+## 10. 질환 분류 — MeSH
+
+- **받는 법**: MeSH SPARQL `https://id.nlm.nih.gov/mesh/sparql`
+  - 링크 244 건, 트리 번호 → 기술어 이름 **1,227** (`cache/mesh_tree.json`)
+- **계층**: 트리 번호는 **접두를 자르면 조상**이 된다.
+  `F03.600.300.375 < F03.600 Mood Disorders < F03 Mental Disorders`.
+  질환 **242 종** · KG 에 4,702 triple (`out/disease_tree.csv`).
+- 논문은 이 축을 SNOMED CT 로 세웠다고 하지만 배포본에는 id 284 개뿐이고
+  라벨·계층이 없다. **MeSH 로 대체된다** — 우리는 트리 번호를 이미 갖고 있었고
+  이름으로 펼치지 않고 있었을 뿐이다.
+
+---
+
+## 11. 질환 식별자 — SNOMED CT
+
+- 배포본 자체는 **1 건**(id·sameAs 뿐, 라벨·계층 없음). 라이선스 때문에 전체를
+  받을 수 없다.
+- **MiKG 가 자기 엔티티에 SCT id 를 63 개** 달아 두었다. 그것을 쓴다.
+
+---
+
+## 받지 못한 것
+
+| 소스 | 왜 |
+|---|---|
+| **gutMDisorder** | 서버가 닫혀 있다. `bio-annotation.cn` 은 DNS 는 해석되나(47.76.215.223) http·https·8080 전부 connection refused. NAR 논문(2020 v1 · 2022 v2) 보충자료가 대안이다 |
+| **SNOMED CT 전체** | 라이선스. 배포본에 라벨·계층이 없다 |
+| **중국 식품 온톨로지** | 배포 KG 의 subset 만 쓴다 (카테고리 39 · 음식 174) |
+
+## 캐시와 재현
+
+네트워크로 받는 것은 전부 `ourkg/cache/` 에 둔다(**git 추적 안 함** — 재생성
+가능하고 용량이 크다). 지우고 다시 돌리면 그때의 공개 데이터로 다시 받는다.
+정적 스냅샷이 아니라 **실시간 재조회**가 기본이다.
+
+```
+cache/foodon_terms.json       FOODON 클래스 28,685
+cache/foodon_ancestors.json   매칭 클래스의 조상 1,123
+cache/mesh_tree.json          MeSH 트리 번호 → 기술어 1,227
+cache/ncbi_taxonomy.json      NCBI efetch 결과
+cache/kegg_*.txt              KEGG REST 응답
+cache/vmh_*.csv               VMH SPARQL·REST 결과
+```

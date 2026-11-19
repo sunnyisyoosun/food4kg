@@ -5,18 +5,20 @@
 `reconstruct.py` → `run_recommendation.py` 경로이고, 이 디렉토리와 섞지 않는다.
 (재현 수치는 `REPRODUCTION.md`, 미해결 문제는 `PROBLEMS.md`)
 
+**어떤 데이터를 어떻게 썼는지는 [`DATA.md`](DATA.md) 에 있다** — 축별로 출처·받는 법·뽑은 것·이어붙인 법·한계. 이 문서는 설계 **결정**, `RESULTS.md` 는 실험과 기각 기록이다.
+
 ## 바뀐 것
 
 | 축 | 논문 (2023) | ourkg |
 |---|---|---|
 | 음식·성분 | FDC 34,250 샘플 (2022 배포본) | FDC 전체 2,101,279 항목 (2026-09 배포본) |
 | 우울증-대사물 | MENDA 5,675 관계 | **ProMENDA** (Pu et al. 2024) 22,519 레코드 / 995 연구 |
-| compound | KEGG 230 metabolite | KEGG, FDC 영양소에 매핑되는 130종 |
+| compound | KEGG 230 metabolite | **KG 층 154 / F 층 130** — 논문처럼 두 층을 나눈다 |
 | 미생물 | NCBI taxonomy 322,917 | NCBI efetch 로 학명·rank·계통 **현재 값**으로 갱신 |
 | compound-미생물 | KEGG (2022) | KEGG REST 로 **재계산** (compound → EC → KO → organism) |
-| 미생물-정신질환 | MiKG 1,234 | MiKG 원본 TTL 의 미생물→신경전달물질→정신질환 경로 406쌍 |
-| 질환 분류 | MeSH + SNOMED CT | MeSH SPARQL 로 tree number 조회 (F03 판정). SNOMED 미통합 |
-| 식품 온톨로지 | FoodOn + Chinese Food Ontology | **미통합** (아래 한계) |
+| 미생물-정신질환 | MiKG 1,234 | MiKG 원본 TTL 406쌍 + **근거등급·방향·KEGG pathway·외부 식별자** |
+| 질환 분류 | MeSH + SNOMED CT | MeSH SPARQL — tree number + **상위 계층 242종**. SNOMED 는 MiKG xref 63 |
+| 식품 온톨로지 | FoodOn + Chinese Food Ontology | **FoodOn 은 EBI OLS 에서 직접** — 음식 8,165 · 클래스 1,096. 중국 온톨로지는 배포 subset |
 
 ## 실행
 
