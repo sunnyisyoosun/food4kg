@@ -8,6 +8,8 @@ MiKG-JAIMS/
 
 # 대용량·외부 데이터 (README §2 에서 받는 법 안내)
 fdc_raw/
+# AGORA2 SBML 2.1GB — VMH 에서 다시 받는다 (ourkg/DATA.md §8)
+agora2_raw/
 food_nutrient.csv
 foodkg_triply/
 menda.xlsx
