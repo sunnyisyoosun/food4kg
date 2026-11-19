@@ -19,7 +19,7 @@
 | 우울증-대사물 | ProMENDA | 로컬 xlsx | 레코드 22,519 → compound 1,412 |
 | 미생물 | NCBI taxonomy | efetch + 캐시 | 127 taxid |
 | compound-미생물 | KEGG REST | REST + 캐시 | 2,124 링크 · compound 59 |
-| compound-미생물 (예측) | **VMH / AGORA** | REST + 캐시 | 아래 — 검증 중 |
+| compound-미생물 (예측) | **VMH / AGORA2** | 벌크 zip + 캐시 | 35,509 링크 · compound 1,014 |
 | 미생물-정신질환 | MiKG 원본 TTL | 로컬 ttl | 406 쌍 |
 | 질환 분류 | MeSH | **SPARQL** + 캐시 | 링크 244 · 트리 1,227 |
 | 질환 식별자 | SNOMED CT | MiKG xref | 63 (배포본 자체는 1) |
@@ -134,30 +134,69 @@ KG 에서도 사라진다.
 
 ---
 
-## 8. compound-미생물 (예측) — VMH / AGORA
+## 8. compound-미생물 (예측) — VMH / AGORA2
 
-논문이 related work 로 **언급만 하고 쓰지 않은** 소스다. 우리 병목(7번)을
-메우려고 받는다.
+논문이 related work 로 **언급만 하고 쓰지 않은** 소스다. 우리 병목(7번)을 메운다.
 
-- **엔드포인트**: `https://www.vmh.life/api/public/…`
-  - SPARQL `…/sparql` — 미생물 10,000 · 대사물 7,060 (`cache/vmh_microbes.csv`,
-    `vmh_metabolites.csv`)
-  - REST `…/getMicrobeHandler?id=<균주명>` — 그 균의 `rxnData`·`metData`
-    (레거시 `rxnsinmiccont`·`metsinmiccont` 의 대체. 모델 파일을 받을 필요가 없다)
-- **이어붙이는 법**: `metData.abbreviation` → `vmh_metabolites.abbr` → **`kegg`**.
-  미생물은 **`ncbiId`** 로 우리 taxid 와 직결된다.
-- **겹침**: 우리 미생물 127 중 **67 taxid**, compound 154 중 **88 종**.
-- **레이트 리밋**: **100 req/hr**. 페이싱(38 초 간격)과 이어받기(균마다 즉시
-  append)를 넣어야 한다 — 안 넣었다가 31 분을 날렸다.
-- **균주 선택**: VMH 는 같은 taxid 에 균주를 여럿 둔다(309 건). **taxid 당 한
-  균주**만 받는다(이름 순으로 결정적). 같은 종의 대사 재구성은 대동소이하다.
-- ⚠ **AGORA 는 유전체에서 추론한 대사 능력이지 실측이 아니다.** KG 에 넣을 때
-  출처를 `VMH/AGORA` 로 따로 달아 MiKG 의 `A/B/C` 근거나 ProMENDA 실측과
-  섞이지 않게 한다.
+### 두 경로
 
-> **상태**: 받는 중. 커버리지 확정 전이라 `linking_stats.csv` 에 아직 없다.
+| | REST API | **벌크 (채택)** |
+|---|---|---|
+| 주소 | `…/api/public/getMicrobeHandler?id=<균주명>` | `…/api/reconstructionFiles?download=<경로>` |
+| 레이트 리밋 | **100 req/hr** | 없음 |
+| 범위 | 우리 67 taxid 한정 | **AGORA2 전체 7,302 균주** |
+| 결과 | 183,593 링크 · 66 taxid | **280,818 링크 · 308 균주 · 66 taxid** |
 
----
+받은 파일: `AGORA2/version2.01/sbml_files_fixed/zipped/AGORA2_models/AGORA2_SBML.zip`
+(2.17 GB, 범위 요청·이어받기 지원). `agora2_raw/` 에 둔다(git 추적 안 함).
+
+### 이어붙이는 법
+
+```
+SBML <species id="M_<abbr>__91__<구획>__93__">
+   -> vmh_metabolites.abbr -> kegg          (대사물)
+파일명 Akkermansia_muciniphila_YL44.xml
+   -> vmh_microbes.label   -> ncbiId        (미생물, 우리 taxid 와 직결)
+```
+
+### 커버리지 (2026-11-19)
+
+| | 현재 우리 | VMH/AGORA2 | **합집합** |
+|---|---:|---:|---:|
+| (균, compound) 링크 | 2,124 | 35,509 | **36,769** |
+| compound | 59 | 1,014 | **1,046** |
+| 균 (taxid) | 82 | 66 | **95** |
+
+겹침 **864** · 순증 **34,645**. 겹침은 KEGG 추론 경로와 AGORA2 유전체 재구성이
+**독립적으로 같은 결론**에 이른 지점이라 서로를 교차 검증한다.
+
+우리 compound 축에 미치는 효과:
+
+| | 총수 | 기존 균 링크 | VMH | 합집합 |
+|---|---:|---:|---:|---:|
+| KG 층 | 154 | 59 | 46 | **78** |
+| F 층 | 130 | 59 | 35 | **67** |
+
+링크가 17 배 늘어도 `F` 층 증가는 +8 이다. VMH 의 compound 1,014 종 중 대부분이
+**음식에 측정되지 않는 세포 내 대사 중간체**라 `F` 에 못 들어간다. 값어치는
+`F` 확대가 아니라 **gut-brain 경로 필터를 59 → 78 종으로 넓히고 근거를 두 소스
+교차로 바꾸는** 데 있다.
+
+### 함정 (전부 실제로 당했다)
+
+- **다운로드 파라미터**: 목록은 `?path=`, 다운로드는 **`?download=<URL 인코딩 경로>`**.
+  틀리면 27 바이트 JSON 에러를 **HTTP 200 으로** 돌려주고 `curl` 이 성공 처리한다
+  (종료 코드 0). **크기와 타입을 확인해야 한다.**
+- **deflate64**: 파이썬 `zipfile` 이 못 읽는다(`compress_type 9`,
+  "That compression method is not supported"). 시스템 `unzip` 으로 우회한다.
+- **SBML 구획 인코딩**: `M_<abbr>_c` 가 아니라 `M_<abbr>__91__c__93__`
+  (`[`=`__91__`, `]`=`__93__`).
+- **API 레이트 리밋**: 페이싱·이어받기 없이 돌렸다가 31 분을 날렸다. 폭주한
+  프로세스가 살아 있으면 창이 계속 막히므로 **PID 로 확인하고 끊어야 한다.**
+
+> ⚠ **AGORA2 는 유전체에서 추론한 대사 능력이지 실측이 아니다.** KG 에 넣을 때
+> 출처를 `VMH/AGORA2` 로 따로 달아 MiKG 의 `A/B/C` 근거나 ProMENDA 실측과
+> 섞이지 않게 한다. **아직 KG 에 넣지 않았다** — `linking_stats.csv` 에도 없다.
 
 ## 9. 미생물-정신질환 — MiKG 원본 TTL
 
