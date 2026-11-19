@@ -928,6 +928,34 @@ def kg():
     for _, r in cm.iterrows():
         W.t(NS['mic'] + r['taxid'], NS['mpq'] + 'hasMetabolites',
             NS['kegg'] + r['kegg'], 'KEGG')
+    # VMH/AGORA2 — 유전체 규모 대사 재구성에서 온 compound-미생물.
+    # **예측이지 실측이 아니다.** 같은 술어를 쓰되 출처를 따로 달아 KEGG 추론
+    # 경로나 MiKG 의 A/B/C 근거와 섞이지 않게 한다 (DATA.md §8).
+    # 두 경로로 받았다 — 벌크 zip(AGORA2 SBML)과 REST API. 같은 VMH 데이터이고
+    # 커버리지가 서로 다르므로(벌크 30,397 / API 34,992 KEGG 링크) 합쳐 쓴다.
+    _vmp = os.path.join(BASE, 'ourkg', 'cache', 'vmh_metabolites.csv')
+    _srcs = [os.path.join(BASE, 'ourkg', 'cache', f) for f in
+             ('agora_microbe_metabolite.csv', 'vmh_microbe_metabolite.csv')]
+    _srcs = [f for f in _srcs if os.path.exists(f)]
+    n_vmh = 0
+    if _srcs and os.path.exists(_vmp):
+        _a2k = pd.read_csv(_vmp, dtype=str).fillna('')
+        _a2k = dict(zip(_a2k.abbr, _a2k.kegg))
+        _ag = pd.concat([pd.read_csv(f, dtype=str)[['taxid', 'met_abbr']]
+                         for f in _srcs]).drop_duplicates()
+        _ag['kegg'] = _ag.met_abbr.map(_a2k).fillna('')
+        _vl = _ag[_ag.kegg != ''][['taxid', 'kegg']].drop_duplicates()
+        _vl.to_csv(os.path.join(OUT, 'compound_microbe_vmh.csv'), index=False)
+        _known = set(cm[['taxid', 'kegg']].itertuples(index=False, name=None))
+        for _t, _k in _vl.itertuples(index=False, name=None):
+            W.t(NS['mic'] + _t, NS['mpq'] + 'hasMetabolites',
+                NS['kegg'] + _k, 'VMH/AGORA2')
+            n_vmh += 1
+        _both = len(_known & set(_vl.itertuples(index=False, name=None)))
+        print(f'  VMH/AGORA2 compound-미생물 {n_vmh:,} '
+              f'(compound {_vl.kegg.nunique()} · 균 {_vl.taxid.nunique()} · '
+              f'KEGG 경로와 겹침 {_both:,})')
+
     print(f'  미생물 {len(mic)} / compound-미생물 {len(cm):,}')
 
     md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
@@ -1356,6 +1384,8 @@ def kg():
         ('disease', 'MeSH 링크 (MiKG xref)', _n_mesh_mikg, ''),
         ('microbe', 'MiKG 근거 등급 보유 관계', _n_mikg_ev, 'A/B/C'),
         ('microbe', 'MiKG KEGG pathway 링크', n_mikg_pw, '미생물→신경전달물질→경로'),
+        ('microbe', 'compound-미생물 (KEGG 추론)', int(len(cm)), 'compound→EC→KO→organism'),
+        ('microbe', 'compound-미생물 (VMH/AGORA2)', n_vmh, '유전체 재구성 — 예측'),
         ('ontology', 'FoodOn ↔ 카테고리 (배포 KG 부분집합)', n_fo_link, '§3.1 FoodOn'),
         ('ontology', 'FoodOn 클래스 링크 (음식, OLS)', fl.get('foodon_food'),
          '배포 subset 에 없는 계층 — foodon_match.py'),
