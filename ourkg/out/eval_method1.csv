@@ -5,9 +5,9 @@ no,aspect,question,paper_answer,ourkg_reproduced,ourkg_valid,note,expert_consens
 3,food categories,The lists of baby food,"Carrots(baby food), plums(baby food), etc",O,O,"baby food 216종, carrots True · plums True",1
 4,compounds in food and gut,The weight of folate that peach pie can provides in gut,0.046mg/100g,O,O,"Pie, peach 의 Folate, DFE = 0.046",1
 5,compounds in food and gut,The difference of retinol between milk and yogurt,"0.127mg/100g milk, 0.702mg/100g yogurt",X,X,"0.127 = ""Cheese, ricotta, whole milk"", 0.702 = ""?"" — 라벨 부분 문자열 매칭. 실제 Milk, whole 0.031~0.045, Yogurt 0.000~0.131",1
-6,compounds in food and gut,The weight of citric acid can Adlercreutzia equolifaciens taken from grape juice,309mg/100g,X,△,"""없음"" = 309, Adlercreutzia equolifaciens 의 C00158 대사 경로 없음",1
-7,compounds in food and gut,The weight of ascorbic acid can Bifidobacterium longum taken from lettuce,15mg/100g,△,△,"""Lettuce, arugula, raw"" = 15, Bifidobacterium longum 의 C00072 대사 경로 없음",1
-8,weight calculation,The rank of Potassium weight in food,"Beans, Egg whites, Almonds, etc",△,△,"순위 범위가 문항에 없다. KG 전체 1~3위는 ['Leavening agents, crea', 'Leavening agents, baki', 'COMPACT THERAPEUTIC NU']. Beans 최대 1795, Egg whites 1116, Almonds 950",1
+6,compounds in food and gut,The weight of citric acid can Adlercreutzia equolifaciens taken from grape juice,309mg/100g,△,△,"""Grape juice, white, with added vitamin C"" = 216.7 (논문 두 값 309/216.7 중), Adlercreutzia equolifaciens 의 C00158 대사 경로 없음",1
+7,compounds in food and gut,The weight of ascorbic acid can Bifidobacterium longum taken from lettuce,15mg/100g,△,△,"""Lettuce, arugula, raw"" = 15 (논문 두 값 15/7.5 중), Bifidobacterium longum 의 C00072 대사 경로 없음",1
+8,weight calculation,The rank of Potassium weight in food,"Beans, Egg whites, Almonds, etc",△,△,"순위 범위가 문항에 없다. KG 전체 1~3위는 ['KETOFEAST CAFFEINE FRE', 'MAPLE KETO FEAST MEAL ', 'BANANA NUT CRUNCH BARS']. Beans 최대 1795, Egg whites 1116, Almonds 950",1
 9,weight calculation,The weight of Vitamin B12 in mixed diet orange and sausage,0.072mg/200g,O,X,"0.072 = ""Orange Blossom"" 0 + ""Veal, variety meats and by-p"" 0.0725 — 두 번째 값이 질문의 음식이 아니다(Query 1 결함). 실제 합 ≈ 0.001",1
 10,weight calculation,The weight of Vitamin B6 in egg and whole milk,6.591mg/200g,X,X,합이 나오는 조합 없음,1
 11,disease classification,The microbial related mental disorders,"Autistic disorder, developmental disorder, etc",O,O,"세균 연관이 있는 질병: {'Autism': 78, 'Pervasive developmental disorder NOS': 30}",1

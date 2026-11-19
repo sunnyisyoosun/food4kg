@@ -648,6 +648,124 @@ KG 층은 **대표 항목의 값**을 쓰도록 고쳤다(`F` 층은 논문 §3.
 논문이 `milk` 를 라벨 부분 문자열로 찾아 리코타 치즈를 우유로 잡았다는 것을
 이제 우리 KG 로 **재현해 보일 수 있다**(§4.1 Query 결함 3).
 
+
+### ★ MiKG 원본을 다시 읽는다 (2026-11-19) — 네 가지를 버리고 있었다
+
+**기준을 바꿨다.** 여기부터는 방법 1 점수를 올리는 것이 목표가 아니라 **우리
+데이터를 두텁게** 하는 것이 목표다. 축별 실태를 보면 미생물 축이 가장 얇고
+(NCBI 127 종 · KEGG organism 82), 그것이 gut-brain 경로 전체를 제약한다.
+
+MiKG 원본(2,465 triple)에서 우리는 `hasGutMicrobiota`·`hasNeurotransmitter`·
+`hasMentalDisorder` **세 술어만** 쓰고 있었다. 전수를 세어 보니 쓸 것이 더 있었다.
+
+| 술어 | 수 | 내용 | 우리에게 |
+|---|---:|---|---|
+| `hasEvidenceLevel` | 82 | **A 4 · B 21 · C 47** | 관계의 **질**을 구분 |
+| `hasRegulation` | 14 | **Promote 13 · Inhibit 1** | 관계의 **방향** |
+| `hasMapID` | 56 | KEGG pathway id | 경로 층이 하나 더 |
+| `owl:sameAs` | 114 | **SNOMED 63 · MeSH 51** | 이름 대신 **ID 로 연결** |
+
+`hasMapID` 는 처음에 0 건이 나왔다 — statement 가 아니라 별도 `KEGG_pathway`
+노드에 달려 신경전달물질과 이어지기 때문이다. 고쳐서 **90 링크 · 경로 56 종**을
+얻었다(`out/neurotransmitter_pathway.csv`).
+
+**SNOMED 축이 열린다.** 통계의 `SNOMED CT 링크` 는 줄곧 **1** 이었고 "배포본에
+라벨·계층 없음" 이라 적어 두었다. 그런데 MiKG 가 자기 엔티티에 SCT id 를 **63 개**
+달아 두었고 우리가 안 읽고 있었다. 측정하지 않으면 없는 것과 같으므로 통계 행을
+출처별로 나눴다.
+
+```
+disease  SNOMED CT 링크 (배포본)        1
+disease  SNOMED CT 링크 (MiKG xref)   63   <- 신규
+disease  MeSH 링크 (MiKG xref)        51   <- 신규
+microbe  MiKG 근거 등급 보유 관계       82   <- 신규
+microbe  MiKG KEGG pathway 링크       90   <- 신규
+```
+
+KG 반영: MiKG triple **6,802 → 7,194**, 관계 종류 **6 → 9**.
+
+```
+<mikg:Microbe/Neurotransmitter>  our:evidenceLevel  "A"|"B"|"C"
+                                 our:regulation     "Promote"|"Inhibit"
+<mikg:Dopamine>   owl:sameAs      <http://id.nlm.nih.gov/mesh/D004298>
+<mikg:Histamine>  our:hasPathway  <https://www.kegg.jp/pathway/map04974>
+```
+
+`F` 는 건드리지 않으므로 두 기준은 불변이다.
+
+#### gutMDisorder — 서버가 닫혀 있다
+
+논문이 related work 로 언급만 하고 쓰지 않은 소스라 우리 미생물–질환 축을 두껍게
+할 후보였다. `bio-annotation.cn` 은 DNS 는 해석되지만(47.76.215.223) http·https·
+8080 이 모두 connection refused 다. NAR 논문(2020 v1 · 2022 v2) 보충자료가 대안이다.
+
+### 방법 1 — 20문항 판정 (2026-11-19 기준)
+
+재현 **13/20** · 재현+타당 **11/20** (공개 KG 는 18/20 · 타당 13/20)
+
+| # | 문항 | 재현 | 타당 | 비고 |
+|---|---|---|---|---|
+| 0 | Lists of fruits which contains Lysine | O | O | Lysine>0 인 과일 80종에 melons·oranges 포함. strawberries 는 Lysine 기록 17건이 전부 0 |
+| 1 | The food categories of the cola | O | O | Beverages 아래 "soft drinks?" 계열에 속하는 음식 8개 |
+| 2 | The food categories of the soy milk | O | △ | Beverages 아래 "milk substitut/plant[- ]based milk/plant derived beverage" |
+| 3 | The lists of baby food | O | O | baby food 318종, carrots True · plums True |
+| 4 | The weight of folate that peach pie can provid | O | O | Pie, peach 의 Folate, DFE = 0.046 |
+| 5 | The difference of retinol between milk and yog | X | X | 0.127 = "Cheese, ricotta, whole milk", 0.702 = "?" — 라벨 부분 문자열 매칭. 실제 Mi |
+| 6 | The weight of citric acid can Adlercreutzia eq | X | △ | "없음" = 309, Adlercreutzia equolifaciens 의 C00158 대사 경로 없음 |
+| 7 | The weight of ascorbic acid can Bifidobacteriu | △ | △ | "101 GREENS JUICE, CUCUMBER, LETTUCE, APPLE" = 15, Bifidobacterium longu |
+| 8 | The rank of Potassium weight in food | △ | △ | 순위 범위가 문항에 없다. KG 전체 1~3위는 ['RAW ITALIAN ALMOND BUT', 'FABULOUS FRIES',  |
+| 9 | The weight of Vitamin B12 in mixed diet orange | O | X | 0.072 = "Orange Blossom" 0 + "Veal, variety meats and by-p" 0.0725 — 두 번 |
+| 10 | The weight of Vitamin B6 in egg and whole milk | X | X | 합이 나오는 조합 없음 |
+| 11 | The microbial related mental disorders | O | O | 세균 연관이 있는 질병: {'Autism': 78, 'Pervasive developmental disorder NOS': 30} |
+| 12 | The difference between depression and autistic | O | O | 우울증 상위 ['Depressive Disorder', 'Mood Disorders'] / 자폐 상위 ['Child Develop |
+| 13 | The list of diseases in mental disorders | O | O | KG 의 mentalDisorder 하위 11종: ['Anxiety disorders', 'Autistic disorder', ' |
+| 14 | The vitamins may have effects on depression | O | O | MENDA 우울증 연관 비타민: ['Vitamin C', 'Vitamin D3', 'Vitamin D2', 'Vitamin B9' |
+| 15 | The alkaloids involved from food | O | O | 음식 성분 중 alkaloid: ['Caffeine', 'Nicotinic acid (Vitamin B3)', 'Theobromi |
+| 16 | The categories of biological compounds | O | O | KEGG 클래스 847개에 Peptides·Alkaloids 포함 |
+| 17 | The Bacteroides may have effects on depression | △ | △ | MENDA 우울증 화합물을 대사하는 Bacteroides: ['fragilis', 'intestinalis', 'ovatus',  |
+| 18 | The taxonomy tree of Escherichia coli | O | O | Escherichia → Enterobacteriaceae → Enterobacterales → Gammaproteobacteri |
+| 19 | The top 3 genus of bacteria related to disease | △ | △ | 질병 연결 수 상위 속: [('Streptococcus', 49), ('Bacteroides', 46), ('Bifidobacte |
+
+#### `KG_MIN_COV` 실험 (2026-11-19) — 개념은 맞고 결과는 퇴행이다
+
+`#6` 을 열려고 **KG 층에서 `MIN_COV>=20` 을 풀었다.** 그 문턱은 F 층의 요구다 —
+유사도를 계산하려면 음식당 성분이 충분해야 한다. KG 에는 그런 요구가 없고 논문
+KG 는 FDC 항목 122 만 개를 담는다. compound 를 F 기준으로 자르던 혼동을 food 에
+그대로 반복하고 있었다.
+
+| | 전 | 후 |
+|---|---:|---:|
+| KG 층 음식 | 14,886 | **475,769** (라벨 병합 전수) |
+| KG 층 값 | 868,442 | 3,406,998 |
+| 파일 크기 | 73 MB | **463 MB** |
+| 두 기준 | (23/1 · 21 · 26 · 0) | **동일** |
+| 방법 1 | 13/20 · 타당 11 | **13/20 · 타당 11** |
+
+**점수는 그대로인데 답의 질이 떨어졌다.**
+
+```
+#7  "Lettuce, arugula, raw" (15)  ->  "101 GREENS JUICE, CUCUMBER, LETTUCE, APPLE"
+#8  Leavening agents (베이킹파우더)  ->  "RAW ITALIAN ALMOND BUT..."
+#0  Lysine 과일 94 종            ->  80 종
+```
+
+브랜드·시료 항목 46 만 개가 들어오면서 상위를 차지한다. 판정은 △ 그대로지만
+문항이 기대하는 것은 큐레이션된 식품이지 브랜드 주스가 아니다. **숫자가 안
+바뀌었다고 중립이 아니다.**
+
+그리고 **`#6` 은 열리지도 않았다.** grape juice 의 citric acid 가 2 건 들어왔지만
+값이 110.2 와 216.7 이다. 논문의 309 를 가진 `fdc_id 2004671` 은
+`sub_sample_food` 인데, 같은 라벨을 공유하는 항목 중 `foundation_food`(216.7)가
+`_PRIORITY` 로 대표가 되기 때문이다.
+
+**즉 `#6` 은 `#4` 를 열어 준 규칙과 정면으로 충돌한다.** 309 를 꺼내려면 "대표
+항목의 값만 쓴다" 를 깨야 하고, 그러면 `Pie, peach` 의 DFE 가 다시 평균으로
+돌아가 `#4` 가 닫힌다. 한 문항을 열면 다른 문항이 닫히는 교환이다.
+
+> **상태**: 되돌릴지 결정 대기. 현재 작업 트리는 **퇴행 상태**다
+> (`KG_MIN_COV=1`, 음식 475,769). 되돌리려면 `KG_MIN_COV` 를 `MIN_COV` 와 같게
+> 두고 `build.py food` 를 다시 돌리면 된다.
+
 #### `#6` citric acid — 단위 버그를 찾았고, 문항은 못 연다
 
 `#6` 을 다시 보다 **KG 층의 단위가 1000 배 틀린 것**을 찾았다. `nutrient_name` 의

@@ -258,16 +258,30 @@ def food():
     # KG 층은 **대표 항목의 값**을 쓴다. foods.csv 는 큐레이션 순위(_PRIORITY)로
     # 대표 fdc_id 를 고르는데 값만 라벨 전체 평균이면 둘이 어긋난다 — 'Pie, peach'
     # 는 대표가 SR legacy(DFE 46 µg)인데 FNDDS(42)와 평균 내 44 가 됐다(방법 1 #4).
-    _rep = dict(zip(meta['food_key'], meta['fdc_id']))
-    _kg_fn = _kg_fn[_kg_fn['food_key'].isin(keep_food)]
+    # 음식 쪽 문턱. 개념만 보면 KG 에는 MIN_COV 가 필요 없고(그것은 유사도를
+    # 계산하는 F 층의 요구다) 논문 KG 는 FDC 항목 122 만 개를 담는다. 그래서
+    # KG_MIN_COV=1 로 풀어 **재 봤고 퇴행이었다** — 음식 14,886 -> 475,769,
+    # 파일 463 MB, 점수는 그대로인데 브랜드·시료가 상위를 차지해 답의 질이
+    # 떨어졌다(#7 arugula -> GREENS JUICE, #8 베이킹파우더 -> ALMOND BUTTER,
+    # #0 과일 94 -> 80). 노린 #6 도 열리지 않았다. RESULTS.md §4.3.
+    KG_MIN_COV = int(os.environ.get('KG_MIN_COV', str(MIN_COV)))
+    _kcov = _kg_fn.groupby('food_key')['kegg'].nunique()
+    _kg_keep = set(_kcov[_kcov >= KG_MIN_COV].index)
+    # 대표 항목은 F 코호트 밖 음식에도 같은 규칙(_PRIORITY)으로 고른다.
+    _kg_prio = _kg_fn.assign(_p=_kg_fn['data_type'].map(_PRIORITY).fillna(9))
+    _krep = (_kg_prio.sort_values('_p').groupby('food_key')['fdc_id'].first().to_dict())
+    _rep = {**_krep, **dict(zip(meta['food_key'], meta['fdc_id']))}
+    _kg_fn = _kg_fn[_kg_fn['food_key'].isin(_kg_keep)]
     _kg_fn = _kg_fn[_kg_fn['fdc_id'] == _kg_fn['food_key'].map(_rep)]
-    _kgc = (_kg_fn.groupby(['food_key', 'nutrient_id', 'nutrient_name', 'kegg'],
-                           as_index=False)['amount_g'].mean())
+    _kgc = (_kg_fn.groupby(['food_key', 'fdc_id', 'food_name', 'nutrient_id',
+                            'nutrient_name', 'kegg'], as_index=False)['amount_g'].mean())
     _kgc.to_csv(os.path.join(OUT, 'food_compound_kg.csv'), index=False)
+    _link['kg_food'] = int(_kgc['food_key'].nunique())
     _link['kg_compound'] = int(_kgc['kegg'].nunique())
     _link['kg_nutrient'] = int(_kgc['nutrient_id'].nunique())
-    print(f'  KG 층: compound {_link["kg_compound"]} · nutrient {_link["kg_nutrient"]} '
-          f'· 값 {len(_kgc):,}  (F 층 compound {long["kegg"].nunique()})')
+    print(f'  KG 층: 음식 {_link["kg_food"]:,} · compound {_link["kg_compound"]} '
+          f'· nutrient {_link["kg_nutrient"]} · 값 {len(_kgc):,}  '
+          f'(F 층 음식 {len(meta):,} · compound {long["kegg"].nunique()})')
     meta.to_csv(os.path.join(OUT, 'foods.csv'), index=False)
     print(f'  음식 {len(meta):,} / compound {long["kegg"].nunique()} / 값 {len(long):,}')
     print(f'  음식당 compound 중앙값 {meta["n_compound"].median():.1f} '
@@ -591,7 +605,7 @@ def microbe():
     # "미생물-정신질환" 관계가 나온다.
     # ------------------------------------------------------------------
     print('[6/6] MiKG 원본 — 미생물 → 신경전달물질 → 정신질환')
-    from rdflib import Graph, URIRef
+    from rdflib import Graph, URIRef, RDFS
 
     MI = 'http://ztonebv.com/MiKG#'
     g = Graph()
@@ -629,6 +643,59 @@ def microbe():
             nd.append({'neurotransmitter': _local(nt), 'disease': _local(dis),
                        'nt_kegg': NT_KEGG.get(_local(nt), ''), 'pmids': ';'.join(pmids)})
     nd = pd.DataFrame(nd).drop_duplicates()
+
+    # MiKG 가 statement 마다 달아 둔 것 — 전에는 버리고 있었다.
+    #   hasEvidenceLevel  A 4 / B 23 / C 55   근거 등급
+    #   hasRegulation     Promote 13 / Inhibit 1  방향
+    #   hasMapID          KEGG pathway id (map00380 등) 56
+    # statement 단위로 모아 microbe_neurotransmitter 에 붙인다.
+    _st = []
+    for _s in set(g.subjects(_p('hasGutMicrobiota'), None)):
+        _mic = [_local(o) for o in g.objects(_s, _p('hasGutMicrobiota'))]
+        _nt = [_local(o) for o in g.objects(_s, _p('hasNeurotransmitter'))]
+        _ev = [str(o) for o in g.objects(_s, _p('hasEvidenceLevel'))]
+        _rg = [str(o) for o in g.objects(_s, _p('hasRegulation'))]
+        for _m in _mic:
+            for _n in _nt:
+                _st.append({'microbe': _m, 'neurotransmitter': _n,
+                            'evidence_level': _ev[0] if _ev else '',
+                            'regulation': _rg[0] if _rg else ''})
+    if _st:
+        _stdf = pd.DataFrame(_st).drop_duplicates(['microbe', 'neurotransmitter'])
+        mn = mn.merge(_stdf, on=['microbe', 'neurotransmitter'], how='left')
+        print(f'  MiKG statement 속성: 근거등급 '
+              f'{dict(_stdf.evidence_level.value_counts())} · 방향 '
+              f'{dict(_stdf.regulation.value_counts())}')
+
+    # KEGG pathway 는 statement 가 아니라 별도 노드에 달려 신경전달물질과 이어진다.
+    # 미생물 -> 신경전달물질 -> **대사 경로** 라는 한 층이 더 생긴다.
+    _pw = [{'neurotransmitter': _local(_n), 'kegg_pathway': str(_mid),
+            'pathway_label': str(_lb)}
+           for _s in set(g.subjects(_p('hasMapID'), None))
+           for _mid in g.objects(_s, _p('hasMapID'))
+           for _n in g.objects(_s, _p('hasNeurotransmitter'))
+           for _lb in list(g.objects(_s, RDFS.label)) or ['']]
+    if _pw:
+        _pwdf = pd.DataFrame(_pw).drop_duplicates()
+        _pwdf.to_csv(os.path.join(OUT, 'neurotransmitter_pathway.csv'), index=False)
+        print(f'  MiKG KEGG pathway 축: {len(_pwdf)} 링크 · '
+              f'경로 {_pwdf.kegg_pathway.nunique()} · '
+              f'신경전달물질 {_pwdf.neurotransmitter.nunique()}')
+
+    # MiKG 가 자기 엔티티에 달아 둔 외부 식별자 (MeSH 51 · SNOMED 63).
+    # 우리는 이름 문자열로 잇고 있었다 — ID 로 이으면 모호성이 사라진다.
+    _SAME = URIRef('http://www.w3.org/2002/07/owl#sameAs')
+    _xref = []
+    for _s, _, _o in g.triples((None, _SAME, None)):
+        _u = str(_o)
+        _src = 'MeSH' if 'nlm.nih.gov' in _u else ('SNOMED CT' if 'ihtsdo' in _u else '')
+        if _src:
+            _xref.append({'entity': _local(_s), 'source': _src,
+                          'id': _u.rsplit('/', 1)[-1], 'uri': _u})
+    _xdf = pd.DataFrame(_xref).drop_duplicates()
+    _xdf.to_csv(os.path.join(OUT, 'mikg_xref.csv'), index=False)
+    print(f'  MiKG 외부 식별자: 엔티티 {_xdf.entity.nunique()} · '
+          f'{dict(_xdf.source.value_counts())}')
 
     mn.to_csv(os.path.join(OUT, 'microbe_neurotransmitter.csv'), index=False)
     nd.to_csv(os.path.join(OUT, 'neurotransmitter_disease.csv'), index=False)
@@ -887,6 +954,14 @@ def kg():
         W.t(mu, NS['mpq'] + 'hasMetabolites', nu, 'MiKG')
         if isinstance(r['nt_kegg'], str) and r['nt_kegg']:
             W.t(nu, SAMEAS, NS['kegg'] + r['nt_kegg'], 'MiKG')
+        # MiKG 가 statement 마다 달아 둔 근거 등급(A/B/C)과 방향(Promote/Inhibit).
+        # 전에는 버리고 있었다 — KG 에서 관계의 **질**을 구분할 수 있게 한다.
+        for _k, _pred in (('evidence_level', 'evidenceLevel'),
+                          ('regulation', 'regulation')):
+            _v = r.get(_k)
+            if isinstance(_v, str) and _v:
+                W.t(mu + '/' + str(r['neurotransmitter']).replace(' ', '-'),
+                    NS['our'] + _pred, _v, 'MiKG', literal=True)
     for _, r in nd.iterrows():
         nu = NS['mikg'] + str(r['neurotransmitter']).replace(' ', '-')
         du = NS['mikg'] + str(r['disease']).replace(' ', '-')
@@ -896,6 +971,28 @@ def kg():
         W.t(du, SUBCLASS, NS['ent'] + 'MentalDisorder', 'MiKG')
         W.t(du, LABEL, r['disease'], 'MiKG', literal=True)
         W.t(nu, NS['mpq'] + 'hasAssociation', du, 'MiKG')
+
+    # MiKG 가 자기 엔티티에 달아 둔 MeSH·SNOMED CT 식별자. 우리는 이름 문자열로
+    # 잇고 있었다 — 배포본에 라벨·계층이 없어 포기했던 SNOMED 축이 여기서 열린다.
+    _xp = os.path.join(OUT, 'mikg_xref.csv')
+    n_mikg_x = 0
+    if os.path.exists(_xp):
+        for _, r in pd.read_csv(_xp).iterrows():
+            W.t(NS['mikg'] + str(r['entity']).replace(' ', '-'), SAMEAS,
+                str(r['uri']), 'MiKG')
+            n_mikg_x += 1
+    # 미생물 -> 신경전달물질 -> KEGG 대사 경로 (별도 노드에 hasMapID 로 달려 있다)
+    _pp = os.path.join(OUT, 'neurotransmitter_pathway.csv')
+    n_mikg_pw = 0
+    if os.path.exists(_pp):
+        for _, r in pd.read_csv(_pp).iterrows():
+            _pu = 'https://www.kegg.jp/pathway/' + str(r['kegg_pathway'])
+            W.t(NS['mikg'] + str(r['neurotransmitter']).replace(' ', '-'),
+                NS['our'] + 'hasPathway', _pu, 'MiKG')
+            if isinstance(r.get('pathway_label'), str) and r['pathway_label']:
+                W.t(_pu, LABEL, r['pathway_label'], 'MiKG', literal=True)
+            n_mikg_pw += 1
+    print(f'  MiKG 외부 식별자 {n_mikg_x} · KEGG pathway {n_mikg_pw} triple 추가')
 
     # ------------------------------------------------------------------
     print('[6/6] 온톨로지 축 (KEGG brite · FoodOn · 중국 식품 온톨로지 · SNOMED CT)')
@@ -1218,6 +1315,19 @@ def kg():
     # ------------------------------------------------------------------
     # 논문 §3.2 Entity linking 대응표. 재현 트랙의 eval/paper_kg_stats.linking()
     # 이 논문 수치를 **검증**한다면, 여기서는 우리가 **수행한** 링킹을 집계한다.
+    _xp2 = os.path.join(OUT, 'mikg_xref.csv')
+    _n_sct_mikg = _n_mesh_mikg = 0
+    if os.path.exists(_xp2):
+        _xd = pd.read_csv(_xp2)
+        _n_sct_mikg = int((_xd.source == 'SNOMED CT').sum())
+        _n_mesh_mikg = int((_xd.source == 'MeSH').sum())
+    _mnp = os.path.join(OUT, 'microbe_neurotransmitter.csv')
+    _n_mikg_ev = 0
+    if os.path.exists(_mnp):
+        _mnd = pd.read_csv(_mnp)
+        if 'evidence_level' in _mnd.columns:
+            _n_mikg_ev = int(_mnd.evidence_level.notna().sum())
+
     fl = {}
     _flp = os.path.join(OUT, 'food_link.json')
     if os.path.exists(_flp):
@@ -1241,7 +1351,11 @@ def kg():
          '§3.2 984,031 gut microbiota'),
         ('microbe', 'KEGG organism 매칭', int(mic['kegg_org'].notna().sum()), ''),
         ('disease', 'MeSH 링크', int(md['mesh_id'].nunique()), '§3.2 3,505 mental disorders'),
-        ('disease', 'SNOMED CT 링크', n_sct_link, '배포본에 라벨·계층 없음'),
+        ('disease', 'SNOMED CT 링크 (배포본)', n_sct_link, '배포본에 라벨·계층 없음'),
+        ('disease', 'SNOMED CT 링크 (MiKG xref)', _n_sct_mikg, 'MiKG 가 엔티티에 단 SCT id'),
+        ('disease', 'MeSH 링크 (MiKG xref)', _n_mesh_mikg, ''),
+        ('microbe', 'MiKG 근거 등급 보유 관계', _n_mikg_ev, 'A/B/C'),
+        ('microbe', 'MiKG KEGG pathway 링크', n_mikg_pw, '미생물→신경전달물질→경로'),
         ('ontology', 'FoodOn ↔ 카테고리 (배포 KG 부분집합)', n_fo_link, '§3.1 FoodOn'),
         ('ontology', 'FoodOn 클래스 링크 (음식, OLS)', fl.get('foodon_food'),
          '배포 subset 에 없는 계층 — foodon_match.py'),

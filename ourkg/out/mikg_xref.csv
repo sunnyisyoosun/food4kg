@@ -1,0 +1,115 @@
+entity,source,id,uri
+Neurotransmitter,MeSH,D018377,http://id.nlm.nih.gov/mesh/2020/D018377
+Neurotransmitter,SNOMED CT,SCT_35069000,http://www.ihtsdo.org/SCT_35069000
+Dopamine,MeSH,D004298,http://id.nlm.nih.gov/mesh/2020/D004298
+Dopamine,SNOMED CT,SCT_412383006,http://www.ihtsdo.org/SCT_412383006
+Serotonin,MeSH,D012701,http://id.nlm.nih.gov/mesh/2020/D012701
+Serotonin,SNOMED CT,SCT_33635003,http://www.ihtsdo.org/SCT_33635003
+gamma Aminobutyric Acid,MeSH,D005680,http://id.nlm.nih.gov/mesh/2020/D005680
+gamma Aminobutyric Acid,SNOMED CT,SCT_259100002,http://www.ihtsdo.org/SCT_259100002
+Norepinephrine,MeSH,D009638,http://id.nlm.nih.gov/mesh/2020/D009638
+Norepinephrine,SNOMED CT,SCT_45555007,http://www.ihtsdo.org/SCT_45555007
+Histamine,MeSH,D006632,http://id.nlm.nih.gov/mesh/2020/D006632
+Histamine,SNOMED CT,SCT_54235008,http://www.ihtsdo.org/SCT_54235008
+Acetylcholine,MeSH,D000109,http://id.nlm.nih.gov/mesh/2020/D000109
+Acetylcholine,SNOMED CT,SCT_57308006,http://www.ihtsdo.org/SCT_57308006
+gutMicrobiota,MeSH,D000069196,http://id.nlm.nih.gov/mesh/2020/D000069196
+Bacillus cereus,MeSH,D001409,http://id.nlm.nih.gov/mesh/2020/D001409
+Bacillus cereus,SNOMED CT,SCT_84408007,http://www.ihtsdo.org/SCT_84408007
+Acinetobacter baumannii,MeSH,D040981,http://id.nlm.nih.gov/mesh/2020/D040981
+Acinetobacter baumannii,SNOMED CT,SCT_91288006,http://www.ihtsdo.org/SCT_91288006
+Paenibacillus,MeSH,D056507,http://id.nlm.nih.gov/mesh/2020/D056507
+Paenibacillus,SNOMED CT,SCT_114086007,http://www.ihtsdo.org/SCT_114086007
+Coprococcus,SNOMED CT,SCT_416549000,http://www.ihtsdo.org/SCT_416549000
+Fusobacterium varium,SNOMED CT,SCT_1972005,http://www.ihtsdo.org/SCT_1972005
+Fusobacterium ulcerans,SNOMED CT,SCT_113764005,http://www.ihtsdo.org/SCT_113764005
+Bacteroides fragilis,MeSH,D001441,http://id.nlm.nih.gov/mesh/2020/D001441
+Bacteroides fragilis,SNOMED CT,SCT_55247009,http://www.ihtsdo.org/SCT_55247009
+Bacteroides uniformis,SNOMED CT,SCT_59604009,http://www.ihtsdo.org/SCT_59604009
+Clostridium ramosum,SNOMED CT,SCT_42706008,http://www.ihtsdo.org/SCT_42706008
+Hafnia alvei,MeSH,D020611,http://id.nlm.nih.gov/mesh/2020/D020611
+Hafnia alvei,SNOMED CT,SCT_76694001,http://www.ihtsdo.org/SCT_76694001
+Klebsiella pneumoniae,MeSH,D007711,http://id.nlm.nih.gov/mesh/2020/D007711
+Klebsiella pneumoniae,SNOMED CT,SCT_56415008,http://www.ihtsdo.org/SCT_56415008
+Morganella morganii,MeSH,D020613,http://id.nlm.nih.gov/mesh/2020/D020613
+Morganella morganii,SNOMED CT,SCT_243301005,http://www.ihtsdo.org/SCT_243301005
+Candida albicans,MeSH,D002176,http://id.nlm.nih.gov/mesh/2020/D002176
+Candida albicans,SNOMED CT,SCT_53326005,http://www.ihtsdo.org/SCT_53326005
+Lactococcus lactis subsp cremoris,SNOMED CT,SCT_81454004,http://www.ihtsdo.org/SCT_81454004
+Lactococcus lactis subsp lactis,MeSH,D013294,http://id.nlm.nih.gov/mesh/2020/D013294
+Lactococcus lactis subsp lactis,SNOMED CT,SCT_38518005,http://www.ihtsdo.org/SCT_38518005
+Lactobacillus plantarum,MeSH,D048191,http://id.nlm.nih.gov/mesh/2020/D048191
+Lactobacillus plantarum,SNOMED CT,SCT_14332009,http://www.ihtsdo.org/SCT_14332009
+Streptococcus thermophilus,MeSH,D048249,http://id.nlm.nih.gov/mesh/2020/D048249
+Streptococcus thermophilus,SNOMED CT,SCT_23310006,http://www.ihtsdo.org/SCT_23310006
+Enterococcus faecalis,MeSH,D013293,http://id.nlm.nih.gov/mesh/2020/D013293
+Enterococcus faecalis,SNOMED CT,SCT_78065002,http://www.ihtsdo.org/SCT_78065002
+Candida guilliermondii,SNOMED CT,SCT_16557001,http://www.ihtsdo.org/SCT_16557001
+Rhodospirillum rubrum,MeSH,D012247,http://id.nlm.nih.gov/mesh/2020/D012247
+Rhodospirillum rubrum,SNOMED CT,SCT_440907003,http://www.ihtsdo.org/SCT_440907003
+Saccharomyces cerevisiae,MeSH,D012441,http://id.nlm.nih.gov/mesh/2020/D012441
+Saccharomyces cerevisiae,SNOMED CT,SCT_58296003,http://www.ihtsdo.org/SCT_58296003
+Clostridium,MeSH,D003013,http://id.nlm.nih.gov/mesh/2020/D003013
+Clostridium,SNOMED CT,SCT_8191000,http://www.ihtsdo.org/SCT_8191000
+Bacillus mycoides,SNOMED CT,SCT_33900003,http://www.ihtsdo.org/SCT_33900003
+Bacillus subtilis,MeSH,D001412,http://id.nlm.nih.gov/mesh/2020/D001412
+Bacillus subtilis,SNOMED CT,SCT_83512007,http://www.ihtsdo.org/SCT_83512007
+Escherichia coli,MeSH,D004926,http://id.nlm.nih.gov/mesh/2020/D004926
+Escherichia coli,SNOMED CT,SCT_112283007,http://www.ihtsdo.org/SCT_112283007
+Proteus vulgaris,MeSH,D011514,http://id.nlm.nih.gov/mesh/2020/D011514
+Proteus vulgaris,SNOMED CT,SCT_45834001,http://www.ihtsdo.org/SCT_45834001
+Staphylococcus aureus,MeSH,D013211,http://id.nlm.nih.gov/mesh/2020/D013211
+Staphylococcus aureus,SNOMED CT,SCT_3092008,http://www.ihtsdo.org/SCT_3092008
+Serratia marcescens,MeSH,D012706,http://id.nlm.nih.gov/mesh/2020/D012706
+Serratia marcescens,SNOMED CT,SCT_33522002,http://www.ihtsdo.org/SCT_33522002
+Bacillus,MeSH,D001407,http://id.nlm.nih.gov/mesh/2020/D001407
+Bacillus,SNOMED CT,SCT_44762009,http://www.ihtsdo.org/SCT_44762009
+Yersinia enterocolitica,MeSH,D015008,http://id.nlm.nih.gov/mesh/2020/D015008
+Yersinia enterocolitica,SNOMED CT,SCT_65255000,http://www.ihtsdo.org/SCT_65255000
+Salmonella enterica,MeSH,D019779,http://id.nlm.nih.gov/mesh/2020/D019779
+Salmonella enterica,SNOMED CT,SCT_110378009,http://www.ihtsdo.org/SCT_110378009
+Pseudomonas aeruginosa,MeSH,D011550,http://id.nlm.nih.gov/mesh/2020/D011550
+Pseudomonas aeruginosa,SNOMED CT,SCT_415187007,http://www.ihtsdo.org/SCT_415187007
+Oscillibacter,SNOMED CT,SCT_708391007,http://www.ihtsdo.org/SCT_708391007
+Escherichia,MeSH,D004925,http://id.nlm.nih.gov/mesh/2020/D004925
+Escherichia,SNOMED CT,SCT_64735005,http://www.ihtsdo.org/SCT_64735005
+Bacteroides,MeSH,D001439,http://id.nlm.nih.gov/mesh/2020/D001439
+Bacteroides,SNOMED CT,SCT_57522007,http://www.ihtsdo.org/SCT_57522007
+Parabacteroides,SNOMED CT,SCT_447036003,http://www.ihtsdo.org/SCT_447036003
+Lactobacillus reuteri,MeSH,D052200,http://id.nlm.nih.gov/mesh/2020/D052200
+Lactobacillus reuteri,SNOMED CT,SCT_86271002,http://www.ihtsdo.org/SCT_86271002
+Bifidobacterium dentium,SNOMED CT,SCT_36623007,http://www.ihtsdo.org/SCT_36623007
+Lactobacillus brevis,MeSH,D052196,http://id.nlm.nih.gov/mesh/2020/D052196
+Lactobacillus brevis,SNOMED CT,SCT_90396007,http://www.ihtsdo.org/SCT_90396007
+Lactobacillus buchneri,SNOMED CT,SCT_49217007,http://www.ihtsdo.org/SCT_49217007
+Lactobacillus paracasei,MeSH,D000069980,http://id.nlm.nih.gov/mesh/2020/D000069980
+Lactobacillus paracasei,SNOMED CT,SCT_113792000,http://www.ihtsdo.org/SCT_113792000
+Lactobacillus rhamnosus,MeSH,D052201,http://id.nlm.nih.gov/mesh/2020/D052201
+Lactobacillus rhamnosus,SNOMED CT,SCT_113798001,http://www.ihtsdo.org/SCT_113798001
+Lactobacillus delbrueckii,MeSH,D048668,http://id.nlm.nih.gov/mesh/2020/D048668
+Lactobacillus delbrueckii,SNOMED CT,SCT_5197002,http://www.ihtsdo.org/SCT_5197002
+Monascus purpureus,MeSH,D032741,http://id.nlm.nih.gov/mesh/2020/D032741
+Streptococcus salivarius,MeSH,D000070001,http://id.nlm.nih.gov/mesh/2020/D000070001
+Streptococcus salivarius,SNOMED CT,SCT_39888004,http://www.ihtsdo.org/SCT_39888004
+Lactobacillus vaginalis,SNOMED CT,SCT_113803005,http://www.ihtsdo.org/SCT_113803005
+mentalDisorder,MeSH,D001523,http://id.nlm.nih.gov/mesh/2020/D001523
+mentalDisorder,SNOMED CT,SCT_74732009,http://www.ihtsdo.org/SCT_74732009
+Anxiety disorders,MeSH,D001008,http://id.nlm.nih.gov/mesh/2020/D001008
+Anxiety disorders,SNOMED CT,SCT_197480006,http://www.ihtsdo.org/SCT_197480006
+Depressive disorder,MeSH,D003866,http://id.nlm.nih.gov/mesh/2020/D003866
+Depressive disorder,SNOMED CT,SCT_35489007,http://www.ihtsdo.org/SCT_35489007
+Sleep disorders,MeSH,D012893,http://id.nlm.nih.gov/mesh/2020/D012893
+Sleep disorders,SNOMED CT,SCT_39898005,http://www.ihtsdo.org/SCT_39898005
+Eating disorders,MeSH,D001068,http://id.nlm.nih.gov/mesh/2020/D001068
+Eating disorders,SNOMED CT,SCT_72366004,http://www.ihtsdo.org/SCT_72366004
+Sexual dysfunction,SNOMED CT,SCT_56925008,http://www.ihtsdo.org/SCT_56925008
+Personality disorder,MeSH,D010554,http://id.nlm.nih.gov/mesh/2020/D010554
+Personality disorder,SNOMED CT,SCT_33449004,http://www.ihtsdo.org/SCT_33449004
+Bipolar disorder,MeSH,D001714,http://id.nlm.nih.gov/mesh/2020/D001714
+Bipolar disorder,SNOMED CT,SCT_13746004,http://www.ihtsdo.org/SCT_13746004
+Autistic disorder,MeSH,D001321,http://id.nlm.nih.gov/mesh/2020/D001321
+Autistic disorder,SNOMED CT,SCT_408856003,http://www.ihtsdo.org/SCT_408856003
+Cognition disorders,MeSH,D003072,http://id.nlm.nih.gov/mesh/2020/D003072
+Cognition disorders,SNOMED CT,SCT_443265004,http://www.ihtsdo.org/SCT_443265004
+Learning disorder,MeSH,D007859,http://id.nlm.nih.gov/mesh/2020/D007859
+Learning disorder,SNOMED CT,SCT_1855002,http://www.ihtsdo.org/SCT_1855002

@@ -361,21 +361,41 @@ def q05_retinol_milk_yogurt(kg):
             f'Yogurt {real_y[0]:.3f}~{real_y[-1]:.3f}')
 
 
-def _food_compound_bacteria(nut, val, pat, bac, kegg, tol=0.05):
-    """#6, #7 — 음식의 성분량 + 그 성분을 그 세균이 대사하는가."""
+def _food_compound_bacteria(nut, vals, pat, bac, kegg, tol=0.05):
+    """#6, #7 — 음식의 성분량 + 그 성분을 그 세균이 대사하는가.
+
+    `vals` 는 **논문이 보고한 값 전부**다. 논문은 같은 사실에 두 값을 적었다 —
+    보충자료 Table 1(20문항, KG 의 답 + 전문가 채점)과 본문 Table 3 이 어긋난다.
+
+      #6 grape juice x citric acid   보충자료 309  /  Table 3 216.7
+      #7 lettuce     x ascorbic acid 보충자료  15  /  Table 3   7.5 (Romaine)
+
+    둘 다 Food4healthKG 자신의 출력이므로 어느 쪽이 나와도 '논문이 보고한 답이
+    KG 에서 나왔다'. 어느 쪽과 맞았는지는 주석에 적는다 (REPRODUCTION §17 계열의
+    논문 내부 불일치).
+    """
+    vals = vals if isinstance(vals, (list, tuple)) else [vals]
+
     def run(kg):
-        hit, link = kg.has(nut, val, pat, tol=tol), kg.metabolizes(bac, kegg)
+        hit, src = [], None
+        for v in vals:
+            hit = kg.has(nut, v, pat, tol=tol)
+            if hit:
+                src = v
+                break
+        link = kg.metabolizes(bac, kegg)
         return ('O' if hit and link else ('△' if hit else 'X'),
                 'O' if hit and link else '△',
-                f'"{hit[0][:42] if hit else "없음"}" = {val:g}, '
+                f'"{hit[0][:40] if hit else "없음"}" = {src if src is not None else vals[0]:g}'
+                f'{" (논문 두 값 " + "/".join(f"{v:g}" for v in vals) + " 중)" if len(vals) > 1 else ""}, '
                 f'{bac} 의 {kegg} 대사 경로 {"있음" if link else "없음"}')
     return run
 
 
 q06_grapejuice_citric = _food_compound_bacteria(
-    'citric', 309.0, 'grape juice', 'Adlercreutzia equolifaciens', 'C00158')
+    'citric', (309.0, 216.7), 'grape juice', 'Adlercreutzia equolifaciens', 'C00158')
 q07_lettuce_ascorbic = _food_compound_bacteria(
-    'vitc', 15.0, 'lettuce', 'Bifidobacterium longum', 'C00072')
+    'vitc', (15.0, 7.5), 'lettuce', 'Bifidobacterium longum', 'C00072')
 
 
 def q08_potassium_rank(kg):
