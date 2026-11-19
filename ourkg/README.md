@@ -14,11 +14,16 @@
 | 음식·성분 | FDC 34,250 샘플 (2022 배포본) | FDC 전체 2,101,279 항목 (2026-09 배포본) |
 | 우울증-대사물 | MENDA 5,675 관계 | **ProMENDA** (Pu et al. 2024) 22,519 레코드 / 995 연구 |
 | compound | KEGG 230 metabolite | **KG 층 154 / F 층 130** — 논문처럼 두 층을 나눈다 |
-| 미생물 | NCBI taxonomy 322,917 | NCBI efetch 로 학명·rank·계통 **현재 값**으로 갱신 |
-| compound-미생물 | KEGG (2022) | KEGG REST 로 **재계산** (compound → EC → KO → organism) |
+| 미생물 | NCBI taxonomy 322,917 | NCBI efetch 로 **현재 값** 갱신 127종. **가장 얇은 축** |
+| compound-미생물 | KEGG (2022) | KEGG REST 재계산 2,124 + **VMH/AGORA2 35,509** (유전체 재구성 — 예측) |
 | 미생물-정신질환 | MiKG 1,234 | MiKG 원본 TTL 406쌍 + **근거등급·방향·KEGG pathway·외부 식별자** |
 | 질환 분류 | MeSH + SNOMED CT | MeSH SPARQL — tree number + **상위 계층 242종**. SNOMED 는 MiKG xref 63 |
 | 식품 온톨로지 | FoodOn + Chinese Food Ontology | **FoodOn 은 EBI OLS 에서 직접** — 음식 8,165 · 클래스 1,096. 중국 온톨로지는 배포 subset |
+
+우리 KG 는 **triple 3,489,732 · 관계 33 · 엔티티 858,178** 이다(논문 13,346,991 ·
+140 · 1,637,915). 격차는 SNOMED CT 429 만과 NCBI taxonomy 131 만을 통합하지 않은
+데서 온다 — 전자는 배포되지 않았고 후자는 정신질환 연관 종만 쓴다. 음식-성분 축만
+보면 우리 쪽이 더 크다(321 만 vs 233 만).
 
 ## 실행
 
@@ -83,8 +88,8 @@ KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐�
 결합값을 KG 안에서 추적하려고 추가한 축이다. RESULTS.md §5.
 
 논문은 140 relation / 1,637,915 entity / 13,346,991 triple 이다. 차이의 대부분은
-온톨로지 축(SNOMED CT 429만, NCBI taxonomy 전체 131만, FoodOn·중국 온톨로지 30만)을
-통합하지 않은 데서 온다. 음식-성분 축만 보면 우리 쪽이 더 크다 (321만 vs 233만).
+온톨로지 축(SNOMED CT 429만, NCBI taxonomy 전체 131만)을 통합하지 않은 데서 온다 —
+FoodOn 은 OLS 로 직접 받아 141,564 triple 로 논문(79,769)을 넘어섰다. 음식-성분 축만 보면 우리 쪽이 더 크다 (321만 vs 233만).
 
 음식 14,719종 (음식당 측정 compound 중앙값 **47**, 논문 heatmap 원본은 33),
 compound 130종, 우울증 극성이 확정된 compound 66종 (논문 E 는 85종 중 공개 소스로 69종).
@@ -121,13 +126,13 @@ Energy drink (HFCS) / Butternut squash.
 | 측면 | 문항 | 판정 | 근거 |
 |---|---|---|---|
 | weight calculation | 3 | O | 성분 중량 768,157건 (g/100g) |
-| compounds categories | 3 | O | KEGG compound 130 |
-| compounds in food and gut | 4 | O | FDC 성분 + KEGG compound-미생물 |
+| compounds categories | 3 | O | KEGG compound — KG 층 154 / F 층 130 |
+| compounds in food and gut | 4 | O | FDC 성분 + compound-미생물 **37,633**(KEGG 2,124 + VMH 35,509) |
 | bacteria taxonomy | 3 | O | NCBI taxonomy 127종, 학명·rank·계통 갱신 |
-| food categories | 4 | △ | FDC SR 27군만. FoodOn·중국 온톨로지 미통합 |
-| disease classification | 3 | △ | MeSH tree number 만. SNOMED CT 미통합 |
+| food categories | 4 | O | FDC SR 27군 + WWEIA→SR 큐레이션 링크 + **FoodOn 클래스 1,096** |
+| disease classification | 3 | O | MeSH tree number + **상위 계층 242종**. SNOMED 는 MiKG xref 63 |
 
-완전 답변 13 / 부분 7 / 불가 0.
+완전 답변 16 / 부분 4 / 불가 0.
 
 ### §5.1 방법 2 — 추론 15건 문헌 검증
 
@@ -272,15 +277,20 @@ ModiMedDiet 은 lean red meat 를 주 3-4회 처방한다. 음식군별로 분�
 
 ## 한계
 
-- **식품 온톨로지 미통합.** FoodOn·중국 식품 온톨로지가 없어 음식 분류가 FDC
-  SR 27군에 머문다. 논문의 128 카테고리 체계와 대응되지 않는다.
-- **SNOMED CT 미통합.** 질환 분류는 MeSH tree number 만 쓴다.
+- **중국 식품 온톨로지는 배포 subset 만.** FoodOn 은 EBI OLS 에서 직접 받아
+  음식 8,165 · 클래스 1,096 을 붙였지만(논문 79,769 triple 대비 141,564),
+  중국 온톨로지는 카테고리 39 · 음식 174 에 머문다.
+- **SNOMED CT 는 라이선스.** 배포본에 라벨·계층이 없어 전체를 못 쓴다. MiKG 가
+  자기 엔티티에 단 SCT id 63 개만 쓴다. 질환 상위 분류는 **MeSH 트리로 대체**했다.
+- **미생물 축이 가장 얇다.** NCBI 127종 · KEGG organism 82. compound-미생물은
+  VMH/AGORA2 로 2,124 → 37,633 으로 넓혔지만 **균 자체는 그대로**다.
 - **미생물-정신질환이 얇다.** 공개 Disease_Bacteria 에서 MeSH F03 으로 걸러지는
   관계는 115건(질환 6종)뿐이고 우울증은 1건이다. MiKG 원본 경로로 406쌍을 보태도
   논문이 말한 1,234 에 못 미친다.
 - **논문 §3.3 의 474만 추론을 재구현하지 않았다.** 전이 추론과 공통 세균 추론만 쓴다.
-- **방법 2 의 자동 판정은 논문의 수작업 검색과 같지 않다.** 초록을 읽지 않으므로
-  논문의 -1(반대 증거)을 만들지 못하고, 공출현만으로 1 을 준다.
+- **방법 2 는 품질 지표가 아니라 검수 도구다.** 초록 판독으로 판별력 0.83 을
+  얻었지만(논문 15건 기준), 우리 15건의 숫자를 논문의 11/15 와 순위처럼 비교하지
+  않는다. RESULTS.md §4.3.
 
 ## 산출물
 
