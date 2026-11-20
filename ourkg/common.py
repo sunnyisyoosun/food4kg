@@ -78,6 +78,26 @@ def cached_get(name, fetch, ttl_days=30):
     return txt
 
 
+def cached_covering(name, fetch, keys):
+    """`cached_get` 인데 **캐시가 요청을 덮는지** 확인한다.
+
+    `cached_get` 은 파일만 보고 입력 변화를 모른다. 요청 목록이 늘어도 옛 캐시를
+    돌려주므로 새로 늘어난 것이 조용히 빠진다. 같은 함정을 두 번 당했다 —
+    taxid 가 127 -> 162 로 늘었을 때, MeSH descriptor 가 244 -> 313 으로 늘었을 때
+    (F03 판정이 15 -> 6 으로 줄었다). 그래서 검사를 코드 한 곳으로 모은다.
+
+    `keys` 가 캐시의 키에 다 들어 있지 않으면 캐시를 버리고 다시 받는다.
+    """
+    import json
+    data = json.loads(cached_get(name, fetch))
+    missing = set(keys) - set(data)
+    if missing:
+        print(f'  캐시에 없는 {len(missing)} 건 — 다시 받는다')
+        os.remove(os.path.join(CACHE, name))
+        data = json.loads(cached_get(name, fetch))
+    return data
+
+
 def kegg_rest(path, session=None, timeout=180):
     """KEGG REST. rate limit(0.34s)을 지키고 캐시한다."""
     import time

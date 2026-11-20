@@ -315,9 +315,9 @@ def recommend(e_mode=None, path=None, save=True):
                perplexity=min(30, len(idx) - 1)).fit_transform(
         X[[pos[k] for k in sub['food_key']]])
     plt.figure(figsize=(9, 7))
-    groups = sub['food_group'].unique()
+    gnames = sub['food_group'].unique()     # 모듈 함수 groups() 를 가리지 않게
     cmap = plt.get_cmap('tab20')
-    for i, gname in enumerate(groups):
+    for i, gname in enumerate(gnames):
         m = (sub['food_group'] == gname).values
         rec = (sub['rank'] <= K).values
         plt.scatter(emb[m & rec, 0], emb[m & rec, 1], marker='o', s=70,

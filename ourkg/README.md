@@ -15,7 +15,7 @@
 | 우울증-대사물 | MENDA 5,675 관계 | **ProMENDA** (Pu et al. 2024) 22,519 레코드 / 995 연구 |
 | compound | KEGG 230 metabolite | **KG 층 154 / F 층 130** — 논문처럼 두 층을 나눈다 |
 | 미생물 | NCBI taxonomy 322,917 | efetch 로 **현재 값** 갱신 **485종** (배포본 127 + **Disbiome 333** + 보탠 30) |
-| compound-미생물 | KEGG (2022) | KEGG REST 재계산 4,571 + **VMH/AGORA2 44,094** (유전체 재구성 — 예측) |
+| compound-미생물 | KEGG (2022) | KEGG REST 재계산 **10,257**(55% 속 수준) + **VMH/AGORA2 44,094** (유전체 재구성 — 예측) |
 | 미생물-정신질환 | MiKG 1,234 | MiKG 원본 TTL 406쌍 + **Disbiome 1,193** (외부 큐레이션) |
 | 질환 분류 | MeSH + SNOMED CT | MeSH SPARQL — tree number + **상위 계층 242종**. SNOMED 는 MiKG xref 63 |
 | 식품 온톨로지 | FoodOn + Chinese Food Ontology | **FoodOn 은 EBI OLS 에서 직접** — 음식 8,165 · 클래스 1,096. 중국 온톨로지는 배포 subset |

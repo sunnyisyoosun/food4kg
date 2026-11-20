@@ -30,7 +30,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (BASE, OUT, FDC_RAW, UNIT_TO_G, FDC_CATEGORY, cached_get, kegg_rest,
                     normalize_label, normalize_category, kegg_map, normkey,
-                    mesh_lookup)
+                    mesh_lookup, cached_covering)
 
 
 def food():
@@ -525,15 +525,7 @@ def microbe():
         return json.dumps(out)
 
 
-    # cached() 는 파일만 보고 **입력 변화를 모른다**. meshids 가 Disbiome 으로
-    # 244 -> 313 으로 늘었는데 옛 캐시를 쓰자 새 descriptor 69 개가 tree number
-    # 없이 떨어졌고 F03 이 10 -> 6 으로 줄었다. ncbi_taxonomy.json 과 같은 검사다.
-    tree = json.loads(cached('mesh_tree.json', fetch_tree))
-    _miss_d = set(meshids) - set(tree)
-    if _miss_d:
-        print(f'  캐시에 없는 descriptor {len(_miss_d)} — 다시 받는다')
-        os.remove(os.path.join(BASE, 'ourkg', 'cache', 'mesh_tree.json'))
-        tree = json.loads(cached('mesh_tree.json', fetch_tree))
+    tree = cached_covering('mesh_tree.json', fetch_tree, meshids)
     mental = {d for d, tns in tree.items() if any(t.startswith('F03') for t in tns)}
     neuro = {d for d, tns in tree.items()
              if any(t.startswith('C10.574') or t.startswith('C10.228.140') for t in tns)}
@@ -592,15 +584,9 @@ def microbe():
         return json.dumps(recs)
 
 
-    # 캐시는 파일만 보고 **입력 변화를 모른다**. focus 가 늘었는데 옛 캐시를 쓰면
-    # 보탠 균이 조용히 빠진다(실제로 127 종에 머물렀다). 캐시가 요청을 덮는지
-    # 검사하고, 모자라면 다시 받는다.
-    tax = json.loads(cached('ncbi_taxonomy.json', fetch_tax))
-    _miss = set(focus) - set(tax)
-    if _miss:
-        print(f'  캐시에 없는 {len(_miss)} 종 — 다시 받는다')
-        os.remove(os.path.join(BASE, 'ourkg', 'cache', 'ncbi_taxonomy.json'))
-        tax = json.loads(cached('ncbi_taxonomy.json', fetch_tax))
+    # 캐시가 요청을 덮는지 common.cached_covering 이 확인한다 — 안 그러면 focus 가
+    # 늘어도 옛 캐시가 돌아와 보탠 균이 조용히 빠진다(실제로 127 종에 머물렀다).
+    tax = cached_covering('ncbi_taxonomy.json', fetch_tax, focus)
     print(f'  갱신된 taxon {len(tax)}')
 
     # ------------------------------------------------------------------
@@ -615,19 +601,35 @@ def microbe():
         code, name = f[1].split('; ', 1)
         orgs.append({'tnum': f[0], 'org': code.strip(), 'name': name.strip()})
     print(f'  KEGG organism {len(orgs):,}')
-    by_species = collections.defaultdict(list)
+    # 종 이름 2 단어로만 맞추다가 485 종 중 167 종밖에 못 이었다. 못 이은 318 중
+    # **255 가 종이 아니다** — 속 200 · 과 47 · 목 6 · 문 5 · 강 2. Disbiome 이
+    # 속·과 수준으로 보고하기 때문이고, 2 단어 매칭으로는 구조적으로 못 잡는다.
+    #
+    # KEGG genome 이름의 첫 단어가 속이므로 **종 -> 속** 사다리를 둔다. 어느
+    # 수준에서 걸렸는지 `match_rank` 에 적는다 — 속 수준 링크는 "이 속의 어떤
+    # 유전체가 이 compound 를 대사한다"는 더 약한 주장이라 구분할 수 있어야 한다.
+    by_species, by_genus = collections.defaultdict(list), collections.defaultdict(list)
     for o in orgs:
-        sp = ' '.join(re.sub(r'\(.*?\)', '', o['name']).split()[:2]).lower()
-        by_species[sp].append(o['org'])
+        w = re.sub(r'\(.*?\)', '', o['name']).split()
+        if not w:
+            continue
+        by_species[' '.join(w[:2]).lower()].append(o['org'])
+        by_genus[re.sub(r'[^a-z]', '', w[0].lower())].append(o['org'])
 
-    tax_org = {}
+    tax_org, tax_lv = {}, {}
     for t, rec in tax.items():
-        sp = ' '.join(rec['name'].split()[:2]).lower()
-        if sp in by_species:
-            tax_org[t] = by_species[sp][0]
-    print(f'  KEGG organism 코드 연결 {len(tax_org)}/{len(tax)}')
+        w = rec['name'].split()
+        for lv, key, table in (('species', ' '.join(w[:2]).lower(), by_species),
+                               ('genus', re.sub(r'[^a-z]', '', w[0].lower()), by_genus)):
+            if key in table:
+                tax_org[t], tax_lv[t] = table[key][0], lv
+                break
+    _n = collections.Counter(tax_lv.values())
+    print(f'  KEGG organism 코드 연결 {len(tax_org)}/{len(tax)} '
+          f'(종 {_n["species"]} · 속 {_n["genus"]})')
 
-    micro = pd.DataFrame([{'taxid': t, **rec, 'kegg_org': tax_org.get(t, '')}
+    micro = pd.DataFrame([{'taxid': t, **rec, 'kegg_org': tax_org.get(t, ''),
+                           'match_rank': tax_lv.get(t, '')}
                           for t, rec in tax.items()])
     micro.to_csv(os.path.join(OUT, 'microbes.csv'), index=False)
     md.to_csv(os.path.join(OUT, 'microbe_disease.csv'), index=False)
@@ -667,11 +669,14 @@ def microbe():
             for c, cko in c2ko.items():
                 n = len(cko & kos)
                 if n:
-                    rows.append({'kegg': c, 'taxid': t, 'kegg_org': org, 'n_ko': n})
+                    rows.append({'kegg': c, 'taxid': t, 'kegg_org': org, 'n_ko': n,
+                                 'match_rank': tax_lv.get(t, '')})
         print(f'\r  organism {i}/{len(orgcodes)}  링크 {len(rows):,}', end='', flush=True)
     print()
     cm = pd.DataFrame(rows)
     cm.to_csv(os.path.join(OUT, 'compound_microbe.csv'), index=False)
+    print(f'  그중 속 수준 매칭 {int((cm["match_rank"] == "genus").sum()):,} 링크 '
+          f'— "이 속의 어떤 유전체가" 라는 더 약한 주장이다')
     print(f'  compound-미생물 {len(cm):,} 링크 / compound {cm["kegg"].nunique()} '
           f'/ 미생물 {cm["taxid"].nunique()}')
 

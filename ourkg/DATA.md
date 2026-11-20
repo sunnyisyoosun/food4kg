@@ -18,7 +18,7 @@
 | 음식 카테고리 | FDC SR / WWEIA | 로컬 덤프 | 세분 265 · 상위 27 |
 | 우울증-대사물 | ProMENDA | 로컬 xlsx | 레코드 22,519 → compound 1,412 |
 | 미생물 | NCBI taxonomy | efetch + 캐시 | **485 taxid** (127 + Disbiome 333 + 보탠 30) |
-| compound-미생물 | KEGG REST | REST + 캐시 | 4,571 링크 · compound 63 |
+| compound-미생물 | KEGG REST | REST + 캐시 | 10,257 링크 · compound 76 (**55% 는 속 수준**) |
 | compound-미생물 (예측) | **VMH / AGORA2** | 벌크 zip + 캐시 | 44,094 링크 · compound 1,069 |
 | 미생물-정신질환 | MiKG 원본 TTL | 로컬 ttl | 406 쌍 |
 | 미생물-질환 (외부) | **Disbiome** | REST 전수 + 캐시 | 1,193 관계 · 균 457 · 질환 23 |
@@ -138,13 +138,41 @@ KG 에서도 사라진다.
 |---|---:|---:|
 | 미생물 | 162 | **485** |
 | KEGG 경로 연결 | 127 종 · 3,103 링크 | **167 종 · 4,571 링크** |
-| compound 연결 합집합 (KEGG ∪ VMH) | 143 종 | **182 종 (38%)** · 47,538 링크 |
+| compound 연결 합집합 (KEGG ∪ VMH) | 143 종 | **379 종 (78%)** · 52,998 링크 |
 
-**남는 한계 둘.** Disbiome 균 457 종 중 compound 연결이 있는 것은 **153 종(33%)**
-이다 — KEGG organism 코드가 없으면(167/485) 추천 경로에 닿지 못한다. 그리고
-`#7` 은 여전히 안 열린다: *Bifidobacterium longum* 은 이제 KEGG 24 · VMH 546
-링크를 갖지만 **ascorbate(C00072)가 양쪽 다 없다.** 균이 없어서가 아니라 그 대사
-자체가 두 소스에 없다 — 외부 데이터의 한계라는 기존 진단이 확인됐다.
+`#7` 은 축을 3 배로 늘려도 안 열린다: *Bifidobacterium longum* 은 KEGG 24 ·
+VMH 546 링크를 갖지만 **ascorbate(C00072)가 양쪽 다 없다.** 균이 없어서가 아니라
+그 대사 자체가 두 소스에 없다 — 외부 데이터의 한계라는 기존 진단이 확인됐다.
+
+### ★ 균을 늘린 다음 벽은 "닿지 않는다" 였다 — 종 → 속 사다리 (2026-11-20)
+
+축을 485 종으로 넓히고 재 보니 **KEGG organism 코드가 붙은 것이 167 종뿐**이었다.
+들여온 균의 2/3 가 추천 경로에도 §4.1 질의에도 못 닿는다. 원인을 재니 매칭
+방식이었다 — 못 이은 318 종 중 **255 가 종(species)이 아니다.**
+
+| rank | 속 | 과 | 목 | 문 | 강 | 종 |
+|---|---:|---:|---:|---:|---:|---:|
+| 미연결 | **200** | 47 | 6 | 5 | 2 | 56 |
+
+Disbiome 은 속·과 수준으로도 보고하는데 우리는 **종 이름 2 단어**로만 맞추고
+있었다. KEGG genome 이름의 첫 단어가 속이므로 **종 → 속 사다리**를 두면
+추가 네트워크 요청 없이 붙는다.
+
+| | 이전 | 지금 |
+|---|---:|---:|
+| KEGG organism 매칭 | 167/485 | **378/485** (종 167 · 속 211) |
+| KEGG 경로 연결 | 167 종 · 4,571 링크 | **378 종 · 10,257 링크** |
+| compound | 63 | **76** |
+| Disbiome 균 중 연결됨 | 153/457 (33%) | **343/457 (75%)** |
+
+> **속 수준 링크는 더 약한 주장이다.** 10,257 링크 중 **5,686(55%)**이 속 수준이고,
+> "이 종이 이 compound 를 대사한다" 가 아니라 **"이 속의 어떤 유전체가"** 를
+> 뜻한다. `microbes.csv` · `compound_microbe.csv` 의 **`match_rank` 열**에 적어
+> 구분할 수 있게 뒀다. 집계할 때 이 열로 걸러야 한다.
+
+**아직 못 잇는 107 종**은 과·목·문 수준(60)과 KEGG 에 유전체가 없는 종(47)이다.
+과 이상은 NCBI 로 하위 속을 물어야 하고(60 요청) 그 수준의 링크는 속보다 더
+약해지므로 하지 않았다.
 - **이름 → taxid**: NCBI esearch. 학명이 바뀐 5 종은 **NCBI 동의어 목록으로 확인**
   했다 — `Bacteroides vulgatus → Phocaeicola vulgatus`,
   `Clostridium ramosum → Thomasclavelia ramosa`,
@@ -161,8 +189,10 @@ KG 에서도 사라진다.
 
 ## 7. compound-미생물 — KEGG REST
 
-- **경로**: `compound → EC → KO → organism`. KEGG organism 에 매칭된 균 **167/485**.
-- **규모**: **4,571 링크 · compound 63 · 미생물 167** (`out/compound_microbe.csv`)
+- **경로**: `compound → EC → KO → organism`. KEGG organism 에 매칭된 균
+  **378/485** (종 167 · 속 211 — §6 의 사다리).
+- **규모**: **10,257 링크 · compound 76 · 미생물 378** (`out/compound_microbe.csv`).
+  **55% 가 속 수준 매칭**이다 — `match_rank` 열로 거른다.
 - **한계**: KEGG 는 유전체가 등록된 균만 담는다. `Adlercreutzia equolifaciens` 의
   citric acid 경로, `Bifidobacterium longum` 의 ascorbic acid 경로가 없어
   §5.1 방법 1 `#6`·`#7` 이 △ 에 머문다.
