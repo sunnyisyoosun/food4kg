@@ -27,7 +27,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'eval'))
-from common import OUT, BASE
+from common import OUT, BASE, compound_microbe
 
 
 def recommend(e_mode=None, path=None, save=True):
@@ -470,10 +470,12 @@ def evaluate():
                 # compound-미생물은 **두 출처를 합쳐** 본다. KEGG 추론 경로만 보면
                 # metabolizes() 가 VMH/AGORA2 의 경로를 놓친다 (#6 의 Adlercreutzia
                 # x citric acid 가 그 경우다). 출처 구분은 KG 가 들고 있다.
-                cm = pd.concat([
-                    pd.read_csv(os.path.join(OUT, f), dtype={'taxid': str})[['taxid', 'kegg']]
-                    for f in ('compound_microbe.csv', 'compound_microbe_vmh.csv')
-                    if os.path.exists(os.path.join(OUT, f))]).drop_duplicates()
+                #
+                # **종 수준만 쓴다.** 방법 1 의 #6·#7 은 Adlercreutzia
+                # equolifaciens, Bifidobacterium longum 을 이름으로 콕 집는다.
+                # 속 수준 매칭으로 답하면 "이 속의 어떤 유전체가" 를 "이 종이" 로
+                # 바꿔 읽는 것이다 (KEGG 링크의 55% 가 속 수준이다).
+                cm = compound_microbe(rank='species')
                 cd = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
 
                 self.food = dict(zip(foods.fdc_id, foods.food_name))
@@ -985,7 +987,7 @@ def compare():
             col = dep['e_shrunk']
         sel = cpds
         if row['path'] == 'gutbrain':
-            cm = pd.read_csv(os.path.join(OUT, 'compound_microbe.csv'), dtype={'taxid': str})
+            cm = compound_microbe(sources=('kegg',))
             md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
             gut = set(cm[cm['taxid'].isin(set(md[md['is_mental']]['taxid']))]['kegg'])
             sel = [c for c in cpds if c in gut]
@@ -1012,7 +1014,7 @@ def compare():
 
 def gutbrain_from_csv():
     """중간 CSV 로 gut-brain 경로 compound 집합을 만든다 (빠른 경로)."""
-    cm = pd.read_csv(os.path.join(OUT, 'compound_microbe.csv'), dtype={'taxid': str})
+    cm = compound_microbe(sources=('kegg',))
     md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
     mental_tax = set(md[md['is_mental']]['taxid'])
     return set(cm[cm['taxid'].isin(mental_tax)]['kegg'])

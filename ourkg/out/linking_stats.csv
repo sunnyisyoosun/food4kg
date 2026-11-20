@@ -17,7 +17,8 @@ disease,SNOMED CT 링크 (MiKG xref),63,MiKG 가 엔티티에 단 SCT id
 disease,MeSH 링크 (MiKG xref),51,
 microbe,MiKG 근거 등급 보유 관계,82,A/B/C
 microbe,MiKG KEGG pathway 링크,90,미생물→신경전달물질→경로
-microbe,compound-미생물 (KEGG 추론),10257,compound→EC→KO→organism
+microbe,"compound-미생물 (KEGG 추론, 종 수준)",4571,compound→EC→KO→organism
+microbe,"compound-미생물 (KEGG 추론, 속 수준)",5686,"""이 속의 어떤 유전체가"" — 더 약한 주장"
 microbe,compound-미생물 (VMH/AGORA2),44094,유전체 재구성 — 예측
 microbe,미생물-질환 (Disbiome),1193,외부 큐레이션 — 축 확장의 자기참조를 끊는다
 ontology,FoodOn ↔ 카테고리 (배포 KG 부분집합),19,§3.1 FoodOn

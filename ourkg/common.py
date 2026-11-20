@@ -228,6 +228,43 @@ def mesh_lookup(names, session=None, pause=0.12):
     return out
 
 
+def compound_microbe(sources=('kegg', 'vmh'), rank=None):
+    """compound-미생물 링크를 **근거 수준을 걸러서** 읽는다.
+
+    네 곳이 각자 `read_csv` 하고 있었고 아무도 `match_rank` 를 보지 않았다.
+    그대로 두면 속 수준 링크가 종 수준과 같은 무게로 집계된다 — KEGG 링크
+    10,257 중 **5,686(55%)**이 속 수준이라 과대평가가 작지 않다. 읽는 자리를
+    하나로 합치고 거르는 기준을 여기 둔다.
+
+    `rank`:
+      'species'  종 수준 매칭만. **이름이 지정된 종을 묻는 질문**(§5.1 방법 1
+                 `#6`·`#7` 은 Adlercreutzia equolifaciens, Bifidobacterium
+                 longum 을 콕 집는다)에는 이쪽을 써야 한다. 속 링크로 답하면
+                 "이 속의 어떤 유전체가" 를 "이 종이" 로 바꿔 읽는 것이다.
+      None/'all' 전부. 커버리지를 말할 때와 KG 에 담을 때 쓴다 — 속 수준 링크도
+                 실재하는 정보다. 버리지 않고 **구분해서** 담는다.
+
+    VMH/AGORA2 쪽에는 `match_rank` 가 없다. 그쪽은 VMH 의 `ncbiId` 로 taxid 에
+    직접 붙으므로 수준 문제가 없다 — 걸러낼 것이 없어 그대로 쓴다.
+    """
+    import pandas as pd
+    out = []
+    files = {'kegg': 'compound_microbe.csv', 'vmh': 'compound_microbe_vmh.csv'}
+    for src in sources:
+        path = os.path.join(OUT, files[src])
+        if not os.path.exists(path):
+            continue
+        df = pd.read_csv(path, dtype={'taxid': str})
+        if src == 'kegg' and rank in ('species', 'genus'):
+            df = df[df.get('match_rank', '') == rank]
+        df = df[['taxid', 'kegg']].copy()
+        df['source'] = src
+        out.append(df)
+    if not out:
+        return pd.DataFrame(columns=['taxid', 'kegg', 'source'])
+    return pd.concat(out).drop_duplicates(['taxid', 'kegg'])
+
+
 def kegg_map():
     """nutrient_id -> KEGG (논문/매핑표 ID 그대로).
 

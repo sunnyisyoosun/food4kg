@@ -68,7 +68,32 @@
  "Q2": [
   [
    "Glutamic acid (Glu)",
+   "Acetomicrobium hydrogeniformans",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Acidaminococcus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Acidovorax",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Acinetobacter",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
    "Acinetobacter baumannii",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Actinobacillus",
    "hasNegativeAssociation"
   ],
   [
@@ -78,17 +103,37 @@
   ],
   [
    "Glutamic acid (Glu)",
+   "Adlercreutzia",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
    "Adlercreutzia equolifaciens",
    "hasNegativeAssociation"
   ],
   [
    "Glutamic acid (Glu)",
-   "Agathobacter rectalis",
+   "Aerococcus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Aggregatibacter",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Akkermansia",
    "hasNegativeAssociation"
   ],
   [
    "Glutamic acid (Glu)",
    "Akkermansia muciniphila",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Alistipes",
    "hasNegativeAssociation"
   ],
   [
@@ -118,7 +163,42 @@
   ],
   [
    "Glutamic acid (Glu)",
-   "Anaerobutyricum hallii",
+   "Allobaculum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Anabaena",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Anaerococcus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Anaerostipes",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Anaerotruncus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Aquabacterium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Atopobium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Bacillaceae",
    "hasNegativeAssociation"
   ],
   [
@@ -139,6 +219,11 @@
   [
    "Glutamic acid (Glu)",
    "Bacillus subtilis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Bacteroidales",
    "hasNegativeAssociation"
   ],
   [
@@ -174,6 +259,16 @@
   [
    "Glutamic acid (Glu)",
    "Bacteroides uniformis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Barnesiella",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Barnesiella intestinihominis",
    "hasNegativeAssociation"
   ],
   [
@@ -218,6 +313,16 @@
   ],
   [
    "Glutamic acid (Glu)",
+   "Bifidobacterium sp.",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Bilophila",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
    "Blautia hydrogenotrophica",
    "hasNegativeAssociation"
   ],
@@ -228,7 +333,37 @@
   ],
   [
    "Glutamic acid (Glu)",
+   "Brevibacterium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Brevundimonas",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Brucella",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Buchnera",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
    "Buchnera aphidicola",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Bulleidia",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Burkholderia",
    "hasNegativeAssociation"
   ],
   [
@@ -238,12 +373,27 @@
   ],
   [
    "Glutamic acid (Glu)",
-   "Campylobacter jejuni",
+   "Butyricicoccus",
    "hasNegativeAssociation"
   ],
   [
    "Glutamic acid (Glu)",
-   "Campylobacter ureolyticus",
+   "Butyricimonas",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Butyrivibrio",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Caloramator",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Candida",
    "hasNegativeAssociation"
   ],
   [
@@ -253,7 +403,17 @@
   ],
   [
    "Glutamic acid (Glu)",
-   "Candida dubliniensis",
+   "Candidatus Epulonipiscium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Candidatus Soleaferrea",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Candidatus Stoquefichus massiliensis",
    "hasNegativeAssociation"
   ],
   [
@@ -263,37 +423,17 @@
   ],
   [
    "Glutamic acid (Glu)",
-   "Capnocytophaga sp.",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Catenibacterium mitsuokai",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Chloracidobacterium thermophilum B",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Christensenella minuta",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Citrobacter koseri",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Clavibacter michiganensis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
    "Clostridioides difficile",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Clostridium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Clostridium aminobutyricum",
    "hasNegativeAssociation"
   ],
   [
@@ -308,12 +448,22 @@
   ],
   [
    "Glutamic acid (Glu)",
-   "Clostridium perfringens",
+   "Clostridium disporicum",
    "hasNegativeAssociation"
   ],
   [
    "Glutamic acid (Glu)",
-   "Clostridium sp.",
+   "Clostridium subterminale",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Clostridium tertium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Collinsella",
    "hasNegativeAssociation"
   ],
   [
@@ -323,52 +473,12 @@
   ],
   [
    "Glutamic acid (Glu)",
-   "Coprococcus eutactus",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
    "Coraliomargarita akajimensis",
    "hasNegativeAssociation"
   ],
   [
    "Glutamic acid (Glu)",
-   "Cronobacter sakazakii",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Desulfovibrio desulfuricans",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Desulfovibrio piger",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Desulfovibrio sp.",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Dorea longicatena",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Eggerthella lenta",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Enterobacter cloacae",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Enterobacter hormaechei",
+   "Enterocloster asparagiformis",
    "hasNegativeAssociation"
   ],
   [
@@ -378,172 +488,32 @@
   ],
   [
    "Glutamic acid (Glu)",
-   "Enterocloster clostridioformis",
+   "Enterocloster citroniae",
    "hasNegativeAssociation"
   ],
   [
    "Glutamic acid (Glu)",
-   "Enterococcus casseliflavus",
+   "Glutamicibacter",
    "hasNegativeAssociation"
   ],
   [
    "Glutamic acid (Glu)",
-   "Enterococcus faecalis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Enterococcus faecium",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Enterococcus sp.",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Escherichia coli",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Eubacterium ventriosum",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Faecalibacterium prausnitzii",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Flavonifractor plautii",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Fusobacterium mortiferum",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Fusobacterium ulcerans",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Fusobacterium varium",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Gardnerella vaginalis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Granulicatella adiacens",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Hafnia alvei",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Halobacillus mangrovi",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Hathewaya histolytica",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Hungatella hathewayi",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Intestinibacter bartlettii",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Klebsiella oxytoca",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Klebsiella pneumoniae",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Lacticaseibacillus paracasei",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Lactobacillus acidophilus",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Lactobacillus delbrueckii",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Lactobacillus gasseri",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Lactobacillus sp.",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Lactococcus cremoris",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Lactococcus lactis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Lactococcus lactis subsp. lactis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Lautropia mirabilis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Lentilactobacillus buchneri",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Levilactobacillus brevis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "Glutamic acid (Glu)",
-   "Limosilactobacillus fermentum",
+   "Phocaeicola coprocola",
    "hasNegativeAssociation"
   ],
   [
    "Glutamic acid (Glu)",
    "Phocaeicola dorei",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Phocaeicola massiliensis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Phocaeicola plebeius",
    "hasNegativeAssociation"
   ],
   [
@@ -558,12 +528,62 @@
   ],
   [
    "Glutamic acid (Glu)",
+   "Ruminiclostridium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
    "Ruminiclostridium cellulolyticum",
    "hasNegativeAssociation"
   ],
   [
    "Glutamic acid (Glu)",
-   "Thomasclavelia ramosa",
+   "[Clostridium] aminophilum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "[Clostridium] innocuum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "[Clostridium] leptum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "[Clostridium] methylpentosum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "[Clostridium] scindens",
+   "hasNegativeAssociation"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "[Clostridium] symbiosum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Acetomicrobium hydrogeniformans",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Acidaminococcus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Acidovorax",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Acinetobacter",
    "hasNegativeAssociation"
   ],
   [
@@ -573,7 +593,17 @@
   ],
   [
    "L-Glutamic acid",
+   "Actinobacillus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
    "Actinomyces sp.",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Adlercreutzia",
    "hasNegativeAssociation"
   ],
   [
@@ -583,12 +613,27 @@
   ],
   [
    "L-Glutamic acid",
-   "Agathobacter rectalis",
+   "Aerococcus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Aggregatibacter",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Akkermansia",
    "hasNegativeAssociation"
   ],
   [
    "L-Glutamic acid",
    "Akkermansia muciniphila",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Alistipes",
    "hasNegativeAssociation"
   ],
   [
@@ -618,7 +663,42 @@
   ],
   [
    "L-Glutamic acid",
-   "Anaerobutyricum hallii",
+   "Allobaculum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Anabaena",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Anaerococcus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Anaerostipes",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Anaerotruncus",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Aquabacterium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Atopobium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bacillaceae",
    "hasNegativeAssociation"
   ],
   [
@@ -639,6 +719,11 @@
   [
    "L-Glutamic acid",
    "Bacillus subtilis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bacteroidales",
    "hasNegativeAssociation"
   ],
   [
@@ -674,6 +759,16 @@
   [
    "L-Glutamic acid",
    "Bacteroides uniformis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Barnesiella",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Barnesiella intestinihominis",
    "hasNegativeAssociation"
   ],
   [
@@ -718,6 +813,16 @@
   ],
   [
    "L-Glutamic acid",
+   "Bifidobacterium sp.",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bilophila",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
    "Blautia hydrogenotrophica",
    "hasNegativeAssociation"
   ],
@@ -728,7 +833,37 @@
   ],
   [
    "L-Glutamic acid",
+   "Brevibacterium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Brevundimonas",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Brucella",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Buchnera",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
    "Buchnera aphidicola",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Bulleidia",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Burkholderia",
    "hasNegativeAssociation"
   ],
   [
@@ -738,12 +873,27 @@
   ],
   [
    "L-Glutamic acid",
-   "Campylobacter jejuni",
+   "Butyricicoccus",
    "hasNegativeAssociation"
   ],
   [
    "L-Glutamic acid",
-   "Campylobacter ureolyticus",
+   "Butyricimonas",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Butyrivibrio",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Caloramator",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Candida",
    "hasNegativeAssociation"
   ],
   [
@@ -753,7 +903,17 @@
   ],
   [
    "L-Glutamic acid",
-   "Candida dubliniensis",
+   "Candidatus Epulonipiscium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Candidatus Soleaferrea",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Candidatus Stoquefichus massiliensis",
    "hasNegativeAssociation"
   ],
   [
@@ -763,37 +923,17 @@
   ],
   [
    "L-Glutamic acid",
-   "Capnocytophaga sp.",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Catenibacterium mitsuokai",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Chloracidobacterium thermophilum B",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Christensenella minuta",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Citrobacter koseri",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Clavibacter michiganensis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
    "Clostridioides difficile",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Clostridium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Clostridium aminobutyricum",
    "hasNegativeAssociation"
   ],
   [
@@ -808,12 +948,22 @@
   ],
   [
    "L-Glutamic acid",
-   "Clostridium perfringens",
+   "Clostridium disporicum",
    "hasNegativeAssociation"
   ],
   [
    "L-Glutamic acid",
-   "Clostridium sp.",
+   "Clostridium subterminale",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Clostridium tertium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Collinsella",
    "hasNegativeAssociation"
   ],
   [
@@ -823,52 +973,12 @@
   ],
   [
    "L-Glutamic acid",
-   "Coprococcus eutactus",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
    "Coraliomargarita akajimensis",
    "hasNegativeAssociation"
   ],
   [
    "L-Glutamic acid",
-   "Cronobacter sakazakii",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Desulfovibrio desulfuricans",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Desulfovibrio piger",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Desulfovibrio sp.",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Dorea longicatena",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Eggerthella lenta",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Enterobacter cloacae",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Enterobacter hormaechei",
+   "Enterocloster asparagiformis",
    "hasNegativeAssociation"
   ],
   [
@@ -878,172 +988,32 @@
   ],
   [
    "L-Glutamic acid",
-   "Enterocloster clostridioformis",
+   "Enterocloster citroniae",
    "hasNegativeAssociation"
   ],
   [
    "L-Glutamic acid",
-   "Enterococcus casseliflavus",
+   "Glutamicibacter",
    "hasNegativeAssociation"
   ],
   [
    "L-Glutamic acid",
-   "Enterococcus faecalis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Enterococcus faecium",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Enterococcus sp.",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Escherichia coli",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Eubacterium ventriosum",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Faecalibacterium prausnitzii",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Flavonifractor plautii",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Fusobacterium mortiferum",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Fusobacterium ulcerans",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Fusobacterium varium",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Gardnerella vaginalis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Granulicatella adiacens",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Hafnia alvei",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Halobacillus mangrovi",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Hathewaya histolytica",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Hungatella hathewayi",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Intestinibacter bartlettii",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Klebsiella oxytoca",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Klebsiella pneumoniae",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Lacticaseibacillus paracasei",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Lactobacillus acidophilus",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Lactobacillus delbrueckii",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Lactobacillus gasseri",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Lactobacillus sp.",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Lactococcus cremoris",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Lactococcus lactis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Lactococcus lactis subsp. lactis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Lautropia mirabilis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Lentilactobacillus buchneri",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Levilactobacillus brevis",
-   "hasNegativeAssociation"
-  ],
-  [
-   "L-Glutamic acid",
-   "Limosilactobacillus fermentum",
+   "Phocaeicola coprocola",
    "hasNegativeAssociation"
   ],
   [
    "L-Glutamic acid",
    "Phocaeicola dorei",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Phocaeicola massiliensis",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "Phocaeicola plebeius",
    "hasNegativeAssociation"
   ],
   [
@@ -1058,12 +1028,42 @@
   ],
   [
    "L-Glutamic acid",
+   "Ruminiclostridium",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
    "Ruminiclostridium cellulolyticum",
    "hasNegativeAssociation"
   ],
   [
    "L-Glutamic acid",
-   "Thomasclavelia ramosa",
+   "[Clostridium] aminophilum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "[Clostridium] innocuum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "[Clostridium] leptum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "[Clostridium] methylpentosum",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "[Clostridium] scindens",
+   "hasNegativeAssociation"
+  ],
+  [
+   "L-Glutamic acid",
+   "[Clostridium] symbiosum",
    "hasNegativeAssociation"
   ]
  ],
@@ -1080,12 +1080,17 @@
   ],
   [
    "4-Hydroxyproline",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
    "5-Methyltetrahydrofolate",
    "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "5-Methyltetrahydrofolate",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1096,6 +1101,11 @@
   [
    "5-Methyltetrahydrofolic acid",
    "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "5-Methyltetrahydrofolic acid",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1129,57 +1139,22 @@
    "Autism"
   ],
   [
-   "CTP",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
-   "Caprylate; Octanoate",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
-   "Caprylic acid",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
    "Choline phosphate",
    "Hominimerdicola alba",
    "Autism"
   ],
   [
-   "Cytidine monophosphate",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
-   "Cytidine triphosphate",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
-   "D-4'-Phosphopantothenate",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
-   "D-Glutamic acid",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
    "D-Maltose",
    "Hominimerdicola alba",
    "Autism"
   ],
   [
    "D-Maltose",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
-   "Deoxythymidine (dT)",
+   "D-Maltose",
    "Streptococcus salivarius",
    "Autism"
   ],
@@ -1215,7 +1190,7 @@
   ],
   [
    "Ethanol",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1225,7 +1200,7 @@
   ],
   [
    "Folic acid",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1235,7 +1210,7 @@
   ],
   [
    "Folic acid (Vitamin B9)",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1245,17 +1220,7 @@
   ],
   [
    "Folinic acid",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
-   "Formate; Methanoate",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
-   "Formic acid",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1266,6 +1231,11 @@
   [
    "Glutamic acid (Glu)",
    "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Glutamic acid (Glu)",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1285,16 +1255,11 @@
   ],
   [
    "Glycine",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
-   "Glycolate",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
-   "Glycolic acid",
+   "Glycine",
    "Streptococcus salivarius",
    "Autism"
   ],
@@ -1305,12 +1270,17 @@
   ],
   [
    "Hydroxyproline",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
    "L-Glutamic acid",
    "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "L-Glutamic acid",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1325,17 +1295,22 @@
   ],
   [
    "L-Lysine",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
-   "L-Serine",
+   "L-Lysine",
    "Streptococcus salivarius",
    "Autism"
   ],
   [
    "L-Threonine",
    "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "L-Threonine",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1360,12 +1335,22 @@
   ],
   [
    "Lysine (Lys)",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "Lysine (Lys)",
    "Streptococcus salivarius",
    "Autism"
   ],
   [
    "Maltose; Malt sugar",
    "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Maltose; Malt sugar",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1380,12 +1365,22 @@
   ],
   [
    "Nicotinic acid",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "Nicotinic acid",
    "Streptococcus salivarius",
    "Autism"
   ],
   [
    "Nicotinic acid (Vitamin B3)",
    "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Nicotinic acid (Vitamin B3)",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1399,18 +1394,8 @@
    "Autism"
   ],
   [
-   "Oleic acid",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
    "Oleic acid (18:1;9)",
    "Hominimerdicola alba",
-   "Autism"
-  ],
-  [
-   "Oleic acid (18:1;9)",
-   "Streptococcus salivarius",
    "Autism"
   ],
   [
@@ -1419,18 +1404,28 @@
    "Autism"
   ],
   [
+   "Palmitic acid",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
    "Palmitic acid (16:0)",
    "Hominimerdicola alba",
    "Autism"
   ],
   [
+   "Palmitic acid (16:0)",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
    "Pantothenic acid",
    "Hominimerdicola alba",
    "Autism"
   ],
   [
    "Pantothenic acid",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1440,7 +1435,7 @@
   ],
   [
    "Pantothenic acid (Vitamin B5)",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1455,7 +1450,7 @@
   ],
   [
    "Retinol",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1465,16 +1460,6 @@
   ],
   [
    "Riboflavin",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
-   "S-Lactoylglutathione",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
-   "Serine (Ser)",
    "Streptococcus salivarius",
    "Autism"
   ],
@@ -1495,6 +1480,11 @@
   ],
   [
    "Sucrose",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "Sucrose",
    "Streptococcus salivarius",
    "Autism"
   ],
@@ -1505,17 +1495,22 @@
   ],
   [
    "Sucrose; Cane sugar",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
-   "Sulfate",
+   "Sucrose; Cane sugar",
    "Streptococcus salivarius",
    "Autism"
   ],
   [
    "Thiamine",
    "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Thiamine",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1530,6 +1525,11 @@
   ],
   [
    "Thiamine (Vitamin B1)",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "Thiamine (Vitamin B1)",
    "Streptococcus salivarius",
    "Autism"
   ],
@@ -1540,11 +1540,11 @@
   ],
   [
    "Threonine (Thr)",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
-   "Thymidine",
+   "Threonine (Thr)",
    "Streptococcus salivarius",
    "Autism"
   ],
@@ -1555,7 +1555,7 @@
   ],
   [
    "Vitamin A",
-   "Streptococcus salivarius",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [

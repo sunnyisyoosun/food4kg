@@ -1010,9 +1010,17 @@ def kg():
             W.t(u, SAMEAS, f'https://www.kegg.jp/entry/gn:{r["kegg_org"]}', 'NCBI taxonomy')
 
     cm = pd.read_csv(os.path.join(OUT, 'compound_microbe.csv'), dtype={'taxid': str})
+    # 속 수준 매칭은 **출처를 갈라서** 담는다. 버리지 않는다 — 실재하는 정보다.
+    # 다만 "이 종이 대사한다" 가 아니라 "이 속의 어떤 유전체가" 이므로 KEGG 종
+    # 수준 추론과 같은 태그를 달면 SPARQL 로 거를 수 없다 (DATA.md §6·§7).
+    _n_genus = 0
     for _, r in cm.iterrows():
+        _g = str(r.get('match_rank', '')) == 'genus'
         W.t(NS['mic'] + r['taxid'], NS['mpq'] + 'hasMetabolites',
-            NS['kegg'] + r['kegg'], 'KEGG')
+            NS['kegg'] + r['kegg'], 'KEGG(속 수준)' if _g else 'KEGG')
+        _n_genus += _g
+    print(f'  compound-미생물 {len(cm):,} (종 수준 {len(cm) - _n_genus:,} · '
+          f'속 수준 {_n_genus:,} — 출처 태그로 구분)')
     # VMH/AGORA2 — 유전체 규모 대사 재구성에서 온 compound-미생물.
     # **예측이지 실측이 아니다.** 같은 술어를 쓰되 출처를 따로 달아 KEGG 추론
     # 경로나 MiKG 의 A/B/C 근거와 섞이지 않게 한다 (DATA.md §8).
@@ -1493,7 +1501,12 @@ def kg():
         ('disease', 'MeSH 링크 (MiKG xref)', _n_mesh_mikg, ''),
         ('microbe', 'MiKG 근거 등급 보유 관계', _n_mikg_ev, 'A/B/C'),
         ('microbe', 'MiKG KEGG pathway 링크', n_mikg_pw, '미생물→신경전달물질→경로'),
-        ('microbe', 'compound-미생물 (KEGG 추론)', int(len(cm)), 'compound→EC→KO→organism'),
+        ('microbe', 'compound-미생물 (KEGG 추론, 종 수준)',
+         int((cm.get('match_rank', pd.Series(dtype=str)) != 'genus').sum()),
+         'compound→EC→KO→organism'),
+        ('microbe', 'compound-미생물 (KEGG 추론, 속 수준)',
+         int((cm.get('match_rank', pd.Series(dtype=str)) == 'genus').sum()),
+         '"이 속의 어떤 유전체가" — 더 약한 주장'),
         ('microbe', 'compound-미생물 (VMH/AGORA2)', n_vmh, '유전체 재구성 — 예측'),
         ('microbe', '미생물-질환 (Disbiome)', n_disb,
          '외부 큐레이션 — 축 확장의 자기참조를 끊는다'),
