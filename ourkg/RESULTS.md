@@ -2679,6 +2679,93 @@ D    = e' × Fᵀ                 (이후는 논문 식 그대로)
 
 **기본값 `ALPHA=0` 을 유지하고 기능은 선택지로 남긴다.**
 
+### ★ 잴 자를 외부에서 만들었다 — 프로바이오틱스 RCT (2026-11-20)
+
+처음에는 "두 평가 기준이 모두 compound 직접 경로로 만들어진 자라 이 가중이
+옳은지 잴 자가 우리에게 없다" 고 적었다. **그 자를 만들었다.**
+
+#### 정답표 — `setup/probiotic_rct.csv`
+
+PMC 가 봇 차단(reCAPTCHA)을 걸어 메타분석 본문을 못 읽는다. **E-utilities 로
+직접 만든다** — 재현 가능하고 차단이 없다 (`ourkg/probiotic_rct.py build`).
+
+```
+(probiotic* OR Lactobacillus OR Bifidobacterium OR …)
+  AND (depression OR depressive OR anxiety)
+  AND randomized controlled trial[pt] AND humans[mh]
+→ RCT 203 편 → 초록에서 종명 추출 → NCBI taxonomy 해소
+→ 25 종 · RCT 178 편 연결
+```
+
+| RCT | 종 | | RCT | 종 |
+|---:|---|---|---:|---|
+| 27 | *Bifidobacterium longum* | | 13 | *Lactobacillus acidophilus* |
+| 22 | *Lacticaseibacillus rhamnosus* | | 13 | *Limosilactobacillus reuteri* |
+| 21 | *Lactiplantibacillus plantarum* | | 13 | *Bifidobacterium animalis* |
+| 15 | *Lactobacillus helveticus* | | 13 | *Lacticaseibacillus casei* |
+
+> **개명 함정을 두 번 넘었다.** ① `[Scientific Name]` 정확 검색은 개명된 종을
+> 전부 버린다 — `L. rhamnosus`(14편)·`L. casei`(13)·`B. lactis`(10) 가 통째로
+> 빠졌다. 필드 제한을 풀고, 돌려받은 taxid 의 rank 를 확인해 아종·균주면 **종
+> 수준 조상**으로 올라가게 했다(`B. lactis` → *B. animalis*).
+> ② `L. plantarum`·`L. reuteri` 는 **옛 이름이 NCBI 검색 색인에서 아예 빠졌다.**
+> taxid 레코드의 **동의어 목록**으로 확인했다 — `Lactobacillus reuteri Kandler
+> et al. 1982` → 1598. [`DATA.md`](DATA.md) §6 의 개명 함정과 같은 자리다.
+
+> **이 목록은 "효과가 입증된 균" 이 아니다.** RCT 에서 **시험된** 균이다.
+> 메타분석 풀링 효과는 SMD −0.34(95% CI −0.76~0.09, **유의하지 않음**, I²=75%)
+> 이고 균주별 결론은 저자들도 잠정적이라고 적는다. 그 전제로 읽어야 한다.
+
+#### 검정 ① 커버리지 — 20/25, 그 전부 compound 연결 있음
+
+우리 485 종 축이 RCT 종의 **80%** 를 담고, 그 20 종 **전부** compound 연결이
+있다. 빠진 5 종은 *L. helveticus*(15편) · *Lc. casei*(13) · *B. bifidum*(9) ·
+*L. paragasseri*(1) · *L. crispatus*(1). **미생물 축은 이 자로 합격이다.**
+
+#### 검정 ② gut-brain 가정 — 약하고 일관되지 않다
+
+"RCT 로 시험된 균이 우리 `E>0` compound 를 더 대사하는가" 를 순열 검정으로
+봤다 (`ourkg/probiotic_rct.py test`, 무작위 20 종 × 2000 회).
+
+| 통계량 | 관측 | 귀무 | p |
+|---|---:|---:|---:|
+| 대사 compound 의 평균 E | **−0.0195** | −0.0257 ± 0.0041 | **0.013** |
+| E>0 비율 | 0.489 | 0.483 ± 0.006 | 0.183 |
+
+**두 통계량 중 하나만 유의하고 효과 크기가 매우 작다**(둘 다 음수 구간, n=20).
+
+#### 검정 ③ 외부 목록으로 가중해도 결과가 같다
+
+`GUTBRAIN_MICROBES=rct` 로 **우리 Disbiome/F03 집합 대신 외부 RCT 목록**으로
+가중했다 (`WHO=rct python3 ourkg/sweep_gutbrain.py`).
+
+| `ALPHA` | Top30 추천군 | Bot30 비추천군 | MMD 처방군 | extras | AUC |
+|---:|---:|---:|---:|---:|---:|
+| **0** | **21** | **26** | **24** | **1** | 0.462 |
+| 1 | 18 | 22 | 22 | 2 | 0.455 |
+| 4 | 18 | 19 | 22 | 2 | 0.451 |
+| 8 | 18 | 21 | 22 | 2 | 0.449 |
+
+`mental` 집합과 **같은 방향으로 단조 악화**다.
+
+#### 결론을 바꾼다
+
+**검정 ③ 이 결정적이다.** 아래 §15c 에서 "평가 자가 편향돼서 그렇다" 고 적었는데,
+**가중할 균 집합 자체를 외부 임상 근거로 바꿔 봤고 결과가 같았다.** 평가 자의
+편향만으로는 설명되지 않는다.
+
+남는 해석 둘 — 어느 쪽인지 아직 못 가린다.
+
+1. **미생물 매개 경로가 음식 추천 순위에 실제로 기여하지 않는다**
+   (적어도 compound 중량 기반 점수에서는).
+2. **우리 compound-미생물 링크가 너무 거칠다** — KEGG 는 "유전체에 효소가
+   있다" 는 **추론**이고 VMH 는 **예측**이다. 실제 장내 대사량이 아니다.
+
+2 번이라면 필요한 것은 균 목록이 아니라 **실측 대사 데이터**(분변 대사체
+코호트)다. 별도 과제다.
+
+### 아래 §15c 의 "잴 자가 없다" 는 이제 성립하지 않는다
+
 ### ★ 그런데 이 결과를 "gut-brain 가중이 틀렸다" 로 읽으면 안 된다
 
 **두 평가 기준이 모두 compound 직접 경로로 만들어진 자다.**
@@ -2693,7 +2780,12 @@ D    = e' × Fᵀ                 (이후는 논문 식 그대로)
 참고값으로 내린 것과 같은 종류의 문제다.
 
 재려면 **미생물 매개 효과를 직접 측정한 외부 기준**(프로바이오틱스 RCT,
-분변 대사체-우울증 코호트)이 필요하다. 별도 과제다.
+분변 대사체-우울증 코호트)이 필요하다.
+
+> **★ 정정 (2026-11-20).** 그 외부 기준을 만들었다 — 프로바이오틱스 RCT 203 편
+> 에서 뽑은 25 종(`setup/probiotic_rct.csv`). **가중할 균 집합을 외부 임상
+> 근거로 바꿔도 결과가 같았다.** 위 "잴 자가 없다" 는 더 이상 성립하지 않고,
+> 기각 근거가 평가 자의 편향이 아닌 것으로 좁혀졌다. 위 절을 보라.
 
 ---
 
@@ -2763,6 +2855,7 @@ D    = e' × Fᵀ                 (이후는 논문 식 그대로)
 | `out/microbe_disease_disbiome.csv` | **Disbiome** 미생물-질환 (외부 큐레이션) |
 | `out/gutbrain_comparison.csv` | **미생물 매개 가중** `ALPHA` 쓸기 (§15c) |
 | `out/modimed_rho_comparison.csv` | **빈도 가중 순위 상관** vs Top-K (§13b) |
+| `setup/probiotic_rct.csv` | **외부 정답표** — 우울/불안 RCT 에서 시험된 균 25 종 |
 | `out/eval_method1.csv`, `out/eval_method2.csv`, `out/eval_sparql.json` | §5.1·§4.1 평가 |
 
 `out/` 의 결과표·평가 결과는 레포에 함께 올라가 있다. 대용량 둘만 제외한다 —

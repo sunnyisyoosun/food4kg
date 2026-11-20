@@ -85,7 +85,17 @@ def gutbrain_weight(compounds):
     sources = ('kegg', 'vmh') if src == 'both' else (src,)
     rank = os.environ.get('GUTBRAIN_RANK', 'species')
     cm = compound_microbe(sources=sources, rank=None if rank == 'all' else rank)
-    cm = cm[cm['taxid'].isin(mental_taxids())]
+    # 어느 균 집합으로 가중할 것인가.
+    #   mental  우리 KG 가 정신질환에 연결한 균 (기본) — Disbiome + 배포 F03
+    #   rct     **외부** 기준: 우울/불안 RCT 에서 시험된 균
+    #           (setup/probiotic_rct.csv, PubMed RCT 203 편에서 뽑은 25 종)
+    who = os.environ.get('GUTBRAIN_MICROBES', 'mental')
+    if who == 'rct':
+        taxa = set(pd.read_csv(os.path.join(BASE, 'setup', 'probiotic_rct.csv'),
+                               dtype={'taxid': str}).taxid)
+    else:
+        taxa = mental_taxids()
+    cm = cm[cm['taxid'].isin(taxa)]
     n = cm.groupby('kegg')['taxid'].nunique()
 
     scale = os.environ.get('GUTBRAIN_SCALE', 'count')
@@ -97,7 +107,7 @@ def gutbrain_weight(compounds):
         s = s / s.max() if s.max() else s
     else:
         s = v / v.max() if v.max() else v
-    print(f'  GUTBRAIN_ALPHA={alpha} SOURCE={src} RANK={rank} SCALE={scale} '
+    print(f'  GUTBRAIN_ALPHA={alpha} MICROBES={who} SOURCE={src} RANK={rank} SCALE={scale} '
           f'— 경로 있는 compound {int((v > 0).sum())}/{len(compounds)} '
           f'(균 중앙값 {np.median(v[v > 0]) if (v > 0).any() else 0:.0f})')
     return 1.0 + alpha * s, int((v > 0).sum())

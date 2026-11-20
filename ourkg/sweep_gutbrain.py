@@ -13,21 +13,23 @@ REC_OK = {'Finfish and Shellfish Products', 'Fruits and Fruit Juices',
 NOT_OK = {'Sausages and Luncheon Meats', 'Baked Products', 'Sweets',
           'Beef Products', 'Pork Products'}
 rows = []
-for alpha in (0, 0.5, 1, 2, 4, 8):
-    os.environ['GUTBRAIN_ALPHA'] = str(alpha)
-    import analyze; importlib.reload(analyze)
-    res = analyze.recommend(save=False)
-    K = 30
-    top, bot = res.head(K), res.tail(K)
-    sc = analyze.modimed_score(res, K)
-    rows.append({'alpha': alpha,
-                 'top30_추천군': int(top.food_group.isin(REC_OK).sum()),
-                 'bot30_비추천군': int(bot.food_group.isin(NOT_OK).sum()),
-                 'top30_위반': int(top.food_group.isin(NOT_OK).sum()),
-                 'MMD_처방군': sc.get(f'top{K}_처방군', ''),
-                 'MMD_extras': sc.get(f'top{K}_extras', ''),
-                 'AUC(참고)': sc.get('modimed_AUC(참고)', ''),
-                 'top1': top.iloc[0].food_name[:38]})
+for who in os.environ.get('WHO', 'mental,rct').split(','):
+  for alpha in (0, 0.5, 1, 2, 4, 8):
+      os.environ['GUTBRAIN_ALPHA'] = str(alpha)
+      os.environ['GUTBRAIN_MICROBES'] = who
+      import analyze; importlib.reload(analyze)
+      res = analyze.recommend(save=False)
+      K = 30
+      top, bot = res.head(K), res.tail(K)
+      sc = analyze.modimed_score(res, K)
+      rows.append({'who': who, 'alpha': alpha,
+                   'top30_추천군': int(top.food_group.isin(REC_OK).sum()),
+                   'bot30_비추천군': int(bot.food_group.isin(NOT_OK).sum()),
+                   'top30_위반': int(top.food_group.isin(NOT_OK).sum()),
+                   'MMD_처방군': sc.get(f'top{K}_처방군', ''),
+                   'MMD_extras': sc.get(f'top{K}_extras', ''),
+                   'AUC(참고)': sc.get('modimed_AUC(참고)', ''),
+                   'top1': top.iloc[0].food_name[:38]})
 t = pd.DataFrame(rows)
 t.to_csv('/home/yoosun/food_recom_w_paper/ourkg/out/gutbrain_comparison.csv', index=False)
 print(); print(t.to_string(index=False))

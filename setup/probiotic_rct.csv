@@ -1,0 +1,26 @@
+taxid,species,names_in_abstracts,n_rct,pmids
+216816,Bifidobacterium longum,Bifidobacterium longum,27,20974015;28068788;28483500;29731182;30198326;31338923;31379269;32300799;33923663;36139496
+47715,Lacticaseibacillus rhamnosus,Lacticaseibacillus rhamnosus;Lactobacillus rhamnosus,22,27255079;27865949;28294985;28943228;30246890;31592939;31992802;32601955;33923663;35130109
+1590,Lactiplantibacillus plantarum,Lactiplantibacillus plantarum;Lactobacillus plantarum,21,30266270;30882244;30979038;32589828;32601955;34444980;35897310;36139496;37033942;37571403
+1587,Lactobacillus helveticus,Lactobacillus helveticus,15,20974015;28068788;29731182;31338923;36139496;36411659;36986132;37026368;37049546;38732635
+1579,Lactobacillus acidophilus,Lactobacillus acidophilus,13,12214543;25862297;26706022;28082816;31379269;31516094;31780038;38216917;38658619;39242786
+1598,Limosilactobacillus reuteri,Lactobacillus reuteri;Limosilactobacillus reuteri,13,24424513;24690625;25876529;27612653;32372186;34444820;35255819;37630704;38427038;40484149
+28025,Bifidobacterium animalis,Bifidobacterium animalis;Bifidobacterium lactis,13,25862297;30246890;31379269;31516094;31992802;32601955;33923663;35343796;38830472;38935259
+1582,Lacticaseibacillus casei,Lactobacillus casei,13,15309418;22563194;25856220;25862297;26689231;26706022;26896291;28443383;31780038;32865025
+1681,Bifidobacterium bifidum,Bifidobacterium bifidum,9,25862297;26706022;31379269;31516094;31780038;32300799;35343796;39242786;41457283
+1685,Bifidobacterium breve,Bifidobacterium breve,6,30198326;32601955;34875345;37630704;38128887;38999739
+1613,Limosilactobacillus fermentum,Lactobacillus fermentum;Limosilactobacillus fermentum,5,38216917;39468832;40729791;41515133;41978077
+1597,Lacticaseibacillus paracasei,Lacticaseibacillus paracasei;Lactobacillus paracasei,4,34209804;38658619;39842252;41663412
+1680,Bifidobacterium adolescentis,Bifidobacterium adolescentis,2,34444820;35343796
+239935,Akkermansia muciniphila,Akkermansia muciniphila,2,40298641;40451504
+1580,Levilactobacillus brevis,Lactobacillus brevis;Levilactobacillus brevis,2,25862297;39163908
+4932,Saccharomyces cerevisiae,Saccharomyces boulardii,2,32438624;35255819
+1308,Streptococcus thermophilus,Streptococcus thermophilus,1,39242786
+1596,Lactobacillus gasseri,Lactobacillus gasseri,1,31405122
+1352,Enterococcus faecium,Enterococcus faecium,1,10500327
+853,Faecalibacterium prausnitzii,Faecalibacterium prausnitzii,1,37657523
+2107999,Lactobacillus paragasseri,Lactobacillus paragasseri,1,41679635
+1358,Lactococcus lactis,Lactococcus lactis,1,25862297
+47770,Lactobacillus crispatus,Lactobacillus crispatus,1,42731127
+1492,Clostridium butyricum,Clostridium butyricum,1,30234616
+1624,Ligilactobacillus salivarius,Lactobacillus salivarius,1,25862297
