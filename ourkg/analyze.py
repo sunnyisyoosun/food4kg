@@ -1716,8 +1716,154 @@ def disagree():
               f'{r.pct_shrunk:7.1f} {r.pct_learned:8.1f} {r.pct_이동:+7.1f}')
 
 
+
+# 논문 Fig.4(c) 의 6 군. 논문은 "biological roles" 라고만 하고 목록을 주지 않아
+# 그림의 x 축 라벨로부터 읽었다. FDC 영양소 이름이 규칙적이라 이름으로 가른다.
+#
+# 두 군데서 그림과 다르게 뒀고, 이유를 적는다.
+#  - **토코페롤·카로티노이드를 지질이 아니라 비타민·조효소에 둔다.** 그림은 이들을
+#    Lipids 칸에 넣었는데(alpha-Tocopherol 은 Vitamins 칸에도 있어 그림 자체가
+#    일관되지 않다), 영양학에서 이들은 비타민 E·프로비타민 A 다.
+#  - **콜린·베타인은 그림대로 아미노산 군에 둔다.** 엄밀히는 4 급 암모늄 화합물이지만
+#    FDC 가 아미노산과 함께 보고하고 그림도 그 칸에 뒀다.
+COMPOUND_GROUPS = [
+    ('지질', r'^(SFA|MUFA|PUFA|TFA) |cholesterol|sitosterol|campesterol|stigmasterol'),
+    ('탄수화물', r'^(starch|fructose|lactose|galactose|sucrose|glucose|maltose)\b'),
+    ('비타민·조효소', r'vitamin|folate|folic|riboflavin|thiamin|niacin|pantothenic|'
+                     r'tocopherol|tocotrienol|carotene|cryptoxanthin|lycopene|lutein|'
+                     r'zeaxanthin|phytoene|phytofluene|menaquinone|phylloquinone|'
+                     r'ergocalciferol|tetrahydrofolate|MTHF|HCOFA'),
+    ('다량무기질', r'^(sodium|calcium|magnesium|phosphorus|potassium|sulfur)[, ]'),
+    ('미량원소', r'^(iron|copper|manganese|zinc|selenium|fluoride|iodine|boron|'
+                 r'cobalt|molybdenum|nickel|chromium)[, ]'),
+    ('아미노산', r'^(tryptophan|threonine|methionine|phenylalanine|tyrosine|alanine|'
+                 r'glutamic|glycine|proline|valine|arginine|histidine|aspartic|serine|'
+                 r'isoleucine|leucine|lysine|cystine|cysteine|hydroxyproline|choline|'
+                 r'betaine)\b'),
+    ('기타', r'.'),
+]
+
+
+def compound_group(name):
+    """영양소 이름 -> 논문 Fig.4(c) 의 6 군. 순서가 중요하다 — 지질을 먼저 본다."""
+    for g, pat in COMPOUND_GROUPS:
+        if re.search(pat, str(name), re.I):
+            return g
+    return '기타'
+
+
+def groups():
+    """논문 Fig.4(c) — 추천군과 비추천군의 성분군별 조성을 비교한다.
+
+    §4.2.3 이 추천 결과의 **근거로 쓰는 그림**인데 우리는 Fig.4(a) PCA 와
+    Fig.4(b) t-SNE 만 하고 이것을 빼놓고 있었다. 논문의 결론은 "추천군은
+    탄수화물·비타민이 높고 비추천군은 미량원소·다량영양소가 높다" 이다.
+
+    정규화 기준이 둘로 읽힌다. 논문 §4.2.3 은 "we normalize the compounds in the
+    two groups of foods separately" 라고만 쓴다.
+
+      `GROUP_NORM=compound` (기본) — compound 마다 두 군의 값을 그 compound 의
+        최대값으로 나눈다. **그림이 보여주는 쪽이다** — Fig.4(c) 는 미량원소·
+        비타민 칸에도 진한 칸이 있는데, 아래 방식으로는 그 칸들이 전부 0 이 된다.
+      `GROUP_NORM=group` — 군 안에서 전체 최대값으로 나눈다. 문장의 문자 그대로지만
+        전분·포도당(g)이 최대라 mg·µg 단위 성분이 전부 0 에 깔린다.
+
+    둘 다 재서 §18 에 적었다.
+
+    출력
+      out/group_composition.csv   compound 별 두 군의 정규화 중량
+      out/group_comparison.csv    6 군 요약 + Mann-Whitney U
+      out/group_comparison.png    Fig.4(c) 대응 히트맵
+    """
+    from scipy.stats import mannwhitneyu
+
+    K = int(os.environ.get('TOP_K', '30'))
+    rec = pd.read_csv(os.path.join(OUT, 'recommendation.csv'))
+    long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    nmap = pd.read_csv(os.path.join(BASE, 'setup', 'nutrient_kegg_map.csv'), dtype=str)
+    nmap = nmap[nmap.nutrient_kegg.str.startswith('C', na=False)]
+    kname = dict(zip(nmap.nutrient_kegg, nmap.nutrient_name))
+
+    top = rec.head(K)['food_key'].tolist()
+    bot = rec.tail(K)['food_key'].tolist()
+    print(f'[1/3] 추천군 {len(top)} · 비추천군 {len(bot)} (K={K})')
+
+    w = long[long.food_key.isin(top + bot)].copy()
+    w['set'] = np.where(w.food_key.isin(top), 'rec', 'not')
+    piv = w.pivot_table(index='kegg', columns='set', values='amount_g', aggfunc='mean').fillna(0)
+    for c in ('rec', 'not'):
+        if c not in piv:
+            piv[c] = 0.0
+    NORM = os.environ.get('GROUP_NORM', 'compound')
+    print(f'  GROUP_NORM={NORM}')
+    if NORM == 'compound':
+        mx = piv[['rec', 'not']].max(axis=1).replace(0, np.nan)
+        piv[['rec', 'not']] = piv[['rec', 'not']].div(mx, axis=0).fillna(0)
+    else:
+        for c in ('rec', 'not'):
+            m = piv[c].max()
+            piv[c] = piv[c] / m if m else 0.0
+    piv['name'] = [kname.get(k, k) for k in piv.index]
+    piv['group'] = piv['name'].map(compound_group)
+    piv = piv.sort_values(['group', 'rec'], ascending=[True, False])
+    piv.to_csv(os.path.join(OUT, 'group_composition.csv'))
+
+    print('[2/3] 성분군별 조성 — 논문 Fig.4(c)')
+    rows = []
+    print(f'  {"성분군":14s} {"n":>4s} {"추천군":>8s} {"비추천군":>9s} {"차":>8s} {"p":>8s}')
+    for g, sub in piv.groupby('group'):
+        try:
+            p = mannwhitneyu(sub['rec'], sub['not']).pvalue
+        except ValueError:
+            p = float('nan')
+        rows.append({'group': g, 'n_compound': len(sub), 'rec_mean': sub['rec'].mean(),
+                     'not_mean': sub['not'].mean(),
+                     'diff': sub['rec'].mean() - sub['not'].mean(), 'p': p})
+        print(f'  {g:14s} {len(sub):4d} {sub["rec"].mean():8.3f} '
+              f'{sub["not"].mean():9.3f} {rows[-1]["diff"]:+8.3f} {p:8.3g}')
+    tab = pd.DataFrame(rows).sort_values('diff', ascending=False)
+    tab.to_csv(os.path.join(OUT, 'group_comparison.csv'), index=False)
+
+    print('[3/3] 히트맵')
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from matplotlib import font_manager
+    for f in ('NanumGothic', 'Noto Sans CJK KR', 'DejaVu Sans'):
+        if any(f in x.name for x in font_manager.fontManager.ttflist):
+            plt.rcParams['font.family'] = f
+            break
+    plt.rcParams['axes.unicode_minus'] = False
+    order = [g for g, _ in COMPOUND_GROUPS if g in set(piv['group'])]
+    piv = piv.loc[sorted(piv.index, key=lambda k: (order.index(piv.at[k, 'group']),
+                                                   -piv.at[k, 'rec']))]
+    fig, ax = plt.subplots(2, 1, figsize=(max(10, len(piv) * 0.16), 5), sharex=True)
+    for a, c, t in zip(ax, ('rec', 'not'), ('추천군 Top 30', '비추천군 Bottom 30')):
+        a.imshow(piv[[c]].T.values, aspect='auto', cmap='OrRd', vmin=0, vmax=1)
+        a.set_yticks([0]); a.set_yticklabels([t], fontsize=9)
+    bound, prev = [], None
+    for i, g in enumerate(piv['group']):
+        if g != prev:
+            bound.append((i, g)); prev = g
+    for a in ax:
+        for i, _ in bound[1:]:
+            a.axvline(i - .5, color='k', lw=.8)
+    # sharex 라 ax[0] 에 눈금을 걸면 ax[1] 의 compound 이름에 덮인다. 성분군 이름은
+    # 눈금이 아니라 주석으로 얹는다.
+    for i, g in bound:
+        ax[0].annotate(g, (i + .3, -.75), ha='left', va='bottom', fontsize=9,
+                       annotation_clip=False)
+    ax[1].set_xticks(range(len(piv)))
+    ax[1].set_xticklabels([n[:22] for n in piv['name']], rotation=90, fontsize=5)
+    fig.suptitle(f'Fig.4(c) 대응 — 추천/비추천군의 성분 조성 ({NORM} 정규화)',
+                 fontsize=11, y=1.02)
+    fig.tight_layout()
+    fig.savefig(os.path.join(OUT, 'group_comparison.png'), dpi=150, bbox_inches='tight')
+    print(f'  저장: {os.path.join(OUT, "group_comparison.png")}')
+
+
 STEPS = {'recommend': recommend, 'compare': compare, 'external': external,
-         'invert': invert, 'stype': stype, 'disagree': disagree,
+         'invert': invert, 'stype': stype, 'disagree': disagree, 'groups': groups,
          'pathcheck': pathcheck, 'evaluate': evaluate}
 
 

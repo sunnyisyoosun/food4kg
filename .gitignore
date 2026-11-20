@@ -30,3 +30,7 @@ ourkg/out/food_foodon.csv
 ourkg/cache/
 ourkg/out/food_compound_kg.csv
 ourkg/cache/agora_microbe_metabolite.csv
+
+# 이 레포와 무관한 다른 과제 파일 (CIFAR-10 360MB + 실습 이미지)
+data/
+output.png

@@ -9,16 +9,17 @@ compound,nutrient -> KEGG 매핑,182,
 compound,음식 행렬의 KEGG compound,130,"§3.2 23,212 compounds / §4.2.1 85"
 compound,ProMENDA E 의 KEGG compound,1412,
 compound,KEGG brite 로 분류된 compound,744,§3.1 compound ontology
-microbe,NCBI taxonomy 링크 (taxid),162,"§3.2 984,031 gut microbiota"
-microbe,KEGG organism 매칭,113,
+microbe,NCBI taxonomy 링크 (taxid),485,"§3.2 984,031 gut microbiota"
+microbe,KEGG organism 매칭,167,
 disease,MeSH 링크,244,"§3.2 3,505 mental disorders"
 disease,SNOMED CT 링크 (배포본),1,배포본에 라벨·계층 없음
 disease,SNOMED CT 링크 (MiKG xref),63,MiKG 가 엔티티에 단 SCT id
 disease,MeSH 링크 (MiKG xref),51,
 microbe,MiKG 근거 등급 보유 관계,82,A/B/C
 microbe,MiKG KEGG pathway 링크,90,미생물→신경전달물질→경로
-microbe,compound-미생물 (KEGG 추론),3103,compound→EC→KO→organism
+microbe,compound-미생물 (KEGG 추론),4571,compound→EC→KO→organism
 microbe,compound-미생물 (VMH/AGORA2),44094,유전체 재구성 — 예측
+microbe,미생물-질환 (Disbiome),1193,외부 큐레이션 — 축 확장의 자기참조를 끊는다
 ontology,FoodOn ↔ 카테고리 (배포 KG 부분집합),19,§3.1 FoodOn
 ontology,"FoodOn 클래스 링크 (음식, OLS)",8165,배포 subset 에 없는 계층 — foodon_match.py
 ontology,FoodOn 고유 클래스 (OLS),1096,

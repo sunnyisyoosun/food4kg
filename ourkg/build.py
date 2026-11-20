@@ -29,7 +29,8 @@ import hashlib
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (BASE, OUT, FDC_RAW, UNIT_TO_G, FDC_CATEGORY, cached_get, kegg_rest,
-                    normalize_label, normalize_category, kegg_map, normkey)
+                    normalize_label, normalize_category, kegg_map, normkey,
+                    mesh_lookup)
 
 
 def food():
@@ -459,8 +460,45 @@ def microbe():
         _new = sorted(set(_ad[_ad.taxid != ''].taxid) - set(taxids))
         taxids = sorted(set(taxids) | set(_new))
         print(f'  보탠 미생물 {len(_new)} (setup/microbes_added.csv)')
-    meshids = sorted({d for _, d in pairs})
-    print(f'  관계 {len(pairs):,} / 미생물 {len(taxids):,} / 질환 {len(meshids):,}')
+    print(f'  관계 {len(pairs):,} / 미생물 {len(taxids):,} / 질환 {len(sorted({d for _, d in pairs})):,}')
+
+    # ------------------------------------------------------------------
+    # Disbiome (ugent.be) — 외부 큐레이션 미생물-질환 목록.
+    #
+    # 그 전까지 미생물 축을 넓히는 길은 setup/microbes_added.csv 하나였고 기준이
+    # '평가가 요구하는 균' 이었다. 그러면 **이미 아는 균만 늘어난다** — 평가가
+    # 묻지 않는 균은 영원히 안 들어온다. 자기참조다.
+    # Disbiome 은 우리 평가와 무관하게 큐레이션된 목록이라 그 고리가 끊긴다.
+    # (논문 §2 가 든 gutMDisorder 는 호스트가 죽어 Disbiome 으로 리다이렉트된다.)
+    #
+    # 질환명이 자유 표기(MedDRA 계열)라 MeSH descriptor 로 해소해야 F03 판정을
+    # 같은 자리에서 할 수 있다 — common.mesh_lookup 참조.
+    print('[1b/5] Disbiome → 미생물-질환 (외부 큐레이션)')
+    _db = json.loads(cached('disbiome_experiment.json', lambda: S.get(
+        'https://disbiome.ugent.be:8080/experiment', timeout=300).text))
+    _dnames = sorted({r['disease_name'] for r in _db})
+    _d2m = json.loads(cached('disbiome_mesh.json',
+                             lambda: json.dumps(mesh_lookup(_dnames, S), ensure_ascii=False)))
+    _alias = os.path.join(BASE, 'setup', 'disease_alias.csv')
+    if os.path.exists(_alias):
+        _al = pd.read_csv(_alias, dtype=str).fillna('')
+        for _, _r in _al.iterrows():
+            _d2m[_r['source_name']] = {'mesh_id': _r['mesh_id'], 'mesh_label': _r['mesh_label'],
+                                       'term_used': _r['mesh_label'], 'match': 'alias'}
+        print(f'  별칭표로 보탠 질환 {len(_al)} (setup/disease_alias.csv)')
+    print(f'  질환 표기 {len(_dnames)} → MeSH 해소 {len(_d2m)}')
+
+    disb = pd.DataFrame([
+        {'taxid': str(r['organism_ncbi_id']), 'organism': r['organism_name'],
+         'disease_name': r['disease_name'], 'outcome': r['qualitative_outcome'],
+         'mesh_id': _d2m[r['disease_name']]['mesh_id'],
+         'disease': _d2m[r['disease_name']]['mesh_label'],
+         'term_used': _d2m[r['disease_name']]['term_used'],
+         'match': _d2m[r['disease_name']]['match']}
+        for r in _db if r.get('organism_ncbi_id') and r['disease_name'] in _d2m])
+    print(f'  실험 {len(disb):,} / 균 {disb.taxid.nunique():,} / 질환 {disb.mesh_id.nunique()}')
+
+    meshids = sorted({d for _, d in pairs} | set(disb.mesh_id))
 
     # ------------------------------------------------------------------
     print('[2/5] MeSH tree number (id.nlm.nih.gov SPARQL) → F03 판정')
@@ -487,7 +525,15 @@ def microbe():
         return json.dumps(out)
 
 
+    # cached() 는 파일만 보고 **입력 변화를 모른다**. meshids 가 Disbiome 으로
+    # 244 -> 313 으로 늘었는데 옛 캐시를 쓰자 새 descriptor 69 개가 tree number
+    # 없이 떨어졌고 F03 이 10 -> 6 으로 줄었다. ncbi_taxonomy.json 과 같은 검사다.
     tree = json.loads(cached('mesh_tree.json', fetch_tree))
+    _miss_d = set(meshids) - set(tree)
+    if _miss_d:
+        print(f'  캐시에 없는 descriptor {len(_miss_d)} — 다시 받는다')
+        os.remove(os.path.join(BASE, 'ourkg', 'cache', 'mesh_tree.json'))
+        tree = json.loads(cached('mesh_tree.json', fetch_tree))
     mental = {d for d, tns in tree.items() if any(t.startswith('F03') for t in tns)}
     neuro = {d for d, tns in tree.items()
              if any(t.startswith('C10.574') or t.startswith('C10.228.140') for t in tns)}
@@ -499,6 +545,13 @@ def microbe():
     md['tree_numbers'] = md['mesh_id'].map(lambda d: ';'.join(tree.get(d, [])))
     md['is_mental'] = md['mesh_id'].isin(mental)
     md['is_neuro'] = md['mesh_id'].isin(neuro)
+    disb['is_mental'] = disb['mesh_id'].isin(mental)
+    disb['is_neuro'] = disb['mesh_id'].isin(neuro)
+    disb.to_csv(os.path.join(OUT, 'microbe_disease_disbiome.csv'), index=False)
+    _dsel = disb[disb.is_mental | disb.is_neuro]
+    print(f'  Disbiome 정신·신경 관계 {len(_dsel):,} '
+          f'(미생물 {_dsel.taxid.nunique()} 종, 질환 {_dsel.mesh_id.nunique()} 종)')
+
     print(f'  정신질환 관계 {int(md.is_mental.sum()):,} '
           f'(미생물 {md[md.is_mental].taxid.nunique()} 종, 질환 {md[md.is_mental].mesh_id.nunique()} 종)')
     for d, n in md[md.is_mental].disease.value_counts().head(12).items():
@@ -511,9 +564,11 @@ def microbe():
     _added = set()
     if os.path.exists(_add):
         _added = set(pd.read_csv(_add, dtype=str).fillna('').taxid) - {''}
-    focus = sorted(set(md[md.is_mental | md.is_neuro]['taxid']) | _added)
-    print(f'  대상 {len(focus)} 종 (정신질환·신경퇴행 연관 {len(focus) - len(_added - set(md[md.is_mental | md.is_neuro]["taxid"]))}'
-          f' + 보탠 {len(_added - set(md[md.is_mental | md.is_neuro]["taxid"]))})')
+    _base = set(md[md.is_mental | md.is_neuro]['taxid'])
+    _disb = set(_dsel['taxid'])
+    focus = sorted(_base | _disb | _added)
+    print(f'  대상 {len(focus)} 종 = 배포 KG {len(_base)}'
+          f' + Disbiome {len(_disb - _base)} + 보탠 {len(_added - _base - _disb)}')
 
 
     def fetch_tax():
@@ -996,6 +1051,28 @@ def kg():
             if tn and tn != 'nan':
                 W.t(du, NS['our'] + 'meshTree', tn, 'MeSH', literal=True)
 
+    # Disbiome — 외부 큐레이션 미생물-질환. 출처를 MiKG 와 **분리해서** 올린다.
+    # Elevated/Reduced 는 그 질환에서 그 균의 **존재비 변화**이지 이로움/해로움이
+    # 아니다. hasPositive/NegativeAssociation 으로 바꾸면 뜻이 달라지므로
+    # 중립 hasAssociation 에 abundance 속성으로 붙인다.
+    _dbp = os.path.join(OUT, 'microbe_disease_disbiome.csv')
+    n_disb = 0
+    if os.path.exists(_dbp):
+        _db = pd.read_csv(_dbp, dtype={'taxid': str})
+        _db = _db[_db.is_mental | _db.is_neuro]
+        _seen = set()
+        for _, r in _db.iterrows():
+            du = NS['mesh'] + r['mesh_id']
+            W.t(NS['mic'] + r['taxid'], NS['mpq'] + 'hasAssociation', du, 'Disbiome')
+            W.t(du, A, NS['ent'] + 'Disease', 'Disbiome')
+            key = (r['taxid'], r['mesh_id'], r['outcome'])
+            if key not in _seen:
+                _seen.add(key)
+                W.t(NS['mic'] + r['taxid'], NS['our'] + 'abundanceIn',
+                    f"{r['disease']}|{r['outcome']}", 'Disbiome', literal=True)
+            n_disb += 1
+        print(f'  Disbiome 미생물-질환 {n_disb:,} (균 {_db.taxid.nunique()} · 질환 {_db.mesh_id.nunique()})')
+
     print('[5/6] 신경전달물질 경로 (MiKG)')
     mn = pd.read_csv(os.path.join(OUT, 'microbe_neurotransmitter.csv'))
     nd = pd.read_csv(os.path.join(OUT, 'neurotransmitter_disease.csv'))
@@ -1413,6 +1490,8 @@ def kg():
         ('microbe', 'MiKG KEGG pathway 링크', n_mikg_pw, '미생물→신경전달물질→경로'),
         ('microbe', 'compound-미생물 (KEGG 추론)', int(len(cm)), 'compound→EC→KO→organism'),
         ('microbe', 'compound-미생물 (VMH/AGORA2)', n_vmh, '유전체 재구성 — 예측'),
+        ('microbe', '미생물-질환 (Disbiome)', n_disb,
+         '외부 큐레이션 — 축 확장의 자기참조를 끊는다'),
         ('ontology', 'FoodOn ↔ 카테고리 (배포 KG 부분집합)', n_fo_link, '§3.1 FoodOn'),
         ('ontology', 'FoodOn 클래스 링크 (음식, OLS)', fl.get('foodon_food'),
          '배포 subset 에 없는 계층 — foodon_match.py'),

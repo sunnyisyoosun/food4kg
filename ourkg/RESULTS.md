@@ -5,8 +5,8 @@
 바꿔 만든 지식그래프의 결과다.
 
 원 논문 **재현**(`reconstruct.py` → `run_recommendation.py`)과는 분리된 별도 산출물이다.
-재현 수치는 [`../REPRODUCTION.md`](../REPRODUCTION.md), 미해결 문제는
-[`../PROBLEMS.md`](../PROBLEMS.md), 파이프라인 사용법·설계 결정은
+재현 수치는 [`REPRODUCTION.md`](../REPRODUCTION.md), 미해결 문제는
+[`PROBLEMS.md`](../PROBLEMS.md), 파이프라인 사용법·설계 결정은
 [`README.md`](README.md) 에 있다.
 
 재현 방법: `python3 ourkg/run_all.py`
@@ -2454,6 +2454,56 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 
 ---
 
+## 15b. ★ 논문 Fig.4(c) — 빠뜨렸던 성분군 비교를 했다 (2026-11-20)
+
+논문을 다시 대조하다 찾았다. Fig.4(a) PCA 와 Fig.4(b) t-SNE 는 했는데 **(c) 만
+빼놓고 있었다.** 이것은 §4.2.3 이 추천 결과의 **근거로 쓰는 그림**이다 — compound 를
+생물학적 역할로 6 군으로 묶어 추천군과 비추천군의 조성을 비교한다.
+
+재료는 이미 있었다(`out/compound_class.csv` 의 KEGG brite, FDC 영양소 이름).
+`python3 ourkg/analyze.py groups` → `out/group_comparison.{csv,png}`.
+
+### 정규화 기준이 두 가지로 읽힌다
+
+논문은 "we normalize the compounds in the two groups of foods separately" 라고만
+쓴다. 문자 그대로는 **군 안에서 전체 최대값으로** 나누는 것인데, 그러면 전분·
+포도당(g)이 최대라 **mg·µg 단위 성분이 전부 0 에 깔린다** — 비타민·미량원소 칸이
+양쪽 모두 0.000 이 된다. 그림에는 그 칸들에도 진한 칸이 있다. 그래서 기본값을
+**compound 별 정규화**(`GROUP_NORM=compound`)로 뒀고, 문자 그대로의 쪽도
+`GROUP_NORM=group` 으로 잴 수 있게 남겼다.
+
+### 결과 — 논문의 세 주장 중 둘이 재현되고, 하나는 **부호가 반대다**
+
+| 성분군 | n | 추천군 | 비추천군 | 차 | p | 논문 §4.2.3 |
+|---|---:|---:|---:|---:|---:|---|
+| **탄수화물** | 7 | 1.000 | 0.011 | **+0.989** | 0.0009 | "carbohydrates" ✓ |
+| **비타민·조효소** | 25 | 0.677 | 0.321 | **+0.356** | 0.014 | "vitamins" ✓ |
+| 다량무기질 | 5 | 0.889 | 0.506 | +0.382 | 0.12 | "macronutrients" **✗ 부호 반대** |
+| 미량원소 | 6 | 0.565 | 0.429 | +0.136 | 0.74 | "trace elements" **✗ 부호 반대** |
+| 지질 | 39 | 0.510 | 0.649 | −0.139 | 0.15 | "nonsignificant lipids" ✓ |
+| **아미노산** | 21 | 0.235 | 0.963 | **−0.728** | 4e-08 | "nonsignificant amino acids" **✗** |
+
+**둘은 그대로 재현된다.** "추천군이 탄수화물·비타민이 높다" 는 우리 데이터에서도
+유의하다 — 탄수화물은 사실상 완전 분리(1.000 vs 0.011)다.
+
+**둘은 부호가 반대다.** 논문은 비추천군이 미량원소·다량영양소가 높다고 했는데
+우리는 **추천군이 높다**. 둘 다 유의하지 않으므로(p 0.12 · 0.74) "반대 방향의
+유의한 결과" 가 아니라 **신호가 없는 자리**로 읽어야 한다. 논문이 이 자리에서
+방향성 주장을 한 것은 표본 135 개의 노이즈일 가능성이 있다.
+
+**하나는 논문이 "유의하지 않다" 고 한 곳에서 우리가 가장 강한 신호를 얻었다.**
+아미노산이 비추천군에서 압도적이다(0.963 vs 0.235, p=4e-08). 우리 비추천군 바닥이
+육류·소시지라 단백질 성분이 몰린 결과다 — 논문은 이 차이를 "원본 데이터의 결측"
+탓으로 돌렸는데, 결측을 메운 우리 데이터에서는 **실재하는 차이**로 나온다.
+
+### 이것이 지표를 하나 늘린다
+
+§13 에서 AUC 가 Top-K 품질과 어긋난다고 결론 낸 뒤, 설정을 고를 때 쓸 수 있는
+것이 **Top 30 수작업 검수뿐**이었다. 성분군 비교는 Top-K 목록을 직접 보지 않고도
+조성이 무너졌는지 볼 수 있는 두 번째 눈이다.
+
+---
+
 ## 16. 한계
 
 - **식품 온톨로지를 넣어도 분류 질문이 풀리지 않는다** (2026-11-09 통합 완료).
@@ -2461,9 +2511,17 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
   "Baby Foods")이 두 온톨로지 어디에도 없다. FDC/WWEIA 어휘이기 때문이다.
 - **SNOMED CT 는 넣을 실체가 없다** — 배포본에 라벨·계층 없는 id 284 개뿐이다.
   #12(Mood / developmental 상위 분류)는 공개 KG 도 답하지 못한다.
-- **미생물-정신질환이 얇다** — 공개 `Disease_Bacteria` 에서 MeSH F03 으로 걸러지는 관계는
-  115건(질환 6종)뿐이고 우울증은 1건이다. MiKG 원본 경로로 406쌍을 보태도 논문이 말한
-  1,234 에 못 미친다.
+- **미생물-정신질환** — 공개 `Disease_Bacteria` 에서 MeSH F03 으로 걸러지는 관계는
+  115건(질환 6종)뿐이고 우울증은 1건이었다. MiKG 406쌍 + **Disbiome 1,193쌍**
+  (질환 23종)으로 논문의 1,234 를 넘겼다 ([`DATA.md` §12](DATA.md)).
+- **미생물 축을 넓히는 기준을 바꿨다 (2026-11-20)** — 그 전까지 유일한 확장 경로가
+  `setup/microbes_added.csv`("평가가 요구하는 균")여서 **이미 아는 균만 늘어나는**
+  자기참조였다. 외부 큐레이션(Disbiome)으로 바꿔 162 → **485종**, compound 연결
+  합집합 143 → **182종**이 됐다. 남는 한계는 **닿는 균이 적다**는 것 —
+  Disbiome 균 457 종 중 compound 연결 153종(33%), KEGG organism 코드 167/485.
+- **`#7` 은 균을 늘려도 안 열린다** — *Bifidobacterium longum* 은 이제 KEGG 24 ·
+  VMH 546 링크를 갖지만 ascorbate(C00072)가 **양쪽 다 없다**. 외부 데이터의
+  한계이지 축 크기의 문제가 아니라는 것이 확인됐다.
 - **논문 §3.3 의 474만 추론을 재구현하지 않았다** — 전이 추론과 공통 세균 추론만 쓴다.
 - **방법 2 의 자동 판정은 수작업 검색과 같지 않다** — 초록을 읽지 않으므로 논문의
   −1(반대 증거)을 만들지 못하고, 공출현만으로 1 을 준다.
@@ -2496,7 +2554,9 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 | `out/compound_microbe.csv` | KEGG 재계산 compound-미생물 2,124 |
 | `out/microbes.csv` | NCBI 갱신 미생물 127 |
 | `out/microbe_disease.csv`, `out/microbe_disease_mikg.csv` | 미생물-질환 |
-| `out/recommendation.csv`, `out/recommendation.png` | 추천 순위·시각화 |
+| `out/recommendation.csv`, `out/recommendation.png` | 추천 순위·시각화 (Fig.4(b) t-SNE) |
+| `out/group_composition.csv`, `out/group_comparison.csv`, `out/group_comparison.png` | **Fig.4(c) 대응** — 추천/비추천군 성분군 조성 |
+| `out/microbe_disease_disbiome.csv` | **Disbiome** 미생물-질환 (외부 큐레이션) |
 | `out/eval_method1.csv`, `out/eval_method2.csv`, `out/eval_sparql.json` | §5.1·§4.1 평가 |
 
 `out/` 의 결과표·평가 결과는 레포에 함께 올라가 있다. 대용량 둘만 제외한다 —

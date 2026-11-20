@@ -138,6 +138,76 @@ def normkey(x, keep='a-z0-9 '):
     return re.sub(r'\s+', ' ', re.sub(f'[^{keep}]+', ' ', str(x).lower())).strip()
 
 
+def mesh_lookup(names, session=None, pause=0.12):
+    """자유 표기 질환명 -> MeSH descriptor. id.nlm.nih.gov/mesh/lookup REST.
+
+    SPARQL 로 라벨 역조회를 하려다 0 건을 받았다 — MeSH 의 라벨 술어는
+    `meshv:prefLabel` 이 아니라 `rdfs:label` 이고, 용어 계층
+    (descriptor -> concept -> term) 을 모두 타야 해서 쿼리가 무거웠다. 전용
+    lookup REST 가 같은 일을 한 번에 한다.
+
+    `match=exact` 는 **descriptor 라벨만** 본다. 그래서 표기 변형 사다리를 둔다 —
+    원문 -> 괄호 제거·쉼표 분해 -> 소유격(Parkinson's -> Parkinson) -> 복수 제거
+    -> 'disorders' -> 'Disorder'. exact 를 먼저 보고 없으면 contains 로 내린다.
+    먼저 걸린 것을 쓰고 어느 표기·어느 모드로 걸렸는지 함께 돌려준다 —
+    해소 근거를 추적할 수 있어야 한다.
+
+    **contains 는 앞에 붙는 수식어를 거르지 못한다.** 'Cognitive impairment' 가
+    'Chemotherapy-Related Cognitive Impairment' 로 붙었다 — 화학요법 후 인지장애는
+    다른 질환이다. 처음에는 '찾은 라벨이 질의어로 시작할 때만 받는다'는 규칙을
+    걸었는데, **쓸 수 없는 기준이었다** — 걸려 떨어진 9 건 중 6 건이
+    `Caries -> Dental Caries`, `Cirrhosis -> Liver Cirrhosis` 처럼 앞 수식어가
+    질환을 바꾸지 않는 올바른 매칭이었다. 앞에 붙는 말이 해부 위치인지 원인인지는
+    문자열로 가를 수 없다.
+
+    그래서 거르지 않고 **`match` 열에 'contains' 라고 적어 감사 가능하게 둔다.**
+    틀린 해소는 `setup/disease_alias.csv` 가 덮어쓴다 — 근거를 적어 두고 들어간다.
+    이 수작업은 질환 **이름**에만 걸리므로, 어떤 미생물이 들어오는지는 바꾸지
+    않는다. 축을 넓히는 기준 자체는 Disbiome 쪽에 그대로 있다.
+    """
+    import json, time, urllib.parse, urllib.request
+    U = 'https://id.nlm.nih.gov/mesh/lookup/descriptor'
+
+    def forms(n):
+        f = []
+        for part in [n] + re.split(r'\s*,\s*', n):
+            part = re.sub(r'\s*\(.*?\)', '', part).strip().replace("'s", '').replace("'", '')
+            if len(part) < 3:
+                continue
+            f.append(part)
+            if part.lower().endswith('s'):
+                f.append(part[:-1])
+            f.append(re.sub(r'\bdisorders?\b', 'Disorder', part, flags=re.I))
+        seen = []
+        for x in f:
+            if x not in seen:
+                seen.append(x)
+        return seen
+
+    out = {}
+    for i, n in enumerate(names):
+        for form in forms(n):
+            for mode in ('exact', 'contains'):
+                q = U + '?' + urllib.parse.urlencode({'label': form, 'match': mode, 'limit': 5})
+                try:
+                    r = urllib.request.urlopen(urllib.request.Request(
+                        q, headers={'User-Agent': 'ourkg/1.0'}), timeout=40)
+                    res = json.load(r)
+                except Exception:
+                    res = []
+                time.sleep(pause)
+                if res:
+                    out[n] = {'mesh_id': res[0]['resource'].rsplit('/', 1)[-1],
+                              'mesh_label': res[0]['label'], 'term_used': form,
+                              'match': mode}
+                    break
+            if n in out:
+                break
+        print(f'\r  MeSH 해소 {i + 1}/{len(names)} — {len(out)}', end='', flush=True)
+    print()
+    return out
+
+
 def kegg_map():
     """nutrient_id -> KEGG (논문/매핑표 ID 그대로).
 

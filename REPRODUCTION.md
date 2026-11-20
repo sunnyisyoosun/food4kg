@@ -1113,7 +1113,7 @@ git log --all --pretty=format: --name-only | sort -u
 -> analyse/{figure.png, final.py, heatmap.xlsx, heat_result.png, p5_foodname.txt}
    foodkg_triply.zip, food_nutrient.csv.zip
    preprocess/{data_cleaning.py, spy_kegg.py}
-   README.md, Supplements.docx
+   [`README.md`](README.md), Supplements.docx
 ```
 
 1. **저자 요청** — 교신저자 Xingpeng Jiang `xpjiang@mail.ccnu.edu.cn`,
@@ -2398,7 +2398,7 @@ Lysine(C00047), Cystine(C00097).
 
 ### 17.15 극성 주장 재검증 — KG 의 pos/neg 는 방향이 아니라 '출현 플래그' 다 (2026-11-03)
 
-`PROBLEMS.md` #4 는 이렇게 적혀 있었다.
+[`PROBLEMS.md`](PROBLEMS.md) #4 는 이렇게 적혀 있었다.
 
 > §4.2.1 의 `E` 정의와 실제 데이터 의미가 반대 — `hasPositiveAssociation` 목록은
 > MENDA 의 `Up`(우울증에서 증가)과 Jaccard 0.981 로 일치하는데, 논문은 이를
@@ -2793,9 +2793,9 @@ $ python3 tools/scorecard.py --check-docs
 고의로 틀린 값을 넣어 검출을 확인했다.
 
 ```
-$ sed -i 's/\*\*+0.786\*\*/**+0.999**/' README.md
+$ sed -i 's/\*\*+0.786\*\*/**+0.999**/' [`README.md`](README.md)
 $ python3 tools/scorecard.py --check-docs
-  ✘  README.md        spearman   문서 "+0.786" 자리에 "+0.999" — 현재 "+0.786"
+  ✘  [`README.md`](README.md)        spearman   문서 "+0.786" 자리에 "+0.999" — 현재 "+0.786"
   ⚠ 문서를 고치거나, 값이 바뀐 이유를 기록할 것     (exit 1)
 ```
 
@@ -3682,7 +3682,7 @@ Type2/4 에서 해석이 갈리는 것**을 찾아 넣으면 P2 가 해소된다
 
 **I4. 변환 규약 자체를 민감도로 보고한다.**
 `E_MODE`·`STYPE_SIGN` 스위치가 이미 있다. paper/legacy 두 규약의 A층·C층을
-`RESULTS.md` 에 나란히 싣고, 어느 쪽도 논문 근거로 확정되지 않았음을 명시한다.
+[`RESULTS.md`](ourkg/RESULTS.md) 에 나란히 싣고, 어느 쪽도 논문 근거로 확정되지 않았음을 명시한다.
 
 ## 18. 개선 방안 (논문 근거 기준)
 

@@ -4,7 +4,7 @@
 못 하는지**를 적는다. 수치는 `out/linking_stats.csv` 가 정본이고 여기 적은 값은
 2026-11-19 빌드 기준이다.
 
-설계 결정의 **이유**는 `README.md`, 실험과 기각 기록은 `RESULTS.md` 에 있다.
+설계 결정의 **이유**는 [`README.md`](README.md), 실험과 기각 기록은 [`RESULTS.md`](RESULTS.md) 에 있다.
 
 ---
 
@@ -17,10 +17,11 @@
 | 음식 온톨로지 | FoodOn | **EBI OLS API** + 캐시 | 클래스 1,096 · 음식 8,165 |
 | 음식 카테고리 | FDC SR / WWEIA | 로컬 덤프 | 세분 265 · 상위 27 |
 | 우울증-대사물 | ProMENDA | 로컬 xlsx | 레코드 22,519 → compound 1,412 |
-| 미생물 | NCBI taxonomy | efetch + 캐시 | **162 taxid** (127 + 보탠 35) |
-| compound-미생물 | KEGG REST | REST + 캐시 | 3,103 링크 · compound 62 |
+| 미생물 | NCBI taxonomy | efetch + 캐시 | **485 taxid** (127 + Disbiome 333 + 보탠 30) |
+| compound-미생물 | KEGG REST | REST + 캐시 | 4,571 링크 · compound 63 |
 | compound-미생물 (예측) | **VMH / AGORA2** | 벌크 zip + 캐시 | 44,094 링크 · compound 1,069 |
 | 미생물-정신질환 | MiKG 원본 TTL | 로컬 ttl | 406 쌍 |
+| 미생물-질환 (외부) | **Disbiome** | REST 전수 + 캐시 | 1,193 관계 · 균 457 · 질환 23 |
 | 질환 분류 | MeSH | **SPARQL** + 캐시 | 링크 244 · 트리 1,227 |
 | 질환 식별자 | SNOMED CT | MiKG xref | 63 (배포본 자체는 1) |
 
@@ -119,12 +120,31 @@ KG 에서도 사라진다.
 
 - **받는 법**: `efetch.fcgi` 로 taxid 의 학명·rank·lineage 를 **현재 값**으로 갱신.
   `cache/ncbi_taxonomy.json`
-- **규모**: **162 taxid** (논문 322,917). 배포 `Disease_Bacteria` 의 정신질환·
-  신경퇴행 연관 127 종 + **보탠 35 종**.
+- **규모**: **485 taxid** (논문 322,917). 배포 `Disease_Bacteria` 의 정신질환·
+  신경퇴행 연관 127 종 + **Disbiome 333 종** + 수작업으로 보탠 30 종.
 - **보탠 근거** (`setup/microbes_added.csv`): MiKG 가 말하는 균 36 종과 평가가
   요구하는 균(논문 Table 3·5, 방법 1 `#6` 의 `Adlercreutzia equolifaciens`)이
   배포본에 없었다. **compound 링크를 17 배로 늘려도 균이 없으면 소용없다**는 것이
   `#6` 으로 드러났다.
+
+### ★ 축을 넓히는 기준을 바꿨다 — 자기참조를 끊는다 (2026-11-20)
+
+그 전까지 미생물 축을 넓히는 길은 `setup/microbes_added.csv` 하나였고 기준이
+**"평가가 요구하는 균"** 이었다. 그러면 **이미 아는 균만 늘어난다** — 평가가
+묻지 않는 균은 영원히 안 들어온다. 커버리지를 재는 자와 커버리지를 늘리는 기준이
+같으니 자기참조다. 그래서 외부 목록으로 바꿨다 ([§12](#12-미생물-질환--disbiome)).
+
+| | 이전 | 지금 |
+|---|---:|---:|
+| 미생물 | 162 | **485** |
+| KEGG 경로 연결 | 127 종 · 3,103 링크 | **167 종 · 4,571 링크** |
+| compound 연결 합집합 (KEGG ∪ VMH) | 143 종 | **182 종 (38%)** · 47,538 링크 |
+
+**남는 한계 둘.** Disbiome 균 457 종 중 compound 연결이 있는 것은 **153 종(33%)**
+이다 — KEGG organism 코드가 없으면(167/485) 추천 경로에 닿지 못한다. 그리고
+`#7` 은 여전히 안 열린다: *Bifidobacterium longum* 은 이제 KEGG 24 · VMH 546
+링크를 갖지만 **ascorbate(C00072)가 양쪽 다 없다.** 균이 없어서가 아니라 그 대사
+자체가 두 소스에 없다 — 외부 데이터의 한계라는 기존 진단이 확인됐다.
 - **이름 → taxid**: NCBI esearch. 학명이 바뀐 5 종은 **NCBI 동의어 목록으로 확인**
   했다 — `Bacteroides vulgatus → Phocaeicola vulgatus`,
   `Clostridium ramosum → Thomasclavelia ramosa`,
@@ -141,8 +161,8 @@ KG 에서도 사라진다.
 
 ## 7. compound-미생물 — KEGG REST
 
-- **경로**: `compound → EC → KO → organism`. KEGG organism 에 매칭된 균 **82/127**.
-- **규모**: **3,103 링크 · compound 62 · 미생물 113** (`out/compound_microbe.csv`)
+- **경로**: `compound → EC → KO → organism`. KEGG organism 에 매칭된 균 **167/485**.
+- **규모**: **4,571 링크 · compound 63 · 미생물 167** (`out/compound_microbe.csv`)
 - **한계**: KEGG 는 유전체가 등록된 균만 담는다. `Adlercreutzia equolifaciens` 의
   citric acid 경로, `Bifidobacterium longum` 의 ascorbic acid 경로가 없어
   §5.1 방법 1 `#6`·`#7` 이 △ 에 머문다.
@@ -283,6 +303,62 @@ MiKG(Liu et al. 2021) **원본 TTL**(2,465 triple)을 직접 읽는다.
 - 배포본 자체는 **1 건**(id·sameAs 뿐, 라벨·계층 없음). 라이선스 때문에 전체를
   받을 수 없다.
 - **MiKG 가 자기 엔티티에 SCT id 를 63 개** 달아 두었다. 그것을 쓴다.
+
+---
+
+## 12. 미생물-질환 — Disbiome
+
+- **받는 법**: `https://disbiome.ugent.be:8080/experiment` 전수 덤프 하나.
+  6.4 MB · 실험 10,866. `cache/disbiome_experiment.json`
+- **왜 이것인가**: 논문 §2 가 VMH 와 나란히 든 **gutMDisorder 는 호스트가 죽었다**
+  (`bio-annotation.cn` 연결 실패, Disbiome 으로 리다이렉트된다). Disbiome 이
+  같은 자리를 메우고, 우리 평가와 무관하게 큐레이션돼 있어 **축 확장의 자기참조를
+  끊는다**.
+- **규모**: 정신·신경질환으로 걸러 **관계 1,193 · 균 457 · 질환 23**
+  (`out/microbe_disease_disbiome.csv`)
+
+### 질환명이 자유 표기다 — MeSH 로 해소해야 F03 판정이 된다
+
+Disbiome 의 `disease_name` 은 MedDRA 계열 자유 표기라 그대로는 MeSH tree 에
+못 넣는다. `common.mesh_lookup` 이 해소한다.
+
+- **SPARQL 로 라벨 역조회를 하다 0 건을 받았다.** MeSH 의 라벨 술어는
+  `meshv:prefLabel` 이 **아니라 `rdfs:label`** 이고, 용어 계층
+  (descriptor → concept → term) 을 다 타야 한다. 전용
+  `id.nlm.nih.gov/mesh/lookup/descriptor` REST 가 같은 일을 한 번에 한다.
+- **`match=exact` 는 descriptor 라벨만 본다.** 그래서 표기 변형 사다리를 둔다 —
+  원문 → 괄호 제거·쉼표 분해 → 소유격(`Parkinson's` → `Parkinson`) → 복수 제거
+  → `disorders` → `Disorder`. exact 가 없으면 contains 로 내린다.
+- **해소 355 표기 → 138** (exact 106 · contains 28 · 별칭 5, 고유 descriptor 137).
+  38% 로 낮아 보이지만 **미해소는 거의 전부 비정신질환**(periodontitis, caries,
+  HIV 등)이다.
+- **별칭표** (`setup/disease_alias.csv`): lookup 으로 닿지 않는 5 건을 근거와 함께
+  적어 넣는다 — ADHD(MeSH 는 어순이 다르다), PTSD(도치 표기),
+  전반적 발달장애 NOS(NOS 는 MeSH 어휘가 아니다), 특발성 국소 뇌전증(focal =
+  partial), 인지장애(아래 참조). 만성 스트레스는 MeSH 에 질환으로 없어 뺐다.
+
+> **함정 — contains 를 거르는 규칙을 만들려다 틀렸다.**
+> `Cognitive impairment` 가 `Chemotherapy-Related Cognitive Impairment` 로
+> 붙었다(화학요법 후 인지장애는 다른 질환). 그래서 "찾은 라벨이 질의어로 시작할
+> 때만 받는다"는 규칙을 걸었는데 **쓸 수 없는 기준이었다** — 걸려 떨어진 9 건 중
+> 6 건이 `Caries → Dental Caries`, `Cirrhosis → Liver Cirrhosis` 처럼 앞 수식어가
+> 질환을 바꾸지 않는 **올바른** 매칭이었다. 앞에 붙는 말이 해부 위치인지 원인인지는
+> 문자열로 가를 수 없다. 규칙을 되돌리고, `match` 열에 적어 **감사 가능하게** 둔
+> 뒤 틀린 것만 별칭표로 덮었다. 이 수작업은 질환 **이름**에만 걸리므로 어떤
+> 미생물이 들어오는지는 바꾸지 않는다 — 축 확장 기준은 Disbiome 쪽에 그대로 있다.
+
+> **함정 — `cached()` 가 또 입력 변화를 모른다.**
+> `meshids` 가 Disbiome 으로 244 → 313 으로 늘었는데 옛 `mesh_tree.json` 을 쓰자
+> 새 descriptor 69 개가 tree number 없이 떨어져 **F03 이 15 → 6 으로 줄었다.**
+> `ncbi_taxonomy.json` 에 쓰던 커버리지 검사를 여기에도 걸었다. §6 함정 ③ 과
+> 같은 것을 **두 번째로** 당했다.
+
+### KG 반영
+
+`Elevated`/`Reduced` 는 그 질환에서 그 균의 **존재비 변화**이지 이로움/해로움이
+아니다. `hasPositiveAssociation`/`hasNegativeAssociation` 으로 바꾸면 뜻이
+달라지므로 중립 `mpq:hasAssociation` 에 `our:abundanceIn` 속성(`질환|방향`)으로
+붙인다. 출처 태그는 `Disbiome` 으로 MiKG 와 **분리**한다.
 
 ---
 

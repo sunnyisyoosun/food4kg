@@ -1,0 +1,6 @@
+source_name,mesh_label,mesh_id,note
+Attention Deficit Hyperactivity Disorder,"Attention Deficit Disorder with Hyperactivity",D001289,MeSH 는 어순이 다르다 — lookup 으로 닿지 않는다
+Posttraumatic stress syndrome,"Stress Disorders, Post-Traumatic",D013313,MeSH 는 도치 표기를 쓴다
+Pervasive developmental disorder NOS,"Child Development Disorders, Pervasive",D002659,NOS 는 MeSH 어휘가 아니다
+Idiopathic focal epilepsy,"Epilepsies, Partial",D004828,focal = partial. MeSH 는 partial 쪽 표기만 있다
+Cognitive impairment,"Cognitive Dysfunction",D060825,"contains 가 Chemotherapy-Related Cognitive Impairment 로 잘못 붙는다 — 화학요법 후 인지장애는 다른 질환이다"
