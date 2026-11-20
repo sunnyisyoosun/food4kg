@@ -1430,7 +1430,22 @@ def invert():
               'Vegetables and Vegetable Products'}
     top, bot = res.head(K), res.tail(K)
     print(f'  held-out 음식 {len(sub):,} 에서 전체 파이프라인 AUC {auc_pipe:.3f}')
-    print(f'  (참고: 현재 최고 vote direct 0.665 / 기본 shrunk 0.491)')
+    # 참고값을 하드코딩하면 데이터가 바뀔 때마다 낡는다 (0.665/0.491 로 박혀
+    # 있었다). 비교표에서 읽어 오고, 표가 없으면 그 사실을 적는다.
+    _cmp = os.path.join(OUT, 'e_mode_comparison.csv')
+    if os.path.exists(_cmp):
+        _c = pd.read_csv(_cmp)
+        _col = next((c for c in ('modimed_AUC(참고)', 'modimed_AUC')
+                     if c in _c.columns), None)
+        if _col:
+            _best = _c.loc[_c[_col].idxmax()]
+            _base = _c[(_c.e_mode == 'shrunk') & (_c.path == 'direct')]
+            _bv = f"{_base[_col].iloc[0]:.3f}" if len(_base) else '-'
+            print(f'  (참고: 공개 소스 최고 {_best.e_mode} {_best.path} '
+                  f'{_best[_col]:.3f} / 기본 shrunk direct {_bv} '
+                  f'— out/e_mode_comparison.csv)')
+    else:
+        print('  (참고값 없음 — analyze.py compare 를 먼저 돌린다)')
     print(f'  §4.2.3 (학습에 쓰지 않은 독립 체크) — '
           f'Top{K} 추천군 {int(top["food_group"].isin(REC_OK).sum())} / '
           f'Bottom{K} 비추천군 {int(bot["food_group"].isin(NOT_OK).sum())}')

@@ -1,7 +1,7 @@
-F열,PCA,AUC,추천군,비추천군,위반,MMD_top30_처방,MMD_top30_extras,MMD_bot30_extras,top
-130 (all),없음,0.633,7,29,4,5,13,4,"Sugar substitute, sucralose, p"
-130 (all),5 (논문 숫자),0.703,2,21,9,9,6,2,"Muffins, wheat bran, dry mix"
-130 (all),auto (분산 80%),0.714,7,27,0,12,4,4,"Spices, chili powder"
-66 (linked),없음,0.592,22,27,2,22,1,8,"Vegetable juice, BOLTHOUSE FAR"
-66 (linked),5 (논문 숫자),0.699,1,20,7,5,10,2,"Turkey, skin from whole (light"
-66 (linked),auto (분산 80%),0.729,0,25,0,0,19,1,"Alcoholic beverage, distilled,"
+F열,PCA,음식,AUC,추천군,비추천군,위반,MMD_top30_처방,MMD_top30_extras,top
+linked,0,12420,0.585,21,26,0,23,1,"Vegetable juice, BOLTHOUSE FAR"
+linked,5,12420,0.698,3,19,9,7,12,"Turkey, skin from whole (light"
+linked,auto,12420,0.693,0,16,1,0,18,"Liqueur, cream"
+all,0,12508,0.631,5,25,12,4,17,"Sugar substitute, sucralose, p"
+all,5,12508,0.697,2,22,9,9,6,"Muffins, wheat bran, dry mix"
+all,auto,12508,0.706,22,14,1,23,0,"Spices, paprika"
