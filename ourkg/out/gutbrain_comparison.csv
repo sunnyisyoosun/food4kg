@@ -1,0 +1,7 @@
+alpha,top30_추천군,bot30_비추천군,top30_위반,MMD_처방군,MMD_extras,AUC(참고),top1
+0.0,21,26,0,24,1,0.462,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+0.5,19,24,0,23,2,0.458,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+1.0,19,24,0,23,2,0.456,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+2.0,17,21,0,21,3,0.455,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+4.0,16,20,1,20,4,0.453,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+8.0,16,21,1,20,4,0.452,"Vegetable juice, BOLTHOUSE FARMS, DAIL"

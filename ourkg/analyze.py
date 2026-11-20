@@ -30,6 +30,79 @@ sys.path.insert(0, os.path.join(
 from common import OUT, BASE, compound_microbe
 
 
+def mental_taxids():
+    """정신질환·신경퇴행에 연관된 미생물 taxid 집합.
+
+    두 출처를 합친다 — 배포 `Disease_Bacteria`(MeSH F03 판정)와 Disbiome.
+    Disbiome 쪽이 질환 23 종·균 457 종으로 훨씬 두껍다.
+    """
+    out = set()
+    for fn, cols in (('microbe_disease.csv', ('is_mental',)),
+                     ('microbe_disease_disbiome.csv', ('is_mental', 'is_neuro'))):
+        path = os.path.join(OUT, fn)
+        if not os.path.exists(path):
+            continue
+        df = pd.read_csv(path, dtype={'taxid': str})
+        m = False
+        for c in cols:
+            if c in df:
+                m = m | df[c].fillna(False).astype(bool)
+        out |= set(df[m]['taxid'])
+    return out
+
+
+def gutbrain_weight(compounds):
+    """compound 별 **미생물 매개 경로 지지도** w (길이 = len(compounds)).
+
+    논문 §4.2.2 의 식 (1)(2) 에는 미생물이 없다. 그래서 KG 최대 소스인
+    VMH 44,094 쌍이 추천 점수에 **0 기여**한다 — §1·§3.1 이 내세우는 gut-brain
+    axis 가 알고리즘에 연결되지 않는다. 이것은 논문 알고리즘의 정의 때문이지
+    우리 구현의 한계가 아니다 ([`METHODS.md`](METHODS.md) 한계).
+
+    `PATH_MODE=gutbrain` 은 미생물을 거치지 않는 compound 의 E 를 **0 으로
+    죽이는** 이분법이라 compound 가 절반으로 줄고 Top-K 가 흔들렸다. 여기서는
+    죽이지 않고 **가중**한다 — 우울증 연관 균이 대사하는 compound 를 더 세게
+    본다.
+
+        w[c] = 1 + ALPHA * s[c]        s[c] in [0, 1]
+
+    `s[c]` 는 그 compound 를 대사하는 **정신질환 연관 균의 수**를 0~1 로 민 것.
+    `ALPHA=0` 이면 w 가 전부 1 이라 **논문 경로와 완전히 같다** (기본값).
+
+    환경변수
+      GUTBRAIN_ALPHA   가중 세기. 0 = 끔(기본)
+      GUTBRAIN_SOURCE  kegg | vmh | both (기본 both)
+      GUTBRAIN_RANK    species(기본) | all — 속 수준 매칭을 넣을지
+                       (KEGG 링크의 55% 가 속 수준이다. DATA.md §6)
+      GUTBRAIN_SCALE   count(기본, 균 수를 최대값으로 나눔) | binary(있으면 1)
+                       | log(log1p 후 최대값으로 나눔)
+    """
+    alpha = float(os.environ.get('GUTBRAIN_ALPHA', '0'))
+    if not alpha:
+        return np.ones(len(compounds)), 0
+
+    src = os.environ.get('GUTBRAIN_SOURCE', 'both')
+    sources = ('kegg', 'vmh') if src == 'both' else (src,)
+    rank = os.environ.get('GUTBRAIN_RANK', 'species')
+    cm = compound_microbe(sources=sources, rank=None if rank == 'all' else rank)
+    cm = cm[cm['taxid'].isin(mental_taxids())]
+    n = cm.groupby('kegg')['taxid'].nunique()
+
+    scale = os.environ.get('GUTBRAIN_SCALE', 'count')
+    v = np.array([float(n.get(c, 0)) for c in compounds])
+    if scale == 'binary':
+        s = (v > 0).astype(float)
+    elif scale == 'log':
+        s = np.log1p(v)
+        s = s / s.max() if s.max() else s
+    else:
+        s = v / v.max() if v.max() else v
+    print(f'  GUTBRAIN_ALPHA={alpha} SOURCE={src} RANK={rank} SCALE={scale} '
+          f'— 경로 있는 compound {int((v > 0).sum())}/{len(compounds)} '
+          f'(균 중앙값 {np.median(v[v > 0]) if (v > 0).any() else 0:.0f})')
+    return 1.0 + alpha * s, int((v > 0).sum())
+
+
 def recommend(e_mode=None, path=None, save=True):
     """05 — 논문 Algorithm 1 을 우리 KG 에 적용 (depression).
 
@@ -183,6 +256,10 @@ def recommend(e_mode=None, path=None, save=True):
     elif PATH != 'direct':
         sys.exit(f'PATH_MODE 는 direct 또는 gutbrain. 받은 값: {PATH}')
     print(f'  PATH={PATH}  (E 비영 {int((e != 0).sum())})')
+
+    # gut-brain 가중. ALPHA=0 이면 w 가 전부 1 이라 논문 경로와 동일하다.
+    w, _n_gb = gutbrain_weight(compounds)
+    e = e * w
     print(f'  F {F.shape[0]:,} x {F.shape[1]}  /  E 비영 {int((e != 0).sum())} '
           f'(+{int((e > 0).sum())} / -{int((e < 0).sum())})')
 
@@ -697,6 +774,21 @@ def evaluate():
                 out.append(head)
             return out
 
+        # 꼬리의 일반 명사를 떨구는 사다리. 음식 쪽만 사다리를 주고 있었는데,
+        # 논문 Table 5 의 **질환 쪽 표기**도 그대로는 안 걸린다 —
+        # "parkinson disorder" 는 0 건이고 MeSH 표기는 "Parkinson Disease" 다.
+        # "Egg products" 도 1 건뿐이다. 양쪽에 같은 사다리를 준다.
+        _TAIL = r'\s+(products?|disorders?|disease)$'
+
+        def _generic(t):
+            out, t = [], str(t).strip()
+            if t:
+                out.append(t)
+            g = re.sub(_TAIL, '', t, flags=re.I).strip()
+            if g and g.lower() != t.lower():
+                out.append(g)
+            return out or ['']
+
         # 추론 (a) Complication — 같은 미생물을 공유하는 두 정신질환 (논문 §3.3)
         by_mic = collections.defaultdict(set)
         for _, r in mdis.iterrows():
@@ -754,9 +846,18 @@ def evaluate():
         ASSOC = (r'associat|correlat|linked|relationship|risk|comorbid|predict|'
                  r'effect|influenc|contribut|increas|decreas|reduc|improv|'
                  r'protect|prevalen')
-        NEG = (r'\bno\s+(significant\s+)?(association|correlation|relationship|'
-               r'difference|effect)|not\s+(significantly\s+)?(associat|correlat|'
-               r'relat)|failed to|did not (differ|associat)|unrelated')
+        # 음성 결론 표현. 처음에는 "no significant association" 계열만 담았는데
+        # 30 건에서 한 번밖에 안 걸렸다. 초록이 실제로 쓰는 꼴을 더 담는다 —
+        # 특히 **보정 후 사라지는 경우**(논문 #10 의 근거가 이것이다: "BMI 를
+        # 넣으면 유의하지 않다")와 귀무 결과 서술.
+        NEG = (r'\bno\s+(significant\s+|clear\s+|consistent\s+)?(association|'
+               r'correlation|relationship|difference|effect|evidence|link)|'
+               r'not\s+(significantly\s+|statistically\s+)?(associat|correlat|'
+               r'relat|differ|link)|failed to|'
+               r'did not (differ|associat|reach|show|find)|unrelated|'
+               r'\bnull\s+(association|finding|result)|'
+               r'no longer (significant|associat)|'
+               r'(attenuated|disappeared|lost significance|non-?significant)')
         ABS_K = int(os.environ.get('ABS_K', '20'))      # 읽을 초록 수
 
         # 음식 행에는 **식이 맥락**을 함께 요구한다. 이게 없으면 "mustard oil 로
@@ -821,6 +922,63 @@ def evaluate():
                                    r'</(?:ArticleTitle|AbstractText)>', a, re.S)))
             return n, ids, docs
 
+        # 개수 비교(`pos > neg`)는 음성 증거를 구조적으로 묻는다. 연관 문장은
+        # 19·25·45 까지 올라가는데 음성은 0~1 이라, **한 건의 음성 증거로는 절대
+        # 못 뒤집는다.** 비율로 바꾼다 — 음성이 전체 판정 문장의 NEG_RATIO 이상일
+        # 때 -1.
+        #
+        # 정답이 -1 인 사례가 논문 #10 하나뿐이라 이 문턱은 **약하게만 식별된다.**
+        # 한 건에 맞춰 고르면 과적합이므로, 논문 15 건 전체 일치율로 고르고
+        # 그 민감도를 RESULTS.md 에 남긴다.
+        NEG_RATIO = float(os.environ.get('NEG_RATIO', '0.5'))
+        # 연관 어휘가 **두 개체를 걸치는 구간**에 있을 때만 세는 제약. 재 보고
+        # **기각했다** — 논문 15 건 일치가 12 -> 11 로 내려간다. #6 의 나열 문장을
+        # 6 -> 1 로 줄이지만 #8(Garlic x Alzheimer)을 깬다. 마늘 연구는
+        # `garlic extract`·`allicin` 으로 쓰지 `dietary` 를 안 써서, 식이 맥락
+        # 게이트와 **곱해지면** 통과 문장이 전부 떨어진다. 되돌릴 수 있게 남긴다.
+        ASSOC_SPAN = os.environ.get('ASSOC_SPAN', '0') != '0'
+
+        def _verdict(pos, neg):
+            if not (pos or neg):
+                return 0
+            return -1 if neg / (pos + neg) >= NEG_RATIO else 1
+
+        def _standalone(low, pat):
+            """개체 매치가 **독립 토큰**인가. 복합어 조각이면 아니다.
+
+            논문 #10 에서 'egg' 가 `vegetable-egg-beans-milk dietary pattern` 의
+            조각으로 걸렸다. 그 문장은 달걀이 아니라 **식이 패턴**을 말한다.
+            하이픈으로 앞뒤에 붙어 있으면 그 개체를 가리킨 것이 아니다.
+            """
+            for m in re.finditer(pat, low):
+                before = low[m.start() - 1] if m.start() else ' '
+                after = low[m.end()] if m.end() < len(low) else ' '
+                if not (before == '-' and after in '-abcdefghijklmnopqrstuvwxyz'):
+                    return m
+            return None
+
+        def _assoc_between(low, pa, pb):
+            """연관 어휘가 **두 개체를 걸치는 구간**에 있는가.
+
+            문장 어디든 ASSOC 가 있으면 세던 것이 1 차 문제였다. 논문 #6 의
+            `Alzheimer's disease (AD), Parkinson's disease (PD), and autism
+            spectrum disorder (ASD)` 는 **나열**이지 둘을 서로 말한 게 아닌데
+            문장 끝의 다른 동사로 양성이 됐다.
+
+            구간은 첫 매치 **앞 60 자**부터 둘째 매치 뒤 40 자까지다. 앞을 포함하는
+            것은 `association between X and Y` 처럼 어휘가 둘보다 앞에 오기
+            때문이다. 나열은 사이에 연관 동사가 없어 떨어진다.
+            """
+            if not (pa and pb):
+                return False
+            ma, mb = _standalone(low, pa), _standalone(low, pb)
+            if not (ma and mb):
+                return False
+            if not ASSOC_SPAN:
+                return bool(re.search(ASSOC, low))
+            lo, hi = sorted([ma.start(), mb.start()])
+            return bool(re.search(ASSOC, low[max(0, lo - 60):hi + 40]))
+
         def judge(terms, evidence, ladder=None, diet=False):
             """한 건을 초록 판독으로 판정한다 (1 / 0 / -1).
 
@@ -828,33 +986,51 @@ def evaluate():
             15 건을 **같은 함수로** 잰다 — 보정값이 자의 차이가 아니라 대상의
             차이가 되도록.
             """
-            pb = _stem(terms[1] if len(terms) > 1 else '')
+            # 두 항 **모두** 사다리를 탄다. 한쪽만 내리면 상대 항 표기가 안 맞는
+            # 경우(논문 #11 "parkinson disorder" 0 건)를 못 넘는다. 첫 항을 먼저
+            # 내리고, 그래도 초록이 없으면 둘째 항을 내린다.
+            second = terms[1] if len(terms) > 1 else ''
+            rungs = [(a, b) for a in (ladder or _generic(terms[0]))
+                     for b in _generic(second)]
             n = pos = neg = 0
             ids, docs, term, lv = [], {}, terms[0], 0
             best = (10 ** 9, '')
-            for lv, term in enumerate(ladder or terms[:1]):
-                n, ids, docs = search_read([term] + terms[1:])
-                pa, pos, neg = _stem(term), 0, 0
+            for lv, (term, second_t) in enumerate(rungs):
+                n, ids, docs = search_read([term, second_t] + terms[2:])
+                pa, pb = _stem(term), _stem(second_t)
+                pos, neg = 0, 0
                 best = (10 ** 9, '')
                 for pid, body in docs.items():
-                    for sent in re.split(r'(?<=[.!?])\s+', body):
+                    sents = re.split(r'(?<=[.!?])\s+', body)
+                    for si, sent in enumerate(sents):
                         low = sent.lower()
-                        if not (pa and pb and re.search(pa, low)
-                                and re.search(pb, low)):
+                        # **문장 쌍 창.** 초록은 앞 문장에서 개체를 말하고 다음
+                        # 문장에서 "No significant association was observed." 처럼
+                        # 개체 이름 없이 끊어 쓴다. 한 문장만 보면 그 음성 결론이
+                        # 통째로 안 세어진다 — 30 건에서 sent_negative 가 1 인 것이
+                        # 단 한 건이었던 이유다. 판정 단서는 이 문장에서 찾고,
+                        # 개체는 **앞 문장까지** 포함한 창에서 찾는다.
+                        ctx = (sents[si - 1] + ' ' + sent).lower() if si else low
+                        if not (pa and pb and _standalone(ctx, pa)
+                                and _standalone(ctx, pb)):
                             continue
+                        # 동음이의·식이 맥락 게이트는 **이 문장**에서 본다.
+                        # 창으로 넓혔더니 앞 문장의 식이 단어로 통과해 우리 15 건의
+                        # 판정이 9/6 -> 13/2 로 확 느슨해졌다. 창은 끊어 쓴 음성
+                        # 결론을 잡으려고 둔 것이지 게이트를 풀려고 둔 게 아니다.
                         if re.search(HOMOGRAPH, low):
                             continue        # 우울증이 아닌 'depression'
                         if diet and not re.search(DIET, low):
                             continue        # 음식 행은 식이 맥락이 있어야 센다
                         if re.search(NEG, low):
                             neg += 1
-                        elif re.search(ASSOC, low):
+                        elif _assoc_between(low, pa, pb):
                             pos += 1
                             # 인용문은 **첫 매치가 아니라** 두 엔티티가 가장 가까이
                             # 붙은 문장으로 고른다. 첫 매치를 쓰면 "psychedelics 가
                             # 담배·섭식… 을 개선" 처럼 두 질환이 나열에만 같이 든
                             # 문장이 걸린다. 가까울수록 둘을 **서로** 말한 문장이다.
-                            m1, m2 = re.search(pa, low), re.search(pb, low)
+                            m1, m2 = _standalone(low, pa), _standalone(low, pb)
                             lo, hi = sorted([m1.start(), m2.start()])
                             if hi - lo < best[0]:
                                 # 문장 앞 90 자가 아니라 **매치 주변**을 보여준다.
@@ -868,7 +1044,7 @@ def evaluate():
                     'term_used': term, 'term_level': lv,
                     'n_hits_pair_only': n, 'n_abstracts': len(docs),
                     'sent_assoc': pos, 'sent_negative': neg, 'quote': best[1],
-                    'result': 1 if pos > neg else (-1 if neg > pos else 0)}
+                    'result': _verdict(pos, neg)}
 
         from paper_data import TABLE5 as _PT5
         cases = [('ourkg', i['q'], i['type'], i['evidence'], i['terms'],
