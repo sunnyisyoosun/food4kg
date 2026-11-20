@@ -5,7 +5,8 @@
 `reconstruct.py` → `run_recommendation.py` 경로이고, 이 디렉토리와 섞지 않는다.
 (재현 수치는 [`REPRODUCTION.md`](../REPRODUCTION.md), 미해결 문제는 [`PROBLEMS.md`](../PROBLEMS.md))
 
-**어떤 데이터를 어떻게 썼는지는 [`DATA.md`](DATA.md) 에 있다** — 축별로 출처·받는 법·뽑은 것·이어붙인 법·한계. 이 문서는 설계 **결정**, [`RESULTS.md`](RESULTS.md) 는 실험과 기각 기록이다.
+**방법론 전체는 [`METHODS.md`](METHODS.md) 에 있다** — 전제·구축·추천·평가와
+알려진 한계. **어떤 데이터를 어떻게 썼는지는 [`DATA.md`](DATA.md) 에 있다** — 축별로 출처·받는 법·뽑은 것·이어붙인 법·한계. 이 문서는 설계 **결정**, [`RESULTS.md`](RESULTS.md) 는 실험과 기각 기록이다.
 
 ## 바뀐 것
 

@@ -4,7 +4,8 @@
 못 하는지**를 적는다. 수치는 `out/linking_stats.csv` 가 정본이고 여기 적은 값은
 2026-11-19 빌드 기준이다.
 
-설계 결정의 **이유**는 [`README.md`](README.md), 실험과 기각 기록은 [`RESULTS.md`](RESULTS.md) 에 있다.
+방법론 전체는 [`METHODS.md`](METHODS.md), 설계 결정의 **이유**는 [`README.md`](README.md),
+실험과 기각 기록은 [`RESULTS.md`](RESULTS.md) 에 있다.
 
 ---
 
