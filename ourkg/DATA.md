@@ -17,9 +17,9 @@
 | 음식 온톨로지 | FoodOn | **EBI OLS API** + 캐시 | 클래스 1,096 · 음식 8,165 |
 | 음식 카테고리 | FDC SR / WWEIA | 로컬 덤프 | 세분 265 · 상위 27 |
 | 우울증-대사물 | ProMENDA | 로컬 xlsx | 레코드 22,519 → compound 1,412 |
-| 미생물 | NCBI taxonomy | efetch + 캐시 | 127 taxid |
-| compound-미생물 | KEGG REST | REST + 캐시 | 2,124 링크 · compound 59 |
-| compound-미생물 (예측) | **VMH / AGORA2** | 벌크 zip + 캐시 | 35,509 링크 · compound 1,014 |
+| 미생물 | NCBI taxonomy | efetch + 캐시 | **162 taxid** (127 + 보탠 35) |
+| compound-미생물 | KEGG REST | REST + 캐시 | 3,103 링크 · compound 62 |
+| compound-미생물 (예측) | **VMH / AGORA2** | 벌크 zip + 캐시 | 44,094 링크 · compound 1,069 |
 | 미생물-정신질환 | MiKG 원본 TTL | 로컬 ttl | 406 쌍 |
 | 질환 분류 | MeSH | **SPARQL** + 캐시 | 링크 244 · 트리 1,227 |
 | 질환 식별자 | SNOMED CT | MiKG xref | 63 (배포본 자체는 1) |
@@ -119,15 +119,30 @@ KG 에서도 사라진다.
 
 - **받는 법**: `efetch.fcgi` 로 taxid 의 학명·rank·lineage 를 **현재 값**으로 갱신.
   `cache/ncbi_taxonomy.json`
-- **규모**: **127 taxid** (논문 322,917). 정신질환 연관 종만 쓴다 —
-  **가장 얇은 축이고 gut-brain 경로 전체를 제약한다.**
+- **규모**: **162 taxid** (논문 322,917). 배포 `Disease_Bacteria` 의 정신질환·
+  신경퇴행 연관 127 종 + **보탠 35 종**.
+- **보탠 근거** (`setup/microbes_added.csv`): MiKG 가 말하는 균 36 종과 평가가
+  요구하는 균(논문 Table 3·5, 방법 1 `#6` 의 `Adlercreutzia equolifaciens`)이
+  배포본에 없었다. **compound 링크를 17 배로 늘려도 균이 없으면 소용없다**는 것이
+  `#6` 으로 드러났다.
+- **이름 → taxid**: NCBI esearch. 학명이 바뀐 5 종은 **NCBI 동의어 목록으로 확인**
+  했다 — `Bacteroides vulgatus → Phocaeicola vulgatus`,
+  `Clostridium ramosum → Thomasclavelia ramosa`,
+  `Lactobacillus plantarum → Lactiplantibacillus plantarum` 등. 동의어는
+  "이름 저자 연도" 꼴이라 **접두 일치**로 봐야 한다.
+
+> **함정 셋 — 데이터를 넣고 쓰는 쪽을 안 보면 조용히 빠진다.**
+> ① 캐시 파일명이 겹치면 서로 덮어쓴다(`mesh_tree.json` 을 둘이 써서 F03 판정이
+> 전부 실패했다). ② `focus` 필터가 질환 링크 있는 균만 추려 보탠 균이 탈락했다.
+> ③ `cached()` 는 **입력 변화를 모른다** — 요청이 늘어도 옛 캐시를 돌려준다.
+> 캐시가 요청을 덮는지 검사하도록 고쳤다.
 
 ---
 
 ## 7. compound-미생물 — KEGG REST
 
 - **경로**: `compound → EC → KO → organism`. KEGG organism 에 매칭된 균 **82/127**.
-- **규모**: **2,124 링크 · compound 59 · 미생물 82** (`out/compound_microbe.csv`)
+- **규모**: **3,103 링크 · compound 62 · 미생물 113** (`out/compound_microbe.csv`)
 - **한계**: KEGG 는 유전체가 등록된 균만 담는다. `Adlercreutzia equolifaciens` 의
   citric acid 경로, `Bifidobacterium longum` 의 ascorbic acid 경로가 없어
   §5.1 방법 1 `#6`·`#7` 이 △ 에 머문다.

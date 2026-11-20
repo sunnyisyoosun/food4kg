@@ -448,6 +448,17 @@ def microbe():
                 pairs.append((m.group(1), d))
     pairs = sorted(set(pairs))
     taxids = sorted({t for t, _ in pairs})
+    # 배포 Disease_Bacteria 에 없는 균을 보탠다. MiKG 가 말하는 균 36 종과 평가가
+    # 요구하는 균(논문 Table 3·5, 방법 1 #6 의 Adlercreutzia 등)이 빠져 있었다 —
+    # compound 링크를 아무리 늘려도 **균이 없으면 소용없다**는 것이 #6 으로 드러났다.
+    # 이름 -> taxid 해소는 NCBI esearch 로 했고, 학명이 바뀐 5 종(Bacteroides
+    # vulgatus -> Phocaeicola vulgatus 등)은 NCBI 동의어 목록으로 확인했다.
+    _add = os.path.join(BASE, 'setup', 'microbes_added.csv')
+    if os.path.exists(_add):
+        _ad = pd.read_csv(_add, dtype=str).fillna('')
+        _new = sorted(set(_ad[_ad.taxid != ''].taxid) - set(taxids))
+        taxids = sorted(set(taxids) | set(_new))
+        print(f'  보탠 미생물 {len(_new)} (setup/microbes_added.csv)')
     meshids = sorted({d for _, d in pairs})
     print(f'  관계 {len(pairs):,} / 미생물 {len(taxids):,} / 질환 {len(meshids):,}')
 
@@ -495,8 +506,14 @@ def microbe():
 
     # ------------------------------------------------------------------
     print('[3/5] NCBI taxonomy 로 학명·계통 갱신')
-    focus = sorted(set(md[md.is_mental | md.is_neuro]['taxid']))
-    print(f'  대상 {len(focus)} 종 (정신질환·신경퇴행 연관 미생물)')
+    # 질환 링크가 있는 균 + **보탠 균**. 보탠 쪽은 Disease_Bacteria 에 쌍이 없어
+    # 이 필터에서 탈락한다 — MiKG(미생물→신경전달물질→정신질환)와 평가가 근거다.
+    _added = set()
+    if os.path.exists(_add):
+        _added = set(pd.read_csv(_add, dtype=str).fillna('').taxid) - {''}
+    focus = sorted(set(md[md.is_mental | md.is_neuro]['taxid']) | _added)
+    print(f'  대상 {len(focus)} 종 (정신질환·신경퇴행 연관 {len(focus) - len(_added - set(md[md.is_mental | md.is_neuro]["taxid"]))}'
+          f' + 보탠 {len(_added - set(md[md.is_mental | md.is_neuro]["taxid"]))})')
 
 
     def fetch_tax():
@@ -520,7 +537,15 @@ def microbe():
         return json.dumps(recs)
 
 
+    # 캐시는 파일만 보고 **입력 변화를 모른다**. focus 가 늘었는데 옛 캐시를 쓰면
+    # 보탠 균이 조용히 빠진다(실제로 127 종에 머물렀다). 캐시가 요청을 덮는지
+    # 검사하고, 모자라면 다시 받는다.
     tax = json.loads(cached('ncbi_taxonomy.json', fetch_tax))
+    _miss = set(focus) - set(tax)
+    if _miss:
+        print(f'  캐시에 없는 {len(_miss)} 종 — 다시 받는다')
+        os.remove(os.path.join(BASE, 'ourkg', 'cache', 'ncbi_taxonomy.json'))
+        tax = json.loads(cached('ncbi_taxonomy.json', fetch_tax))
     print(f'  갱신된 taxon {len(tax)}')
 
     # ------------------------------------------------------------------
@@ -1230,8 +1255,10 @@ def kg():
     # 배포본에는 id 284 개뿐이고 라벨·계층이 없다(§5.1 방법 1 #12). 우리는 이미
     # 트리 번호를 갖고 있었고, 번호는 접두를 자르면 조상이 된다
     # (F03.600.300.375 < F03.600.300 < F03.600 Mood Disorders < F03 Mental Disorders).
-    # 번호 -> 기술어 이름은 MeSH SPARQL 로 받아 ourkg/cache/mesh_tree.json 에 둔다.
-    _mtp = os.path.join(BASE, 'ourkg', 'cache', 'mesh_tree.json')
+    # 번호 -> 기술어 이름은 MeSH SPARQL 로 받아 둔다. 파일명은 build.microbe 의
+    # `mesh_tree.json`({mesh_id: [트리번호]})과 **달라야 한다** — 같은 이름을 쓰면
+    # 서로 덮어써서 F03 판정이 전부 실패한다(실제로 그렇게 깨졌다).
+    _mtp = os.path.join(BASE, 'ourkg', 'cache', 'mesh_tree_ancestors.json')
     n_tree = 0
     if os.path.exists(_mtp):
         _MT = json.load(open(_mtp))

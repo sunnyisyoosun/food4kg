@@ -467,8 +467,13 @@ def evaluate():
                 mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str})
                 md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'),
                                  dtype={'taxid': str})
-                cm = pd.read_csv(os.path.join(OUT, 'compound_microbe.csv'),
-                                 dtype={'taxid': str})
+                # compound-미생물은 **두 출처를 합쳐** 본다. KEGG 추론 경로만 보면
+                # metabolizes() 가 VMH/AGORA2 의 경로를 놓친다 (#6 의 Adlercreutzia
+                # x citric acid 가 그 경우다). 출처 구분은 KG 가 들고 있다.
+                cm = pd.concat([
+                    pd.read_csv(os.path.join(OUT, f), dtype={'taxid': str})[['taxid', 'kegg']]
+                    for f in ('compound_microbe.csv', 'compound_microbe_vmh.csv')
+                    if os.path.exists(os.path.join(OUT, f))]).drop_duplicates()
                 cd = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
 
                 self.food = dict(zip(foods.fdc_id, foods.food_name))

@@ -1,0 +1,39 @@
+name,taxid,current_name,how
+Acetomicrobium hydrogeniformans,649746,,esearch [Scientific Name]
+Acinetobacter baumannii,470,,esearch [Scientific Name]
+Adlercreutzia equolifaciens,446660,,esearch [Scientific Name]
+Bacillus cereus,1396,,esearch [Scientific Name]
+Bacillus mycoides,1405,,esearch [Scientific Name]
+Bacillus subtilis,1423,,esearch [Scientific Name]
+Bacteroides uniformis,820,,esearch [Scientific Name]
+Bacteroides vulgatus,821,Phocaeicola vulgatus,NCBI 재분류 확인
+Burkholderia oklahomensis,342113,,esearch [Scientific Name]
+Candida albicans,5476,,esearch [Scientific Name]
+Candida guilliermondii,4929,Meyerozyma guilliermondii,NCBI 재분류 확인
+Clostridium ramosum,1547,Thomasclavelia ramosa,NCBI 재분류 확인
+Enterococcus faecalis,1351,,esearch [Scientific Name]
+Fusobacterium ulcerans,861,,esearch [Scientific Name]
+Fusobacterium varium,856,,esearch [Scientific Name]
+Hafnia alvei,569,,esearch [Scientific Name]
+Klebsiella pneumoniae,573,,esearch [Scientific Name]
+Lactobacillus brevis,1580,Levilactobacillus brevis,esearch 동의어
+Lactobacillus buchneri,1581,Lentilactobacillus buchneri,NCBI 재분류 확인
+Lactobacillus delbrueckii,1584,,esearch [Scientific Name]
+Lactobacillus paracasei,1597,Lacticaseibacillus paracasei,esearch 동의어
+Lactobacillus plantarum,1590,Lactiplantibacillus plantarum,NCBI 재분류 확인
+Lactobacillus rhamnosus,47715,Lacticaseibacillus rhamnosus,esearch 동의어
+Lactobacillus vaginalis,1633,Limosilactobacillus vaginalis,esearch 동의어
+Lactococcus lactis subsp cremoris,1359,Lactococcus cremoris,esearch 동의어
+Lactococcus lactis subsp lactis,1360,,esearch [Scientific Name]
+Monascus purpureus,5098,,esearch [Scientific Name]
+Morganella morganii,582,,esearch [Scientific Name]
+Oscillibacter,459786,,esearch [Scientific Name]
+Paenibacillus,44249,,esearch [Scientific Name]
+Proteus vulgaris,585,,esearch [Scientific Name]
+Pseudomonas aeruginosa,287,,esearch [Scientific Name]
+Rhodospirillum rubrum,1085,,esearch [Scientific Name]
+Saccharomyces cerevisiae,4932,,esearch [Scientific Name]
+Salmonella enterica,28901,,esearch [Scientific Name]
+Serratia marcescens,615,,esearch [Scientific Name]
+Staphylococcus aureus,1280,,esearch [Scientific Name]
+Yersinia enterocolitica,630,,esearch [Scientific Name]
