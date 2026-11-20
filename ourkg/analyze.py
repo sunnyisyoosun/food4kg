@@ -1363,6 +1363,68 @@ def modimed_labels(foods):
     return label, why
 
 
+# ModiMedDiet 의 **주당 처방 횟수**. 규칙의 src 문자열에 이미 적혀 있던 것을
+# 수치로 옮긴다. 범위는 중앙값을 쓴다(5-8/day -> 6.5/day -> 45.5/week).
+#
+# `eggs <=6/week` 와 extras 의 `<=3/week` 는 **상한**이지 처방량이 아니다.
+# 달걀은 처방 12군에 들어 있으므로 상한을 그대로 쓰고, extras 는 "적게 먹으라"
+# 는 쪽이라 0 으로 둔다 — 상한 3 을 그대로 쓰면 생선(주 2회)보다 위에 놓인다.
+MODIMED_FREQ = {
+    'vegetables 6/day': 42.0,
+    'whole grains 5-8/day': 45.5,
+    'fruit 3/day': 21.0,
+    'olive oil 3 tbsp/day': 21.0,
+    'low-fat unsweetened dairy 2-3/day': 17.5,
+    'raw unsalted nuts 1/day': 7.0,
+    'eggs <=6/week': 6.0,
+    'legumes 3-4/week': 3.5,
+    'lean red meat 3-4/week': 3.5,
+    'chicken 2-3/week': 2.5,
+    'fish >=2/week': 2.0,
+}
+
+
+def modimed_freq(res):
+    """음식마다 주당 처방 횟수. 처방 12군은 위 표, extras 는 0, 해당 없음은 NaN."""
+    lab, why = modimed_labels(res)
+    f = why.map(MODIMED_FREQ)
+    f[lab == -1] = float(os.environ.get('MODIMED_EXTRAS_FREQ', '0'))
+    f[lab == 0] = float('nan')
+    return f
+
+
+def modimed_spearman(res):
+    """추천 점수와 **주당 처방 횟수**의 순위 상관.
+
+    지금까지 ModiMedDiet 은 처방군/extras **이분법**이었다. 그러면 채소(주 42회)
+    와 lean red meat(주 3-4회)가 같은 +1 이 되어 정답셋이 처방 강도를 잃는다.
+    SMILES 는 빈도 처방이므로 그 기울기를 그대로 쓰는 것이 맞다.
+
+    AUC 가 Top-K 와 어긋난 것(§13)은 라벨이 **이분법**이라 순서의 가운데를 못
+    봤기 때문이기도 하다. 순위 상관은 전 구간의 순서를 본다.
+
+    되돌아보기 쉽게 둘을 같이 낸다 — 전체(extras 포함)와 처방군 안에서만.
+    """
+    from scipy.stats import spearmanr
+    f = modimed_freq(res)
+    # 상위 N 개 안에서만 재는 변형. 전역 ρ 는 AUC 와 마찬가지로 **맨 위에 무엇이
+    # 오는지에 둔감**하다 — 추천군 0 개인 설정을 기본값보다 위에 놓는다(§13b).
+    # Top-K 추천의 품질을 보려면 상위 구간을 봐야 한다.
+    topn = int(os.environ.get('MODIMED_RHO_TOP', '0'))
+    head = res.head(topn).index if topn else res.index
+    out = {}
+    for name, m in (('전체', f.notna()),
+                    ('처방군만', f.notna() & (f > 0)),
+                    (f'상위{topn}', f.notna() & f.index.isin(head)) if topn else
+                    ('전체', f.notna())):
+        if m.sum() < 10 or f[m].nunique() < 2:
+            continue
+        rho, pv = spearmanr(res.loc[m, 'score'], f[m])
+        out[f'modimed_rho_{name}'] = round(float(rho), 3)
+        out[f'modimed_rho_{name}_n'] = int(m.sum())
+    return out
+
+
 # ModiMedDiet 은 **빈도** 처방이다. 채소 6회/일(주 42회)과 lean red meat 주 3-4회를
 # 같은 +1 로 두면 정답셋이 처방 강도를 잃는다(§11 D). MODIMED_POSITIVES 로 고른다.
 #   all        처방 12군 전부를 양성으로 (기본, §7 표가 이것이다)
@@ -1407,6 +1469,7 @@ def modimed_score(res, K):
         f'top{K}_extras': int((ltop == -1).sum()),
         f'bot{K}_extras': int((lbot == -1).sum()),
         'modimed_AUC(참고)': round(float(auc), 3),
+        **modimed_spearman(res),
     }
 
 
