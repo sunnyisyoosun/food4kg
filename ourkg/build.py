@@ -1049,6 +1049,30 @@ def kg():
               f'(compound {_vl.kegg.nunique()} · 균 {_vl.taxid.nunique()} · '
               f'KEGG 경로와 겹침 {_both:,})')
 
+    # 측정 상관으로 만든 compound-미생물 (metabolome_check.py build).
+    # **추론도 예측도 아닌 관측**이다 — 짝지어진 분변 마이크로바이옴-대사체
+    # 13 코호트에서 BH q<0.05 + 2 개 이상 코호트 같은 부호 재현으로 걸렀다.
+    # KEGG 추론·VMH 예측과 겹치는 것은 13% 뿐이라(RESULTS §15b) 출처를 갈라
+    # 담는다. 코호트가 속 수준이라 우리 taxid 로 펼친다.
+    # 상관의 **부호**는 소비(음)/생산(양)이라 속성으로 남긴다 — 술어로 바꾸면
+    # hasPositive/NegativeAssociation(이로움/해로움)과 뜻이 섞인다.
+    _mp = os.path.join(OUT, 'compound_microbe_measured.csv')
+    n_meas = 0
+    if os.path.exists(_mp):
+        _ms = pd.read_csv(_mp)
+        _g = mic.copy()
+        _g['genus'] = _g['name'].astype(str).str.split().str[0]
+        _ms = _ms.merge(_g[['taxid', 'genus']], on='genus')
+        for _, r in _ms.drop_duplicates(['taxid', 'kegg', 'sign']).iterrows():
+            u = NS['mic'] + str(r['taxid'])
+            W.t(u, NS['mpq'] + 'hasMetabolites', NS['kegg'] + r['kegg'], '측정 상관')
+            W.t(u, NS['our'] + 'measuredCorrelation',
+                f"{r['kegg']}|{'-' if r['sign'] < 0 else '+'}|{r['n_cohorts']}코호트",
+                '측정 상관', literal=True)
+            n_meas += 1
+        print(f'  측정 상관 compound-미생물 {n_meas:,} '
+              f'(compound {_ms.kegg.nunique()} · 균 {_ms.taxid.nunique()})')
+
     print(f'  미생물 {len(mic)} / compound-미생물 {len(cm):,}')
 
     md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
@@ -1508,6 +1532,8 @@ def kg():
          int((cm.get('match_rank', pd.Series(dtype=str)) == 'genus').sum()),
          '"이 속의 어떤 유전체가" — 더 약한 주장'),
         ('microbe', 'compound-미생물 (VMH/AGORA2)', n_vmh, '유전체 재구성 — 예측'),
+        ('microbe', 'compound-미생물 (측정 상관)', n_meas,
+         '분변 대사체 13 코호트 — 추론도 예측도 아닌 관측'),
         ('microbe', '미생물-질환 (Disbiome)', n_disb,
          '외부 큐레이션 — 축 확장의 자기참조를 끊는다'),
         ('ontology', 'FoodOn ↔ 카테고리 (배포 KG 부분집합)', n_fo_link, '§3.1 FoodOn'),

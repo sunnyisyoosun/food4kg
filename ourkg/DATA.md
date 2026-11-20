@@ -23,6 +23,7 @@
 | compound-미생물 (예측) | **VMH / AGORA2** | 벌크 zip + 캐시 | 44,094 링크 · compound 1,069 |
 | 미생물-정신질환 | MiKG 원본 TTL | 로컬 ttl | 406 쌍 |
 | 미생물-질환 (외부) | **Disbiome** | REST 전수 + 캐시 | 1,193 관계 · 균 457 · 질환 23 |
+| compound-미생물 (관측) | **분변 대사체 13 코호트** | GitHub raw + 캐시 | 39,574 쌍 · 속 1,859 · compound 315 |
 | 질환 분류 | MeSH | **SPARQL** + 캐시 | 링크 244 · 트리 1,227 |
 | 질환 식별자 | SNOMED CT | MiKG xref | 63 (배포본 자체는 1) |
 
@@ -421,6 +422,47 @@ Disbiome 의 `disease_name` 은 MedDRA 계열 자유 표기라 그대로는 MeSH
 아니다. `hasPositiveAssociation`/`hasNegativeAssociation` 으로 바꾸면 뜻이
 달라지므로 중립 `mpq:hasAssociation` 에 `our:abundanceIn` 속성(`질환|방향`)으로
 붙인다. 출처 태그는 `Disbiome` 으로 MiKG 와 **분리**한다.
+
+---
+
+## 13. compound-미생물 (관측) — 분변 대사체 코호트
+
+- **받는 법**: [Gut Microbiome-Metabolome Dataset Collection](https://www.nature.com/articles/s41522-022-00345-5)
+  (Muller et al., npj Biofilms Microbiomes 2022) 의 GitHub raw. 차단 없다.
+  `cache/gmm/<코호트>/` · `ourkg/metabolome_check.py build`
+- **왜 이것인가**: KEGG 는 "유전체에 효소가 있다" 는 **추론**이고 VMH 는
+  **예측**이다. 둘 다 실제 장내 대사량이 아니고, 측정된 분변 대사체와 무관함이
+  확인됐다([`RESULTS.md`](RESULTS.md) §15b 검정 ④). 이쪽은 **관측**이다.
+- **규모**: 13 코호트 · 268 만 쌍 → BH q<0.05 437,149 → **2 개 이상 코호트에서
+  같은 부호로 재현 39,574** (속 1,859 · compound 315).
+  우리 taxid 로 펼치면 7,052 쌍 · 균 298 · compound 252.
+- **KEGG/VMH 와 13% 만 겹친다** — 서로 보완한다.
+- **부호**: 음 26,196 / 양 13,378. 소비 방향이 2 배로 대사 상식과 맞는다.
+
+### 재현성을 두 겹으로 요구한다
+
+한 코호트 안에서는 **다중검정으로 상관이 쉽게 나온다** — IBS 에서 BH 보정 전
+p<0.05 쌍이 **41%** 였다. 그래서 ① 코호트 안 BH q<0.05, ② 서로 다른 **2 개
+이상** 코호트에서 **같은 부호로** 유의할 것을 요구한다. 부호를 맞추는 것은
+소비/생산 방향이 코호트마다 뒤집히면 신호가 아니라 잡음이기 때문이다.
+
+### 한계
+
+- **우울증 코호트가 없다.** 14 개 중 정신질환은 자폐 하나이고 나머지는
+  IBD·대장암·신장병·영아 등이다. 만들어지는 것은 "이 속과 이 compound 가 사람
+  장에서 함께 움직인다" 는 **일반 사실**이지 우울증 특이적 지식이 아니다.
+  우울증 전용 MTBLS12050 은 EBI API 가 401, 공개 FTP 가 404 다.
+- **속 수준이다.** 코호트가 속까지만 준다. 우리 taxid 로 펼칠 때 같은 속의 종이
+  전부 같은 링크를 받는다.
+- **상관은 대사가 아니다.** 같이 사는 균과 대사물이 상관을 보일 뿐이다.
+- `iHMP_IBDMDB_2019` 는 HTTP 오류로 빠졌다(대사물 81,867 짜리라 파일 구성이 다르다).
+
+### KG 반영
+
+`mpq:hasMetabolites` 에 출처 `측정 상관` 으로 담는다. 부호는 `our:measuredCorrelation`
+속성(`KEGG|±|n코호트`)으로 남긴다 — 술어로 바꾸면
+`hasPositive/NegativeAssociation`(이로움/해로움)과 뜻이 섞인다.
+**14,126 트리플** (링크 7,063 + 속성).
 
 ---
 

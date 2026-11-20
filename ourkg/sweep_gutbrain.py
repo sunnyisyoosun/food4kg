@@ -13,7 +13,9 @@ REC_OK = {'Finfish and Shellfish Products', 'Fruits and Fruit Juices',
 NOT_OK = {'Sausages and Luncheon Meats', 'Baked Products', 'Sweets',
           'Beef Products', 'Pork Products'}
 rows = []
-for who in os.environ.get('WHO', 'mental,rct').split(','):
+for spec in os.environ.get('WHO', 'mental,rct').split(','):
+  who, _, src = spec.partition('/')
+  os.environ['GUTBRAIN_SOURCE'] = src or 'both'
   for alpha in (0, 0.5, 1, 2, 4, 8):
       os.environ['GUTBRAIN_ALPHA'] = str(alpha)
       os.environ['GUTBRAIN_MICROBES'] = who
@@ -22,7 +24,7 @@ for who in os.environ.get('WHO', 'mental,rct').split(','):
       K = 30
       top, bot = res.head(K), res.tail(K)
       sc = analyze.modimed_score(res, K)
-      rows.append({'who': who, 'alpha': alpha,
+      rows.append({'who': spec, 'alpha': alpha,
                    'top30_추천군': int(top.food_group.isin(REC_OK).sum()),
                    'bot30_비추천군': int(bot.food_group.isin(NOT_OK).sum()),
                    'top30_위반': int(top.food_group.isin(NOT_OK).sum()),

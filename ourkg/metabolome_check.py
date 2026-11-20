@@ -33,6 +33,14 @@ from common import CACHE, OUT, compound_microbe
 BASE_URL = ('https://raw.githubusercontent.com/borenstein-lab/'
             'microbiome-metabolome-curated-data/main/data/processed_data')
 COHORTS = ('KANG_AUTISM_2017', 'MARS_IBS_2020')
+# 모음의 14 코호트 전부. 링크를 **만들 때**는 전부 쓴다 — 한 코호트의 상관은
+# 다중검정으로 쉽게 나오므로 **여러 코호트에서 반복되는 쌍만** 받아야 한다.
+ALL_COHORTS = (
+    'ERAWIJANTARI_GASTRIC_CANCER_2020', 'FRANZOSA_IBD_2019', 'HE_INFANTS_MFGM_2019',
+    'JACOBS_IBD_FAMILIES_2016', 'KANG_AUTISM_2017', 'KIM_ADENOMAS_2020',
+    'KOSTIC_INFANTS_DIABETES_2015', 'MARS_IBS_2020', 'POYET_BIO_ML_2019',
+    'SINHA_CRC_2016', 'WANDRO_PRETERMS_2018', 'WANG_ESRD_2020', 'YACHIDA_CRC_2019',
+    'iHMP_IBDMDB_2019')
 FILES = ('mtb.tsv', 'genera.tsv', 'mtb.map.tsv', 'metadata.tsv')
 
 
@@ -106,7 +114,80 @@ def check(cohort, n_perm=2000):
     return t
 
 
+def _pairs(cohort, min_prev=0.5):
+    """한 코호트의 (속, KEGG) Spearman 전부. BH 보정 q 까지."""
+    from scipy.stats import spearmanr, false_discovery_control
+    d = _load(cohort)
+    mtb, gen, mp = d['mtb.tsv'], d['genera.tsv'], d['mtb.map.tsv']
+    if 'KEGG' not in mp:
+        return pd.DataFrame()
+    k = mp.dropna(subset=['KEGG']).set_index('Compound')['KEGG'].to_dict()
+    mtb = mtb.set_index(mtb.columns[0])
+    gen = gen.set_index(gen.columns[0]).reindex(mtb.index)
+    gen.columns = [str(c).split('g__')[-1].split(';')[0].strip() for c in gen.columns]
+    gen = gen.loc[:, [bool(c) and c != 'NA' for c in gen.columns]]
+    gen = gen.loc[:, (gen > 0).mean() > min_prev]
+    cols = [c for c in k if c in mtb.columns]
+    if not (len(gen.columns) and cols):
+        return pd.DataFrame()
+    rows = []
+    for c in cols:
+        y = pd.to_numeric(mtb[c], errors='coerce')
+        for g in gen.columns:
+            rho, p = spearmanr(gen[g], y, nan_policy='omit')
+            if not np.isnan(rho):
+                rows.append((g, k[c], rho, p))
+    t = pd.DataFrame(rows, columns=['genus', 'kegg', 'rho', 'p'])
+    if not t.empty:
+        t['q'] = false_discovery_control(t.p.values)
+        t['cohort'] = cohort
+        t['n'] = len(mtb)
+    return t
+
+
+def build_links(q_max=0.05, min_cohorts=2):
+    """측정 상관으로 compound-미생물 링크를 만든다 -> out/compound_microbe_measured.csv
+
+    §15b 검정 ④ 에서 우리 예측 링크(KEGG 추론 · VMH 예측)가 측정된 분변
+    대사체와 **무관함**이 드러났다. 측정에서 직접 만든다.
+
+    **재현성을 요구한다.** 한 코호트 안에서는 다중검정으로 상관이 쉽게 나온다
+    (IBS 에서 BH 전 p<0.05 쌍이 41% 였다). BH q 를 걸고, 그 위에 **서로 다른
+    코호트 min_cohorts 개 이상에서 같은 부호로** 유의할 것을 요구한다.
+    부호를 맞추는 것은 소비/생산 방향이 코호트마다 뒤집히면 잡음이기 때문이다.
+    """
+    parts = []
+    for i, c in enumerate(ALL_COHORTS, 1):
+        try:
+            t = _pairs(c)
+        except Exception as e:
+            print(f'  ! {c}: {type(e).__name__}')
+            continue
+        print(f'  [{i}/{len(ALL_COHORTS)}] {c:34s} 쌍 {len(t):7,} '
+              f'(q<{q_max} {int((t.q < q_max).sum()) if len(t) else 0:,})', flush=True)
+        if len(t):
+            parts.append(t)
+    allt = pd.concat(parts, ignore_index=True)
+    sig = allt[allt.q < q_max].copy()
+    sig['sign'] = np.sign(sig.rho)
+    g = sig.groupby(['genus', 'kegg', 'sign']).agg(
+        n_cohorts=('cohort', 'nunique'), median_rho=('rho', 'median'),
+        cohorts=('cohort', lambda x: ';'.join(sorted(set(x))))).reset_index()
+    out = g[g.n_cohorts >= min_cohorts].sort_values(
+        ['n_cohorts', 'median_rho'], ascending=[False, False])
+    path = os.path.join(OUT, 'compound_microbe_measured.csv')
+    out.to_csv(path, index=False)
+    print(f'\n  전체 쌍 {len(allt):,} / q<{q_max} {len(sig):,} / '
+          f'{min_cohorts}+ 코호트 재현 **{len(out):,}**')
+    print(f'  속 {out.genus.nunique()} · compound {out.kegg.nunique()}  ->  {path}')
+    return out
+
+
 if __name__ == '__main__':
-    for c in (sys.argv[1:] or COHORTS):
-        check(c)
-        print()
+    a = sys.argv[1:]
+    if a and a[0] == 'build':
+        build_links()
+    else:
+        for c in (a or COHORTS):
+            check(c)
+            print()

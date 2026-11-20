@@ -82,9 +82,23 @@ def gutbrain_weight(compounds):
         return np.ones(len(compounds)), 0
 
     src = os.environ.get('GUTBRAIN_SOURCE', 'both')
-    sources = ('kegg', 'vmh') if src == 'both' else (src,)
     rank = os.environ.get('GUTBRAIN_RANK', 'species')
-    cm = compound_microbe(sources=sources, rank=None if rank == 'all' else rank)
+    if src == 'measured':
+        # 측정 상관으로 만든 링크 (metabolome_check.py build). 속 수준이라
+        # 우리 taxid 로 펼친다 — 같은 속의 종이 여럿이면 전부 받는다.
+        mp = os.path.join(OUT, 'compound_microbe_measured.csv')
+        if not os.path.exists(mp):
+            sys.exit('compound_microbe_measured.csv 가 없다. '
+                     'python3 ourkg/metabolome_check.py build')
+        meas = pd.read_csv(mp)
+        mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'),
+                          dtype={'taxid': str}).fillna('')
+        mic['genus'] = mic['name'].astype(str).str.split().str[0]
+        cm = meas.merge(mic[['taxid', 'genus']], on='genus')[['taxid', 'kegg']]
+        cm = cm.drop_duplicates()
+    else:
+        sources = ('kegg', 'vmh') if src == 'both' else (src,)
+        cm = compound_microbe(sources=sources, rank=None if rank == 'all' else rank)
     # 어느 균 집합으로 가중할 것인가.
     #   mental  우리 KG 가 정신질환에 연결한 균 (기본) — Disbiome + 배포 F03
     #   rct     **외부** 기준: 우울/불안 RCT 에서 시험된 균
