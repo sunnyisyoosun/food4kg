@@ -234,6 +234,17 @@ def recommend(e_mode=None, path=None, save=True):
     else:
         col = E_df['e_shrunk']
     e = np.array([col.get(c, 0.0) for c in compounds], dtype=float)
+    # 특정 compound 의 E 를 0 으로 둔다 (진단용).
+    # §15b 검정 ⑦ 에서 에탄올(C00469 e=+0.200)·설탕(C00089 e=+0.259)이 양수인
+    # 것이 드러났다. ProMENDA 의 up/down 은 "우울증 환자에서 이 대사물이 높다"
+    # 이지 "먹으면 좋다" 가 아니다(§9) — 그 불일치가 F 열에 남은 자리다.
+    # 유사도 평활화가 덮고 있을 뿐이라, 영향 크기를 재려고 둔다.
+    E_ZERO = [c for c in os.environ.get('E_ZERO', '').split(',') if c]
+    if E_ZERO:
+        _hit = [i for i, c in enumerate(compounds) if c in E_ZERO]
+        for i in _hit:
+            e[i] = 0.0
+        print(f'  E_ZERO={",".join(E_ZERO)} — {len(_hit)}개 열의 E 를 0 으로')
     print(f'  E_MODE={E_MODE}')
 
     # 논문 §4.2.1 — "135 food samples and their associated 85 component compounds,
