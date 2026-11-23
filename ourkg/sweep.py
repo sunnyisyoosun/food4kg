@@ -59,6 +59,15 @@ def _simthr():
 
 
 SWEEPS = {
+    # §17e — 나쁜 음식의 기여를 0 이하로 묶으면. E 모드 x 유사도 공간과 교차.
+    'simsign': ('simsign_comparison.csv',
+                [(f'{sg}/{sp}/{em}', {'SIM_SIGN': sg, 'SIM_SPACE': sp, 'E_MODE': em,
+                                      'NO_SIM': '0', 'SIM_THRESHOLD': 'none',
+                                      'GUTBRAIN_ALPHA': '0', 'E_ZERO': '',
+                                      'F_SCALE': 'per100g'})
+                 for sg in ('none', 'clip')
+                 for sp in ('composition', 'effect')
+                 for em in ('shrunk', 'nhanes_all')]),
     # §17d — 유사도를 무엇으로 재나. 성분 구성 vs 우울증 프로파일.
     'simspace': ('simspace_comparison.csv',
                  [(f'{sp}/{em}', {'SIM_SPACE': sp, 'E_MODE': em, 'NO_SIM': '0',

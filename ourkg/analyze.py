@@ -494,6 +494,27 @@ def recommend(e_mode=None, path=None, save=True):
     if os.environ.get('NO_SIM') == '1':
         print('  NO_SIM=1 — 유사도 단계를 건너뛴다 (P = D)')
         P = D.copy()
+    elif os.environ.get('SIM_SIGN', 'none') == 'clip':
+        # **나쁜 음식의 기여를 0 이하로 묶는다.**
+        #
+        # §17b 에서 1 위(야채주스) 점수의 상위 기여 8 개 중 6 개가 음수 x 음수
+        # 였다 — 버터(D=-1.1)와 유사도가 -0.07 이라 곱이 +0.077 이 된다.
+        # "버터와 안 닮았다" 가 "좋다" 로 번역되는 것이고, 식 (2) 에는 이 처리가
+        # 없다. 여기서는 D<0 인 음식이 **점수를 낮추기만** 하게 한다 — 닮으면
+        # 벌점, 안 닮으면 0.
+        #
+        #   D_i >= 0 :  그대로 D_i * S_ij
+        #   D_i <  0 :  min(D_i * S_ij, 0) = D_i * max(S_ij, 0)
+        #
+        # S 가 12,420^2 라 relu(S) 를 통째로 만들면 1.2 GB 가 더 든다. D<0 인
+        # 행만 1,000 개씩 끊어 처리한다.
+        pos = D > 0
+        P = (D * pos) @ S
+        negi = np.flatnonzero(~pos & (D != 0))
+        for k in range(0, len(negi), 1000):
+            blk = negi[k:k + 1000]
+            P += D[blk] @ np.maximum(S[blk], 0.0)
+        print(f'  SIM_SIGN=clip — D<0 인 음식 {len(negi):,} 개의 기여를 0 이하로')
     else:
         P = D @ S
     if SIM_NORM == 'colsum':
