@@ -59,6 +59,13 @@ def _simthr():
 
 
 SWEEPS = {
+    # §17d — 유사도를 무엇으로 재나. 성분 구성 vs 우울증 프로파일.
+    'simspace': ('simspace_comparison.csv',
+                 [(f'{sp}/{em}', {'SIM_SPACE': sp, 'E_MODE': em, 'NO_SIM': '0',
+                                  'SIM_THRESHOLD': 'none', 'GUTBRAIN_ALPHA': '0',
+                                  'E_ZERO': '', 'F_SCALE': 'per100g'})
+                  for sp in ('composition', 'effect')
+                  for em in ('shrunk', 'nhanes_all')]),
     # §17c — 유사도 단계를 빼면 어떤가. D 단독 vs D x S.
     'nosim': ('nosim_comparison.csv',
               [(f'{lab}/{em}', {'NO_SIM': ns, 'E_MODE': em, 'SIM_THRESHOLD': 'none',
@@ -132,8 +139,14 @@ def run(name):
         top, bot = res.head(30), res.tail(30)
         rows.append({
             '설정': lab,
-            # 주지표 — 표집에 안정적이다 (§17)
+            # 주지표 — 표집에 안정적이다 (§17).
+            # `비추천군` 은 **논문 §4.2.3 의 군 목록**으로만 센다(소시지·제과·
+            # 과자·소고기·돼지). 유지류·양고기는 논문 목록에 없어 안 세어지는데,
+            # 그것이 바닥에 오는 설정에서는 과소평가된다 — 그래서 외부 기준인
+            # `bot30_extras`(ModiMedDiet 가 제한하는 군)를 **나란히** 둔다.
+            # 어느 쪽을 셀지 우리가 정하지 않기 위해서다.
             'bot30_비추천군': int(bot.food_group.isin(NOT).sum()),
+            'bot30_extras(외부)': sc.get('bot30_extras'),
             'top30_위반': int(top.food_group.isin(NOT).sum()),
             # 참고 — 폭 16 으로 흔들린다. 차이 5 이하는 읽지 않는다
             'top30_추천군(참고)': int(top.food_group.isin(REC).sum()),

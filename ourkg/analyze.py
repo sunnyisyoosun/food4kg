@@ -409,8 +409,26 @@ def recommend(e_mode=None, path=None, save=True):
     D = X @ e
 
     print('[4/5] S = adjusted cosine (식 1) — 벡터화')
-    Xc = Xs - Xs.mean(axis=1, keepdims=True)
-    M = (Xs > 0).astype(float)                 # 공식 구현의 common 조건 (>0)
+    # 유사도를 **무엇으로** 잴 것인가.
+    #
+    #   composition  성분 구성 그대로 (기본, 논문 식 1)
+    #   effect       **우울증 프로파일**(e ⊙ F) 로
+    #
+    # §17b·§17c 에서 두 가지가 드러났다 — `E x F^T` 가 결과에 전달되지 않고,
+    # `S` 는 `E` 를 **전혀 쓰지 않는다**. 그래서 "지방이 0 vs 지방이 전부" 가
+    # 유사도를 지배하고(야채주스가 버터와 안 닮아서 1 위가 된다), `E` 를 고치는
+    # 모든 시도가 `D` 에 갇힌다. 성분을 `e` 로 가중해 유사도를 재면 "건강 효과가
+    # 비슷한 음식끼리" 가 되고 `E` 가 비로소 유사도에 들어간다.
+    SIM_SPACE = os.environ.get('SIM_SPACE', 'composition')
+    if SIM_SPACE == 'effect':
+        Xsim = Xs * e                      # compound 축을 E 로 가중
+        print(f'  SIM_SPACE=effect — 우울증 프로파일로 유사도를 잰다')
+    elif SIM_SPACE == 'composition':
+        Xsim = Xs
+    else:
+        sys.exit(f'SIM_SPACE 는 composition 또는 effect. 받은 값: {SIM_SPACE}')
+    Xc = Xsim - Xsim.mean(axis=1, keepdims=True)
+    M = (Xsim != 0).astype(float)              # 공식 구현의 common 조건
     num = (Xc * M) @ (Xc * M).T                # 공통 성분만 더한 분자
     nrm = np.sqrt((Xc ** 2).sum(axis=1))       # 분모는 전체 성분 (식 1 그대로)
     den = np.outer(nrm, nrm)
