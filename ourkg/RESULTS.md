@@ -1336,7 +1336,7 @@ WWEIA 군 링크·KG/F 층 분리·미생물 축 확장 이전** 수치였다. `
 
 `fcolumns_comparison.csv` 는 **만드는 스크립트가 저장소에 없었다** — 과거 임시
 스크립트로 만들고 CSV 만 커밋한 것이라 아무도 다시 만들 수 없었다.
-`ourkg/sweep_fcolumns.py` 로 고정했다.
+`ourkg/sweep.py fcolumns` 로 고정했다.
 
 #### E 구성 방식 (`analyze.py compare`)
 
@@ -1356,7 +1356,7 @@ WWEIA 군 링크·KG/F 층 분리·미생물 축 확장 이전** 수치였다. `
 `gutbrain` 경로가 compound 35 로 `direct`(66)의 절반인데 성적이 거의 같다 —
 미생물 축을 162 종으로 넓힌 결과다.
 
-#### F 열 × PCA (`ourkg/sweep_fcolumns.py`)
+#### F 열 × PCA (`ourkg/sweep.py fcolumns`)
 
 | F 열 | PCA | AUC | 추천군 | 비추천군 | 위반 | MMD 처방/extras | Top 1 |
 |---|---|---:|---:|---:|---:|---:|---|
@@ -2421,7 +2421,7 @@ SMILES 는 빈도 처방이므로 그 기울기를 그대로 쓰는 것이 맞�
 ### 결과 ① — 전역 순위 상관은 AUC 와 똑같이 실패한다
 
 §13 에서 AUC 가 Top-K 와 어긋났던 설정 넷으로 쟀다
-(`python3 ourkg/sweep_modimed_rho.py` → `out/modimed_rho_comparison.csv`).
+(`python3 ourkg/sweep.py modimed_rho` → `out/modimed_rho_comparison.csv`).
 
 | 설정 | Top30 추천군 | Bot30 비추천군 | AUC(참고) | ρ 처방군 | ρ 전체 | **ρ 상위200** |
 |---|---:|---:|---:|---:|---:|---:|
@@ -2663,7 +2663,7 @@ D    = e' × Fᵀ                 (이후는 논문 식 그대로)
 
 ### 결과 — 네 지표 모두 단조 악화
 
-`python3 ourkg/sweep_gutbrain.py` → `out/gutbrain_comparison.csv`
+`python3 ourkg/sweep.py gutbrain` → `out/gutbrain_comparison.csv`
 
 | `ALPHA` | Top30 추천군 | Bot30 비추천군 | Top30 위반 | MMD 처방군 | MMD extras | AUC(참고) |
 |---:|---:|---:|---:|---:|---:|---:|
@@ -2737,7 +2737,7 @@ PMC 가 봇 차단(reCAPTCHA)을 걸어 메타분석 본문을 못 읽는다. **
 #### 검정 ③ 외부 목록으로 가중해도 결과가 같다
 
 `GUTBRAIN_MICROBES=rct` 로 **우리 Disbiome/F03 집합 대신 외부 RCT 목록**으로
-가중했다 (`WHO=rct python3 ourkg/sweep_gutbrain.py`).
+가중했다 (`WHO=rct python3 ourkg/sweep.py gutbrain`).
 
 | `ALPHA` | Top30 추천군 | Bot30 비추천군 | MMD 처방군 | extras | AUC |
 |---:|---:|---:|---:|---:|---:|
@@ -2808,8 +2808,7 @@ IBS 에서 전체 p<0.05 쌍 비율이 **0.41** 이다. 데이터에 강한 구�
 
 부호는 **음 26,196 / 양 13,378** 로 소비 방향이 2 배다 — 대사 상식과 맞는다.
 
-**네 구성으로 쓸었다** (`WHO=mental,mental/kegg,mental/measured,rct
-python3 ourkg/sweep_gutbrain.py`). `ALPHA=1` 기준:
+**네 구성으로 쓸었다** (`python3 ourkg/sweep.py gutbrain`). `ALPHA=1` 기준:
 
 | 구성 | Top30 추천군 | Bot30 비추천군 | 위반 | MMD 처방군 | extras |
 |---|---:|---:|---:|---:|---:|

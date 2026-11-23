@@ -1,0 +1,95 @@
+"""설정 쓸기 — 한 자리에서 잰다.
+
+    python3 ourkg/sweep.py                 # 전부
+    python3 ourkg/sweep.py gutbrain        # 하나만
+    WHO=mental,rct python3 ourkg/sweep.py gutbrain
+
+쓸기가 셋으로 갈려 있었다(`sweep_fcolumns` · `sweep_gutbrain` ·
+`sweep_modimed_rho`). 셋 다 **같은 골격**이었다 — 설정을 환경변수로 바꿔
+`recommend` 를 돌리고, 두 기준으로 채점해 CSV 로 쓴다. 다른 것은 **무엇을
+바꾸느냐** 뿐이라 그것만 표로 두고 골격을 합쳤다.
+
+채점은 항상 둘을 같이 낸다. AUC 가 가장 높은 설정의 Top 30 이 처방 0 /
+extras 19(1 위가 증류주)인 경우가 있었다(RESULTS §13). **Top-K 가 주지표다.**
+"""
+import importlib
+import os
+import sys
+import warnings
+
+warnings.filterwarnings('ignore')
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import pandas as pd  # noqa: E402
+from common import OUT  # noqa: E402
+
+REC = {'Finfish and Shellfish Products', 'Fruits and Fruit Juices',
+       'Vegetables and Vegetable Products'}
+NOT = {'Sausages and Luncheon Meats', 'Baked Products', 'Sweets',
+       'Beef Products', 'Pork Products'}
+
+# 이름: (출력 파일, [(라벨, {환경변수}), ...]).  RESULTS 의 해당 절을 함께 적는다.
+def _gutbrain():
+    out = []
+    for spec in os.environ.get('WHO', 'mental,mental/kegg,mental/measured,rct').split(','):
+        who, _, src = spec.partition('/')
+        for a in (0, 0.5, 1, 2, 4, 8):
+            out.append((f'{spec} a={a}', {'GUTBRAIN_ALPHA': str(a),
+                                          'GUTBRAIN_MICROBES': who,
+                                          'GUTBRAIN_SOURCE': src or 'both'}))
+    return out
+
+
+SWEEPS = {
+    # §13 — F 열 제한 x PCA. AUC 와 Top-K 가 어긋나는 것을 처음 본 자리다.
+    'fcolumns': ('fcolumns_comparison.csv',
+                 [(f'{c}+{p}', {'F_COLUMNS': c, 'PCA_COMPONENTS': p})
+                  for c in ('linked', 'all') for p in ('0', '5', 'auto')]),
+    # §13b — 빈도 가중 순위 상관이 Top-K 와 같은 방향인지.
+    'modimed_rho': ('modimed_rho_comparison.csv',
+                    [(lab, {'F_COLUMNS': c, 'PCA_COMPONENTS': p, 'GUTBRAIN_ALPHA': '0'})
+                     for lab, c, p in (('기본', 'linked', '0'), ('all+0', 'all', '0'),
+                                       ('linked+PCA', 'linked', 'auto'),
+                                       ('all+auto(기각)', 'all', 'auto'))]),
+    # §15b·§15c — 미생물 매개 가중. 균 집합 x 링크 출처 x 세기.
+    'gutbrain': ('gutbrain_comparison.csv', None),
+}
+
+
+def run(name):
+    path, cfgs = SWEEPS[name]
+    if cfgs is None:
+        cfgs = _gutbrain()
+    rows = []
+    for lab, env in cfgs:
+        os.environ.update(env)
+        import analyze
+        importlib.reload(analyze)
+        res = analyze.recommend(save=False)
+        sc = analyze.modimed_score(res, 30)
+        top, bot = res.head(30), res.tail(30)
+        rows.append({
+            '설정': lab,
+            'top30_추천군': int(top.food_group.isin(REC).sum()),
+            'bot30_비추천군': int(bot.food_group.isin(NOT).sum()),
+            'top30_위반': int(top.food_group.isin(NOT).sum()),
+            'MMD_처방군': sc.get('top30_처방군'),
+            'MMD_extras': sc.get('top30_extras'),
+            'AUC(참고)': sc.get('modimed_AUC(참고)'),
+            'rho_처방군': sc.get('modimed_rho_처방군만'),
+            'rho_상위': sc.get(f"modimed_rho_상위{os.environ.get('MODIMED_RHO_TOP', '0')}"),
+            'top1': str(top.iloc[0].food_name)[:38]})
+    t = pd.DataFrame(rows).dropna(axis=1, how='all')
+    t.to_csv(os.path.join(OUT, path), index=False)
+    print(f'\n== {name}  ->  out/{path}')
+    print(t.to_string(index=False))
+    return t
+
+
+if __name__ == '__main__':
+    want = sys.argv[1:] or list(SWEEPS)
+    bad = [w for w in want if w not in SWEEPS]
+    if bad:
+        sys.exit(f'알 수 없는 쓸기 {bad}. 가능: {list(SWEEPS)}')
+    for n in want:
+        run(n)

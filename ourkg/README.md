@@ -28,12 +28,18 @@
 
 ## 실행
 
+**`.venv` 를 켜야 한다** — 설치는 [루트 `README.md`](../README.md) 의 설치 절.
+
 ```bash
-python3 ourkg/run_all.py                    # 구축 4단계 → 분석 2단계
+source .venv/bin/activate
+
+python3 ourkg/run_all.py                    # 구축 → 분석 → 외부 검정 → 쓸기
 python3 ourkg/run_all.py kg recommend       # 일부만
+python3 ourkg/run_all.py --env              # 환경변수 전수 (소스에서 긁는다)
 
 python3 ourkg/build.py                      # 구축만 (food promenda microbe kg)
 python3 ourkg/analyze.py recommend          # 분석 한 단계만
+python3 ourkg/sweep.py gutbrain             # 설정 쓸기 하나만
 ```
 
 필요 입력:
@@ -68,7 +74,11 @@ KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐�
 | | `disagree` | 두 평가 기준이 갈리는 지점을 음식군별로 분해 | `disagreement_by_group.csv` |
 | | `evaluate` | §4.1 SPARQL Q1~Q3, §5.1 방법 1·2 | `eval_*.csv/json` |
 | `common.py` | — | 경로·단위 환산·라벨/카테고리 정규화 공유 | |
-| `run_all.py` | — | 위 둘을 순서대로 호출 | |
+| `foodon_match.py` | — | FoodOn 매칭 (OLS) | `food_foodon.csv` |
+| `probiotic_rct.py` | `build`·`test` | **외부 검정** — 프로바이오틱스 RCT 25 종 | `setup/probiotic_rct.csv` |
+| `metabolome_check.py` | `build`·(기본) | **외부 검정** — 분변 대사체 코호트 | `compound_microbe_measured.csv` |
+| `sweep.py` | `fcolumns`·`modimed_rho`·`gutbrain` | 설정 쓸기 — 두 기준으로 채점 | `*_comparison.csv` |
+| `run_all.py` | — | 위를 순서대로 호출. `--env` 로 환경변수 전수 | |
 
 ## 결과
 
