@@ -233,6 +233,17 @@ def recommend(e_mode=None, path=None, save=True):
     CURATED = ('foundation_food', 'sr_legacy_food', 'survey_fndds_food')
     if os.environ.get('DATA_TYPES', 'curated') != 'all':
         foods = foods[foods['data_type'].isin(CURATED)]
+
+    # 음식 부분표집 — Top-K 지표의 **표집 변동**을 재려고 둔다.
+    #
+    # 지금까지 "추천군 21 vs 19" 같은 차이로 채택·기각했는데 **그 차이가 잡음인지
+    # 잰 적이 없다**(RESULTS §17). Top 30 은 30 칸뿐이라 몇 개 차이는 쉽게 난다.
+    #
+    # 복원추출 대신 **비복원 부분표집**을 쓴다. 복원추출은 같은 음식이 여러 번
+    # 뽑혀 Top-K 칸을 중복 점유하므로 순위 문제에서 지표가 부풀려진다.
+    _bf = float(os.environ.get('BOOT_FRAC', '0'))
+    if _bf:
+        foods = foods.sample(frac=_bf, random_state=int(os.environ.get('BOOT_SEED', '0')))
         long = long[long['food_key'].isin(set(foods.index))]
         print(f'  분석 측정 기반 음식만: {len(foods):,}')
 

@@ -11,6 +11,11 @@
 
 채점은 항상 둘을 같이 낸다. AUC 가 가장 높은 설정의 Top 30 이 처방 0 /
 extras 19(1 위가 증류주)인 경우가 있었다(RESULTS §13). **Top-K 가 주지표다.**
+
+**Top-K 안에서는 `비추천군`·`위반` 이 주지표다** (RESULTS §17). 음식을 5% 만
+빼도 `추천군` 은 21 -> 6 까지 흔들리는데(폭 16) `비추천군` 은 [25, 27](폭 2)
+이다. 추천군 차이가 **5 이하면 잡음 구간**이라 그것만으로 채택·기각하지 않는다.
+그래서 표의 열 순서도 비추천군을 앞에 둔다.
 """
 import importlib
 import os
@@ -114,9 +119,11 @@ def run(name):
         top, bot = res.head(30), res.tail(30)
         rows.append({
             '설정': lab,
-            'top30_추천군': int(top.food_group.isin(REC).sum()),
+            # 주지표 — 표집에 안정적이다 (§17)
             'bot30_비추천군': int(bot.food_group.isin(NOT).sum()),
             'top30_위반': int(top.food_group.isin(NOT).sum()),
+            # 참고 — 폭 16 으로 흔들린다. 차이 5 이하는 읽지 않는다
+            'top30_추천군(참고)': int(top.food_group.isin(REC).sum()),
             'MMD_처방군': sc.get('top30_처방군'),
             'MMD_extras': sc.get('top30_extras'),
             'AUC(참고)': sc.get('modimed_AUC(참고)'),

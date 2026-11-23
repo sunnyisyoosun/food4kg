@@ -24,7 +24,9 @@ ANALYZE = ['recommend', 'compare', 'external', 'invert', 'stype',
            'pathcheck', 'groups', 'evaluate']
 # 외부 자로 재는 단계. 네트워크를 쓰고 캐시가 비면 오래 걸린다.
 VERIFY = {'probiotic': ('probiotic_rct.py', ['test']),     # RESULTS §15b 검정 ①②
-          'metabolome': ('metabolome_check.py', [])}        # RESULTS §15b 검정 ④
+          'metabolome': ('metabolome_check.py', []),        # RESULTS §15b 검정 ④
+          'nhanes': ('nhanes.py', []),                      # RESULTS §15d
+          'bootstrap': ('bootstrap.py', [])}                # RESULTS §17 (주지표 근거)
 # 설정 쓸기. 하나하나가 recommend 를 여러 번 돌린다.
 SWEEP = {'sweep': ('sweep.py', [])}
 STEPS = BUILD + ANALYZE + list(VERIFY) + list(SWEEP)
