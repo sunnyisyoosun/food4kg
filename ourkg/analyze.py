@@ -27,7 +27,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'eval'))
-from common import OUT, BASE, compound_microbe
+from common import OUT, BASE, CACHE, compound_microbe
 
 
 def mental_taxids():
@@ -125,6 +125,44 @@ def gutbrain_weight(compounds):
           f'— 경로 있는 compound {int((v > 0).sum())}/{len(compounds)} '
           f'(균 중앙값 {np.median(v[v > 0]) if (v > 0).any() else 0:.0f})')
     return 1.0 + alpha * s, int((v > 0).sum())
+
+
+def serving_grams(foods):
+    """음식당 **1 회 섭취량(g)**. FDC food_portion 의 중앙값, 결측은 음식군 중앙값.
+
+    `F` 가 g/100 g 이라 "100 g 먹었을 때" 를 가정한다. 그런데 향신료는 1 회
+    4.2 g, 음료는 193 g 이다 — **46 배** 차이다. 이 왜곡이 기각된 설정 둘에서
+    같은 꼴로 드러났다 (RESULTS §15d):
+
+      `all+auto`      상위가 말린 향신료 (파프리카·오레가노)
+      `E_MODE=nhanes` 상위가 영양 강화 분말
+
+    둘 다 1 회 섭취량이 작은데 100 g 당 농도가 높은 식품이다.
+
+    **논문을 벗어난다** — §4.1.2 는 "each food instance's unit weight is
+    standardized to 100 g" 라고 명시한다. 그래서 `F_SCALE` 의 선택지로 두고
+    기본값은 `per100g` 다.
+
+    커버리지가 56% 뿐이라(12,513 중 6,970) 결측을 어떻게 다루느냐가 결과를
+    가른다. 음식군 중앙값으로 메우고, 아예 없으면 전체 중앙값을 쓴다.
+    """
+    d = os.path.join(CACHE, 'fdc_portion')
+    files = [os.path.join(d, f) for f in ('survey.csv', 'sr_legacy.csv')
+             if os.path.exists(os.path.join(d, f))]
+    if not files:
+        sys.exit('ourkg/cache/fdc_portion/ 가 비었다 — FDC food_portion.csv 가 필요하다 '
+                 '(DATA.md §1 참조)')
+    fp = pd.concat([pd.read_csv(f, dtype=str) for f in files])
+    fp['g'] = pd.to_numeric(fp.gram_weight, errors='coerce')
+    med = fp[fp.g > 0].groupby('fdc_id').g.median()
+    s = foods['fdc_id'].astype(str).map(med)
+    n_have = int(s.notna().sum())
+    by_group = s.groupby(foods['food_group']).transform('median')
+    s = s.fillna(by_group).fillna(s.median())
+    print(f'  F_SCALE=serving — 서빙 보유 {n_have:,}/{len(foods):,} '
+          f'({n_have / max(len(foods), 1) * 100:.0f}%), 나머지는 음식군 중앙값. '
+          f'중앙값 {s.median():.0f} g')
+    return s
 
 
 def recommend(e_mode=None, path=None, save=True):
@@ -318,6 +356,14 @@ def recommend(e_mode=None, path=None, save=True):
     # matrix represents the weight of a compound in the corresponding food sample"
     # 와 Fig.4(c) "we normalize the compounds in the two groups of foods separately"
     # 가 성분 축 정규화를 가리킨다. 공식 경로는 NORM=row_minmax 로 그대로 돌릴 수 있다.
+    # 1 회 섭취량 기준으로 바꾸기 — 논문은 100 g 고정이다(§4.1.2).
+    F_SCALE = os.environ.get('F_SCALE', 'per100g')
+    if F_SCALE == 'serving':
+        _sv = serving_grams(foods.loc[F.index].reset_index()).values
+        F = F.mul(_sv / 100.0, axis=0)
+    elif F_SCALE != 'per100g':
+        sys.exit(f'F_SCALE 은 per100g 또는 serving. 받은 값: {F_SCALE}')
+
     NORM = os.environ.get('NORM', 'compound')
     print(f'[2/5] 정규화 (NORM={NORM})')
     X = F.values.astype(float)

@@ -34,3 +34,4 @@ ourkg/cache/agora_microbe_metabolite.csv
 # 이 레포와 무관한 다른 과제 파일 (CIFAR-10 360MB + 실습 이미지)
 data/
 output.png
+ourkg/cache/fdc_portion/
