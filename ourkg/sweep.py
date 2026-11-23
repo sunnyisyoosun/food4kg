@@ -40,7 +40,22 @@ def _gutbrain():
     return out
 
 
+def _simthr():
+    """S 희소화. 두 가지를 같이 본다 — Top-K 가 나아지는가, 그리고 **미생물
+    가중이 살아나는가**(ALPHA=0 vs 2 의 차이가 커지는가). RESULTS §15b 의
+    "S 가 99.3% 꽉 차 있어 D 의 변조가 평균에 묻힌다" 를 검증하는 자리다."""
+    out = []
+    for thr in ('none', 'positive', 'q50', 'q90', 'topn:1000', 'topn:100', 'topn:30'):
+        for a in (0, 2):
+            out.append((f'{thr} a={a}', {'SIM_THRESHOLD': thr,
+                                         'GUTBRAIN_ALPHA': str(a),
+                                         'GUTBRAIN_MICROBES': 'mental'}))
+    return out
+
+
 SWEEPS = {
+    # §15b — 유사도 희소화. S 가 꽉 차 있어 D 의 변조가 묻히는지.
+    'simthr': ('simthr_comparison.csv', None),
     # §13 — F 열 제한 x PCA. AUC 와 Top-K 가 어긋나는 것을 처음 본 자리다.
     'fcolumns': ('fcolumns_comparison.csv',
                  [(f'{c}+{p}', {'F_COLUMNS': c, 'PCA_COMPONENTS': p})
@@ -59,7 +74,7 @@ SWEEPS = {
 def run(name):
     path, cfgs = SWEEPS[name]
     if cfgs is None:
-        cfgs = _gutbrain()
+        cfgs = {'gutbrain': _gutbrain, 'simthr': _simthr}[name]()
     rows = []
     for lab, env in cfgs:
         os.environ.update(env)

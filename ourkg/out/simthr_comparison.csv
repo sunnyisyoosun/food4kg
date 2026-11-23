@@ -1,0 +1,15 @@
+설정,top30_추천군,bot30_비추천군,top30_위반,MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
+none a=0,21,26,0,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+none a=2,17,21,0,21,3,0.455,0.325,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+positive a=0,0,26,0,1,18,0.459,0.313,"Alcoholic beverage, beer, light, low c"
+positive a=2,0,20,0,0,21,0.452,0.321,"Alcoholic beverage, beer, light, low c"
+q50 a=0,0,26,0,0,16,0.456,0.307,"Alcoholic beverage, malt beer, hard le"
+q50 a=2,0,26,0,0,17,0.45,0.313,"Alcoholic beverage, malt beer, hard le"
+q90 a=0,0,26,0,0,17,0.453,0.356,Hard seltzer
+q90 a=2,0,29,0,0,17,0.453,0.357,Hard seltzer
+topn:1000 a=0,0,29,0,0,17,0.513,0.322,"Alcoholic beverage, malt beer, hard le"
+topn:1000 a=2,0,30,0,0,17,0.504,0.336,"Alcoholic beverage, malt beer, hard le"
+topn:100 a=0,0,12,0,0,16,0.534,0.289,Glug
+topn:100 a=2,0,11,0,0,17,0.528,0.308,Glug
+topn:30 a=0,0,13,0,0,25,0.538,0.288,"Alcoholic beverage, whiskey sour, prep"
+topn:30 a=2,0,14,0,0,25,0.53,0.304,"Alcoholic beverage, whiskey sour, prep"
