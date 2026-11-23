@@ -2127,9 +2127,93 @@ def groups():
     print(f'  저장: {os.path.join(OUT, "group_comparison.png")}')
 
 
+
+def emicrobe():
+    """미생물 경로에서 **독립된 E** 를 유도해 ProMENDA 의 E 와 대조한다.
+
+    §15b 에서 미생물 매개 가중이 안 먹히는 이유를 **구조**로 진단했다 —
+    `P = D x S` 에서 `S` 가 99.3% 꽉 차 있어 `D` 의 compound 별 변조가 평균에
+    묻힌다(ALPHA 를 9 배로 걸어도 순위상관 0.99).
+
+    구조를 고치기 전에 **미생물 축에 신호가 있는지부터** 본다. 알고리즘을 안
+    바꾸고 답할 수 있는 질문이다:
+
+        compound c 를 대사하는 균이 우울증에서 **감소**한다면 c 는 이로운 쪽인가?
+        그렇게 만든 E_microbe 가 ProMENDA 의 E 와 일치하는가?
+
+    **방향 가정은 검증 대상이지 전제가 아니다.** "감소한 균이 좋은 균" 과 그
+    반대를 **둘 다** 재서 어느 쪽이 맞는지(혹은 둘 다 아닌지) 본다.
+
+    출력
+      out/e_microbe.csv            compound 별 E_microbe 와 근거 수
+      out/e_microbe_compare.csv    ProMENDA E 와의 일치 (방향 가정 x 질환 범위)
+    """
+    from scipy.stats import spearmanr
+
+    K = float(os.environ.get('SHRINK_K', '10'))
+    E = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+    db = pd.read_csv(os.path.join(OUT, 'microbe_disease_disbiome.csv'),
+                     dtype={'taxid': str})
+    rows = []
+    for scope, dsel in (('정신질환 전체', db[db.is_mental]),
+                        ('우울증만', db[db.disease == 'Major Depressive Disorder'])):
+        # 균별로 그 질환에서 늘었는지(Elevated) 줄었는지(Reduced)
+        for src in ('both', 'measured'):
+            cm = (compound_microbe() if src == 'both'
+                  else _measured_links())
+            if cm.empty:
+                continue
+            j = cm.merge(dsel[['taxid', 'outcome']], on='taxid')
+            if j.empty:
+                continue
+            n = j.pivot_table(index='kegg', columns='outcome', aggfunc='size',
+                              fill_value=0)
+            up = n.get('Elevated', pd.Series(0, index=n.index))
+            dn = n.get('Reduced', pd.Series(0, index=n.index))
+            for assume, pos, neg in (('감소=이로움', dn, up), ('증가=이로움', up, dn)):
+                e = (pos - neg) / (pos + neg + K)
+                both = E['e_shrunk'].reindex(e.index).dropna()
+                e2 = e.reindex(both.index)
+                nz = (both != 0) & (e2 != 0)
+                if nz.sum() < 10:
+                    continue
+                rho = spearmanr(both[nz], e2[nz]).statistic
+                agree = float((np.sign(both[nz]) == np.sign(e2[nz])).mean())
+                # 부호일치가 우연(0.5)보다 큰가 — 눈대중 말고 이항검정으로
+                from scipy.stats import binomtest
+                bt = binomtest(int(round(agree * nz.sum())), int(nz.sum()), 0.5,
+                               alternative='greater')
+                rows.append({'질환범위': scope, '링크': src, '방향가정': assume,
+                             'compound': int(nz.sum()),
+                             '부호일치': round(agree, 3), 'p': round(bt.pvalue, 4),
+                             'rho': round(float(rho), 3)})
+                if scope == '정신질환 전체' and src == 'both' and assume == '감소=이로움':
+                    pd.DataFrame({'kegg': e.index, 'e_microbe': e.values,
+                                  'n_reduced': dn.reindex(e.index).values,
+                                  'n_elevated': up.reindex(e.index).values}
+                                 ).to_csv(os.path.join(OUT, 'e_microbe.csv'), index=False)
+    t = pd.DataFrame(rows)
+    t.to_csv(os.path.join(OUT, 'e_microbe_compare.csv'), index=False)
+    print(t.to_string(index=False))
+    print('\n  부호일치 0.5 · rho 0 이 우연 수준이다. 두 방향 가정이 대칭이므로')
+    print('  한쪽이 0.5 보다 높으면 다른 쪽은 그만큼 낮다 — **크기**를 봐야 한다.')
+    return t
+
+
+def _measured_links():
+    """측정 상관 링크를 taxid 로 펼친 것 (metabolome_check.py build)."""
+    p = os.path.join(OUT, 'compound_microbe_measured.csv')
+    if not os.path.exists(p):
+        return pd.DataFrame(columns=['taxid', 'kegg'])
+    m = pd.read_csv(p)
+    mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str}).fillna('')
+    mic['genus'] = mic['name'].astype(str).str.split().str[0]
+    return m.merge(mic[['taxid', 'genus']], on='genus')[['taxid', 'kegg']].drop_duplicates()
+
+
 STEPS = {'recommend': recommend, 'compare': compare, 'external': external,
          'invert': invert, 'stype': stype, 'disagree': disagree, 'groups': groups,
-         'pathcheck': pathcheck, 'evaluate': evaluate}
+         'pathcheck': pathcheck, 'evaluate': evaluate, 'emicrobe': emicrobe}
 
 
 def main(argv):
