@@ -430,9 +430,19 @@ def recommend(e_mode=None, path=None, save=True):
     #   none      자르지 않는다 (2026-11-05 이전 동작)
     #   topn:<N>  음식마다 가장 닮은 N 개만 남긴다 (Sarwar 의 model size)
     #   q<p>      |S| 의 p 분위수 미만을 0 으로
+    #   neg:<w>   음수 유사도에 w 를 곱한다 (0=positive, 1=none 과 같다)
+    #
+    #             **왜 중간값이 필요한가.** 1 위(야채주스) 점수를 분해하면 상위
+    #             기여 8 개 중 6 개가 **음수 x 음수**다 — 버터(D=-1.1)와 유사도가
+    #             -0.07 이라 곱이 +0.077 이 된다. 즉 "좋은 음식과 닮아서" 가
+    #             아니라 **"버터와 안 닮아서"** 올라간다(RESULTS §17b). 식 (2)
+    #             에는 이 처리가 없는데, 0 으로 자르면(positive) 추천군이 0 이
+    #             되고 그대로 두면(none) 주스가 Top-K 를 점령한다. 사이를 잰다.
     SIM_THRESHOLD = os.environ.get('SIM_THRESHOLD', 'none')
     _n_before = int((S != 0).sum())
-    if SIM_THRESHOLD == 'positive':
+    if SIM_THRESHOLD.startswith('neg:'):
+        S[S < 0] *= float(SIM_THRESHOLD.split(':', 1)[1])
+    elif SIM_THRESHOLD == 'positive':
         S[S < 0] = 0.0
     elif SIM_THRESHOLD == 'negative':      # 진단용 — 음수 절반만 남긴다
         S[S > 0] = 0.0
@@ -446,7 +456,8 @@ def recommend(e_mode=None, path=None, save=True):
         t = np.quantile(np.abs(S[S != 0]), q) if (S != 0).any() else 0.0
         S = np.where(np.abs(S) >= t, S, 0.0)
     elif SIM_THRESHOLD != 'none':
-        sys.exit(f'SIM_THRESHOLD 는 positive|none|topn:<N>|q<p>. 받은 값: {SIM_THRESHOLD}')
+        sys.exit('SIM_THRESHOLD 는 positive|none|neg:<w>|topn:<N>|q<p>. '
+                 f'받은 값: {SIM_THRESHOLD}')
     _n_after = int((S != 0).sum())
     print(f'  Threshold={SIM_THRESHOLD}  S 비영 {_n_before:,} -> {_n_after:,} '
           f'({_n_after / max(_n_before, 1) * 100:.0f}%)')

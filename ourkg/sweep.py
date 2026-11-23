@@ -59,6 +59,12 @@ def _simthr():
 
 
 SWEEPS = {
+    # §17b — 음수 유사도 가중. "안 닮아서 좋다" 를 얼마나 인정할 것인가.
+    'negw': ('negw_comparison.csv',
+             [(f'neg:{w}', {'SIM_THRESHOLD': f'neg:{w}', 'E_MODE': 'shrunk',
+                            'GUTBRAIN_ALPHA': '0', 'E_ZERO': '',
+                            'F_SCALE': 'per100g'})
+              for w in ('0', '0.25', '0.5', '0.75', '1')]),
     # §15b — 유사도 희소화. S 가 꽉 차 있어 D 의 변조가 묻히는지.
     'simthr': ('simthr_comparison.csv', None),
     # §13 — F 열 제한 x PCA. AUC 와 Top-K 가 어긋나는 것을 처음 본 자리다.
