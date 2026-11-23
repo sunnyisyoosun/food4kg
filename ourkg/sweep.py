@@ -59,6 +59,13 @@ def _simthr():
 
 
 SWEEPS = {
+    # §17c — 유사도 단계를 빼면 어떤가. D 단독 vs D x S.
+    'nosim': ('nosim_comparison.csv',
+              [(f'{lab}/{em}', {'NO_SIM': ns, 'E_MODE': em, 'SIM_THRESHOLD': 'none',
+                                'GUTBRAIN_ALPHA': '0', 'E_ZERO': '',
+                                'F_SCALE': 'per100g'})
+               for lab, ns in (('P=DxS', '0'), ('P=D', '1'))
+               for em in ('shrunk', 'nhanes_all')]),
     # §17b — 음수 유사도 가중. "안 닮아서 좋다" 를 얼마나 인정할 것인가.
     'negw': ('negw_comparison.csv',
              [(f'neg:{w}', {'SIM_THRESHOLD': f'neg:{w}', 'E_MODE': 'shrunk',

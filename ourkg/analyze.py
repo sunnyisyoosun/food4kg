@@ -470,7 +470,14 @@ def recommend(e_mode=None, path=None, save=True):
     # 14,000개에서는 성분이 적은 음식(칵테일류)의 열합이 ~15 까지 떨어져(중앙값 3,894)
     # 나눗셈이 점수를 폭발시킨다. 기본값은 논문 식 (2) 그대로다.
     SIM_NORM = os.environ.get('SIM_NORM', 'none')   # none(논문 식2) | colsum(공식 코드)
-    P = D @ S
+    # 유사도 단계를 아예 빼 본다 (P = D). §17b 에서 "E x F^T 는 기여하지
+    # 않는다" 를 보였는데, 그 주장을 완성하려면 **D 단독이 어떤지**도 보여야
+    # 한다. 논문 Algorithm 1 의 line 8 을 지우는 것이라 진단용이다.
+    if os.environ.get('NO_SIM') == '1':
+        print('  NO_SIM=1 — 유사도 단계를 건너뛴다 (P = D)')
+        P = D.copy()
+    else:
+        P = D @ S
     if SIM_NORM == 'colsum':
         colsum = S.sum(axis=0)
         P = np.divide(P, colsum, out=np.zeros_like(P), where=colsum != 0)
