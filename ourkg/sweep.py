@@ -70,6 +70,11 @@ SWEEPS = {
     'gutbrain': ('gutbrain_comparison.csv', None),
     # §15b 검정 ⑧ — 에탄올·설탕의 E 를 0 으로 두면 무엇이 바뀌나.
     'ezero': ('ezero_comparison.csv', None),
+    # §16 — E 의 소스를 바꾼다. ProMENDA(농도) vs NHANES(섭취-결과).
+    'emode': ('emode_comparison.csv',
+              [(m, {'E_MODE': m, 'SIM_THRESHOLD': 'none', 'GUTBRAIN_ALPHA': '0',
+                    'E_ZERO': ''})
+               for m in ('shrunk', 'binary', 'nhanes', 'nhanes_all', 'learned')]),
 }
 
 

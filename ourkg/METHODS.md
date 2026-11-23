@@ -47,6 +47,7 @@ python3 ourkg/run_all.py
 | | 중국 식품 온톨로지 | 로컬 | 카테고리 39 · 음식 174 |
 | compound | KEGG | REST + 캐시 | 행렬 **130** · brite 분류 744 |
 | 우울증-대사물 | ProMENDA | 로컬 | compound **1,412** |
+| **섭취-결과** | **NHANES 2017-18** | CDC xpt + 캐시 | 표본 4,774 · compound 47 |
 | 미생물 | NCBI taxonomy | efetch + 캐시 | **485 taxid** |
 | 미생물-질환 | **Disbiome** | REST 전수 + 캐시 | **1,193** 관계 |
 | | MiKG 원본 TTL | 로컬 | 406 쌍 + 근거등급 A/B/C |
@@ -180,7 +181,15 @@ RCT 203 편에서 종명을 뽑아 NCBI taxonomy 로 해소한 **25 종** 정답
 (`ourkg/probiotic_rct.py`). 우리 미생물 축의 **커버리지 20/25** 이고 그 전부
 compound 연결이 있다. 이 목록은 "효과가 입증된 균" 이 아니라 **시험된** 균이다.
 
-### ⑤ 외부 검정 — 측정된 분변 대사체 (compound-미생물 링크)
+### ⑤ 외부 소스 — NHANES 섭취-결과 E (`E_MODE=nhanes`)
+
+ProMENDA 의 "환자에서 농도가 높다" 와 달리 **"먹으면 어떻게 되나"** 를 잰다
+(`ourkg/nhanes.py`). 24 시간 식이회상 x PHQ-9, 나이·성별·총열량·소득 보정.
+개별 극성은 더 타당하지만(에탄올 부호를 바로잡는다) Top-K 에서는 진다 —
+`F` 가 g/100 g 이라 영양 강화 분말이 상위를 차지한다
+([`RESULTS.md`](RESULTS.md) §15d). **관찰 연구라 기본값으로 쓰지 않는다.**
+
+### ⑥ 외부 검정 — 측정된 분변 대사체 (compound-미생물 링크)
 
 짝지어진 분변 마이크로바이옴 + 대사체 코호트([Gut Microbiome-Metabolome Dataset
 Collection](https://www.nature.com/articles/s41522-022-00345-5))로 우리 예측
@@ -193,7 +202,7 @@ id 로 직접 매핑해 변환 없이 붙는다. **두 코호트 모두 음성**
 걸러 **39,574 쌍**. KEGG 추론·VMH 예측과 13% 만 겹치므로 서로 보완한다.
 출처 태그는 `측정 상관` 으로 분리한다 — 추론도 예측도 아닌 **관측**이다.
 
-### ⑥ 보조 — 논문 Fig 4(c) 성분군 조성
+### ⑦ 보조 — 논문 Fig 4(c) 성분군 조성
 
 compound 를 생물학적 역할 6 군으로 묶어 추천군과 비추천군의 조성을 비교한다
 (`analyze.py groups`). AUC 를 못 쓰게 된 뒤 **Top 30 수작업 검수 말고 쓸 수

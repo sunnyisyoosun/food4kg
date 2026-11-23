@@ -227,6 +227,15 @@ def recommend(e_mode=None, path=None, save=True):
             sys.exit('compound_evidence.csv 가 없다. python3 ourkg/build.py evidence')
         ev = pd.read_csv(ev_path).set_index('kegg')
         col = ev['e_' + E_MODE]
+    elif E_MODE.startswith('nhanes'):
+        # 섭취-결과 기반 E (ourkg/nhanes.py). ProMENDA 의 "환자에서 농도가
+        # 높다" 와 달리 "먹으면 어떻게 되나" 를 잰다 — RESULTS §9·§15b.
+        np_ = os.path.join(OUT, 'compound_depression_nhanes.csv')
+        if not os.path.exists(np_):
+            sys.exit('compound_depression_nhanes.csv 가 없다. python3 ourkg/nhanes.py')
+        _nh = pd.read_csv(np_).set_index('kegg')
+        # nhanes = q<0.05 만(보수적) · nhanes_all = 전부
+        col = _nh['e_nhanes' if E_MODE == 'nhanes_all' else 'e_sig']
     elif E_MODE == 'binary':
         col = E_df['e_binary']
     elif E_MODE == 'sig':
