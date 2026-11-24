@@ -69,6 +69,14 @@ SWEEPS = {
                                      ('learned x S', 'learned', '0'),
                                      ('learned 단독(=지도학습 점수)', 'learned', '1'),
                                      ('shrunk 단독', 'shrunk', '1'))]),
+    # §22 — 두 E 소스를 합치면. 교체만 해 보고 합쳐 본 적이 없다.
+    'union': ('union_comparison.csv',
+              [(f'{em}/{sp}', {'E_MODE': em, 'SIM_SPACE': sp, 'NO_SIM': '0',
+                               'SIM_SIGN': 'none', 'SIM_THRESHOLD': 'none',
+                               'GUTBRAIN_ALPHA': '0', 'E_ZERO': '', 'DEDUP': 'none',
+                               'F_SCALE': 'per100g'})
+               for em in ('shrunk', 'union', 'union_all')
+               for sp in ('composition', 'effect')]),
     # §21b — learned x S 에서 중복 변종을 묶으면 위반이 줄어드나.
     'learned_dedup': ('learned_dedup_comparison.csv',
                       [(f'{em}/{dd}', {'E_MODE': em, 'DEDUP': dd, 'NO_SIM': '0',

@@ -312,7 +312,7 @@ def recommend(e_mode=None, path=None, save=True):
             sys.exit('compound_evidence.csv 가 없다. python3 ourkg/build.py evidence')
         ev = pd.read_csv(ev_path).set_index('kegg')
         col = ev['e_' + E_MODE]
-    elif E_MODE.startswith('nhanes'):
+    elif E_MODE.startswith(('nhanes', 'union')):
         # 섭취-결과 기반 E (ourkg/nhanes.py). ProMENDA 의 "환자에서 농도가
         # 높다" 와 달리 "먹으면 어떻게 되나" 를 잰다 — RESULTS §9·§15b.
         np_ = os.path.join(OUT, 'compound_depression_nhanes.csv')
@@ -320,7 +320,25 @@ def recommend(e_mode=None, path=None, save=True):
             sys.exit('compound_depression_nhanes.csv 가 없다. python3 ourkg/nhanes.py')
         _nh = pd.read_csv(np_).set_index('kegg')
         # nhanes = q<0.05 만(보수적) · nhanes_all = 전부
-        col = _nh['e_nhanes' if E_MODE == 'nhanes_all' else 'e_sig']
+        # union / union_all = **ProMENDA 와 합친다.**
+        #   두 소스를 교체만 해 보고 합쳐 본 적이 없었다. 겹치는 compound 가
+        #   11 개(유의)·29 개(전체)뿐이라 합치면 F 열의 비영 E 가 66 -> 79/84 로
+        #   는다. NHANES 만 있는 13 개는 철·구리·콜린·칼륨·마그네슘·셀레늄·
+        #   비타민K·카로틴·루테인·인 — ProMENDA(혈중 대사체)에 없던 **미네랄과
+        #   카로티노이드** 축이다. 나머지 64 열은 지금 점수에 전혀 기여하지 않는다.
+        #
+        #   겹치는 곳은 **ProMENDA 를 우선**한다. 논문 경로를 기본으로 두고
+        #   NHANES 로 **빈 칸만 메우는** 것이 바꾸는 폭이 가장 작다.
+        _nhcol = 'e_nhanes' if E_MODE.endswith('_all') else 'e_sig'
+        if E_MODE.startswith('union'):
+            col = E_df['e_shrunk'].copy()
+            _fill = _nh[_nhcol]
+            _add = _fill[(_fill != 0) & (~_fill.index.isin(col[col != 0].index))]
+            col = pd.concat([col[col != 0], _add])
+            print(f'  union — ProMENDA {int((E_df["e_shrunk"] != 0).sum())} '
+                  f'+ NHANES 로 메운 {len(_add)}')
+        else:
+            col = _nh[_nhcol]
     elif E_MODE == 'binary':
         col = E_df['e_binary']
     elif E_MODE == 'sig':

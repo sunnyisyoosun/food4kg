@@ -83,6 +83,8 @@ CANDIDATES = {
                     'DEDUP': 'name2'},
     'learned-name2': {'E_MODE': 'learned', 'SIM_SPACE': 'composition',
                       'DEDUP': 'name2'},
+    'union': {'E_MODE': 'union', 'SIM_SPACE': 'composition'},
+    'union_all': {'E_MODE': 'union_all', 'SIM_SPACE': 'composition'},
 }
 
 
