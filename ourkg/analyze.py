@@ -165,6 +165,74 @@ def serving_grams(foods):
     return s
 
 
+def resolve_e(mode, E_df=None):
+    """`E_MODE` 이름 -> compound 별 E (pandas Series). **해석은 여기 한 곳이다.**
+
+    `recommend` · `compare` · `evaluate`(근거 고르기)가 각자 이 분기를 들고
+    있었다. 기본값이 `shrunk` 하나였던 동안에는 드러나지 않다가 §24·§25 에서
+    두 번 바꾸자 버그 둘이 났다 (RESULTS §26) —
+
+      `basis()` 가 `e_shrunk` 만 봐서 **점수는 앙상블, 근거는 ProMENDA**
+      `compare()` 가 모르는 모드를 **조용히 `shrunk` 로** 떨어뜨림
+
+    모르는 이름은 **소리 내고 멈춘다.** 조용한 기본값 복귀가 위 둘의 원인이다.
+    """
+    if E_df is None:
+        E_df = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+
+    def _need(path, how):
+        if not os.path.exists(path):
+            sys.exit(f'{os.path.basename(path)} 가 없다. {how}')
+        return pd.read_csv(path).set_index('kegg')
+
+    if mode.startswith('stype:'):
+        t = _need(os.path.join(OUT, 'compound_depression_stype.csv'),
+                  'python3 ourkg/analyze.py stype')
+        return t[mode.split(':', 1)[1]]
+    if mode == 'learned':
+        # 주의: ModiMedDiet 라벨로 학습한 E 다(analyze.py invert).
+        # ModiMedDiet 기준으로 잴 때는 held-out 음식만 써야 한다.
+        return _need(os.path.join(OUT, 'compound_learned.csv'),
+                     'python3 ourkg/analyze.py invert')['e_learned']
+    if mode.split('_')[0] in ('weighted', 'priority', 'vote'):
+        return _need(os.path.join(OUT, 'compound_evidence.csv'),
+                     'python3 ourkg/build.py evidence')['e_' + mode]
+    if mode.startswith(('nhanes', 'union')):
+        # 섭취-결과 기반 E (ourkg/nhanes.py). ProMENDA 의 "환자에서 농도가
+        # 높다" 와 달리 "먹으면 어떻게 되나" 를 잰다 — RESULTS §9·§15b.
+        nh = _need(os.path.join(OUT, 'compound_depression_nhanes.csv'),
+                   'python3 ourkg/nhanes.py')
+        #   nhanes = q<0.05 만(보수적) · nhanes_all = 전부
+        #   union* = **ProMENDA 와 합친다.** 겹치는 compound 가 11/29 개뿐이라
+        #   F 열의 비영 E 가 66 -> 79/84 로 는다. NHANES 만 있는 것은 철·구리·
+        #   콜린·칼륨·마그네슘·셀레늄·비타민K·카로틴·루테인·인 — ProMENDA
+        #   (혈중 대사체)에 없던 **미네랄·카로티노이드** 축이다.
+        #   겹치는 곳은 **ProMENDA 우선** — 바꾸는 폭이 가장 작다.
+        nhcol = 'e_nhanes' if mode.endswith('_all') else 'e_sig'
+        if mode.startswith('union'):
+            base = E_df['e_shrunk']
+            fill = nh[nhcol]
+            add = fill[(fill != 0) & (~fill.index.isin(base[base != 0].index))]
+            print(f'  union — ProMENDA {int((base != 0).sum())} + NHANES 로 메운 {len(add)}')
+            return pd.concat([base[base != 0], add])
+        return nh[nhcol]
+    if mode == 'binary':
+        return E_df['e_binary']
+    if mode == 'sig':
+        return E_df['e_binary'].where(E_df['q'] < 0.05, 0.0)
+    if mode == 'shrunk':
+        return E_df['e_shrunk']
+    sys.exit(f'알 수 없는 E_MODE: {mode}')
+
+
+def ensemble_modes():
+    """기본 경로에서 쓰이는 E 모드 목록. 빈 목록이면 앙상블을 끈 것이다."""
+    v = os.environ.get('ENSEMBLE', 'shrunk,nhanes_all')
+    if not v or v == 'none':
+        return []
+    return [m.strip() for m in v.split(',') if m.strip()]
+
+
 def recommend(e_mode=None, path=None, save=True):
     """(앞부분은 아래 docstring 참조)"""
     # --- 순위 앙상블 (기본 경로, RESULTS §25) ---------------------------------
@@ -339,58 +407,7 @@ def _recommend_one(e_mode=None, path=None, save=True):
     # 미네랄·카로티노이드 축이 들어온다. 겹치는 곳은 ProMENDA 우선.
     # `shrunk` 로 되돌리면 2026-11-24 이전 동작이다.
     E_MODE = e_mode or os.environ.get('E_MODE', 'union_all')
-    if E_MODE.startswith('stype:'):
-        sp = os.path.join(OUT, 'compound_depression_stype.csv')
-        if not os.path.exists(sp):
-            sys.exit('compound_depression_stype.csv 가 없다. '
-                     'python3 ourkg/analyze.py stype')
-        col = pd.read_csv(sp).set_index('kegg')[E_MODE.split(':', 1)[1]]
-    elif E_MODE == 'learned':
-        # 주의: 이 E 는 ModiMedDiet 라벨로 학습한 것이다(analyze.py invert).
-        # ModiMedDiet 기준으로 잴 때는 held-out 음식만 써야 한다.
-        lp = os.path.join(OUT, 'compound_learned.csv')
-        if not os.path.exists(lp):
-            sys.exit('compound_learned.csv 가 없다. python3 ourkg/analyze.py invert')
-        col = pd.read_csv(lp).set_index('kegg')['e_learned']
-    elif E_MODE.split('_')[0] in ('weighted', 'priority', 'vote'):
-        ev_path = os.path.join(OUT, 'compound_evidence.csv')
-        if not os.path.exists(ev_path):
-            sys.exit('compound_evidence.csv 가 없다. python3 ourkg/build.py evidence')
-        ev = pd.read_csv(ev_path).set_index('kegg')
-        col = ev['e_' + E_MODE]
-    elif E_MODE.startswith(('nhanes', 'union')):
-        # 섭취-결과 기반 E (ourkg/nhanes.py). ProMENDA 의 "환자에서 농도가
-        # 높다" 와 달리 "먹으면 어떻게 되나" 를 잰다 — RESULTS §9·§15b.
-        np_ = os.path.join(OUT, 'compound_depression_nhanes.csv')
-        if not os.path.exists(np_):
-            sys.exit('compound_depression_nhanes.csv 가 없다. python3 ourkg/nhanes.py')
-        _nh = pd.read_csv(np_).set_index('kegg')
-        # nhanes = q<0.05 만(보수적) · nhanes_all = 전부
-        # union / union_all = **ProMENDA 와 합친다.**
-        #   두 소스를 교체만 해 보고 합쳐 본 적이 없었다. 겹치는 compound 가
-        #   11 개(유의)·29 개(전체)뿐이라 합치면 F 열의 비영 E 가 66 -> 79/84 로
-        #   는다. NHANES 만 있는 13 개는 철·구리·콜린·칼륨·마그네슘·셀레늄·
-        #   비타민K·카로틴·루테인·인 — ProMENDA(혈중 대사체)에 없던 **미네랄과
-        #   카로티노이드** 축이다. 나머지 64 열은 지금 점수에 전혀 기여하지 않는다.
-        #
-        #   겹치는 곳은 **ProMENDA 를 우선**한다. 논문 경로를 기본으로 두고
-        #   NHANES 로 **빈 칸만 메우는** 것이 바꾸는 폭이 가장 작다.
-        _nhcol = 'e_nhanes' if E_MODE.endswith('_all') else 'e_sig'
-        if E_MODE.startswith('union'):
-            col = E_df['e_shrunk'].copy()
-            _fill = _nh[_nhcol]
-            _add = _fill[(_fill != 0) & (~_fill.index.isin(col[col != 0].index))]
-            col = pd.concat([col[col != 0], _add])
-            print(f'  union — ProMENDA {int((E_df["e_shrunk"] != 0).sum())} '
-                  f'+ NHANES 로 메운 {len(_add)}')
-        else:
-            col = _nh[_nhcol]
-    elif E_MODE == 'binary':
-        col = E_df['e_binary']
-    elif E_MODE == 'sig':
-        col = E_df['e_binary'].where(E_df['q'] < 0.05, 0.0)
-    else:
-        col = E_df['e_shrunk']
+    col = resolve_e(E_MODE, E_df)
     e = np.array([col.get(c, 0.0) for c in compounds], dtype=float)
     # 특정 compound 의 E 를 0 으로 둔다 (진단용).
     # §15b 검정 ⑦ 에서 에탄올(C00469 e=+0.200)·설탕(C00089 e=+0.259)이 양수인
@@ -1071,23 +1088,9 @@ def evaluate():
         # ProMENDA 로 설명하는 불일치였다(그린빈의 근거가 Palmitic acid 로
         # 나왔다). 쓰인 모드들의 E 를 평균해서 쓴다.
         def _basis_e():
-            modes = [m.strip() for m in
-                     os.environ.get('ENSEMBLE', 'shrunk,nhanes_all').split(',')
-                     if m.strip() and m.strip() != 'none']
-            if not modes:
-                modes = [os.environ.get('E_MODE', 'union_all')]
-            cols = []
-            for m in modes:
-                if m.startswith('nhanes'):
-                    _p = os.path.join(OUT, 'compound_depression_nhanes.csv')
-                    if os.path.exists(_p):
-                        _n = pd.read_csv(_p).set_index('kegg')
-                        cols.append(_n['e_nhanes' if m.endswith('_all') else 'e_sig'])
-                else:
-                    cols.append(E['e_shrunk'])
-            if not cols:
-                return E['e_shrunk']
+            modes = ensemble_modes() or [os.environ.get('E_MODE', 'union_all')]
             # 서로 다른 스케일을 평균하지 않도록 **각자 최대절대값으로 정규화**
+            cols = [resolve_e(m, E) for m in modes]
             cols = [c / c.abs().max() if c.abs().max() else c for c in cols]
             return pd.concat(cols, axis=1).mean(axis=1)
 
@@ -1446,21 +1449,7 @@ def compare():
     cpds = sorted(long['kegg'].unique())
     for row in rows:
         m = row['e_mode']
-        if m.split('_')[0] in ('weighted', 'priority', 'vote') and ev is not None:
-            col = ev['e_' + m]
-        elif m == 'binary':
-            col = dep['e_binary']
-        elif m == 'sig':
-            col = dep['e_binary'].where(dep['q'] < 0.05, 0.0)
-        elif m == 'shrunk':
-            col = dep['e_shrunk']
-        else:
-            # 모르는 모드를 **조용히 shrunk 로 떨어뜨리지 않는다.** 여기 분기가
-            # `recommend` 의 것과 따로 자라서, E_MODES=nhanes_all 같이 주면
-            # 이름만 다른 shrunk 결과가 나왔다. 기본값을 §24·§25 에서 두 번
-            # 바꾸면서 드러난 종류의 함정이다 (RESULTS §26).
-            sys.exit(f'compare 가 모르는 E_MODE: {m}. '
-                     f'nhanes/union/learned 계열은 `sweep.py emode` 로 잰다.')
+        col = resolve_e(m, dep)      # 해석은 resolve_e 한 곳이다 (§26)
         sel = cpds
         if row['path'] == 'gutbrain':
             cm = compound_microbe(sources=('kegg',))
