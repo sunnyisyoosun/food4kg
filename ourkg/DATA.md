@@ -19,7 +19,7 @@
 | 음식 카테고리 | FDC SR / WWEIA | 로컬 덤프 | 세분 265 · 상위 27 |
 | 우울증-대사물 | ProMENDA | 로컬 xlsx | 레코드 22,519 → compound 1,412 |
 | 미생물 | NCBI taxonomy | efetch + 캐시 | **798 taxid** (127 + Disbiome 333 + gutMDisorder 309 + 보탠 29) |
-| compound-미생물 | KEGG REST | REST + 캐시 | 10,257 링크 · compound 76 (**55% 는 속 수준**) |
+| compound-미생물 | KEGG REST | REST + 캐시 | 14,918 링크 · compound 76 (**57% 는 속 수준**) |
 | compound-미생물 (예측) | **VMH / AGORA2** | 벌크 zip + 캐시 | 44,094 링크 · compound 1,069 |
 | 미생물-정신질환 | MiKG 원본 TTL | 로컬 ttl | 406 쌍 |
 | 미생물-질환 (외부) | **Disbiome** | REST 전수 + 캐시 | 1,193 관계 · 균 457 · 질환 23 |
@@ -32,9 +32,39 @@
 
 ---
 
+## 출처 링크 — 어디서 받았나
+
+받은 주소를 한자리에 모은다. **엔드포인트 주소까지 적는다** — 받는 페이지만
+적으면 다시 받을 때 경로를 또 찾아야 하고, 실제로 그걸로 한 번 깨졌다(§15).
+
+| # | 소스 | 받는 곳 | 실제 주소 |
+|---|---|---|---|
+| 1 · 4 · 14 | FoodData Central (FDC) | [다운로드 페이지](https://fdc.nal.usda.gov/download-datasets.html) → "Full Download of All Data Types" | [`FoodData_Central_survey_food_csv_2024-10-31.zip`](https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_survey_food_csv_2024-10-31.zip) |
+| 2 · 7 | KEGG | [KEGG](https://www.kegg.jp/) · [REST 안내](https://www.kegg.jp/kegg/rest/keggapi.html) | `https://rest.kegg.jp/<operation>` |
+| 3 | FoodOn | [EBI OLS4 — foodon](https://www.ebi.ac.uk/ols4/ontologies/foodon) | `https://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms` |
+| 5 | ProMENDA | [Pu et al. 2024, *Transl Psychiatry*](https://www.nature.com/articles/s41398-024-02948-2) → Supplementary Data 2 | `41398_2024_2948_MOESM3_ESM.xlsx` (로컬) |
+| 6 | NCBI taxonomy | [NCBI Taxonomy](https://www.ncbi.nlm.nih.gov/taxonomy) | `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=taxonomy&id=…` |
+| 8 | VMH / AGORA2 | [VMH](https://www.vmh.life/) | `https://www.vmh.life/api/reconstructionFiles?download=AGORA2/version2.01/sbml_files_fixed/zipped/AGORA2_models/AGORA2_SBML.zip` (2.17 GB) |
+| 9 · 11 | MiKG | [tingcosmos/MiKG-JAIMS](https://github.com/tingcosmos/MiKG-JAIMS) (git clone) | 원본 TTL (로컬) |
+| 10 | MeSH | [MeSH RDF](https://id.nlm.nih.gov/mesh/) | `https://id.nlm.nih.gov/mesh/sparql` · `https://id.nlm.nih.gov/mesh/lookup/descriptor` |
+| 12 | Disbiome | [Disbiome](https://disbiome.ugent.be/) | `https://disbiome.ugent.be:8080/experiment` (전수 1 회) |
+| 12b | **gutMDisorder v3** | [gutMDisorder (하얼빈의대)](https://bio-computing.hrbmu.edu.cn/gutMDisorder/resource.dhtml) | `https://bio-computing.hrbmu.edu.cn/gutMDisorder_api/api/resource/download?fileName=gutMDisorder_v3_Literature-based_All.xlsx` (· `..._Rawdata-based_All.xlsx`) |
+| 13 | 분변 대사체 13 코호트 | [Muller et al. 2022, *npj Biofilms Microbiomes*](https://www.nature.com/articles/s41522-022-00345-5) · [borenstein-lab/microbiome-metabolome-curated-data](https://github.com/borenstein-lab/microbiome-metabolome-curated-data) | `https://raw.githubusercontent.com/borenstein-lab/microbiome-metabolome-curated-data/main/data/processed_data/<코호트>/` |
+| 15 | NHANES 2017-18 | [CDC NHANES 2017-2018](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2017) | `https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DR1TOT_J.xpt` (· `DPQ_J` · `DEMO_J`) |
+| 비교 기준 | 논문 배포 KG | [ccszbd/Food4healthKG](https://github.com/ccszbd/Food4healthKG) (git clone) | `foodkg_triply/` (로컬) |
+
+- **로컬** 로 적힌 넷(FDC · ProMENDA · MiKG · 논문 배포본)은 용량이나 수동
+  승인 때문에 실행 중 받지 않는다. 루트 [`README.md`](../README.md) §2 가 받는
+  법을 적어 둔다. 나머지는 전부 **실행 중 재조회**하고 `ourkg/cache/` 에 캐시한다.
+- 라이선스로 못 받는 것은 [받지 못한 것](#받지-못한-것) 에 적는다.
+
+---
+
 ## 1. 음식·성분 — FoodData Central (FDC)
 
-- **받는 법**: USDA 전체 배포본(CSV)을 `fdc_raw/` 에 둔다. 네트워크로 받지 않는다.
+- **받는 법**: [FDC 다운로드 페이지](https://fdc.nal.usda.gov/download-datasets.html)
+  의 "Full Download of All Data Types"(CSV)를 `fdc_raw/` 에 둔다. 용량 때문에
+  실행 중 네트워크로 받지 않는다.
   - `food.csv` 219 MB · `food_nutrient.csv` 1.79 GB · `nutrient.csv`
   - `survey_fndds_food.csv`, `wweia_food_category.csv` — FNDDS 음식의 카테고리
 - **뽑는 것**: 2,710 만 행을 스트리밍하며 KEGG 로 매핑되는 nutrient 행만 보관.
@@ -86,7 +116,8 @@ KG 에서도 사라진다.
 **12,913 노드짜리 부분집합**이라 `soy milk` 가 없고 상위 노드의 라벨조차 빠져
 계층이 끊겨 있다. 그래서 **EBI OLS** 에서 직접 받는다.
 
-- **받는 법**: `https://www.ebi.ac.uk/ols4/api/ontologies/foodon/…`
+- **받는 법**: [EBI OLS4 — foodon](https://www.ebi.ac.uk/ols4/ontologies/foodon) 의
+  API `https://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms`
   - 클래스 전수 → `cache/foodon_terms.json` (**28,685**)
   - 매칭된 클래스의 `hierarchicalAncestors` → `cache/foodon_ancestors.json` (1,123)
 - **매칭 규칙**: `foodon_match.py`. **이름 일치만** 쓴다. 검수로 함정 셋을 막았다.
@@ -113,7 +144,8 @@ KG 에서도 사라진다.
 
 ## 5. 우울증-대사물 — ProMENDA
 
-- **받는 법**: Pu et al. (2024) 보충자료 `41398_2024_2948_MOESM3_ESM.xlsx` (로컬)
+- **받는 법**: [Pu et al. (2024) *Transl Psychiatry*](https://www.nature.com/articles/s41398-024-02948-2)
+  의 Supplementary Data 2 `41398_2024_2948_MOESM3_ESM.xlsx` (로컬)
 - **규모**: 22,519 레코드 / 995 연구 → KEGG compound **1,412**
 - **극성**: `e_shrunk = (pos − neg) / (pos + neg + K)`, `K = 10`.
   `K` 민감도는 2026-11-18 에 처음 쟀다 — `K=0`(축소 없음)이 ModiMedDiet 처방군
@@ -123,7 +155,9 @@ KG 에서도 사라진다.
 
 ## 6. 미생물 — NCBI taxonomy
 
-- **받는 법**: `efetch.fcgi` 로 taxid 의 학명·rank·lineage 를 **현재 값**으로 갱신.
+- **받는 법**: [NCBI Taxonomy](https://www.ncbi.nlm.nih.gov/taxonomy) 의
+  `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=taxonomy` 로
+  taxid 의 학명·rank·lineage 를 **현재 값**으로 갱신.
   `cache/ncbi_taxonomy.json`
 - **규모**: **798 taxid** (논문 322,917). 배포 `Disease_Bacteria` 의 정신질환·
   신경퇴행 연관 127 종 + **Disbiome 333 종** + **gutMDisorder 309 종**(§12b)
@@ -250,7 +284,8 @@ KG 의 종 수준 항목이라 속 링크가 그 경로엔 끼어들지 않았�
 | 범위 | 우리 67 taxid 한정 | **AGORA2 전체 7,302 균주** |
 | 결과 | 183,593 링크 · 66 taxid | **280,818 링크 · 308 균주 · 66 taxid** |
 
-받은 파일: `AGORA2/version2.01/sbml_files_fixed/zipped/AGORA2_models/AGORA2_SBML.zip`
+받은 파일: [VMH](https://www.vmh.life/) 의
+`api/reconstructionFiles?download=AGORA2/version2.01/sbml_files_fixed/zipped/AGORA2_models/AGORA2_SBML.zip`
 (2.17 GB, 범위 요청·이어받기 지원). `agora2_raw/` 에 둔다(git 추적 안 함).
 
 ### 이어붙이는 법
@@ -336,7 +371,8 @@ API 34,992 / 합집합 35,509. 처음에 벌크만 넣었다가 문서 수치와
 ## 9. 미생물-정신질환 — MiKG 원본 TTL
 
 배포 KG 의 `Disease_Bacteria` 만으로는 정신질환 관계가 얇다(F03 6 종, 우울증 1 건).
-MiKG(Liu et al. 2021) **원본 TTL**(2,465 triple)을 직접 읽는다.
+[MiKG](https://github.com/tingcosmos/MiKG-JAIMS)(Liu et al. 2021) **원본 TTL**
+(2,465 triple)을 직접 읽는다.
 
 - **경로**: 미생물 → 신경전달물질 → 정신질환. 두 statement 를 이어 **406 쌍**.
 - **2026-11-19 에 네 가지를 더 뽑았다** — 그 전에는 세 술어만 썼다.
@@ -355,7 +391,8 @@ MiKG(Liu et al. 2021) **원본 TTL**(2,465 triple)을 직접 읽는다.
 
 ## 10. 질환 분류 — MeSH
 
-- **받는 법**: MeSH SPARQL `https://id.nlm.nih.gov/mesh/sparql`
+- **받는 법**: [MeSH RDF](https://id.nlm.nih.gov/mesh/) 의 SPARQL
+  `https://id.nlm.nih.gov/mesh/sparql`
   - 링크 244 건, 트리 번호 → 기술어 이름 **1,227** (`cache/mesh_tree.json`)
 - **계층**: 트리 번호는 **접두를 자르면 조상**이 된다.
   `F03.600.300.375 < F03.600 Mood Disorders < F03 Mental Disorders`.
@@ -376,7 +413,8 @@ MiKG(Liu et al. 2021) **원본 TTL**(2,465 triple)을 직접 읽는다.
 
 ## 12. 미생물-질환 — Disbiome
 
-- **받는 법**: `https://disbiome.ugent.be:8080/experiment` 전수 덤프 하나.
+- **받는 법**: [Disbiome](https://disbiome.ugent.be/) 의
+  `https://disbiome.ugent.be:8080/experiment` 전수 덤프 하나.
   6.4 MB · 실험 10,866. `cache/disbiome_experiment.json`
 - **왜 이것인가**: 우리 평가와 무관하게 큐레이션돼 있어 **축 확장의 자기참조를
   끊는다**. 그 전까지 미생물 축을 넓히는 길은 `setup/microbes_added.csv` 하나였고
@@ -438,7 +476,7 @@ Disbiome 의 `disease_name` 은 MedDRA 계열 자유 표기라 그대로는 MeSH
 
 **§12 가 대체재였다. 원본이 살아 있었다.**
 
-- **받는 법**: `https://bio-computing.hrbmu.edu.cn/gutMDisorder/` (하얼빈의대).
+- **받는 법**: [gutMDisorder (하얼빈의대)](https://bio-computing.hrbmu.edu.cn/gutMDisorder/resource.dhtml).
   페이지는 SPA 라 표가 HTML 에 없고, 번들의
   `/gutMDisorder_api/api/resource/download?fileName=<파일>` 이 xlsx 를 준다.
   두 파일을 받는다 — `..._Literature-based_All.xlsx` (1.5 MB) ·
@@ -546,7 +584,8 @@ p<0.05 쌍이 **41%** 였다. 그래서 ① 코호트 안 BH q<0.05, ② 서로 
 
 ## 14. 1 회 섭취량 — FDC food_portion
 
-- **받는 법**: FDC 배포본 zip 의 `food_portion.csv`(survey + sr_legacy).
+- **받는 법**: [FDC 배포본](https://fdc.nal.usda.gov/download-datasets.html) zip 의
+  `food_portion.csv`(survey + sr_legacy).
   `ourkg/cache/fdc_portion/` 에 둔다.
 - **규모**: 행 37,158 / 고유 음식 13,129. **추천 코호트 커버리지 56%**
   (12,513 중 6,970). 결측은 음식군 중앙값으로 메운다.
@@ -561,7 +600,8 @@ p<0.05 쌍이 **41%** 였다. 그래서 ① 코호트 안 BH q<0.05, ② 서로 
 
 ## 15. 섭취-결과 — NHANES
 
-- **받는 법**: `wwwn.cdc.gov/Nchs/Data/Nhanes/Public/<연도>/DataFiles/*.xpt`.
+- **받는 법**: [CDC NHANES 2017-2018](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2017)
+  의 `https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/<연도>/DataFiles/*.xpt`.
   **경로가 바뀌었다** — 예전 `Nchs/Nhanes/<주기>/` 는 404 대신 **HTML 오류
   페이지를 200 으로** 돌려준다(세 파일이 전부 20,905 바이트로 똑같아 눈치챘다).
   `ourkg/cache/nhanes/<주기>/` · `ourkg/nhanes.py`
