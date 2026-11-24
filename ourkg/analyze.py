@@ -1065,14 +1065,49 @@ def evaluate():
                          'terms': [a, b]})
 
         # 추론 (b) Diet recommendation — 상·하위 음식과 그 근거 compound
+        # 근거 compound 를 고를 때 쓰는 E 는 **점수를 낸 E 와 같아야 한다.**
+        # 기본값이 앙상블(shrunk + nhanes_all)로 바뀐 뒤에도 여기가
+        # `E['e_shrunk']` 단일 소스를 보고 있었다 — 점수는 앙상블로 내고 근거는
+        # ProMENDA 로 설명하는 불일치였다(그린빈의 근거가 Palmitic acid 로
+        # 나왔다). 쓰인 모드들의 E 를 평균해서 쓴다.
+        def _basis_e():
+            modes = [m.strip() for m in
+                     os.environ.get('ENSEMBLE', 'shrunk,nhanes_all').split(',')
+                     if m.strip() and m.strip() != 'none']
+            if not modes:
+                modes = [os.environ.get('E_MODE', 'union_all')]
+            cols = []
+            for m in modes:
+                if m.startswith('nhanes'):
+                    _p = os.path.join(OUT, 'compound_depression_nhanes.csv')
+                    if os.path.exists(_p):
+                        _n = pd.read_csv(_p).set_index('kegg')
+                        cols.append(_n['e_nhanes' if m.endswith('_all') else 'e_sig'])
+                else:
+                    cols.append(E['e_shrunk'])
+            if not cols:
+                return E['e_shrunk']
+            # 서로 다른 스케일을 평균하지 않도록 **각자 최대절대값으로 정규화**
+            cols = [c / c.abs().max() if c.abs().max() else c for c in cols]
+            return pd.concat(cols, axis=1).mean(axis=1)
+
+        _E_BASIS = _basis_e()
+        _km = pd.read_csv(os.path.join(BASE, 'setup', 'nutrient_kegg_map.csv'),
+                          dtype=str).fillna('')
+        _km = _km[_km.nutrient_kegg.str.startswith('C')].drop_duplicates('nutrient_kegg')
+        _KEGG_NAME = dict(zip(_km.nutrient_kegg, _km.nutrient_name))
+
         def basis(fk):
             sub = long[long.food_key == fk].copy()
-            sub['e'] = sub['kegg'].map(E['e_shrunk']).fillna(0)
+            sub['e'] = sub['kegg'].map(_E_BASIS).fillna(0)
             sub['w'] = sub['amount_g'] * sub['e']
             if sub.empty or sub['w'].abs().max() == 0:
                 return None
             row = sub.loc[sub['w'].abs().idxmax()]
-            return str(E['name'].get(row['kegg'], row['kegg']))
+            # 이름은 ProMENDA 표에 없을 수 있다 — NHANES 로 메운 compound
+            # (칼륨·셀레늄 등)가 그렇다. setup 매핑표로 보충한다.
+            return str(E['name'].get(row['kegg'])
+                       or _KEGG_NAME.get(row['kegg'], row['kegg']))
 
         for fk in list(rec.head(20)['food_key']) + list(rec.tail(20)['food_key']):
             c = basis(fk)
@@ -1417,8 +1452,15 @@ def compare():
             col = dep['e_binary']
         elif m == 'sig':
             col = dep['e_binary'].where(dep['q'] < 0.05, 0.0)
-        else:
+        elif m == 'shrunk':
             col = dep['e_shrunk']
+        else:
+            # 모르는 모드를 **조용히 shrunk 로 떨어뜨리지 않는다.** 여기 분기가
+            # `recommend` 의 것과 따로 자라서, E_MODES=nhanes_all 같이 주면
+            # 이름만 다른 shrunk 결과가 나왔다. 기본값을 §24·§25 에서 두 번
+            # 바꾸면서 드러난 종류의 함정이다 (RESULTS §26).
+            sys.exit(f'compare 가 모르는 E_MODE: {m}. '
+                     f'nhanes/union/learned 계열은 `sweep.py emode` 로 잰다.')
         sel = cpds
         if row['path'] == 'gutbrain':
             cm = compound_microbe(sources=('kegg',))

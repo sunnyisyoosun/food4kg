@@ -1094,11 +1094,6 @@
    "Autism"
   ],
   [
-   "5-Methyltetrahydrofolate",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
    "5-Methyltetrahydrofolic acid",
    "Hominimerdicola alba",
    "Autism"
@@ -1106,11 +1101,6 @@
   [
    "5-Methyltetrahydrofolic acid",
    "Ruminococcus flavefaciens",
-   "Autism"
-  ],
-  [
-   "5-Methyltetrahydrofolic acid",
-   "Streptococcus salivarius",
    "Autism"
   ],
   [
@@ -1139,8 +1129,33 @@
    "Autism"
   ],
   [
+   "Asymmetric dimethylarginine",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "Caproic acid",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "Capronate; Hexanoate",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
    "Choline phosphate",
    "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Creatine",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "Creatinine",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1154,8 +1169,8 @@
    "Autism"
   ],
   [
-   "D-Maltose",
-   "Streptococcus salivarius",
+   "Decanedioic acid",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1174,6 +1189,11 @@
    "Autism"
   ],
   [
+   "Dodecanedioic acid",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
    "Eicosapentaenoic acid",
    "Hominimerdicola alba",
    "Autism"
@@ -1181,6 +1201,11 @@
   [
    "Eicosapentaenoic acid (20:5;5,8,11,14.17)",
    "Hominimerdicola alba",
+   "Autism"
+  ],
+  [
+   "Enanthate; Heptanoate",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1239,11 +1264,6 @@
    "Autism"
   ],
   [
-   "Glutamic acid (Glu)",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
    "Glycerophosphocholine",
    "Hominimerdicola alba",
    "Autism"
@@ -1259,8 +1279,13 @@
    "Autism"
   ],
   [
-   "Glycine",
-   "Streptococcus salivarius",
+   "Heptanoic acid",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "Hydrocinnamic acid",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1284,11 +1309,6 @@
    "Autism"
   ],
   [
-   "L-Glutamic acid",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
    "L-Lysine",
    "Hominimerdicola alba",
    "Autism"
@@ -1296,11 +1316,6 @@
   [
    "L-Lysine",
    "Ruminococcus flavefaciens",
-   "Autism"
-  ],
-  [
-   "L-Lysine",
-   "Streptococcus salivarius",
    "Autism"
   ],
   [
@@ -1314,8 +1329,8 @@
    "Autism"
   ],
   [
-   "L-Threonine",
-   "Streptococcus salivarius",
+   "L-Tryptophan",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1339,11 +1354,6 @@
    "Autism"
   ],
   [
-   "Lysine (Lys)",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
    "Maltose; Malt sugar",
    "Hominimerdicola alba",
    "Autism"
@@ -1354,8 +1364,18 @@
    "Autism"
   ],
   [
-   "Maltose; Malt sugar",
-   "Streptococcus salivarius",
+   "N-Acetyl-L-glutamate",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "N-Acetyl-L-glutamic acid",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "N6,N6,N6-Trimethyl-L-lysine",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1369,11 +1389,6 @@
    "Autism"
   ],
   [
-   "Nicotinic acid",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
    "Nicotinic acid (Vitamin B3)",
    "Hominimerdicola alba",
    "Autism"
@@ -1381,11 +1396,6 @@
   [
    "Nicotinic acid (Vitamin B3)",
    "Ruminococcus flavefaciens",
-   "Autism"
-  ],
-  [
-   "Nicotinic acid (Vitamin B3)",
-   "Streptococcus salivarius",
    "Autism"
   ],
   [
@@ -1444,6 +1454,11 @@
    "Autism"
   ],
   [
+   "Putrescine",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
    "Retinol",
    "Hominimerdicola alba",
    "Autism"
@@ -1459,8 +1474,8 @@
    "Autism"
   ],
   [
-   "Riboflavin",
-   "Streptococcus salivarius",
+   "Sebacic acid",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1484,11 +1499,6 @@
    "Autism"
   ],
   [
-   "Sucrose",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
    "Sucrose; Cane sugar",
    "Hominimerdicola alba",
    "Autism"
@@ -1496,11 +1506,6 @@
   [
    "Sucrose; Cane sugar",
    "Ruminococcus flavefaciens",
-   "Autism"
-  ],
-  [
-   "Sucrose; Cane sugar",
-   "Streptococcus salivarius",
    "Autism"
   ],
   [
@@ -1514,11 +1519,6 @@
    "Autism"
   ],
   [
-   "Thiamine",
-   "Streptococcus salivarius",
-   "Autism"
-  ],
-  [
    "Thiamine (Vitamin B1)",
    "Hominimerdicola alba",
    "Autism"
@@ -1526,11 +1526,6 @@
   [
    "Thiamine (Vitamin B1)",
    "Ruminococcus flavefaciens",
-   "Autism"
-  ],
-  [
-   "Thiamine (Vitamin B1)",
-   "Streptococcus salivarius",
    "Autism"
   ],
   [
@@ -1544,8 +1539,13 @@
    "Autism"
   ],
   [
-   "Threonine (Thr)",
-   "Streptococcus salivarius",
+   "Tryptamine",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "Tryptophan (Trp)",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [

@@ -1,12 +1,12 @@
 no,evidence,pubmed,term_used,term_level,n_hits_pair_only,n_abstracts,sent_assoc,sent_negative,quote,result,who,question,attributes,paper_result
-0,Bifidobacterium longum,37781978;37030965,Autistic disorder,0,1021,19,12,0,"31560663: …al manifestations of comorbid depression in autism, risk factors for comorbid depression the importance …",1,paper,Autistic disorder and depression,Complication,1.0
+0,Bifidobacterium longum,37781978;37030965,Autistic disorder,0,1022,19,13,0,"31560663: …al manifestations of comorbid depression in autism, risk factors for comorbid depression the importance …",1,paper,Autistic disorder and depression,Complication,1.0
 1,Streptococcus mutans,34982207;27059320,Parkinson disorder,0,4,4,1,0,"27059320: …ychiatric outcomes, including depression, Parkinson's disorder, and substance abuse.…",1,paper,Parkinson disorder and depression,Complication,1.0
 2,Escherichia coli,38929285;15165430,Learning disabilities,0,893,18,3,0,37123814: …le residing in care homes for learning disabilities and/or autism and investigate the risk of death compared with indiv…,1,paper,Learning disabilities and autism,Complication,1.0
-3,Escherichia coli,31083878;32002932,Anxiety,0,194584,20,45,1,32002932: Patients with anxious depression were significantly more likely to be found in pri…,1,paper,Anxiety and depression,Complication,1.0
-4,Lactobacillus plantarum,28503106;31311335,Bipolar disorder,0,21578,20,25,1,31311335: Bipolar depression is associated with considerable burden of illness…,1,paper,Bipolar disorder and depression,Complication,1.0
+3,Escherichia coli,31083878;32002932,Anxiety,0,194737,20,49,1,32002932: Patients with anxious depression were significantly more likely to be found in pri…,1,paper,Anxiety and depression,Complication,1.0
+4,Lactobacillus plantarum,28503106;31311335,Bipolar disorder,0,21588,20,25,1,31311335: Bipolar depression is associated with considerable burden of illness…,1,paper,Bipolar disorder and depression,Complication,1.0
 5,Bacillus cereus,30556689;39171222,Learning disabilities,0,634,19,2,1,2738458: …t in the relationship between depression and learning disabilities.…,1,paper,Learning disabilities and depression,Complication,0.0
 6,Lactobacillus reuteri,27502797;31194327,Parkinson,1,1156,18,6,0,"39065682: … of Alzheimer's disease (AD), Parkinson's disease (PD), and autism spectrum disorder (ASD).…",1,paper,Parkinson disorder and autism,Complication,0.0
-7,Bacteroides fragilis,33184495;31194327,Alzheimer Disease,0,1450,18,10,0,"21482951: …lights an association between autism, Alzheimer disease (AD), and fragile X syndrome (FXS).…",1,paper,Alzheimer Disease and autism,Complication,1.0
+7,Bacteroides fragilis,31753762;33184495,Alzheimer Disease,0,1451,18,9,0,"21482951: …lights an association between autism, Alzheimer disease (AD), and fragile X syndrome (FXS).…",1,paper,Alzheimer Disease and autism,Complication,1.0
 8,Threonine,35805955;16395514,Garlic,0,69,20,1,0,36809972: A Review on Garlic as a Supplement for Alzheimer&#x2019;s Disease: A Mechanistic Insight into its D…,1,paper,Garlic and Alzheimer Disease,Diet recommendation,1.0
 9,alpha-Tocopherol,32567677;29274129,Milk,0,28,20,0,0,,0,paper,Milk and Learning disabilities,Diet recommendation,0.0
 10,Cystine,36660077;39371628,Egg,1,579,20,0,0,,0,paper,Egg products and depression,Diet recommendation,-1.0
