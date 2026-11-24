@@ -350,6 +350,61 @@ def compound_microbe(sources=('kegg', 'vmh'), rank=None):
     return pd.concat(out).drop_duplicates(['taxid', 'kegg'])
 
 
+def microbe_disease_direction():
+    """(균, 질환) 쌍마다 **방향을 믿을 수 있는지** 판정해서 돌려준다.
+
+    전에는 Disbiome 과 gutMDisorder 가 각자 `our:abundanceIn` 을 올렸다. 출처
+    태그로만 갈라 두니 KG 를 쓰는 쪽이 모순을 직접 밟는다 — 두 소스가 공유하는
+    **613 쌍 중 216(35%)이 방향이 반대**다(우연 50% 보다는 낫지만 3 쌍 중 1 쌍).
+    각 소스는 자기 안에서도 어긋난다(Disbiome 7.1% · gutMDisorder 4.4%) —
+    같은 균·질환을 다른 연구가 반대로 보고한 것이다.
+
+    그래서 방향은 **쌍 단위로 먼저 합의를 보고** 올린다. 불일치 쌍을 버리지는
+    않는다 — "연관은 있고 방향은 모른다" 가 실제로 우리가 아는 것이고, 버리면
+    그 사실이 KG 에서 사라진다. `status` 로 구분해 담아 감사 가능하게 둔다.
+
+    status:
+      'agreed'    방향이 하나로 모인다. `direction` 이 Elevated/Reduced.
+      'conflict'  Elevated 와 Reduced 가 같이 있다. `direction` 은 ''.
+    열: taxid · mesh_id · disease · status · direction · n_sources · sources
+        · n_elevated · n_reduced
+    """
+    import pandas as pd
+    DIRECTIONAL = ('Elevated', 'Reduced')
+    parts = []
+    for fn, src in (('microbe_disease_disbiome.csv', 'Disbiome'),
+                    ('microbe_disease_gutmdisorder.csv', 'gutMDisorder')):
+        path = os.path.join(OUT, fn)
+        if not os.path.exists(path):
+            continue
+        d = pd.read_csv(path, dtype={'taxid': str})
+        d = d[(d.get('is_mental', False) | d.get('is_neuro', False))
+              & d.outcome.isin(DIRECTIONAL)]
+        d = d[['taxid', 'mesh_id', 'disease', 'outcome']].copy()
+        d['source'] = src
+        parts.append(d)
+    cols = ['taxid', 'mesh_id', 'disease', 'status', 'direction',
+            'n_sources', 'sources', 'n_elevated', 'n_reduced']
+    if not parts:
+        return pd.DataFrame(columns=cols)
+    a = pd.concat(parts).drop_duplicates(['taxid', 'mesh_id', 'outcome', 'source'])
+    rows = []
+    for (tx, mid), g in a.groupby(['taxid', 'mesh_id']):
+        dirs = set(g.outcome)
+        up = int((g.outcome == 'Elevated').sum())
+        dn = int((g.outcome == 'Reduced').sum())
+        rows.append({
+            'taxid': tx, 'mesh_id': mid,
+            # 라벨은 소스마다 표기가 달라 가장 긴 것을 쓴다(약어보다 정식 명칭).
+            'disease': max(g.disease.astype(str), key=len),
+            'status': 'agreed' if len(dirs) == 1 else 'conflict',
+            'direction': dirs.pop() if len(dirs) == 1 else '',
+            'n_sources': int(g.source.nunique()),
+            'sources': '+'.join(sorted(set(g.source))),
+            'n_elevated': up, 'n_reduced': dn})
+    return pd.DataFrame(rows, columns=cols)
+
+
 def kegg_map():
     """nutrient_id -> KEGG (논문/매핑표 ID 그대로).
 

@@ -30,7 +30,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (BASE, OUT, FDC_RAW, UNIT_TO_G, FDC_CATEGORY, cached_get, kegg_rest,
                     normalize_label, normalize_category, kegg_map, normkey,
-                    mesh_lookup, cached_covering, gutmdisorder)
+                    mesh_lookup, cached_covering, gutmdisorder,
+                    microbe_disease_direction)
 
 
 def food():
@@ -1131,16 +1132,10 @@ def kg():
     if os.path.exists(_dbp):
         _db = pd.read_csv(_dbp, dtype={'taxid': str})
         _db = _db[_db.is_mental | _db.is_neuro]
-        _seen = set()
         for _, r in _db.iterrows():
             du = NS['mesh'] + r['mesh_id']
             W.t(NS['mic'] + r['taxid'], NS['mpq'] + 'hasAssociation', du, 'Disbiome')
             W.t(du, A, NS['ent'] + 'Disease', 'Disbiome')
-            key = (r['taxid'], r['mesh_id'], r['outcome'])
-            if key not in _seen:
-                _seen.add(key)
-                W.t(NS['mic'] + r['taxid'], NS['our'] + 'abundanceIn',
-                    f"{r['disease']}|{r['outcome']}", 'Disbiome', literal=True)
             n_disb += 1
         print(f'  Disbiome 미생물-질환 {n_disb:,} (균 {_db.taxid.nunique()} · 질환 {_db.mesh_id.nunique()})')
 
@@ -1152,23 +1147,50 @@ def kg():
     if os.path.exists(_gp):
         _gm = pd.read_csv(_gp, dtype={'taxid': str})
         _gm = _gm[_gm.is_mental | _gm.is_neuro]
-        _seen = set()
         for _, r in _gm.iterrows():
             du = NS['mesh'] + r['mesh_id']
             W.t(NS['mic'] + r['taxid'], NS['mpq'] + 'hasAssociation', du, 'gutMDisorder')
             W.t(du, A, NS['ent'] + 'Disease', 'gutMDisorder')
             if isinstance(r['disease'], str):
                 W.t(du, LABEL, r['disease'], 'gutMDisorder', literal=True)
-            if r['outcome'] in ('Elevated', 'Reduced'):
-                key = (r['taxid'], r['mesh_id'], r['outcome'])
-                if key not in _seen:
-                    _seen.add(key)
-                    W.t(NS['mic'] + r['taxid'], NS['our'] + 'abundanceIn',
-                        f"{r['disease']}|{r['outcome']}|{r['n_evidence']}건",
-                        'gutMDisorder', literal=True)
             n_gmd += 1
         print(f'  gutMDisorder 미생물-질환 {n_gmd:,} '
               f'(균 {_gm.taxid.nunique()} · 질환 {_gm.mesh_id.nunique()})')
+
+    # ------------------------------------------------------------------
+    # 존재비 **방향**은 출처별로 올리지 않고 쌍 단위로 합의를 본 뒤 올린다.
+    # 전에는 Disbiome 과 gutMDisorder 가 각자 our:abundanceIn 을 올렸다. 출처
+    # 태그로만 갈라 두면 쓰는 쪽이 모순을 직접 밟는다 — 두 소스가 공유하는
+    # 정신·신경 쌍 125 개 중 **일치가 63(50.4%)으로 우연 수준**이다
+    # (이항검정 p=0.5). 자폐는 9:25 로 우연보다 나쁘다.
+    # 불일치 쌍을 버리지는 않는다 — "연관은 있고 방향은 모른다" 가 우리가
+    # 실제로 아는 것이고, 버리면 그 사실이 KG 에서 사라진다.
+    _ag = microbe_disease_direction()
+    n_dir = n_conf = 0
+    if len(_ag):
+        _ag.to_csv(os.path.join(OUT, 'microbe_disease_agreement.csv'), index=False)
+        for _, r in _ag.iterrows():
+            mu, du = NS['mic'] + r['taxid'], NS['mesh'] + r['mesh_id']
+            if r['status'] == 'agreed':
+                W.t(mu, NS['our'] + 'abundanceIn',
+                    f"{r['disease']}|{r['direction']}", '방향 합의', literal=True)
+                W.t(mu, NS['our'] + 'crossSourceAgreement',
+                    f"{r['disease']}|{r['sources']}|소스{r['n_sources']}",
+                    '방향 합의', literal=True)
+                n_dir += 1
+            else:
+                # 방향을 주지 않는다. 어긋난 내용을 적어 감사 가능하게 둔다.
+                W.t(mu, NS['our'] + 'abundanceConflict',
+                    f"{r['disease']}|증가{r['n_elevated']}:감소{r['n_reduced']}"
+                    f"|{r['sources']}", '방향 합의', literal=True)
+                n_conf += 1
+        _sh = _ag[_ag.n_sources == 2]
+        print(f'  존재비 방향: 합의 {n_dir:,} / 모순 {n_conf:,}'
+              f' (쌍 {len(_ag):,})')
+        if len(_sh):
+            print(f'  두 소스가 공유하는 쌍 {len(_sh)} 중 일치 '
+                  f'{int((_sh.status == "agreed").sum())} '
+                  f'({(_sh.status == "agreed").mean():.1%}) — 우연이 50% 다')
 
     print('[5/6] 신경전달물질 경로 (MiKG)')
     mn = pd.read_csv(os.path.join(OUT, 'microbe_neurotransmitter.csv'))
@@ -1598,6 +1620,10 @@ def kg():
          '외부 큐레이션 — 축 확장의 자기참조를 끊는다'),
         ('microbe', '미생물-질환 (gutMDisorder v3)', n_gmd,
          '논문 §2 의 DB — MeSH 가 원본에 붙어 있어 이름 매칭을 안 탄다'),
+        ('microbe', '존재비 방향 — 쌍 단위 합의', n_dir,
+         '두 소스가 같은 방향을 말하는 쌍만'),
+        ('microbe', '존재비 방향 — 모순 (방향 안 올림)', n_conf,
+         '연관은 있고 방향은 모른다 — 버리지 않고 구분해 담는다'),
         ('ontology', 'FoodOn ↔ 카테고리 (배포 KG 부분집합)', n_fo_link, '§3.1 FoodOn'),
         ('ontology', 'FoodOn 클래스 링크 (음식, OLS)', fl.get('foodon_food'),
          '배포 subset 에 없는 계층 — foodon_match.py'),

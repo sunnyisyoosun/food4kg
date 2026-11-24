@@ -23,6 +23,8 @@ microbe,compound-미생물 (VMH/AGORA2),44094,유전체 재구성 — 예측
 microbe,compound-미생물 (측정 상관),10406,분변 대사체 13 코호트 — 추론도 예측도 아닌 관측
 microbe,미생물-질환 (Disbiome),1193,외부 큐레이션 — 축 확장의 자기참조를 끊는다
 microbe,미생물-질환 (gutMDisorder v3),1239,논문 §2 의 DB — MeSH 가 원본에 붙어 있어 이름 매칭을 안 탄다
+microbe,존재비 방향 — 쌍 단위 합의,1519,두 소스가 같은 방향을 말하는 쌍만
+microbe,존재비 방향 — 모순 (방향 안 올림),163,연관은 있고 방향은 모른다 — 버리지 않고 구분해 담는다
 ontology,FoodOn ↔ 카테고리 (배포 KG 부분집합),19,§3.1 FoodOn
 ontology,"FoodOn 클래스 링크 (음식, OLS)",8165,배포 subset 에 없는 계층 — foodon_match.py
 ontology,FoodOn 고유 클래스 (OLS),1096,

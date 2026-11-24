@@ -27,7 +27,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'eval'))
-from common import OUT, BASE, CACHE, compound_microbe
+from common import (OUT, BASE, CACHE, compound_microbe,
+                    microbe_disease_direction)
 
 
 def mental_taxids():
@@ -2440,6 +2441,15 @@ def emicrobe():
                    ('두 소스 합/정신질환', pd.concat(
                        [db[db.is_mental][['taxid', 'outcome', 'disease']],
                         gmd[gmd.is_mental][['taxid', 'outcome', 'disease']]]))]
+    # **방향 합의를 본 쌍만** — 두 소스가 공유하는 쌍의 일치가 50.4%(우연)라
+    # 합집합을 그대로 쓰면 반대 방향이 섞여 서로를 지운다. 합의 쌍으로 좁히면
+    # 신호가 드러나는지가 이 검정의 요점이다.
+    _ag = microbe_disease_direction()
+    if len(_ag):
+        _ok = _ag[_ag.status == 'agreed'].rename(columns={'direction': 'outcome'})
+        scopes += [('합의 쌍만/정신·신경', _ok[['taxid', 'outcome', 'disease']]),
+                   ('합의+2소스/정신·신경',
+                    _ok[_ok.n_sources == 2][['taxid', 'outcome', 'disease']])]
     rows = []
     for scope, dsel in scopes:
         # 균별로 그 질환에서 늘었는지(Elevated) 줄었는지(Reduced)
