@@ -132,6 +132,7 @@ GMD_FILES = (
 )
 GMD_HEALTH = 'D006262'          # MeSH "Health" — 대조군
 GMD_PHENOTYPE = 'Gut microbiota associated with phenotype'
+GMD_INTERVENTION = 'Interventions change the composition of gut microbiota'
 
 
 def gutmdisorder(session=None):
@@ -348,6 +349,78 @@ def compound_microbe(sources=('kegg', 'vmh'), rank=None):
     if not out:
         return pd.DataFrame(columns=['taxid', 'kegg', 'source'])
     return pd.concat(out).drop_duplicates(['taxid', 'kegg'])
+
+
+# 중재 행에서 "무중재 대조" 를 가리는 패턴. 대조군이 다른 식단이면 증감이
+# "그 식단 대비" 라서 "먹으면 늘어난다" 로 읽을 수 없다.
+GMD_NULL_CONTROL = re.compile(
+    r'^(no\s|non[\s-]|placebo|habitual diet|normal chow|sedentary)', re.I)
+
+
+def _gmd_parts(x):
+    return [p.strip() for p in re.split(r'[;，]', str(x)) if p.strip() and p.strip() != '*']
+
+
+def gutmdisorder_intervention(session=None):
+    """gutMDisorder 의 **식이 중재** 행 → (중재, 미생물, 증감).
+
+    `gutmdisorder()` 가 버리는 쪽이다. 저쪽은 "질환에서 늘어나는 균" 을 뽑으려고
+    `Condition2 == Health` 만 남기는데, 중재 행은 Condition2 가 대조군이라 전부
+    탈락한다. 그런데 **중재 행이야말로 `음식 → 미생물` 관측**이다 — 우리
+    `E x F^T` 에 미생물이 들어갈 자리가 없는 구조 문제의 빠진 간선이다.
+
+    **여기서도 방향을 믿을 수 있는 행만 남긴다.** 대조군이 무중재가 아니면
+    증감이 "다른 식단 대비" 다. 실제로 식이 중재 메타행 147 중 **60 이
+    다른 식단과의 대조**였다(저항전분 저 vs 고, 폴리덱스트로스 vs 옥수수섬유,
+    저섬유/중지방 vs 저섬유/고지방 …). 그걸 섞으면 부호가 뒤집힌다.
+
+    규칙: Condition1 에서 Condition2 에도 있는 항(동반질환·인구집단)을 뺀 것이
+    **중재**다. 남은 Condition2 쪽 항이 없거나(동반질환만 적힌 대조군) 전부
+    `No …`/`Placebo`/`Habitual diet` 류면 **무중재 대조**로 본다.
+    Human · `InterventionType = Diet, Food, and Nutrition` 만 쓴다.
+
+    열: intervention · taxid · organism · gmd_rank · alteration · pvalue
+        · control · evidence · gmd_source
+    """
+    import requests
+    S = session or requests.Session()
+    rows = []
+    for fn, msheet, asheet, txcol, evcol in GMD_FILES:
+        blob = cached_bytes(fn, lambda fn=fn: S.get(GMD_URL + fn, timeout=300).content)
+        meta = pd.read_excel(io.BytesIO(blob), sheet_name=msheet)
+        assoc = pd.read_excel(io.BytesIO(blob), sheet_name=asheet)
+        meta = meta[(meta.HumanOrMouse.astype(str).str.strip() == 'Human')
+                    & (meta.ResearchType == GMD_INTERVENTION)
+                    & (meta.InterventionType.astype(str)
+                       .str.contains('Diet, Food', na=False))]
+        keep = []
+        for _, r in meta.iterrows():
+            p1, p2 = _gmd_parts(r['Condition1']), _gmd_parts(r['Condition2'])
+            iv = [x for x in p1 if x not in set(p2)]
+            extra = [x for x in p2 if x not in set(p1)]
+            if not iv:
+                continue
+            if extra and not all(GMD_NULL_CONTROL.match(x) for x in extra):
+                continue                      # 다른 식단과의 대조 — 방향을 못 쓴다
+            keep.append({'Index': r['Index'], 'intervention': ';'.join(iv),
+                         'control': r['Condition2'], 'evidence': str(r[evcol])})
+        if not keep:
+            continue
+        k = pd.DataFrame(keep)
+        a = assoc.rename(columns={assoc.columns[0]: 'Index'}).merge(k, on='Index')
+        for _, r in a.iterrows():
+            if pd.isna(r[txcol]):
+                continue
+            alt = str(r['Alteration']).strip().lower()
+            alt = {'increased': 'increase', 'decreased': 'decrease'}.get(alt, alt)
+            rows.append({
+                'intervention': r['intervention'], 'taxid': str(int(r[txcol])),
+                'organism': r['GutMicrobe'],
+                'gmd_rank': str(r['Classification']).strip().lower(),
+                'alteration': alt, 'pvalue': r.get('PValue'),
+                'control': r['control'], 'evidence': r['evidence'],
+                'gmd_source': msheet})
+    return pd.DataFrame(rows)
 
 
 def microbe_disease_direction():

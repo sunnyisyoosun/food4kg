@@ -1,0 +1,319 @@
+intervention,taxid,organism,gmd_rank,alteration,pvalue,control,evidence,gmd_source
+Yogurt,543,Enterobacteriaceae,family,decrease,0.06,No yogurt,17217568,Literature
+Lupin Kernel Fiber,1678,Bifidobacterium,genus,decrease,0.01,No Lupin Kernel Fiber,16763747,Literature
+Lupin Kernel Fiber,69824,Clostridium cocleatum,species,increase,0.039,No Lupin Kernel Fiber,16763747,Literature
+Lupin Kernel Fiber,29348,Clostridium spiroforme,species,increase,0.039,No Lupin Kernel Fiber,16763747,Literature
+Lupin Kernel Fiber,1547,Erysipelatoclostridium ramosum,species,increase,0.039,No Lupin Kernel Fiber,16763747,Literature
+"Synbiotics(Bifidobacterium longum,Synergy 1)",1678,Bifidobacterium,genus,increase,,Placebos;Crohn Disease,20735782,Literature
+Polydextrose,239934,Akkermansia,genus,increase,<0.05,No supplemental fiber;Health,22649263,Literature
+Polydextrose,39488,Anaerobutyricum hallii,species,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Polydextrose,1678,Bifidobacterium,genus,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Polydextrose,41200,Bifidobacterium sp.,species,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Polydextrose,1485,Clostridium,genus,increase,<0.05,No supplemental fiber;Health,22649263,Literature
+Polydextrose,33042,Coprococcus,genus,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Polydextrose,39948,Dialister,genus,increase,<0.05,No supplemental fiber;Health,22649263,Literature
+Polydextrose,189330,Dorea,genus,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Polydextrose,1730,Eubacterium,genus,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Polydextrose,39491,Eubacterium rectale,species,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Polydextrose,853,Faecalibacterium prausnitzii,species,increase,<0.05,No supplemental fiber;Health,22649263,Literature
+Polydextrose,33024,Phascolarctobacterium,genus,increase,<0.05,No supplemental fiber;Health,22649263,Literature
+Polydextrose,1263,Ruminococcus,genus,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Polydextrose,41978,Ruminococcus sp.,species,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Soluble corn fiber,39488,Anaerobutyricum hallii,species,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Soluble corn fiber,1678,Bifidobacterium,genus,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Soluble corn fiber,33042,Coprococcus,genus,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Soluble corn fiber,39948,Dialister,genus,increase,<0.05,No supplemental fiber;Health,22649263,Literature
+Soluble corn fiber,189330,Dorea,genus,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Soluble corn fiber,1730,Eubacterium,genus,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Soluble corn fiber,39491,Eubacterium rectale,species,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Soluble corn fiber,853,Faecalibacterium prausnitzii,species,increase,<0.05,No supplemental fiber;Health,22649263,Literature
+Soluble corn fiber,186803,Lachnospiraceae,family,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Soluble corn fiber,1578,Lactobacillus,genus,increase,<0.05,No supplemental fiber;Health,22649263,Literature
+Soluble corn fiber,33024,Phascolarctobacterium,genus,increase,<0.05,No supplemental fiber;Health,22649263,Literature
+Soluble corn fiber,1263,Ruminococcus,genus,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+Soluble corn fiber,41978,Ruminococcus sp.,species,decrease,<0.05,No supplemental fiber;Health,22649263,Literature
+"Diet, Gluten-Free",301302,Roseburia faecis,species,decrease,0.00188,Habitual diet,27102333,Literature
+"Diet, Gluten-Free",40518,Ruminococcus bromii,species,decrease,0.000294,Habitual diet,27102333,Literature
+"Diet, Gluten-Free",84108,Slackia,genus,increase,0.00214,Habitual diet,27102333,Literature
+Macrobiotic Ma-Pi 2 diet,239934,Akkermansia,genus,increase,,"Diabetes Mellitus, Type 2",27151248,Literature
+Macrobiotic Ma-Pi 2 diet,816,Bacteroides,genus,increase,,"Diabetes Mellitus, Type 2",27151248,Literature
+Macrobiotic Ma-Pi 2 diet,102106,Collinsella,genus,decrease,,"Diabetes Mellitus, Type 2",27151248,Literature
+Macrobiotic Ma-Pi 2 diet,189330,Dorea,genus,increase,,"Diabetes Mellitus, Type 2",27151248,Literature
+Macrobiotic Ma-Pi 2 diet,216851,Faecalibacterium,genus,increase,,"Diabetes Mellitus, Type 2",27151248,Literature
+Macrobiotic Ma-Pi 2 diet,186803,Lachnospiraceae,family,decrease,,"Diabetes Mellitus, Type 2",27151248,Literature
+Macrobiotic Ma-Pi 2 diet,1263,Ruminococcus,genus,decrease,,"Diabetes Mellitus, Type 2",27151248,Literature
+Macrobiotic Ma-Pi 2 diet,1301,Streptococcus,genus,decrease,,"Diabetes Mellitus, Type 2",27151248,Literature
+Cardiac Resynchronization Therapy diet,239934,Akkermansia,genus,increase,,"Diabetes Mellitus, Type 2",27151248,Literature
+Cardiac Resynchronization Therapy diet,816,Bacteroides,genus,increase,,"Diabetes Mellitus, Type 2",27151248,Literature
+Cardiac Resynchronization Therapy diet,189330,Dorea,genus,increase,,"Diabetes Mellitus, Type 2",27151248,Literature
+Cardiac Resynchronization Therapy diet,216851,Faecalibacterium,genus,increase,,"Diabetes Mellitus, Type 2",27151248,Literature
+Cardiac Resynchronization Therapy diet,1263,Ruminococcus,genus,decrease,,"Diabetes Mellitus, Type 2",27151248,Literature
+"Diet, High-Fat",239934,Akkermansia,genus,increase,,Normal chow diet,28411689,Literature
+"Diet, High-Fat",244127,Anaerotruncus,genus,decrease,,Normal chow diet,28411689,Literature
+"Diet, High-Fat",816,Bacteroides,genus,increase,,Normal chow diet,28411689,Literature
+"Diet, High-Fat",946234,Flavonifractor,genus,decrease,,Normal chow diet,28411689,Literature
+"Diet, High-Fat",375288,Parabacteroides,genus,increase,,Normal chow diet,28411689,Literature
+Probiotic Saccharomyces boulardii;Immunological non-responders,135858,Catenibacterium,genus,decrease,3e-05,Placebos;HIV Infections,28388647,Literature
+Probiotic Saccharomyces boulardii;Immunological non-responders,158846,Megamonas,genus,increase,0.02,Placebos;HIV Infections,28388647,Literature
+Probiotic Saccharomyces boulardii,135858,Catenibacterium,genus,decrease,3e-05,Placebos;HIV Infections,28388647,Literature
+Probiotic Saccharomyces boulardii,158846,Megamonas,genus,increase,0.02,Placebos;HIV Infections,28388647,Literature
+Immunological non-responders,186803,Lachnospiraceae,family,increase,0.05,Probiotic Saccharomyces boulardii;HIV Infections,28388647,Literature
+Probiotics,816,Bacteroides,genus,increase,,"Arthritis, Juvenile",27861762,Literature
+Probiotics,838,Prevotella,genus,decrease,,"Arthritis, Juvenile",27861762,Literature
+Synbiotics,174708,Allobaculum,genus,increase,0.01,Placebos;Obesity,31952249,Literature
+Synbiotics,1678,Bifidobacterium,genus,increase,0.01,Placebos;Obesity,31952249,Literature
+Synbiotics,574697,Butyricimonas,genus,increase,0.0001,Placebos;Obesity,31952249,Literature
+Synbiotics,33042,Coprococcus,genus,increase,0.05,Placebos;Obesity,31952249,Literature
+Synbiotics,84111,Eggerthella,genus,increase,0.01,Placebos;Obesity,31952249,Literature
+Synbiotics,1350,Enterococcus,genus,increase,0.01,Placebos;Obesity,31952249,Literature
+Synbiotics,1730,Eubacterium,genus,increase,0.05,Placebos;Obesity,31952249,Literature
+Synbiotics,2701,Gardnerella,genus,decrease,0.001,Placebos;Obesity,31952249,Literature
+Synbiotics,186803,Lachnospiraceae,family,increase,0.05,Placebos;Obesity,31952249,Literature
+Synbiotics,1578,Lactobacillus,genus,increase,0.05,Placebos;Obesity,31952249,Literature
+Synbiotics,906,Megasphaera,genus,decrease,0.01,Placebos;Obesity,31952249,Literature
+Synbiotics,2172,Methanobrevibacter,genus,increase,0.01,Placebos;Obesity,31952249,Literature
+Synbiotics,838,Prevotella,genus,decrease,0.01,Placebos;Obesity,31952249,Literature
+Synbiotics,1263,Ruminococcus,genus,increase,0.01,Placebos;Obesity,31952249,Literature
+Synbiotics,40544,Sutterella,genus,increase,0.05,Placebos;Obesity,31952249,Literature
+Synbiotics,191303,Turicibacter,genus,decrease,0.01,Placebos;Obesity,31952249,Literature
+Probiotics,1730,Eubacterium,genus,decrease,0.05,Health,32300799,Literature
+Low FODMAP diet,816,Bacteroides,genus,decrease,0.01,Irritable Bowel Syndrome,33183883,Literature
+Low FODMAP diet,1678,Bifidobacterium,genus,increase,0.029,Irritable Bowel Syndrome,33183883,Literature
+Probiotics,1578,Lactobacillus,genus,increase,0.001,Irritable Bowel Syndrome,33183883,Literature
+Probiotics,1301,Streptococcus,genus,increase,0.001,Irritable Bowel Syndrome,33183883,Literature
+Lower-carbohydrate diet,29523,Bacteroides sp.,species,decrease,0.05,Weight Loss,31996717,Literature
+Lower-carbohydrate diet,41200,Bifidobacterium sp.,species,decrease,0.05,Weight Loss,31996717,Literature
+Lower-carbohydrate diet,853,Faecalibacterium prausnitzii,species,increase,0.05,Weight Loss,31996717,Literature
+Inulin-type fructan prebiotic,186803,Lachnospiraceae,family,decrease,0.043,Lower-fiber dietary,29307330,Literature
+Inulin-type fructan prebiotic,1678,Bifidobacterium,genus,increase,0.001,Higher-fiber dietary,29307330,Literature
+Inulin-type fructan prebiotic,33042,Coprococcus,genus,increase,0.05,Higher-fiber dietary,29307330,Literature
+Inulin-type fructan prebiotic,189330,Dorea,genus,increase,0.029,Higher-fiber dietary,29307330,Literature
+Inulin-type fructan prebiotic,216851,Faecalibacterium,genus,increase,0.018,Higher-fiber dietary,29307330,Literature
+Inulin-type fructan prebiotic,1578,Lactobacillus,genus,increase,0.025,Higher-fiber dietary,29307330,Literature
+Inulin-type fructan prebiotic,1263,Ruminococcus,genus,decrease,0.01,Higher-fiber dietary,29307330,Literature
+Probiotics,1680,Bifidobacterium adolescentis,species,increase,0.00819366830930055,"Placebos;Diabetes Mellitus, Type 2",33024120,Literature
+Probiotics,216816,Bifidobacterium longum,species,increase,0.0229580486982644,"Placebos;Diabetes Mellitus, Type 2",33024120,Literature
+Synbiotics(1 month),59823,Prevotella sp.,species,increase,<0.001,Constipation,29340896,Literature
+Synbiotics(3 months),59823,Prevotella sp.,species,increase,<0.001,Constipation,29340896,Literature
+"Diet, Ketogenic",239759,Alistipes,genus,decrease,<0.05,Drug Resistant Epilepsy,28970732,Literature
+"Diet, Ketogenic",397864,Barnesiella,genus,decrease,<0.05,Drug Resistant Epilepsy,28970732,Literature
+"Diet, Ketogenic",1678,Bifidobacterium,genus,increase,<0.05,Drug Resistant Epilepsy,28970732,Literature
+"Diet, Ketogenic",413496,Cronobacter,genus,decrease,<0.05,Drug Resistant Epilepsy,28970732,Literature
+"Diet, Ketogenic",1350,Enterococcus,genus,decrease,<0.05,Drug Resistant Epilepsy,28970732,Literature
+"Diet, Ketogenic",838,Prevotella,genus,increase,<0.05,Drug Resistant Epilepsy,28970732,Literature
+"Diet, Ketogenic",1508657,Ruminiclostridium,genus,decrease,<0.05,Drug Resistant Epilepsy,28970732,Literature
+"Diet, Ketogenic",1301,Streptococcus,genus,decrease,<0.05,Drug Resistant Epilepsy,28970732,Literature
+Multiple Micronutrient Powder+Fe,1678,Bifidobacterium,genus,decrease,0.02,Placebos,28753958,Literature
+Multiple Micronutrient Powder+Fe,561,Escherichia,genus,decrease,0.01,Placebos,28753958,Literature
+Multiple Micronutrient Powder−Fe,1485,Clostridium,genus,increase,0.02,Placebos,28753958,Literature
+Multiple Micronutrient Powder−Fe,561,Escherichia,genus,decrease,0.05,Placebos,28753958,Literature
+Prebiotics,41200,Bifidobacterium sp.,species,increase,0.023,Placebos,28596023,Literature
+Prebiotics,853,Faecalibacterium prausnitzii,species,decrease,0.002,Placebos,28596023,Literature
+Prebiotics,186804,Peptostreptococcaceae,family,decrease,0.044,Placebos,28596023,Literature
+Prebiotics,821,Phocaeicola vulgatus,species,decrease,0.005,Placebos,28596023,Literature
+Probiotics,1485,Clostridium,genus,decrease,0.002,"Infant, Premature",26859305,Literature
+Probiotics,1301,Streptococcus,genus,decrease,0.001,"Infant, Premature",26859305,Literature
+Probiotics,12916,Acidovorax,genus,increase,0.001,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,469,Acinetobacter,genus,increase,>0.001,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,1386,Bacillus,genus,increase,0.017,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,28216,Betaproteobacteria,class,decrease,0.031,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,2747,Carnobacterium,genus,increase,0.018,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,75,Caulobacter,genus,increase,>0.001,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,33042,Coprococcus,genus,decrease,0.02,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,212791,Enhydrobacter,genus,increase,>0.001,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,1350,Enterococcus,genus,increase,0.033,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,848,Fusobacterium,genus,decrease,0.032,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,1743,Propionibacterium,genus,increase,0.003,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,286,Pseudomonas,genus,increase,>0.001,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,497,Psychrobacter,genus,increase,>0.001,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,1827,Rhodococcus,genus,increase,0.018,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,13687,Sphingomonas,genus,decrease,>0.001,Placebos;Colorectal Neoplasms,26238090,Literature
+Probiotics,40323,Stenotrophomonas,genus,increase,0.013,Placebos;Colorectal Neoplasms,26238090,Literature
+Prebiotics,186803,Lachnospiraceae,family,decrease,0.00899999999999999,Placebos;Constipation,31686768,Literature
+Prebiotics,301301,Roseburia hominis,species,increase,0.045,Placebos;Constipation,31686768,Literature
+Prebiotics,1872444,Alistipes sp.,species,increase,<0.05,Placebos;Health,29723105,Literature
+Prebiotics,29523,Bacteroides sp.,species,increase,<0.05,Placebos;Health,29723105,Literature
+Synbiotics,118747,Bulleidia,genus,increase,<0.05,Placebos;Obesity,31298466,Literature
+Synbiotics,543,Enterobacteriaceae,family,decrease,<0.05,Placebos;Obesity,31298466,Literature
+Synbiotics,283168,Odoribacter,genus,increase,<0.05,Placebos;Obesity,31298466,Literature
+Synbiotics1,544,Citrobacter,genus,decrease,<0.05,Placebos;Synbiotics2;Obesity,31298466,Literature
+Synbiotics1,613,Serratia,genus,decrease,<0.05,Placebos;Synbiotics2;Obesity,31298466,Literature
+Synbiotics2,375288,Parabacteroides,genus,increase,<0.05,Placebos;Placebos;Obesity,31298466,Literature
+Prebiotics,1678,Bifidobacterium,genus,increase,<0.05,"Placebos;Diabetes Mellitus, Type 1",31188437,Literature
+Prebiotics,216816,Bifidobacterium longum,species,increase,<0.05,"Placebos;Diabetes Mellitus, Type 1",31188437,Literature
+Prebiotics,1573534,Faecalitalea,genus,increase,<0.05,"Placebos;Diabetes Mellitus, Type 1",31188437,Literature
+Prebiotics,360807,Roseburia inulinivorans,species,increase,<0.05,"Placebos;Diabetes Mellitus, Type 1",31188437,Literature
+Prebiotics,1301,Streptococcus,genus,increase,<0.05,"Placebos;Diabetes Mellitus, Type 1",31188437,Literature
+Prebiotics,1505652,Terrisporobacter,genus,increase,<0.05,"Placebos;Diabetes Mellitus, Type 1",31188437,Literature
+Polyphenol-rich aronia extract,207244,Anaerostipes,genus,increase,0.01,Placebos;Health,31152545,Literature
+Photinia,816,Bacteroides,genus,increase,0.01,Placebos;Health,31152545,Literature
+Placebos,207244,Anaerostipes,genus,increase,0.027,Obesity,30572270,Literature
+Placebos,102106,Collinsella,genus,increase,0.035,Obesity,30572270,Literature
+Placebos,577309,Paraprevotella,genus,decrease,0.035,Obesity,30572270,Literature
+Placebos,838,Prevotella,genus,increase,0.015,Obesity,30572270,Literature
+Dietary Fiber,1654,Actinomyces,genus,decrease,0.014,Obesity,30572270,Literature
+Probiotics,171549,Bacteroidales,order,decrease,0.04,Obesity,31250099,Literature
+Probiotics,135858,Catenibacterium,genus,increase,0.04,Obesity,31250099,Literature
+Probiotics,102106,Collinsella,genus,increase,0.04,Obesity,31250099,Literature
+Probiotics,189330,Dorea,genus,increase,<0.001,Obesity,31250099,Literature
+Probiotics,848,Fusobacterium,genus,decrease,0.01,Obesity,31250099,Literature
+Probiotics,283168,Odoribacter,genus,decrease,0.01,Obesity,31250099,Literature
+Probiotics,186804,Peptostreptococcaceae,family,increase,<0.001,Obesity,31250099,Literature
+Probiotics,838,Prevotella,genus,decrease,<0.01,Obesity,31250099,Literature
+Probiotics,191303,Turicibacter,genus,increase,0.04,Obesity,31250099,Literature
+"Diet, Mediterranean",1506553,Lachnoclostridium,genus,increase,0.039,Cardiovascular Diseases(risk),31292752,Literature
+"Diet, Mediterranean",375288,Parabacteroides,genus,decrease,0.037,Cardiovascular Diseases(risk),31292752,Literature
+"Diet, Vegetarian",207244,Anaerostipes,genus,increase,0.041,Cardiovascular Diseases(risk),31292752,Literature
+"Diet, Vegetarian",1485,Clostridium,genus,decrease,0.02,Cardiovascular Diseases(risk),31292752,Literature
+"Diet, Vegetarian",283168,Odoribacter,genus,decrease,0.025,Cardiovascular Diseases(risk),31292752,Literature
+"Diet, Vegetarian",1301,Streptococcus,genus,increase,0.038,Cardiovascular Diseases(risk),31292752,Literature
+Probiotics,438033,Ruminococcus gauvreauii,species,increase,<0.05,Placebos;Biotin;Depressive Disorder,33171595,Literature
+Allergenic foods,838,Prevotella,genus,increase,<0.05,"Infant;Milk, Human",33551026,Literature
+"Diet, Mediterranean",239935,Akkermansia muciniphila,species,decrease,,Aged;Health,33198235,Literature
+"Diet, Mediterranean",102106,Collinsella,genus,increase,,Aged;Health,33198235,Literature
+"Diet, Mediterranean",33038,Ruminococcus gnavus,species,increase,,Aged;Health,33198235,Literature
+"Diet, Mediterranean",1306,Streptococcus sp.,species,increase,,Aged;Health,33198235,Literature
+Probiotics,816,Bacteroides,genus,decrease,<0.05,"Diet, Mediterranean;Overweight;Breast Neoplasms",32234652,Literature
+Probiotics,580596,Butyricicoccus,genus,decrease,<0.05,"Diet, Mediterranean;Overweight;Breast Neoplasms",32234652,Literature
+Probiotics,561,Escherichia,genus,increase,<0.05,"Diet, Mediterranean;Overweight;Breast Neoplasms",32234652,Literature
+Probiotics,1730,Eubacterium,genus,decrease,<0.05,"Diet, Mediterranean;Overweight;Breast Neoplasms",32234652,Literature
+Probiotics,1263,Ruminococcus,genus,increase,<0.05,"Diet, Mediterranean;Overweight;Breast Neoplasms",32234652,Literature
+Flavonoid-rich orange juice,1766253,Agathobacter,genus,increase,<0.05,Depression,32570775,Literature
+Flavonoid-rich orange juice,239934,Akkermansia,genus,increase,,Depression,32570775,Literature
+Flavonoid-rich orange juice,239759,Alistipes,genus,increase,,Depression,32570775,Literature
+Flavonoid-rich orange juice,1678,Bifidobacterium,genus,increase,,Depression,32570775,Literature
+Flavonoid-rich orange juice,1506,Clostridium sp.,species,increase,<0.05,Depression,32570775,Literature
+Flavonoid-rich orange juice,102106,Collinsella,genus,increase,,Depression,32570775,Literature
+Flavonoid-rich orange juice,128827,Erysipelotrichaceae,family,decrease,,Depression,32570775,Literature
+Flavonoid-rich orange juice,142586,Eubacterium sp.,species,increase,<0.05,Depression,32570775,Literature
+Flavonoid-rich orange juice,216851,Faecalibacterium,genus,decrease,,Depression,32570775,Literature
+Flavonoid-rich orange juice,186803,Lachnospiraceae,family,increase,<0.05,Depression,32570775,Literature
+Flavonoid-rich orange juice,1578,Lactobacillus,genus,increase,,Depression,32570775,Literature
+Flavonoid-rich orange juice,841,Roseburia,genus,increase,<0.05,Depression,32570775,Literature
+Flavonoid-rich orange juice,1301,Streptococcus,genus,decrease,,Depression,32570775,Literature
+Flavonoid-low orange cordial,816,Bacteroides,genus,decrease,<0.05,Depression,32570775,Literature
+Flavonoid-low orange cordial,1678,Bifidobacterium,genus,decrease,<0.05,Depression,32570775,Literature
+Flavonoid-low orange cordial,41200,Bifidobacterium sp.,species,increase,<0.05,Depression,32570775,Literature
+Flavonoid-low orange cordial,572511,Blautia,genus,increase,<0.05,Depression,32570775,Literature
+Flavonoid-low orange cordial,33042,Coprococcus,genus,increase,<0.05,Depression,32570775,Literature
+Flavonoid-low orange cordial,1301,Streptococcus,genus,increase,<0.05,Depression,32570775,Literature
+Flavonoid-low orange cordial,292632,Subdoligranulum,genus,decrease,<0.05,Depression,32570775,Literature
+Arabinoxylan-Oligosaccharide,1678,Bifidobacterium,genus,increase,<0.05,Placebos;Health,31983281,Literature
+Inulin-type fructans,816,Bacteroides,genus,increase,<0.05,"Placebos;Diabetes Mellitus, Type 2",32440730,Literature
+Inulin-type fructans,1680,Bifidobacterium adolescentis,species,increase,<0.05,"Placebos;Diabetes Mellitus, Type 2",32440730,Literature
+Pomegranate extract nutraceutical,1678,Bifidobacterium,genus,increase,<0.05,Placebos;Metabolic Syndrome,33458928,Literature
+Pomegranate extract nutraceutical,1506,Clostridium sp.,species,decrease,<0.05,Placebos;Metabolic Syndrome,33458928,Literature
+Pomegranate extract nutraceutical,1357,Lactococcus,genus,increase,<0.05,Placebos;Metabolic Syndrome,33458928,Literature
+Pomegranate extract nutraceutical,46255,Weissella,genus,decrease,<0.05,Placebos;Metabolic Syndrome,33458928,Literature
+Probiotics,102106,Collinsella,genus,increase,,Placebos;Psoriasis,31453631,Literature
+Probiotics,1578,Lactobacillus,genus,increase,,Placebos;Psoriasis,31453631,Literature
+Probiotics,1827,Rhodococcus,genus,decrease,,Placebos;Psoriasis,31453631,Literature
+Probiotics(2 years),1358,Lactococcus lactis,species,decrease,<0.05,Placebos(2 years);Atopic,26378926,Literature
+Prebiotics,1678,Bifidobacterium,genus,increase,<0.05,Placebos;Health,30776899,Literature
+Prebiotics,1578,Lactobacillus,genus,increase,0.014,Placebos;Health,30776899,Literature
+Barley beta glucans diet,1535,Clostridium leptum,species,decrease,<0.05,Placebos;Metabolic Syndrome(high risk),30396006,Literature
+Barley beta glucans diet,74426,Collinsella aerofaciens,species,decrease,<0.05,Placebos;Metabolic Syndrome(high risk),30396006,Literature
+Barley beta glucans diet,39491,Eubacterium rectale,species,increase,<0.05,Placebos;Metabolic Syndrome(high risk),30396006,Literature
+Barley beta glucans diet,838,Prevotella,genus,increase,<0.05,Placebos;Metabolic Syndrome(high risk),30396006,Literature
+Wheat Germ Agglutinins,29523,Bacteroides sp.,species,increase,0.004,Placebos;Health,31325040,Literature
+Wheat Germ Agglutinins,41200,Bifidobacterium sp.,species,increase,0.008,Placebos;Health,31325040,Literature
+"Diet, Mediterranean(non-energy restricted)",39948,Dialister,genus,decrease,<0.05,Metabolic Syndrome,34020445,Literature
+"Diet, Mediterranean(non-energy restricted)",189330,Dorea,genus,increase,<0.05,Metabolic Syndrome,34020445,Literature
+"Diet, Mediterranean(non-energy restricted)",1898203,Lachnospiraceae bacterium,species,increase,<0.05,Metabolic Syndrome,34020445,Literature
+"Diet, Mediterranean(non-energy restricted)",375288,Parabacteroides,genus,decrease,<0.05,Metabolic Syndrome,34020445,Literature
+"Diet, Mediterranean(non-energy restricted)",33024,Phascolarctobacterium,genus,decrease,<0.05,Metabolic Syndrome,34020445,Literature
+Higher-fat diet,816,Bacteroides,genus,increase,<0.05,Health,30876827,Literature
+Higher-fat diet,1678,Bifidobacterium,genus,increase,<0.05,Health,30876827,Literature
+Higher-fat diet,1485,Clostridium,genus,increase,<0.05,Health,30876827,Literature
+Higher-fat diet,1578,Lactobacillus,genus,increase,<0.05,Health,30876827,Literature
+Prebiotics,816,Bacteroides,genus,decrease,0.035,Placebos;Health,32440731,Literature
+Prebiotics,853,Faecalibacterium prausnitzii,species,increase,0.043,Placebos;Health,32440731,Literature
+Prebiotics,1578,Lactobacillus,genus,increase,<0.001,Placebos;Health,32440731,Literature
+Prebiotics,838,Prevotella,genus,increase,0.001,Placebos;Health,32440731,Literature
+triphala,128827,Erysipelotrichaceae,family,decrease,,Placebos;Health,32955913,Literature
+triphala,186804,Peptostreptococcaceae,family,increase,,Placebos;Health,32955913,Literature
+Probiotics,239759,Alistipes,genus,increase,,Placebos;Milk Hypersensitivity,32996156,Literature
+Probiotics,397864,Barnesiella,genus,increase,,Placebos;Milk Hypersensitivity,32996156,Literature
+Probiotics,1678,Bifidobacterium,genus,increase,,Placebos;Milk Hypersensitivity,32996156,Literature
+Probiotics,35832,Bilophila,genus,decrease,,Placebos;Milk Hypersensitivity,32996156,Literature
+Probiotics,189330,Dorea,genus,decrease,,Placebos;Milk Hypersensitivity,32996156,Literature
+Probiotics,1578,Lactobacillus,genus,increase,,Placebos;Milk Hypersensitivity,32996156,Literature
+Probiotics,459786,Oscillibacter,genus,decrease,,Placebos;Milk Hypersensitivity,32996156,Literature
+Probiotics,841,Roseburia,genus,decrease,,Placebos;Milk Hypersensitivity,32996156,Literature
+"Probiotics(Bifidobacterium breve Bb99 Propionibacterium freundenreichii subsp, shermanii JS, Lactobacillus rhamnosus Lc705, Lactobacillus rhamnosus GG)",1685,Bifidobacterium breve,species,increase,,"Milk,Human",30326954,Literature
+"Probiotics(Bifidobacterium breve Bb99 Propionibacterium freundenreichii subsp, shermanii JS, Lactobacillus rhamnosus Lc705, Lactobacillus rhamnosus GG)",47715,Lacticaseibacillus rhamnosus,species,increase,,"Milk,Human",30326954,Literature
+"Probiotics(Bifidobacterium breve Bb99 Propionibacterium freundenreichii subsp, shermanii JS, Lactobacillus rhamnosus Lc705, Lactobacillus rhamnosus GG)",207244,Anaerostipes,genus,increase,0.05,Infant Formula,30326954,Literature
+"Probiotics(Bifidobacterium breve Bb99 Propionibacterium freundenreichii subsp, shermanii JS, Lactobacillus rhamnosus Lc705, Lactobacillus rhamnosus GG)",1685,Bifidobacterium breve,species,increase,,Infant Formula,30326954,Literature
+"Probiotics(Bifidobacterium breve Bb99 Propionibacterium freundenreichii subsp, shermanii JS, Lactobacillus rhamnosus Lc705, Lactobacillus rhamnosus GG)",570,Klebsiella,genus,increase,0.05,Infant Formula,30326954,Literature
+"Probiotics(Bifidobacterium breve Bb99 Propionibacterium freundenreichii subsp, shermanii JS, Lactobacillus rhamnosus Lc705, Lactobacillus rhamnosus GG)",47715,Lacticaseibacillus rhamnosus,species,increase,,Infant Formula,30326954,Literature
+"Probiotics(Bifidobacterium breve Bb99 Propionibacterium freundenreichii subsp, shermanii JS, Lactobacillus rhamnosus Lc705, Lactobacillus rhamnosus GG)",29465,Veillonella,genus,increase,<0.0001,Infant Formula,30326954,Literature
+"Probiotics(Bifidobacterium breve Bb99 Propionibacterium freundenreichii subsp, shermanii JS, Lactobacillus rhamnosus Lc705, Lactobacillus rhamnosus GG)",816,Bacteroides,genus,decrease,<0.0001,Cesarean Section,30326954,Literature
+"Probiotics(Bifidobacterium breve Bb99 Propionibacterium freundenreichii subsp, shermanii JS, Lactobacillus rhamnosus Lc705, Lactobacillus rhamnosus GG)",1678,Bifidobacterium,genus,decrease,0.01,Cesarean Section,30326954,Literature
+"Probiotics(Bifidobacterium breve Bb99 Propionibacterium freundenreichii subsp, shermanii JS, Lactobacillus rhamnosus Lc705, Lactobacillus rhamnosus GG)",543,Enterobacteriaceae,family,decrease,,Antibiotics,30326954,Literature
+"Diet, High-Protein",207244,Anaerostipes,genus,decrease,,Health,32199523,Literature
+"Diet, High-Protein",1578,Lactobacillus,genus,increase,,Health,32199523,Literature
+"Diet, High-Protein",1357,Lactococcus,genus,increase,,Health,32199523,Literature
+"Diet, High-Protein",841,Roseburia,genus,decrease,,Health,32199523,Literature
+"Diet, High-Protein",1301,Streptococcus,genus,increase,,Health,32199523,Literature
+"Prebiotics(inulin, fructo-oligosaccharides, galacto-oligosaccharides);Probiotics(Lactobacillus, Bifidobacteria, Streptococcus)",41200,Bifidobacterium sp.,species,increase,0.003,"Renal Insufficiency, Chronic",26772193,Literature
+"Prebiotics(inulin, fructo-oligosaccharides, galacto-oligosaccharides);Probiotics(Lactobacillus, Bifidobacteria, Streptococcus)",186803,Lachnospiraceae,family,increase,0.01,"Renal Insufficiency, Chronic",26772193,Literature
+Soy Foods,39948,Dialister,genus,decrease,,Health,32620337,Literature
+Soy Foods,838,Prevotella,genus,decrease,,Health,32620337,Literature
+Probiotics,1623,Lactobacillus ruminis,species,decrease,0.045352,Liver Cirrhosis,PRJNA431746,projectr
+Probiotics,33043,Coprococcus eutactus,species,increase,0.037641,Liver Cirrhosis,PRJNA431746,projectr
+Probiotics,128827,Erysipelotrichaceae,family,increase,0.03289,Liver Cirrhosis,PRJNA431746,projectr
+Probiotics,487173,Dialister succinatiphilus,species,increase,0.003382,Liver Cirrhosis,PRJNA431746,projectr
+Probiotics,292632,Subdoligranulum,genus,decrease,0.029261,Placebos,PRJNA644097,projectr
+Probiotics,1766253,Agathobacter,genus,decrease,0.036027,Placebos,PRJNA644097,projectr
+Probiotics,218538,Dialister invisus,species,decrease,0.049687,Placebos,PRJNA644097,projectr
+Probiotics,310298,Phocaeicola coprocola,species,decrease,0.042136,Placebos,PRJNA644097,projectr
+Probiotics,207244,Anaerostipes,genus,decrease,0.000986,Placebos,PRJNA644097,projectr
+Probiotics,338188,Bacteroides finegoldii,species,decrease,0.033427,Placebos,PRJNA644097,projectr
+Probiotics,97478,Lactobacillus mucosae,species,decrease,0.026685,Placebos,PRJNA644097,projectr
+Probiotics,906,Megasphaera,genus,decrease,0.006337,Placebos,PRJNA644097,projectr
+Probiotics,39492,Eubacterium siraeum,species,decrease,0.01285,Placebos,PRJNA644097,projectr
+Probiotics,2144175,Megasphaera stantonii,species,decrease,0.026685,Placebos,PRJNA644097,projectr
+Probiotics,291644,Bacteroides salyersiae,species,decrease,0.000389,Placebos,PRJNA644097,projectr
+Probiotics,848,Fusobacterium,genus,increase,0.022579,Placebos,PRJNA644097,projectr
+Probiotics,1506,Clostridium sp.,species,increase,0.036608,Placebos,PRJNA644097,projectr
+Probiotics,102106,Collinsella,genus,increase,0.004444,Placebos,PRJNA644097,projectr
+Probiotics,59823,Prevotella sp.,species,increase,0.001653,Placebos,PRJNA644097,projectr
+Probiotics,204516,Phocaeicola massiliensis,species,increase,0.002013,Placebos,PRJNA644097,projectr
+Probiotics,158846,Megamonas,genus,increase,0.004744,Placebos,PRJNA644097,projectr
+Probiotics,375288,Parabacteroides,genus,increase,0.024153,Placebos,PRJNA644097,projectr
+Probiotics,454155,Paraprevotella xylaniphila,species,increase,0.022655,Placebos,PRJNA644097,projectr
+Probiotics,165179,Prevotella copri,species,increase,0.006523,Placebos,PRJNA644097,projectr
+Probiotics,46503,Parabacteroides merdae,species,increase,0.013218,Placebos,PRJNA644097,projectr
+Probiotics,674529,Bacteroides faecis,species,increase,0.001107,Placebos,PRJNA644097,projectr
+Probiotics,841,Roseburia,genus,increase,0.026496,Placebos,PRJNA644097,projectr
+Probiotics,577309,Paraprevotella,genus,increase,3.7e-05,Placebos,PRJNA644097,projectr
+Probiotics,46506,Bacteroides stercoris,species,increase,0.010982,Placebos,PRJNA644097,projectr
+Probiotics,838,Prevotella,genus,increase,2.3e-05,Placebos,PRJNA644097,projectr
+Probiotics,171549,Bacteroidales,order,increase,0.02729,Placebos,PRJNA644097,projectr
+"Milk, Human",77133,uncultured bacterium,species,decrease,0.0178683074923,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",1357,Lactococcus,genus,decrease,0.038508769336,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",1301,Streptococcus,genus,increase,0.0149610176752,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",186803,Lachnospiraceae,family,decrease,0.0101769997919,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",1164882,Lachnoanaerobaculum,genus,decrease,0.0309921874373,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",29465,Veillonella,genus,decrease,0.0174856655589,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",712,Pasteurellaceae,family,increase,0.0289311325273,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",171549,Bacteroidales,order,decrease,0.0273101371326,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",838,Prevotella,genus,decrease,0.0279023138673,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",1357,Lactococcus,genus,decrease,0.038508769336,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",1301,Streptococcus,genus,increase,0.0149610176752,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",186803,Lachnospiraceae,family,decrease,0.00759879165078,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",186803,Lachnospiraceae,family,decrease,0.0101769997919,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",1164882,Lachnoanaerobaculum,genus,decrease,0.0309921874373,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",29465,Veillonella,genus,decrease,0.0160013085109,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",712,Pasteurellaceae,family,increase,0.0117908413791,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",712,Pasteurellaceae,family,increase,0.0289311325273,"No Milk, Human;Age stage 1",PRJNA747639,projectr
+"Milk, Human",77133,uncultured bacterium,species,decrease,0.0140091323647,"No Milk, Human;Age stage 2",PRJNA747639,projectr
+"Milk, Human",29465,Veillonella,genus,decrease,0.0444483652542,"No Milk, Human;Age stage 2",PRJNA747639,projectr
+"Milk, Human",836,Porphyromonas,genus,decrease,0.00913183109034,"No Milk, Human;Age stage 2",PRJNA747639,projectr
+"Milk, Human",29465,Veillonella,genus,decrease,0.0478797647057,"No Milk, Human;Age stage 2",PRJNA747639,projectr
+"Milk, Human",171549,Bacteroidales,order,decrease,0.0113305596675,"No Milk, Human;Age stage 3",PRJNA747639,projectr
+"Milk, Human",80840,Burkholderiales,order,increase,0.0492658309897,"No Milk, Human;Age stage 3",PRJNA747639,projectr
+"Milk, Human",195950,Tannerella,genus,decrease,0.0297348706966,"No Milk, Human;Age stage 4",PRJNA747639,projectr
+"Milk, Human",47670,Lautropia,genus,increase,0.0410211047869,"No Milk, Human;Age stage 4",PRJNA747639,projectr
+"Milk, Human",195950,Tannerella,genus,decrease,0.0297348706966,"No Milk, Human;Age stage 4",PRJNA747639,projectr
+"Milk, Human",47670,Lautropia,genus,increase,0.0410211047869,"No Milk, Human;Age stage 4",PRJNA747639,projectr

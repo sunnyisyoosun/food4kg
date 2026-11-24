@@ -26,6 +26,7 @@ ANALYZE = ['recommend', 'compare', 'external', 'invert', 'stype',
 VERIFY = {'probiotic': ('probiotic_rct.py', ['test']),     # RESULTS §15b 검정 ①②
           'metabolome': ('metabolome_check.py', []),        # RESULTS §15b 검정 ④
           'nhanes': ('nhanes.py', []),                      # RESULTS §15d
+          'diet_iv': ('diet_intervention.py', []),          # RESULTS §33 (중재로 E 검정)
           'bootstrap': ('bootstrap.py', []),                # RESULTS §17 (주지표 근거)
           'consensus': ('consensus.py', [])}                # RESULTS §23 (합의 Top-K)
 # 설정 쓸기. 하나하나가 recommend 를 여러 번 돌린다.
