@@ -1,0 +1,56 @@
+a,b,공유,A,B,기대,p,q
+Cognition disorders,Eating disorders,29,29,29,17.5,8.664123881800393e-14,4.765268134990216e-12
+Cognition disorders,Sex behavior disorder,29,29,30,18.1,2.5992371645401183e-12,4.7652681349902163e-11
+Eating disorders,Sex behavior disorder,29,29,30,18.1,2.5992371645401183e-12,4.7652681349902163e-11
+Anxiety disorders,Personality disorder,43,43,43,38.5,5.840084470981788e-07,8.030116147599958e-06
+Learning disorder,Personality disorder,32,32,43,28.7,0.002550948896924845,0.02338369822181108
+Anxiety disorders,Learning disorder,32,43,32,28.7,0.0025509488969248455,0.02338369822181108
+Personality disorder,Sex behavior disorder,30,43,30,26.9,0.005003784374737197,0.031124730188097437
+Anxiety disorders,Sex behavior disorder,30,43,30,26.9,0.005003784374737197,0.031124730188097437
+Anxiety disorders,Eating disorders,29,43,29,26.0,0.006790850222857622,0.031124730188097437
+Anxiety disorders,Cognition disorders,29,43,29,26.0,0.006790850222857622,0.031124730188097437
+Cognition disorders,Personality disorder,29,29,43,26.0,0.006790850222857623,0.031124730188097437
+Eating disorders,Personality disorder,29,29,43,26.0,0.006790850222857623,0.031124730188097437
+Personality disorder,Sleep disorders,43,43,47,42.1,0.10416666666666667,0.40922619047619047
+Anxiety disorders,Sleep disorders,43,43,47,42.1,0.10416666666666667,0.40922619047619047
+Learning disorder,Sleep disorders,32,32,47,31.3,0.3333333333333333,1.0
+Sex behavior disorder,Sleep disorders,30,30,47,29.4,0.375,1.0
+Cognition disorders,Sleep disorders,29,29,47,28.4,0.3958333333333333,1.0
+Eating disorders,Sleep disorders,29,29,47,28.4,0.3958333333333333,1.0
+Cognition disorders,Learning disorder,19,29,32,19.3,0.6966492566352573,1.0
+Eating disorders,Learning disorder,19,29,32,19.3,0.6966492566352573,1.0
+Eating disorders,Learning disorders,5,29,9,5.4,0.762651503186464,1.0
+Cognition disorders,Learning disorders,5,29,9,5.4,0.762651503186464,1.0
+Learning disorders,Sex behavior disorder,5,9,30,5.6,0.8059868870354004,1.0
+Learning disorders,Sleep disorders,9,9,47,8.8,0.8125,1.0
+Learning disorder,Sex behavior disorder,19,32,30,20.0,0.8281124242674308,1.0
+Learning disorder,Learning disorders,5,32,9,6.0,0.8790235068176702,1.0
+Anxiety disorders,Learning disorders,5,43,9,8.1,0.9999264149356656,1.0
+Learning disorders,Personality disorder,5,9,43,8.1,0.9999264149356656,1.0
+Anxiety disorders,Bipolar disorder,43,43,48,43.0,1.0,1.0
+Anxiety disorders,Autistic disorder,43,43,48,43.0,1.0,1.0
+Autistic disorder,Bipolar disorder,48,48,48,48.0,1.0,1.0
+Autistic disorder,Cognition disorders,29,48,29,29.0,1.0,1.0
+Bipolar disorder,Personality disorder,43,48,43,43.0,1.0,1.0
+Bipolar disorder,Sex behavior disorder,30,48,30,30.0,1.0,1.0
+Bipolar disorder,Sleep disorders,47,48,47,47.0,1.0,1.0
+Cognition disorders,Depressive disorder,29,29,48,29.0,1.0,1.0
+Bipolar disorder,Depressive disorder,48,48,48,48.0,1.0,1.0
+Bipolar disorder,Eating disorders,29,48,29,29.0,1.0,1.0
+Bipolar disorder,Learning disorder,32,48,32,32.0,1.0,1.0
+Bipolar disorder,Learning disorders,9,48,9,9.0,1.0,1.0
+Bipolar disorder,Cognition disorders,29,48,29,29.0,1.0,1.0
+Autistic disorder,Sleep disorders,47,48,47,47.0,1.0,1.0
+Autistic disorder,Sex behavior disorder,30,48,30,30.0,1.0,1.0
+Autistic disorder,Personality disorder,43,48,43,43.0,1.0,1.0
+Autistic disorder,Depressive disorder,48,48,48,48.0,1.0,1.0
+Autistic disorder,Eating disorders,29,48,29,29.0,1.0,1.0
+Autistic disorder,Learning disorder,32,48,32,32.0,1.0,1.0
+Autistic disorder,Learning disorders,9,48,9,9.0,1.0,1.0
+Anxiety disorders,Depressive disorder,43,43,48,43.0,1.0,1.0
+Depressive disorder,Personality disorder,43,48,43,43.0,1.0,1.0
+Depressive disorder,Learning disorders,9,48,9,9.0,1.0,1.0
+Depressive disorder,Learning disorder,32,48,32,32.0,1.0,1.0
+Depressive disorder,Sex behavior disorder,30,48,30,30.0,1.0,1.0
+Depressive disorder,Sleep disorders,47,48,47,47.0,1.0,1.0
+Depressive disorder,Eating disorders,29,48,29,29.0,1.0,1.0

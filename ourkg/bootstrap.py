@@ -68,8 +68,21 @@ def run(configs, R=None, frac=None):
     return t
 
 
+# 이름 붙인 후보 — 기본값을 바꿀지 판단할 때 쓴다 (RESULTS §17f)
+BASE = {'SIM_THRESHOLD': 'none', 'GUTBRAIN_ALPHA': '0', 'E_ZERO': '',
+        'F_SCALE': 'per100g', 'F_COLUMNS': 'linked', 'PCA_COMPONENTS': '0',
+        'NO_SIM': '0', 'SIM_SIGN': 'none'}
+CANDIDATES = {
+    '현행': {'E_MODE': 'shrunk', 'SIM_SPACE': 'composition'},
+    'effect+nhanes': {'E_MODE': 'nhanes_all', 'SIM_SPACE': 'effect'},
+    'effect+shrunk': {'E_MODE': 'shrunk', 'SIM_SPACE': 'effect'},
+    'comp+nhanes': {'E_MODE': 'nhanes_all', 'SIM_SPACE': 'composition'},
+}
+
+
 if __name__ == '__main__':
-    want = sys.argv[1:] or ['shrunk']
-    base = {'SIM_THRESHOLD': 'none', 'GUTBRAIN_ALPHA': '0', 'E_ZERO': '',
-            'F_SCALE': 'per100g', 'F_COLUMNS': 'linked', 'PCA_COMPONENTS': '0'}
-    run([(m, {**base, 'E_MODE': m}) for m in want])
+    want = sys.argv[1:] or list(CANDIDATES)
+    bad = [w for w in want if w not in CANDIDATES]
+    if bad:
+        sys.exit(f'알 수 없는 후보 {bad}. 가능: {list(CANDIDATES)}')
+    run([(w, {**BASE, **CANDIDATES[w]}) for w in want])
