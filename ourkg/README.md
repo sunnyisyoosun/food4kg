@@ -77,7 +77,8 @@ KEGG / NCBI / MeSH 는 실행 중 네트워크로 받고 `ourkg/cache/` 에 캐�
 | `foodon_match.py` | — | FoodOn 매칭 (OLS) | `food_foodon.csv` |
 | `probiotic_rct.py` | `build`·`test` | **외부 검정** — 프로바이오틱스 RCT 25 종 | `setup/probiotic_rct.csv` |
 | `metabolome_check.py` | `build`·(기본) | **외부 검정** — 분변 대사체 코호트 | `compound_microbe_measured.csv` |
-| `sweep.py` | `fcolumns`·`modimed_rho`·`gutbrain`·`simthr`·`ezero`·`emode`·`fscale` | 설정 쓸기 — 두 기준으로 채점 | `*_comparison.csv` |
+| `sweep.py` | `fcolumns`·`modimed_rho`·`gutbrain`·`simthr`·`ezero`·`emode`·`fscale`·`simspace`·`simsign`·`nosim`·`dedup`·`union`·`learned`… | 설정 쓸기 — 두 기준으로 채점 | `*_comparison.csv` |
+| `consensus.py` | — | **합의 Top-K** — 부분표집에서 반복 선택되는 음식 | `consensus_*.csv` |
 | `bootstrap.py` | — | **Top-K 지표의 표집 변동** (주지표 선정 근거) | `bootstrap_ci.csv` |
 | `nhanes.py` | — | **섭취-결과 E** (NHANES) | `compound_depression_nhanes.csv` |
 | `run_all.py` | — | 위를 순서대로 호출. `--env` 로 환경변수 전수 | |

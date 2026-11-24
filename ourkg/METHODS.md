@@ -116,7 +116,7 @@ P = D × S           Threshold & Top K        (식 2)
 
 | 설정 | 기본값 | 근거 |
 |---|---|---|
-| `E_MODE` | `shrunk` | `(pos−neg)/(pos+neg+K)`, `SHRINK_K=10`. 근거 수가 적은 compound 를 0 쪽으로 당긴다 |
+| `E_MODE` | **`union_all`** | ProMENDA `shrunk` 66 열 + NHANES 섭취-결과 `E` 로 빈 칸 18 개(미네랄·카로티노이드). 겹치면 ProMENDA 우선. **수치가 아니라 Top-K 목록을 보고 고른 것** ([`RESULTS.md`](RESULTS.md) §24). `shrunk` 로 되돌아간다 |
 | `F_COLUMNS` | `linked` | 논문 §4.2.1 의 `F` 제한에 대응 |
 | `PCA_COMPONENTS` | `0` | 논문은 5 를 명시하지만, `F` 제한과 함께 켜면 Top 30 이 무너진다 ([`RESULTS.md`](RESULTS.md) §13) |
 | `SIM_NORM` | `none` | 논문 식 (2) 그대로. 공식 코드의 `colsum` 나눗셈은 성분 적은 음식의 점수를 폭발시킨다 |
@@ -208,6 +208,14 @@ id 로 직접 매핑해 변환 없이 붙는다. **두 코호트 모두 음성**
 > 음식의 변종**이라 부분표집에 한꺼번에 무너진다. **추천군 차이가 5 이하면
 > 잡음 구간**이라 그것만으로 채택·기각하지 않는다
 > (`ourkg/bootstrap.py`, [`RESULTS.md`](RESULTS.md) §17).
+
+### ⑥b 합의 Top-K — 불안정을 선택 기준으로
+
+음식을 부분표집해 R 번 돌리고 **매번 Top-K 에 드는 비율**로 추천 목록을 만든다
+(`ourkg/consensus.py`). 단일 실행 Top-30 은 음식 20% 가 바뀌면 2~18 개만
+겹치는데 합의는 **29/30** 이다. "이 음식은 코호트가 바뀌어도 상위에 남는다" 는
+주장이 가능해진다. 논문 Algorithm 1 을 바꾸지 않고 **선택 층만 얹는다**
+([`RESULTS.md`](RESULTS.md) §23).
 
 ### ⑦ 보조 — 논문 Fig 4(c) 성분군 조성
 

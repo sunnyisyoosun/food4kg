@@ -292,7 +292,11 @@ def recommend(e_mode=None, path=None, save=True):
     #   E_MODE=sig       BH q<0.05 인 compound 만 ±1
     #   E_MODE=weighted  네 근거의 가중 합의 (build.py evidence)
     #   E_MODE=priority  우선순위 첫 비영 값 (build.py evidence)
-    E_MODE = e_mode or os.environ.get('E_MODE', 'shrunk')
+    # 기본값은 **union_all** 이다 (2026-11-24, RESULTS §24).
+    # ProMENDA 비영 66 열에 NHANES 섭취-결과 E 로 빈 칸 18 개를 메운 것 —
+    # 미네랄·카로티노이드 축이 들어온다. 겹치는 곳은 ProMENDA 우선.
+    # `shrunk` 로 되돌리면 2026-11-24 이전 동작이다.
+    E_MODE = e_mode or os.environ.get('E_MODE', 'union_all')
     if E_MODE.startswith('stype:'):
         sp = os.path.join(OUT, 'compound_depression_stype.csv')
         if not os.path.exists(sp):
