@@ -1,0 +1,184 @@
+food_key,food_name,food_group,top_rate,bot_rate,n_seen,설정
+"vegetable juice, bolthouse farm, daily green","Vegetable juice, BOLTHOUSE FARMS, DAILY GREENS",Vegetables and Vegetable Products,1.0,0.0,47,dedup-comp
+"lettuce, co or romaine, raw","Lettuce, cos or romaine, raw",Vegetables and Vegetable Products,1.0,0.0,49,dedup-comp
+"cranberry juice blend, 100% juice, bottled, with added vitamin c and calcium","Cranberry juice blend, 100% juice, bottled, with added vitamin C and calcium",Fruits and Fruit Juices,1.0,0.0,49,dedup-comp
+"mcdonald's, bacon ranch salad without chicken","McDONALD'S, Bacon Ranch Salad without chicken",Fast Foods,0.96,0.0,50,dedup-comp
+"cranberry juice blend, 100% juice, with calcium added","Cranberry juice blend, 100% juice, with calcium added",Fruits and Fruit Juices,0.9574468085106383,0.0,47,dedup-comp
+"whale, beluga, flipper, raw","Whale, beluga, flipper, raw (Alaska Native)",American Indian/Alaska Native Foods,0.9111111111111111,0.0,45,dedup-comp
+"mustard spinach, raw","Mustard spinach, (tendergreen), raw",Vegetables and Vegetable Products,0.8867924528301887,0.0,53,dedup-comp
+"orange juice, 100%, canned, bottled or in a carton","Orange juice, 100%, canned, bottled or in a carton",Fruits and Fruit Juices,0.8846153846153846,0.0,52,dedup-comp
+"pineapple juice, canned or bottled, unsweetened, with added ascorbic acid","Pineapple juice, canned or bottled, unsweetened, with added ascorbic acid",Fruits and Fruit Juices,0.88,0.0,50,dedup-comp
+"syrup, corn, light","Syrups, corn, light",Sweets,0.8461538461538461,0.0,39,dedup-comp
+jam,Jam,"Soups, Sauces, and Gravies",0.8444444444444444,0.0,45,dedup-comp
+chutney,Chutney,Spices and Herbs,0.8431372549019608,0.0,51,dedup-comp
+"beverage, orange drink, breakfast type, with juice and pulp, frozen concentrate","Beverages, Orange drink, breakfast type, with juice and pulp, frozen concentrate",Beverages,0.8269230769230769,0.0,52,dedup-comp
+imitation crab meat,Imitation crab meat,Finfish and Shellfish Products,0.8125,0.0,48,dedup-comp
+"tomato juice, 100%","Tomato juice, 100%",Vegetables and Vegetable Products,0.803921568627451,0.0,51,dedup-comp
+corn syrup,Corn syrup,"Soups, Sauces, and Gravies",0.7916666666666666,0.0,48,dedup-comp
+"tomato juice, 100%, low sodium","Tomato juice, 100%, low sodium",Vegetables and Vegetable Products,0.782608695652174,0.0,46,dedup-comp
+"caramel dip, light","Caramel dip, light","Soups, Sauces, and Gravies",0.7755102040816326,0.0,49,dedup-comp
+"beverage, fuze, orange mango, fortified with vitamin a, c, e, b6","Beverages, FUZE, orange mango, fortified with vitamins A, C, E, B6",Beverages,0.7659574468085106,0.0,47,dedup-comp
+"cherry juice, tart","Cherry juice, tart",Fruits and Fruit Juices,0.7551020408163265,0.0,49,dedup-comp
+"pineapple juice, 100%","Pineapple juice, 100%",Fruits and Fruit Juices,0.7333333333333333,0.0,45,dedup-comp
+"orange juice, 100%","Orange juice, 100%, NFS",Fruits and Fruit Juices,0.7317073170731707,0.0,41,dedup-comp
+fruit juice drink,Fruit juice drink,Beverages,0.6829268292682927,0.0,41,dedup-comp
+"broccoli and cauliflower, cooked, no added fat","Broccoli and cauliflower, cooked, no added fat",Vegetables and Vegetable Products,0.6739130434782609,0.0,46,dedup-comp
+"spinach, cooked, as ingredient","Spinach, cooked, as ingredient",Unclassified,0.6666666666666666,0.0,48,dedup-comp
+"orange juice, 100%, with calcium added, canned, bottled or in a carton","Orange juice, 100%, with calcium added, canned, bottled or in a carton",Fruits and Fruit Juices,0.6666666666666666,0.0,48,dedup-comp
+"balsam-pear , leafy tip, cooked, boiled, drained, without salt","Balsam-pear (bitter gourd), leafy tips, cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.6530612244897959,0.0,49,dedup-comp
+"babyfood, juice, orange and pineapple","Babyfood, juice, orange and pineapple",Baby Foods,0.6382978723404256,0.0,47,dedup-comp
+"broccoli, frozen, cooked, no added fat","Broccoli, frozen, cooked, no added fat",Vegetables and Vegetable Products,0.6274509803921569,0.0,51,dedup-comp
+"pineapple, frozen","Pineapple, frozen",Fruits and Fruit Juices,0.62,0.0,50,dedup-comp
+dark green vegetable as ingredient in omelet,Dark green vegetables as ingredient in omelet,Vegetables and Vegetable Products,0.5957446808510638,0.0,47,dedup-comp
+"spinach, fresh, cooked, no added fat","Spinach, fresh, cooked, no added fat",Vegetables and Vegetable Products,0.5952380952380952,0.0,42,dedup-comp
+"spinach, for use on a sandwich","Spinach, for use on a sandwich",Vegetables and Vegetable Products,0.5909090909090909,0.0,44,dedup-comp
+"turnip green, fresh, cooked, no added fat","Turnip greens, fresh, cooked, no added fat",Vegetables and Vegetable Products,0.5869565217391305,0.0,46,dedup-comp
+"fruit juice smoothie, odwalla, strawberry banana","Fruit juice smoothie, ODWALLA, strawberry banana",Fruits and Fruit Juices,0.5833333333333334,0.0,48,dedup-comp
+"kiwifruit, zespri sungold, raw","Kiwifruit, ZESPRI SunGold, raw",Fruits and Fruit Juices,0.5686274509803921,0.0,51,dedup-comp
+"jam or jelly, reduced sugar","Jam or jelly, reduced sugar","Soups, Sauces, and Gravies",0.5652173913043478,0.0,46,dedup-comp
+"mustard green, frozen, cooked, no added fat","Mustard greens, frozen, cooked, no added fat",Vegetables and Vegetable Products,0.5625,0.0,48,dedup-comp
+"fruit punch, made with fruit juice and soda","Fruit punch, made with fruit juice and soda",Beverages,0.45454545454545453,0.0,44,dedup-comp
+"fruit juice drink, added calcium","Fruit juice drink, added calcium (Sunny D)",Beverages,0.42857142857142855,0.0,49,dedup-comp
+"pineapple, raw","Pineapple, raw",Fruits and Fruit Juices,0.4222222222222222,0.0,45,dedup-comp
+"babyfood, gerber, 2nd food, apple, carrot and squash, organic","Babyfood, GERBER, 2nd Foods, apple, carrot and squash, organic",Baby Foods,0.3695652173913043,0.0,46,dedup-comp
+"beverage, orange drink, canned, with added vitamin c","Beverages, orange drink, canned, with added vitamin C",Beverages,0.35294117647058826,0.0,51,dedup-comp
+applesauce,"Applesauce, regular",Fruits and Fruit Juices,0.3409090909090909,0.0,44,dedup-comp
+"mustard green, fresh, cooked, no added fat","Mustard greens, fresh, cooked, no added fat",Vegetables and Vegetable Products,0.3137254901960784,0.0,51,dedup-comp
+"orange, raw","Orange, raw",Fruits and Fruit Juices,0.28888888888888886,0.0,45,dedup-comp
+"orange juice, 100%, frozen, not reconstituted","Orange juice, 100%, frozen, not reconstituted",Fruits and Fruit Juices,0.28846153846153844,0.0,52,dedup-comp
+"beverage, fruit punch drink, frozen concentrate with water","Beverages, Fruit punch drink, frozen concentrate, prepared with water",Beverages,0.2765957446808511,0.0,47,dedup-comp
+"acerola juice, raw","Acerola juice, raw",Fruits and Fruit Juices,0.26666666666666666,0.0,45,dedup-comp
+"broccoli, cooked, as ingredient","Broccoli, cooked, as ingredient",Vegetables and Vegetable Products,0.23076923076923078,0.0,52,dedup-comp
+"orange juice, 100%, with calcium added, frozen","Orange juice, 100%, with calcium added, frozen, reconstituted",Fruits and Fruit Juices,0.2222222222222222,0.0,45,dedup-comp
+"acerola, raw","Acerola, (west indian cherry), raw",Fruits and Fruit Juices,0.2,0.0,50,dedup-comp
+"beverage, ocean spray, cran cherry","Beverages, OCEAN SPRAY, Cran Cherry",Beverages,0.17777777777777778,0.0,45,dedup-comp
+"broccoli, fresh, cooked, no added fat","Broccoli, fresh, cooked, no added fat",Vegetables and Vegetable Products,0.17391304347826086,0.0,46,dedup-comp
+"beverage, fruit punch drink, frozen concentrate","Beverages, Fruit punch drink, frozen concentrate",Beverages,0.1702127659574468,0.0,47,dedup-comp
+fuzzy navel,Fuzzy Navel,Beverages,0.16666666666666666,0.0,48,dedup-comp
+"beverage, vegetable and fruit juice drink, reduced calorie, with low-calorie sweetener, added vitamin c","Beverages, Vegetable and fruit juice drink, reduced calorie, with low-calorie sweetener, added vitamin C",Beverages,0.1590909090909091,0.0,44,dedup-comp
+"coconut water, sweetened","Coconut water, sweetened",Beverages,0.14893617021276595,0.0,47,dedup-comp
+"coconut water, unsweetened","Coconut water, unsweetened",Beverages,0.14893617021276595,0.0,47,dedup-comp
+orange blossom,Orange Blossom,Beverages,0.14583333333333334,0.0,48,dedup-comp
+"beverage, vegetable and fruit juice blend, 100% juice, with added vitamin a, c, e","Beverages, vegetable and fruit juice blend, 100% juice, with added vitamins A, C, E",Beverages,0.14,0.0,50,dedup-comp
+fruit juice,"Fruit juice, NFS",Fruits and Fruit Juices,0.1346153846153846,0.0,52,dedup-comp
+"beverage, fruit punch-flavor drink, powder, without added sodium with water","Beverages, fruit punch-flavor drink, powder, without added sodium, prepared with water",Beverages,0.13043478260869565,0.0,46,dedup-comp
+"lemonade, fruit juice drink, light","Lemonade, fruit juice drink, light",Beverages,0.13043478260869565,0.0,46,dedup-comp
+"orange juice, 100%, frozen","Orange juice, 100%, frozen, reconstituted",Fruits and Fruit Juices,0.125,0.0,48,dedup-comp
+"beverage, fruit juice drink, greater than 3% fruit juice, high vitamin c and added thiamin","Beverages, fruit juice drink, greater than 3% fruit juice, high vitamin C and added thiamin",Beverages,0.125,0.0,48,dedup-comp
+"brussel sprout, fresh, cooked, no added fat","Brussels sprouts, fresh, cooked, no added fat",Vegetables and Vegetable Products,0.125,0.0,48,dedup-comp
+cape cod,Cape Cod,Beverages,0.10869565217391304,0.0,46,dedup-comp
+"alcoholic beverage, whiskey sour","Alcoholic beverage, whiskey sour",Beverages,0.10638297872340426,0.0,47,dedup-comp
+tequila sunrise,Tequila Sunrise,Beverages,0.10416666666666667,0.0,48,dedup-comp
+"cowpea, leafy tip, raw","Cowpeas, leafy tips, raw",Vegetables and Vegetable Products,0.10204081632653061,0.0,49,dedup-comp
+jam or jelly,"Jam or jelly, NFS","Soups, Sauces, and Gravies",0.10204081632653061,0.0,49,dedup-comp
+screwdriver,Screwdriver,Beverages,0.09803921568627451,0.0,51,dedup-comp
+"alcoholic beverage, whiskey sour with water, whiskey and powder mix","Alcoholic beverage, whiskey sour, prepared with water, whiskey and powder mix",Beverages,0.09433962264150944,0.0,53,dedup-comp
+seabreeze,Seabreeze,Beverages,0.09090909090909091,0.0,55,dedup-comp
+"beverage, mixed vegetable and fruit juice drink, with added nutrient","Beverages, Mixed vegetable and fruit juice drink, with added nutrients",Beverages,0.08888888888888889,0.0,45,dedup-comp
+"cabbage, chinese, raw","Cabbage, Chinese, raw",Vegetables and Vegetable Products,0.08888888888888889,0.0,45,dedup-comp
+"babyfood, juice, orange and apricot","Babyfood, juice, orange and apricot",Baby Foods,0.08888888888888889,0.0,45,dedup-comp
+black russian,Black Russian,Beverages,0.08,0.0,50,dedup-comp
+"cowpea, leafy tip, cooked, boiled, drained, with salt","Cowpeas, leafy tips, cooked, boiled, drained, with salt",Vegetables and Vegetable Products,0.0784313725490196,0.0,51,dedup-comp
+"cranberry juice drink, with high vitamin c","Cranberry juice drink, with high vitamin C",Beverages,0.07407407407407407,0.0,54,dedup-comp
+"beverage, fruit flavored drink, reduced sugar, greater than 3% fruit juice, high vitamin c, added calcium","Beverages, Fruit flavored drink, reduced sugar, greater than 3% fruit juice, high vitamin C, added calcium",Beverages,0.06666666666666667,0.0,45,dedup-comp
+margarita,Margarita,Beverages,0.06382978723404255,0.0,47,dedup-comp
+"fruit punch, alcoholic","Fruit punch, alcoholic",Beverages,0.06382978723404255,0.0,47,dedup-comp
+mimosa,Mimosa,Beverages,0.0625,0.0,48,dedup-comp
+"mustard green, cooked, boiled, drained, without salt","Mustard greens, cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.0625,0.0,48,dedup-comp
+"cauliflower, frozen, cooked, no added fat","Cauliflower, frozen, cooked, no added fat",Vegetables and Vegetable Products,0.06,0.0,50,dedup-comp
+frozen margarita,Frozen margarita,Beverages,0.06,0.0,50,dedup-comp
+"alcoholic beverage, whiskey sour from item 14028","Alcoholic beverage, whiskey sour, prepared from item 14028",Beverages,0.05660377358490566,0.0,53,dedup-comp
+"mustard green, cooked, boiled, drained, with salt","Mustard greens, cooked, boiled, drained, with salt",Vegetables and Vegetable Products,0.05,0.0,40,dedup-comp
+"currant, red and white, raw","Currants, red and white, raw",Fruits and Fruit Juices,0.047619047619047616,0.0,42,dedup-comp
+"cowpea, leafy tip, cooked, boiled, drained, without salt","Cowpeas, leafy tips, cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.045454545454545456,0.0,44,dedup-comp
+"mixed salad green, raw","Mixed salad greens, raw",Vegetables and Vegetable Products,0.043478260869565216,0.0,46,dedup-comp
+vanilla extract,Vanilla extract,Spices and Herbs,0.043478260869565216,0.0,46,dedup-comp
+"alcoholic beverage, daiquiri-from","Alcoholic beverage, daiquiri, prepared-from-recipe",Beverages,0.0425531914893617,0.0,47,dedup-comp
+singapore sling,Singapore Sling,Beverages,0.041666666666666664,0.0,48,dedup-comp
+"alcoholic beverage, creme de menthe, 72 proof","Alcoholic beverage, creme de menthe, 72 proof",Beverages,0.041666666666666664,0.0,48,dedup-comp
+"cress, raw","Cress, raw",Vegetables and Vegetable Products,0.04,0.0,50,dedup-comp
+"pineapple juice, canned, not from concentrate, unsweetened, with added vitamin a, c and e","Pineapple juice, canned, not from concentrate, unsweetened, with added vitamins A, C and E",Fruits and Fruit Juices,0.04,0.0,50,dedup-comp
+"strawberry, canned","Strawberries, canned",Fruits and Fruit Juices,0.023255813953488372,0.0,43,dedup-comp
+old fashioned,Old fashioned,Beverages,0.02127659574468085,0.0,47,dedup-comp
+"syrup, table blend, pancake","Syrups, table blends, pancake",Sweets,0.02127659574468085,0.0,47,dedup-comp
+"shrimp, dried","Shrimp, dried",Finfish and Shellfish Products,0.02127659574468085,0.0,47,dedup-comp
+michelada,Michelada,Beverages,0.02127659574468085,0.0,47,dedup-comp
+mai tai,Mai Tai,Beverages,0.020833333333333332,0.0,48,dedup-comp
+whiskey sour,Whiskey sour,Beverages,0.020833333333333332,0.0,48,dedup-comp
+"syrup, table blend, pancake, reduced","Syrups, table blends, pancake, reduced-calorie",Sweets,0.020833333333333332,0.0,48,dedup-comp
+champagne punch,Champagne punch,Beverages,0.02040816326530612,0.0,49,dedup-comp
+"alcoholic beverage, liqueur, coffee, 63 proof","Alcoholic beverage, liqueur, coffee, 63 proof",Beverages,0.02,0.0,50,dedup-comp
+"beverage, energy drink, vault, citrus flavor","Beverages, Energy drink, VAULT, citrus flavor",Beverages,0.02,0.0,50,dedup-comp
+"shrimp, canned","Shrimp, canned",Finfish and Shellfish Products,0.02,0.0,50,dedup-comp
+"chicken, broiler or fryer, wing, meat and skin, cooked, fried, batter","Chicken, broilers or fryers, wing, meat and skin, cooked, fried, batter",Poultry Products,0.0,0.6530612244897959,49,dedup-comp
+"goose, domesticated, meat and skin, cooked, roasted","Goose, domesticated, meat and skin, cooked, roasted",Poultry Products,0.0,0.78,50,dedup-comp
+"beerwurst, pork and beef","Beerwurst, pork and beef",Sausages and Luncheon Meats,0.0,0.5,52,dedup-comp
+"babyfood, meat, meat stick, junior","Babyfood, meat, meat sticks, junior",Baby Foods,0.0,0.7333333333333333,45,dedup-comp
+"veal, breast, whole, boneless, separable lean and fat, raw","Veal, breast, whole, boneless, separable lean and fat, raw","Lamb, Veal, and Game Products",0.0,0.8444444444444444,45,dedup-comp
+"beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, roasted","Beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, roasted",Beef Products,0.0,1.0,50,dedup-comp
+"babyfood, meat, chicken stick, junior","Babyfood, meat, chicken sticks, junior",Baby Foods,0.0,0.6595744680851063,47,dedup-comp
+"beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, select, cooked, braised","Beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, select, cooked, braised",Beef Products,0.0,0.041666666666666664,48,dedup-comp
+"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,1.0,52,dedup-comp
+"chicken, capon, meat and skin, raw","Chicken, capons, meat and skin, raw",Poultry Products,0.0,0.14814814814814814,54,dedup-comp
+"beef, tenderloin, steak, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled","Beef, tenderloin, steak, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled",Beef Products,0.0,0.2222222222222222,45,dedup-comp
+"chicken, broiler or fryer, dark meat, meat and skin, cooked, fried, batter","Chicken, broilers or fryers, dark meat, meat and skin, cooked, fried, batter",Poultry Products,0.0,0.022222222222222223,45,dedup-comp
+"duck, wild, meat and skin, raw","Duck, wild, meat and skin, raw",Poultry Products,0.0,0.6595744680851063,47,dedup-comp
+"beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted","Beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,0.8518518518518519,54,dedup-comp
+"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, broiled","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, broiled",Beef Products,0.0,0.45098039215686275,51,dedup-comp
+"pork, fresh, sparerib, separable lean and fat, cooked, braised","Pork, fresh, spareribs, separable lean and fat, cooked, braised",Pork Products,0.0,0.7551020408163265,49,dedup-comp
+"babyfood, dinner, chicken stew, toddler","Babyfood, dinner, chicken stew, toddler",Baby Foods,0.0,0.02127659574468085,47,dedup-comp
+"beef, short loin, top loin, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled","Beef, short loin, top loin, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled",Beef Products,0.0,0.18518518518518517,54,dedup-comp
+"pork, cured, shoulder, arm picnic, separable lean and fat, roasted","Pork, cured, shoulder, arm picnic, separable lean and fat, roasted",Pork Products,0.0,0.17307692307692307,52,dedup-comp
+"beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, braised","Beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, braised",Beef Products,0.0,1.0,46,dedup-comp
+"beef, brisket, point half, separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, braised","Beef, brisket, point half, separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, braised",Beef Products,0.0,0.68,50,dedup-comp
+"lamb, loin, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, roasted","Lamb, loin, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, roasted","Lamb, Veal, and Game Products",0.0,0.1111111111111111,45,dedup-comp
+ham and cheese loaf or roll,Ham and cheese loaf or roll,Sausages and Luncheon Meats,0.0,0.7843137254901961,51,dedup-comp
+"beef, short loin, top loin, steak, separable lean and fat, trimmed to 1/8"" fat, prime, raw","Beef, short loin, top loin, steak, separable lean and fat, trimmed to 1/8"" fat, prime, raw",Beef Products,0.0,0.22448979591836735,49,dedup-comp
+"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled",Beef Products,0.0,0.9347826086956522,46,dedup-comp
+"beef, rib, small end , separable lean and fat, trimmed to 0"" fat, select, cooked, broiled","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 0"" fat, select, cooked, broiled",Beef Products,0.0,0.058823529411764705,51,dedup-comp
+"beef, rib, small end , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,0.7111111111111111,45,dedup-comp
+"dutch brand loaf, chicken, pork and beef","Dutch brand loaf, chicken, pork and beef",Sausages and Luncheon Meats,0.0,0.08163265306122448,49,dedup-comp
+"pork, fresh, shoulder, whole, separable lean and fat, cooked, roasted","Pork, fresh, shoulder, whole, separable lean and fat, cooked, roasted",Pork Products,0.0,0.5849056603773585,53,dedup-comp
+"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, broiled","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, broiled",Beef Products,0.0,0.8809523809523809,42,dedup-comp
+"pork, fresh, shoulder, blade, boston , separable lean and fat, cooked, roasted","Pork, fresh, shoulder, blade, boston (roasts), separable lean and fat, cooked, roasted",Pork Products,0.0,0.020833333333333332,48,dedup-comp
+"beef, rib, small end , separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,1.0,49,dedup-comp
+"beef, brisket, whole, separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, braised","Beef, brisket, whole, separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, braised",Beef Products,0.0,1.0,43,dedup-comp
+"pork, fresh, ground, raw","Pork, fresh, ground, raw",Pork Products,0.0,0.3125,48,dedup-comp
+"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,1.0,52,dedup-comp
+"veal, breast, plate half, boneless, separable lean and fat, cooked, braised","Veal, breast, plate half, boneless, separable lean and fat, cooked, braised","Lamb, Veal, and Game Products",0.0,0.018867924528301886,53,dedup-comp
+"pork, cured, shoulder, blade roll, separable lean and fat, unheated","Pork, cured, shoulder, blade roll, separable lean and fat, unheated",Pork Products,0.0,0.8723404255319149,47,dedup-comp
+"lamb, new zealand, imported, frozen, shoulder, whole , separable lean and fat, trimmed to 1/8"" fat, raw","Lamb, New Zealand, imported, frozen, shoulder, whole (arm and blade), separable lean and fat, trimmed to 1/8"" fat, raw","Lamb, Veal, and Game Products",0.0,0.02127659574468085,47,dedup-comp
+"picnic loaf, pork, beef","Picnic loaf, pork, beef",Sausages and Luncheon Meats,0.0,0.5306122448979592,49,dedup-comp
+"bratwurst, pork, cooked","Bratwurst, pork, cooked",Sausages and Luncheon Meats,0.0,0.96,50,dedup-comp
+"lamb, loin, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, broiled","Lamb, loin, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, broiled","Lamb, Veal, and Game Products",0.0,0.058823529411764705,51,dedup-comp
+"lamb, new zealand, imported, frozen, shoulder, whole , separable lean and fat, cooked, braised","Lamb, New Zealand, imported, frozen, shoulder, whole (arm and blade), separable lean and fat, cooked, braised","Lamb, Veal, and Game Products",0.0,0.14814814814814814,54,dedup-comp
+"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, choice, cooked, broiled","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, choice, cooked, broiled",Beef Products,0.0,0.1875,48,dedup-comp
+"beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,0.9787234042553191,47,dedup-comp
+"turkey, mechanically deboned, from turkey frame, raw","Turkey, mechanically deboned, from turkey frames, raw",Poultry Products,0.0,0.061224489795918366,49,dedup-comp
+"beef, rib, small end , separable lean and fat, trimmed to 0"" fat, choice, cooked, broiled","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 0"" fat, choice, cooked, broiled",Beef Products,0.0,0.9148936170212766,47,dedup-comp
+"ham, chopped, canned","Ham, chopped, canned",Sausages and Luncheon Meats,0.0,0.8301886792452831,53,dedup-comp
+"beef, brisket, whole, separable lean and fat, trimmed to 1/8"" fat, all grade, raw","Beef, brisket, whole, separable lean and fat, trimmed to 1/8"" fat, all grades, raw",Beef Products,0.0,0.10638297872340426,47,dedup-comp
+"pork, fresh, shoulder, arm picnic, separable lean and fat, cooked, roasted","Pork, fresh, shoulder, arm picnic, separable lean and fat, cooked, roasted",Pork Products,0.0,0.96,50,dedup-comp
+"beef, rib, back rib, bone-in, separable lean and fat, trimmed to 0"" fat, choice, cooked, braised","Beef, rib, back ribs, bone-in, separable lean and fat, trimmed to 0"" fat, choice, cooked, braised",Beef Products,0.0,0.0196078431372549,51,dedup-comp
+"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,1.0,52,dedup-comp
+"beef, rib, small end , separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled",Beef Products,0.0,1.0,48,dedup-comp
+"beef, rib, back rib, bone-in, separable lean only, trimmed to 0"" fat, choice, cooked, braised","Beef, rib, back ribs, bone-in, separable lean only, trimmed to 0"" fat, choice, cooked, braised",Beef Products,0.0,0.12244897959183673,49,dedup-comp
+"beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, select, raw","Beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, select, raw",Beef Products,0.0,0.1568627450980392,51,dedup-comp
+"beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, braised","Beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, braised",Beef Products,0.0,1.0,48,dedup-comp
+"beef, rib, large end , separable lean and fat, trimmed to 0"" fat, select, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 0"" fat, select, cooked, roasted",Beef Products,0.0,1.0,50,dedup-comp
+"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted",Beef Products,0.0,0.98,50,dedup-comp
+"beef, brisket, point half, separable lean and fat, trimmed to 0"" fat, all grade, cooked, braised","Beef, brisket, point half, separable lean and fat, trimmed to 0"" fat, all grades, cooked, braised",Beef Products,0.0,0.24,50,dedup-comp
+"chicken, broiler or fryer, neck, meat and skin, cooked, fried, batter","Chicken, broilers or fryers, neck, meat and skin, cooked, fried, batter",Poultry Products,0.0,0.6909090909090909,55,dedup-comp
+"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,0.4583333333333333,48,dedup-comp
+"beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, all grade, raw","Beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, all grades, raw",Beef Products,0.0,0.0425531914893617,47,dedup-comp
+"chicken, broiler or fryer, back, meat and skin, cooked, fried, batter","Chicken, broilers or fryers, back, meat and skin, cooked, fried, batter",Poultry Products,0.0,0.13636363636363635,44,dedup-comp
+"lamb, new zealand, imported, frozen, rib, separable lean and fat, trimmed to 1/8"" fat, cooked, roasted","Lamb, New Zealand, imported, frozen, rib, separable lean and fat, trimmed to 1/8"" fat, cooked, roasted","Lamb, Veal, and Game Products",0.0,0.021739130434782608,46,dedup-comp
+"pork, cured, shoulder, blade roll, separable lean and fat, roasted","Pork, cured, shoulder, blade roll, separable lean and fat, roasted",Pork Products,0.0,0.8372093023255814,43,dedup-comp
+"beef, rib, back rib, bone-in, separable lean and fat, trimmed to 0"" fat, all grade, cooked, braised","Beef, rib, back ribs, bone-in, separable lean and fat, trimmed to 0"" fat, all grades, cooked, braised",Beef Products,0.0,0.15,40,dedup-comp
+"beef, rib, large end , separable lean and fat, trimmed to 0"" fat, choice, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 0"" fat, choice, cooked, roasted",Beef Products,0.0,0.021739130434782608,46,dedup-comp
+"beef, rib, back rib, bone-in, separable lean and fat, trimmed to 0"" fat, select, cooked, braised","Beef, rib, back ribs, bone-in, separable lean and fat, trimmed to 0"" fat, select, cooked, braised",Beef Products,0.0,0.08163265306122448,49,dedup-comp
+"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled",Beef Products,0.0,1.0,52,dedup-comp
+"beef, top sirloin, steak, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, pan-fried","Beef, top sirloin, steak, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, pan-fried",Beef Products,0.0,0.20408163265306123,49,dedup-comp
+"bologna, beef and pork","Bologna, beef and pork",Sausages and Luncheon Meats,0.0,0.9,50,dedup-comp
+"beef, tenderloin, separable lean and fat, trimmed to 1/8"" fat, prime, raw","Beef, tenderloin, separable lean and fat, trimmed to 1/8"" fat, prime, raw",Beef Products,0.0,0.022222222222222223,45,dedup-comp
+"beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted","Beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted",Beef Products,0.0,1.0,51,dedup-comp

@@ -1,0 +1,373 @@
+food_key,food_name,food_group,top_rate,bot_rate,n_seen,설정
+"rice, brown, with pea, no added fat","Rice, brown, with peas, no added fat",Cereal Grains and Pasta,0.9795918367346939,0.0,49,union_all
+"cherry, canned","Cherries, canned",Fruits and Fruit Juices,0.9411764705882353,0.0,51,union_all
+"blackberry, frozen, unsweetened","Blackberries, frozen, unsweetened",Fruits and Fruit Juices,0.9183673469387755,0.0,49,union_all
+"pie filling, cherry, low calorie","Pie fillings, cherry, low calorie",Sweets,0.9148936170212766,0.0,47,union_all
+"soup, vegetable, canned, reduced sodium","Soup, vegetable, canned, reduced sodium",Vegetables and Vegetable Products,0.8979591836734694,0.0,49,union_all
+artichoke,Artichoke,Vegetables and Vegetable Products,0.8979591836734694,0.0,49,union_all
+"artichoke, raw","Artichokes, (globe or french), raw",Vegetables and Vegetable Products,0.8958333333333334,0.0,48,union_all
+"baby toddler green bean, stage 2","Baby Toddler green beans, Stage 2",Vegetables and Vegetable Products,0.8913043478260869,0.0,46,union_all
+"blackberry, frozen","Blackberries, frozen",Fruits and Fruit Juices,0.8867924528301887,0.0,53,union_all
+"summer squash, yellow, raw","Summer squash, yellow, raw",Vegetables and Vegetable Products,0.8723404255319149,0.0,47,union_all
+"artichoke, cooked, boiled, drained, without salt","Artichokes, (globe or french), cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.86,0.0,50,union_all
+"soup, vegetable, canned","Soup, vegetable, canned",Vegetables and Vegetable Products,0.86,0.0,50,union_all
+"artichoke, cooked, boiled, drained, with salt","Artichokes, (globe or french), cooked, boiled, drained, with salt",Vegetables and Vegetable Products,0.8571428571428571,0.0,49,union_all
+"bean, shellie, canned, solid and liquid","Beans, shellie, canned, solids and liquids",Vegetables and Vegetable Products,0.8461538461538461,0.0,39,union_all
+"baby toddler green bean, stage 1","Baby Toddler green beans, Stage 1",Vegetables and Vegetable Products,0.8431372549019608,0.0,51,union_all
+"berry, frozen","Berries, frozen",Fruits and Fruit Juices,0.8333333333333334,0.0,48,union_all
+"okra, fresh, cooked, no added fat","Okra, fresh, cooked, no added fat",Vegetables and Vegetable Products,0.8235294117647058,0.0,51,union_all
+"green bean, fresh, cooked, no added fat","Green beans, fresh, cooked, no added fat",Vegetables and Vegetable Products,0.8235294117647058,0.0,51,union_all
+"lima bean and corn, cooked, no added fat","Lima beans and corn, cooked, no added fat",Vegetables and Vegetable Products,0.7954545454545454,0.0,44,union_all
+"okra, pickled","Okra, pickled",Vegetables and Vegetable Products,0.7884615384615384,0.0,52,union_all
+"green bean, raw","Green beans, raw",Vegetables and Vegetable Products,0.782608695652174,0.0,46,union_all
+"green bean, pickled","Green beans, pickled",Vegetables and Vegetable Products,0.7551020408163265,0.0,49,union_all
+"green bean, cooked, as ingredient","Green beans, cooked, as ingredient",Legumes and Legume Products,0.7380952380952381,0.0,42,union_all
+"raspberry, frozen","Raspberries, frozen",Fruits and Fruit Juices,0.7142857142857143,0.0,42,union_all
+"fruit and vegetable smoothie, non-dairy, added protein","Fruit and vegetable smoothie, non-dairy, added protein",Beverages,0.7111111111111111,0.0,45,union_all
+"salsa verde or salsa, green","Salsa verde or salsa, green","Soups, Sauces, and Gravies",0.7083333333333334,0.0,48,union_all
+"enchilada sauce, green","Enchilada sauce, green","Soups, Sauces, and Gravies",0.6981132075471698,0.0,53,union_all
+"rice, brown, with pea, ns as to fat","Rice, brown, with peas, NS as to fat",Cereal Grains and Pasta,0.6956521739130435,0.0,46,union_all
+"rice, brown, with dark green vegetable, no added fat","Rice, brown, with dark green vegetables, no added fat",Cereal Grains and Pasta,0.6923076923076923,0.0,52,union_all
+"okra, frozen, cooked, no added fat","Okra, frozen, cooked, no added fat",Vegetables and Vegetable Products,0.66,0.0,50,union_all
+"rice, brown, with pea, fat added","Rice, brown, with peas, fat added",Cereal Grains and Pasta,0.66,0.0,50,union_all
+"fruit and vegetable smoothie, added protein","Fruit and vegetable smoothie, added protein",Beverages,0.6458333333333334,0.0,48,union_all
+"pear, canned, heavy syrup, drained","Pears, canned, heavy syrup, drained",Fruits and Fruit Juices,0.625,0.0,48,union_all
+"soup, fish or shrimp","Soup, fish or shrimp",Finfish and Shellfish Products,0.6086956521739131,0.0,46,union_all
+"pear nectar, canned, without added ascorbic acid","Pear nectar, canned, without added ascorbic acid",Fruits and Fruit Juices,0.5106382978723404,0.0,47,union_all
+"cowpea, young pod with seed, raw","Cowpeas, young pods with seeds, raw",Vegetables and Vegetable Products,0.4782608695652174,0.0,46,union_all
+"blackberry, canned, heavy syrup, solid and liquid","Blackberries, canned, heavy syrup, solids and liquids",Fruits and Fruit Juices,0.46,0.0,50,union_all
+"sauce, salsa, verde","Sauce, salsa, verde, ready-to-serve","Soups, Sauces, and Gravies",0.40425531914893614,0.0,47,union_all
+vegetable sandwich on wheat,Vegetable sandwich on wheat,Fast Foods,0.40425531914893614,0.0,47,union_all
+"cherry, sweet, canned, pitted, heavy syrup, drained","Cherries, sweet, canned, pitted, heavy syrup, drained",Fruits and Fruit Juices,0.391304347826087,0.0,46,union_all
+"babyfood, green bean, dice, toddler","Babyfood, green beans, dices, toddler",Baby Foods,0.375,0.0,48,union_all
+"pear, canned, in syrup","Pear, canned, in syrup",Fruits and Fruit Juices,0.3617021276595745,0.0,47,union_all
+"popcorn, sugar syrup/caramel, fat-free","Popcorn, sugar syrup/caramel, fat-free",Snacks,0.28888888888888886,0.0,45,union_all
+"green bean, frozen, cooked, no added fat","Green beans, frozen, cooked, no added fat",Vegetables and Vegetable Products,0.2826086956521739,0.0,46,union_all
+"rice, brown, with dark green vegetable, fat added","Rice, brown, with dark green vegetables, fat added",Cereal Grains and Pasta,0.25,0.0,40,union_all
+"eggplant, cooked, no added fat","Eggplant, cooked, no added fat",Vegetables and Vegetable Products,0.2,0.0,45,union_all
+"eggplant, cooked, as ingredient","Eggplant, cooked, as ingredient",Dairy and Egg Products,0.17777777777777778,0.0,45,union_all
+"rice, brown, with dark green vegetable, ns as to fat","Rice, brown, with dark green vegetables, NS as to fat",Cereal Grains and Pasta,0.1590909090909091,0.0,44,union_all
+"pear, canned","Pear, canned, NFS",Fruits and Fruit Juices,0.1568627450980392,0.0,51,union_all
+"cherry, raw","Cherries, raw",Fruits and Fruit Juices,0.15555555555555556,0.0,45,union_all
+"rice, brown, with vegetable, soy-based sauce, ns as to fat","Rice, brown, with vegetables, soy-based sauce, NS as to fat",Cereal Grains and Pasta,0.14893617021276595,0.0,47,union_all
+"snowpea, frozen, cooked, no added fat","Snowpeas, frozen, cooked, no added fat",Vegetables and Vegetable Products,0.14583333333333334,0.0,48,union_all
+"pear, canned, juice pack","Pear, canned, juice pack",Fruits and Fruit Juices,0.1346153846153846,0.0,52,union_all
+"cherry, frozen","Cherries, frozen",Fruits and Fruit Juices,0.13043478260869565,0.0,46,union_all
+"rice, brown, with corn, fat added","Rice, brown, with corn, fat added",Cereal Grains and Pasta,0.12244897959183673,0.0,49,union_all
+"rice, brown, with dark green vegetable and tomato and/or tomato-based sauce, no added fat","Rice, brown, with dark green vegetables and tomatoes and/or tomato-based sauce, no added fat",Cereal Grains and Pasta,0.11363636363636363,0.0,44,union_all
+"rice, brown, with dark green vegetable and tomato and/or tomato-based sauce, fat added","Rice, brown, with dark green vegetables and tomatoes and/or tomato-based sauce, fat added",Cereal Grains and Pasta,0.1111111111111111,0.0,45,union_all
+"lima bean and corn, cooked, fat added","Lima beans and corn, cooked, fat added",Vegetables and Vegetable Products,0.1111111111111111,0.0,45,union_all
+"rice, brown, with vegetable, soy-based sauce, fat added","Rice, brown, with vegetables, soy-based sauce, fat added",Cereal Grains and Pasta,0.10869565217391304,0.0,46,union_all
+"rice, brown, with corn, no added fat","Rice, brown, with corn, no added fat",Cereal Grains and Pasta,0.10204081632653061,0.0,49,union_all
+"cherry, sweet, canned, water pack, solid and liquid","Cherries, sweet, canned, water pack, solids and liquids",Fruits and Fruit Juices,0.10204081632653061,0.0,49,union_all
+"loganberry, frozen","Loganberries, frozen",Fruits and Fruit Juices,0.1,0.0,50,union_all
+"rice, brown, with dark green vegetable and tomato and/or tomato-based sauce, ns as to fat","Rice, brown, with dark green vegetables and tomatoes and/or tomato-based sauce, NS as to fat",Cereal Grains and Pasta,0.1,0.0,50,union_all
+"rice, brown, with vegetable and gravy, no added fat","Rice, brown, with vegetables and gravy, no added fat",Cereal Grains and Pasta,0.09803921568627451,0.0,51,union_all
+"bread, whole wheat, toasted","Bread, whole wheat, toasted",Baked Products,0.09615384615384616,0.0,52,union_all
+"rice, brown, with vegetable and gravy, fat added","Rice, brown, with vegetables and gravy, fat added",Cereal Grains and Pasta,0.08928571428571429,0.0,56,union_all
+"bread, whole wheat","Bread, whole wheat",Baked Products,0.08695652173913043,0.0,46,union_all
+"okra, fresh, cooked, fat added","Okra, fresh, cooked, fat added",Vegetables and Vegetable Products,0.08695652173913043,0.0,46,union_all
+"balsam-pear , leafy tip, cooked, boiled, drained, without salt","Balsam-pear (bitter gourd), leafy tips, cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.08695652173913043,0.0,46,union_all
+"cereal ready-to-eat, quaker, low fat 100% natural granola with raisin","Cereals ready-to-eat, QUAKER, Low Fat 100% Natural Granola with Raisins",Breakfast Cereals,0.0851063829787234,0.0,47,union_all
+"bread, multigrain, with raisin","Bread, multigrain, with raisins",Baked Products,0.08333333333333333,0.0,48,union_all
+"cherry, sweet, canned, juice pack, solid and liquid","Cherries, sweet, canned, juice pack, solids and liquids",Fruits and Fruit Juices,0.08333333333333333,0.0,48,union_all
+"rice, brown, with vegetable, soy-based sauce, no added fat","Rice, brown, with vegetables, soy-based sauce, no added fat",Cereal Grains and Pasta,0.08,0.0,50,union_all
+"muffin, bran with fruit, lowfat","Muffin, bran with fruit, lowfat",Baked Products,0.07692307692307693,0.0,52,union_all
+"soup, chicken","Soup, chicken",Poultry Products,0.07547169811320754,0.0,53,union_all
+green bean casserole,Green bean casserole,Vegetables and Vegetable Products,0.07142857142857142,0.0,42,union_all
+"rice, brown, with vegetable and gravy, ns as to fat","Rice, brown, with vegetables and gravy, NS as to fat",Cereal Grains and Pasta,0.06818181818181818,0.0,44,union_all
+"cherry, sweet, canned, light syrup pack, solid and liquid","Cherries, sweet, canned, light syrup pack, solids and liquids",Fruits and Fruit Juices,0.06521739130434782,0.0,46,union_all
+"bread, multigrain, with raisin, toasted","Bread, multigrain, with raisins, toasted",Baked Products,0.06521739130434782,0.0,46,union_all
+"blackberry juice, canned","Blackberry juice, canned",Fruits and Fruit Juices,0.06382978723404255,0.0,47,union_all
+"blackberry juice, 100%","Blackberry juice, 100%",Fruits and Fruit Juices,0.06382978723404255,0.0,47,union_all
+"green bean, fresh, cooked with oil","Green beans, fresh, cooked with oil",Vegetables and Vegetable Products,0.0625,0.0,48,union_all
+"bread, pumpernickel, toasted","Bread, pumpernickel, toasted",Baked Products,0.0625,0.0,48,union_all
+"potato, roasted, from fresh, peel eaten, no added fat","Potato, roasted, from fresh, peel eaten, no added fat",Baked Products,0.061224489795918366,0.0,49,union_all
+"prune juice, 100%","Prune juice, 100%",Fruits and Fruit Juices,0.061224489795918366,0.0,49,union_all
+"rice, brown, with other vegetable, ns as to fat","Rice, brown, with other vegetables, NS as to fat",Cereal Grains and Pasta,0.06,0.0,50,union_all
+"rice, brown, with corn, ns as to fat","Rice, brown, with corn, NS as to fat",Cereal Grains and Pasta,0.05357142857142857,0.0,56,union_all
+"baby toddler cereal, oatmeal with fruit","Baby Toddler cereal, oatmeal with fruit, ready-to-eat",Cereal Grains and Pasta,0.04878048780487805,0.0,41,union_all
+kidney bean and brown rice,Kidney beans and brown rice,Legumes and Legume Products,0.046511627906976744,0.0,43,union_all
+"nutritional drink or shake, sugar free","Nutritional drink or shake, ready-to-drink, sugar free (Slim Fast)",Beverages,0.045454545454545456,0.0,44,union_all
+"pear, dried","Pear, dried",Fruits and Fruit Juices,0.044444444444444446,0.0,45,union_all
+"nutritional powder mix, high protein","Nutritional powder mix, high protein (Slim Fast)",Dairy and Egg Products,0.044444444444444446,0.0,45,union_all
+refried bean,Refried beans,Legumes and Legume Products,0.043478260869565216,0.0,46,union_all
+"tortilla chip, reduced fat, plain","Tortilla chips, reduced fat, plain",Baked Products,0.043478260869565216,0.0,46,union_all
+"fish sandwich, from school cafeteria","Fish sandwich, from school cafeteria",Fast Foods,0.043478260869565216,0.0,46,union_all
+"snowpea, fresh, cooked, no added fat","Snowpeas, fresh, cooked, no added fat",Vegetables and Vegetable Products,0.043478260869565216,0.0,46,union_all
+"popcorn, air-popped, no butter added","Popcorn, air-popped, no butter added",Dairy and Egg Products,0.0425531914893617,0.0,47,union_all
+baby toddler cereal,"Baby Toddler cereal, NFS",Cereal Grains and Pasta,0.0425531914893617,0.0,47,union_all
+"popcorn, microwave, plain, light","Popcorn, microwave, plain, light",Snacks,0.041666666666666664,0.0,48,union_all
+soup,"Soup, NFS","Soups, Sauces, and Gravies",0.041666666666666664,0.0,48,union_all
+"celery, cooked, as ingredient","Celery, cooked, as ingredient",Unclassified,0.041666666666666664,0.0,48,union_all
+"potato, baked, peel eaten","Potato, baked, peel eaten",Baked Products,0.04081632653061224,0.0,49,union_all
+"cereal, multigrain","Cereal, multigrain",Sweets,0.04081632653061224,0.0,49,union_all
+"okra, ns as to form, cooked","Okra, NS as to form, cooked",Vegetables and Vegetable Products,0.04,0.0,50,union_all
+"dried, fruit","Dried, fruit, NFS",Fruits and Fruit Juices,0.04,0.0,50,union_all
+"snack, tortilla chip, low fat, unsalted","Snacks, tortilla chips, low fat, unsalted",Snacks,0.0392156862745098,0.0,51,union_all
+"rice, brown, with other vegetable, fat added","Rice, brown, with other vegetables, fat added",Cereal Grains and Pasta,0.0392156862745098,0.0,51,union_all
+blueberry pie filling,Blueberry pie filling,"Soups, Sauces, and Gravies",0.0392156862745098,0.0,51,union_all
+"refried bean, from canned, reduced sodium","Refried beans, from canned, reduced sodium",Legumes and Legume Products,0.0392156862745098,0.0,51,union_all
+"bread, black, toasted","Bread, black, toasted",Baked Products,0.0392156862745098,0.0,51,union_all
+refried bean with meat,Refried beans with meat,Legumes and Legume Products,0.038461538461538464,0.0,52,union_all
+"tortilla chip, low fat, unsalted","Tortilla chips, low fat, unsalted",Baked Products,0.038461538461538464,0.0,52,union_all
+"beverage, abbott, ea whey protein powder","Beverages, ABBOTT, EAS whey protein powder",Beverages,0.038461538461538464,0.0,52,union_all
+nutritional powder mix,"Nutritional powder mix, NFS",Dairy and Egg Products,0.038461538461538464,0.0,52,union_all
+"white bean, from canned, fat added","White beans, from canned, fat added",Legumes and Legume Products,0.03773584905660377,0.0,53,union_all
+"millet, puffed","Millet, puffed",Breakfast Cereals,0.03571428571428571,0.0,56,union_all
+"tortilla chip, reduced fat, flavored","Tortilla chips, reduced fat, flavored",Baked Products,0.023255813953488372,0.0,43,union_all
+"bagel, multigrain, with raisin","Bagel, multigrain, with raisins",Baked Products,0.023255813953488372,0.0,43,union_all
+"white bean, from canned, reduced sodium","White beans, from canned, reduced sodium",Legumes and Legume Products,0.023255813953488372,0.0,43,union_all
+flavored rice mixture with cheese,Flavored rice mixture with cheese,Dairy and Egg Products,0.022727272727272728,0.0,44,union_all
+"fast food, potato, mashed","Fast foods, potato, mashed",Fast Foods,0.022727272727272728,0.0,44,union_all
+"potato, boiled, from fresh, peel eaten, no added fat","Potato, boiled, from fresh,  peel eaten, no added fat",Baked Products,0.022727272727272728,0.0,44,union_all
+"bread, multigrain","Bread, multigrain",Baked Products,0.022222222222222223,0.0,45,union_all
+"rice mix, cheese flavor, dry mix","Rice mix, cheese flavor, dry mix, unprepared","Meals, Entrees, and Side Dishes",0.022222222222222223,0.0,45,union_all
+yokan,Yokan,Unclassified,0.022222222222222223,0.0,45,union_all
+"rice, brown, with other vegetable, no added fat","Rice, brown, with other vegetables, no added fat",Cereal Grains and Pasta,0.021739130434782608,0.0,46,union_all
+"jelly sandwich, on wheat bread","Jelly sandwich, on wheat bread",Fast Foods,0.021739130434782608,0.0,46,union_all
+"bread, multigrain, toasted","Bread, multigrain, toasted",Baked Products,0.021739130434782608,0.0,46,union_all
+"tomatillo, raw","Tomatillos, raw",Vegetables and Vegetable Products,0.021739130434782608,0.0,46,union_all
+celery juice,Celery juice,Vegetables and Vegetable Products,0.02127659574468085,0.0,47,union_all
+"cracker, woven wheat, reduced fat","Crackers, woven wheat, reduced fat",Baked Products,0.02127659574468085,0.0,47,union_all
+"popcorn, microwave, flavored, light","Popcorn, microwave, flavored, light",Snacks,0.02127659574468085,0.0,47,union_all
+bean and brown rice,Beans and brown rice,Legumes and Legume Products,0.020833333333333332,0.0,48,union_all
+"bread, black","Bread, black",Baked Products,0.020833333333333332,0.0,48,union_all
+"baby toddler cereal, multigrain","Baby Toddler cereal, multigrain, ready-to-eat",Cereal Grains and Pasta,0.02040816326530612,0.0,49,union_all
+vegetable as ingredient in soup,Vegetables as ingredient in soups,Vegetables and Vegetable Products,0.02040816326530612,0.0,49,union_all
+"corn, raw","Corn, raw",Vegetables and Vegetable Products,0.02040816326530612,0.0,49,union_all
+"cereal ready-to-eat, wheat and bran, presweetened with nut and fruit","Cereals ready-to-eat, wheat and bran, presweetened with nuts and fruits",Breakfast Cereals,0.02040816326530612,0.0,49,union_all
+date,Date,Fruits and Fruit Juices,0.02,0.0,50,union_all
+"kidney bean, from canned, fat added","Kidney beans, from canned, fat added",Legumes and Legume Products,0.02,0.0,50,union_all
+"kidney bean, from canned, reduced sodium","Kidney beans, from canned, reduced sodium",Legumes and Legume Products,0.02,0.0,50,union_all
+"soup, rice","Soup, rice",Cereal Grains and Pasta,0.02,0.0,50,union_all
+baked bean from fast food / restaurant,Baked beans from fast food / restaurant,Legumes and Legume Products,0.02,0.0,50,union_all
+"baby toddler cereal, oatmeal","Baby Toddler cereal, oatmeal, ready-to-eat",Cereal Grains and Pasta,0.0196078431372549,0.0,51,union_all
+"tortilla chip, low fat, baked without fat","Tortilla chips, low fat, baked without fat",Snacks,0.0196078431372549,0.0,51,union_all
+"black bean, from canned, fat added","Black beans, from canned, fat added",Legumes and Legume Products,0.0196078431372549,0.0,51,union_all
+chicken or turkey hash,Chicken or turkey hash,Poultry Products,0.019230769230769232,0.0,52,union_all
+"bitter melon, horseradish, jute, or radish leave, cooked","Bitter melon, horseradish, jute, or radish leaves, cooked",Vegetables and Vegetable Products,0.019230769230769232,0.0,52,union_all
+"bagel, whole wheat, with raisin","Bagel, whole wheat, with raisins",Baked Products,0.019230769230769232,0.0,52,union_all
+"bagel, wheat, with fruit and nut","Bagel, wheat, with fruit and nuts",Baked Products,0.018867924528301886,0.0,53,union_all
+"corn, fresh, cooked, no added fat","Corn, fresh, cooked, no added fat",Vegetables and Vegetable Products,0.018867924528301886,0.0,53,union_all
+"bagel, wheat, with raisin","Bagel, wheat, with raisins",Baked Products,0.018867924528301886,0.0,53,union_all
+"potato soup, instant, dry mix","Potato soup, instant, dry mix","Soups, Sauces, and Gravies",0.018867924528301886,0.0,53,union_all
+baby toddler cracker,Baby Toddler crackers,Baked Products,0.01818181818181818,0.0,55,union_all
+"prune, dried","Prune, dried",Fruits and Fruit Juices,0.01818181818181818,0.0,55,union_all
+"beef, round, eye of round steak, boneless, separable lean only, trimmed to 0"" fat, all grade, cooked, grilled","Beef, round, eye of round steak, boneless, separable lean only, trimmed to 0"" fat, all grades, cooked, grilled",Beef Products,0.0,0.04081632653061224,49,union_all
+"vegetable oil, palm kernel","Vegetable oil, palm kernel",Fats and Oils,0.0,0.0196078431372549,51,union_all
+"cheese, parmesan, hard","Cheese, parmesan, hard",Dairy and Egg Products,0.0,0.24528301886792453,53,union_all
+"beef, australian, imported, grass-fed, round, bottom round steak/roast, boneless, separable lean only, raw","Beef, Australian, imported, grass-fed, round, bottom round steak/roast, boneless, separable lean only, raw",Beef Products,0.0,0.22,50,union_all
+"beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8"" fat, all grade, cooked, grilled","Beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8"" fat, all grades, cooked, grilled",Beef Products,0.0,0.6956521739130435,46,union_all
+"beef, loin, top loin steak, boneless, lip off, separable lean only, trimmed to 0"" fat, select, raw","Beef, loin, top loin steak, boneless, lip off, separable lean only, trimmed to 0"" fat, select, raw",Beef Products,0.0,0.7674418604651163,43,union_all
+"cheese, muenster","Cheese, muenster",Dairy and Egg Products,0.0,0.044444444444444446,45,union_all
+"beef, loin, tenderloin roast, boneless, separable lean and fat, trimmed to 0"" fat, select, cooked, roasted","Beef, loin, tenderloin roast, boneless, separable lean and fat, trimmed to 0"" fat, select, cooked, roasted",Beef Products,0.0,0.2391304347826087,46,union_all
+butter,"Butter, NFS",Fats and Oils,0.0,0.02,50,union_all
+"beef, loin, tenderloin roast, boneless, separable lean only, trimmed to 0"" fat, choice, cooked, roasted","Beef, loin, tenderloin roast, boneless, separable lean only, trimmed to 0"" fat, choice, cooked, roasted",Beef Products,0.0,0.17647058823529413,51,union_all
+"egg, grade a, large, egg white","Eggs, Grade A, Large, egg white",Dairy and Egg Products,0.0,0.03773584905660377,53,union_all
+"beef, loin, top loin steak, boneless, lip-on, separable lean and fat, trimmed to 1/8"" fat, choice, raw","Beef, loin, top loin steak, boneless, lip-on, separable lean and fat, trimmed to 1/8"" fat, choice, raw",Beef Products,0.0,0.0425531914893617,47,union_all
+"beef, short loin, t-bone steak, separable lean and fat, trimmed to 1/8"" fat, all grade, raw","Beef, short loin, t-bone steak, separable lean and fat, trimmed to 1/8"" fat, all grades, raw",Beef Products,0.0,0.020833333333333332,48,union_all
+"beef, loin, tenderloin steak, boneless, separable lean only, trimmed to 0"" fat, choice, raw","Beef, loin, tenderloin steak, boneless, separable lean only, trimmed to 0"" fat, choice, raw",Beef Products,0.0,0.275,40,union_all
+"cheese, mozzarella, part skim milk","Cheese, mozzarella, part skim milk",Dairy and Egg Products,0.0,0.10416666666666667,48,union_all
+"oil, industrial, coconut, principal use candy coating, oil spray, roasting nut","Oil, industrial, coconut, principal uses candy coatings, oil sprays, roasting nuts",Fats and Oils,0.0,0.0196078431372549,51,union_all
+"candy, sprinkle","Candy, sprinkles",Sweets,0.0,0.022222222222222223,45,union_all
+"beef, loin, tenderloin steak, boneless, separable lean only, trimmed to 0"" fat, all grade, raw","Beef, loin, tenderloin steak, boneless, separable lean only, trimmed to 0"" fat, all grades, raw",Beef Products,0.0,0.58,50,union_all
+"cheese, monterey","Cheese, monterey",Dairy and Egg Products,0.0,0.04,50,union_all
+"oil, industrial, palm kernel, confection fat, use similar to high quality cocoa butter","Oil, industrial, palm kernel, confection fat, uses similar to high quality cocoa butter",Fats and Oils,0.0,0.021739130434782608,46,union_all
+"beef, round, eye of round roast, boneless, separable lean only, trimmed to 0"" fat, all grade, raw","Beef, round, eye of round roast, boneless, separable lean only, trimmed to 0"" fat, all grades, raw",Beef Products,0.0,0.05660377358490566,53,union_all
+"beef, loin, tenderloin roast, boneless, separable lean only, trimmed to 0"" fat, all grade, cooked, roasted","Beef, loin, tenderloin roast, boneless, separable lean only, trimmed to 0"" fat, all grades, cooked, roasted",Beef Products,0.0,0.5454545454545454,55,union_all
+"beef, new zealand, imported, brisket point end, separable lean only, cooked, braised","Beef, New Zealand, imported, brisket point end, separable lean only, cooked, braised",Beef Products,0.0,0.02127659574468085,47,union_all
+honey butter,Honey butter,Fats and Oils,0.0,0.02040816326530612,49,union_all
+"cheese, cottage, creamed, with fruit","Cheese, cottage, creamed, with fruit",Dairy and Egg Products,0.0,0.6590909090909091,44,union_all
+"butter, light, stick, with salt","Butter, light, stick, with salt",Fats and Oils,0.0,0.0196078431372549,51,union_all
+"butter, stick","Butter, stick",Fats and Oils,0.0,0.02127659574468085,47,union_all
+"beef, loin, tenderloin steak, boneless, separable lean only, trimmed to 0"" fat, select, raw","Beef, loin, tenderloin steak, boneless, separable lean only, trimmed to 0"" fat, select, raw",Beef Products,0.0,0.5909090909090909,44,union_all
+"beef, rib eye steak, bone-in, lip-on, separable lean only, trimmed to 1/8"" fat, select, cooked, grilled","Beef, rib eye steak, bone-in, lip-on, separable lean only, trimmed to 1/8"" fat, select, cooked, grilled",Beef Products,0.0,0.875,48,union_all
+"yogurt, greek, nonfat, peach, chobani","Yogurt, Greek, nonfat, peach, CHOBANI",Dairy and Egg Products,0.0,0.061224489795918366,49,union_all
+"butter, light","Butter, light",Fats and Oils,0.0,0.02127659574468085,47,union_all
+"oil, coconut","Oil, coconut",Fats and Oils,0.0,0.020833333333333332,48,union_all
+"beef, short loin, t-bone steak, separable lean and fat, trimmed to 1/8"" fat, select, raw","Beef, short loin, t-bone steak, separable lean and fat, trimmed to 1/8"" fat, select, raw",Beef Products,0.0,0.02040816326530612,49,union_all
+whipped topping,Whipped topping,Dairy and Egg Products,0.0,0.0196078431372549,51,union_all
+"beef, loin, tenderloin roast, separable lean only, boneless, trimmed to 0"" fat, select, cooked, roasted","Beef, loin, tenderloin roast, separable lean only, boneless, trimmed to 0"" fat, select, cooked, roasted",Beef Products,0.0,0.875,48,union_all
+"ghee, clarified butter","Ghee, clarified butter",Fats and Oils,0.0,0.018867924528301886,53,union_all
+"cheese, low fat, cheddar or colby","Cheese, low fat, cheddar or colby",Dairy and Egg Products,0.0,0.04081632653061224,49,union_all
+"beef, top loin filet, boneless, separable lean only, trimmed to 1/8"" fat, select, cooked, grilled","Beef, top loin filet, boneless, separable lean only, trimmed to 1/8"" fat, select, cooked, grilled",Beef Products,0.0,0.022727272727272728,44,union_all
+"beef, australian, imported, grass-fed, loin, tenderloin steak/roast, boneless, separable lean only, raw","Beef, Australian, imported, grass-fed, loin, tenderloin steak/roast, boneless, separable lean only, raw",Beef Products,0.0,0.24444444444444444,45,union_all
+"beef, australian, imported, grass-fed, loin, top loin steak/roast, boneless, separable lean and fat, raw","Beef, Australian, imported, grass-fed, loin, top loin steak/roast, boneless, separable lean and fat, raw",Beef Products,0.0,0.05555555555555555,54,union_all
+"beverage, zevia, cola, caffeine free","Beverages, ZEVIA, cola, caffeine free",Beverages,0.0,0.018867924528301886,53,union_all
+"beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8"" fat, select, cooked, grilled","Beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8"" fat, select, cooked, grilled",Beef Products,0.0,0.8,45,union_all
+"beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8"" fat, choice, raw","Beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8"" fat, choice, raw",Beef Products,0.0,0.625,48,union_all
+"yogurt, greek, 2% fat, apricot, chobani","Yogurt, Greek, 2% fat, apricot, CHOBANI",Dairy and Egg Products,0.0,0.018518518518518517,54,union_all
+"gelatin, dry powder, unsweetened","Gelatins, dry powder, unsweetened",Sweets,0.0,0.04081632653061224,49,union_all
+"beef, loin, top sirloin cap steak, boneless, separable lean only, trimmed to 1/8"" fat, select, cooked, grilled","Beef, loin, top sirloin cap steak, boneless, separable lean only, trimmed to 1/8"" fat, select, cooked, grilled",Beef Products,0.0,0.0196078431372549,51,union_all
+"cheese, parmesan, dry grated, reduced fat","Cheese, parmesan, dry grated, reduced fat",Dairy and Egg Products,0.0,0.08695652173913043,46,union_all
+"cheese, mozzarella, low moisture, part-skim, shredded","Cheese, mozzarella, low moisture, part-skim, shredded",Dairy and Egg Products,0.0,0.021739130434782608,46,union_all
+"cheese, ricotta, part skim milk","Cheese, ricotta, part skim milk",Dairy and Egg Products,0.0,0.3125,48,union_all
+"yogurt, greek, nonfat, raspberry, chobani","Yogurt, Greek, nonfat, raspberry, CHOBANI",Dairy and Egg Products,0.0,0.06,50,union_all
+"beef, loin, tenderloin steak, boneless, separable lean only, trimmed to 0"" fat, all grade, cooked, grilled","Beef, loin, tenderloin steak, boneless, separable lean only, trimmed to 0"" fat, all grades, cooked, grilled",Beef Products,0.0,0.12962962962962962,54,union_all
+"beef, australian, imported, grass-fed, round, top round cap-off steak/roast, boneless, separable lean only, raw","Beef, Australian, imported, grass-fed, round, top round cap-off steak/roast, boneless, separable lean only, raw",Beef Products,0.0,0.16326530612244897,49,union_all
+"yogurt, greek, nonfat, fruit on bottom, blackberry, chobani","Yogurt, Greek, nonfat, Fruit on Bottom, Blackberry, CHOBANI",Dairy and Egg Products,0.0,0.023255813953488372,43,union_all
+"candy, mar snackfood us, starburst fruit chew fruit","Candies, MARS SNACKFOOD US, STARBURST Fruit Chews, Original fruits",Sweets,0.0,0.02,50,union_all
+"yogurt, greek, nonfat, fruit on bottom, pomegranate, chobani","Yogurt, Greek, nonfat, Fruit on Bottom, Pomegranate, CHOBANI",Dairy and Egg Products,0.0,0.04081632653061224,49,union_all
+"beef, australian, imported, grass-fed, loin, top sirloin cap-off steak/roast, boneless, separable lean and fat, raw","Beef, Australian, imported, grass-fed, loin, top sirloin cap-off steak/roast, boneless, separable lean and fat, raw",Beef Products,0.0,0.10909090909090909,55,union_all
+"cheese, provolone, reduced fat","Cheese, provolone, reduced fat",Dairy and Egg Products,0.0,0.18604651162790697,43,union_all
+"beef, round, eye of round roast, boneless, separable lean only, trimmed to 0"" fat, select, cooked, roasted","Beef, round, eye of round roast, boneless, separable lean only, trimmed to 0"" fat, select, cooked, roasted",Beef Products,0.0,0.6382978723404256,47,union_all
+"veal, australian, shank, hind, bone-in, separable lean only, raw","Veal, Australian, shank, hind, bone-in, separable lean only, raw","Lamb, Veal, and Game Products",0.0,0.1,50,union_all
+"beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8"" fat, all grade, raw","Beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8"" fat, all grades, raw",Beef Products,0.0,0.82,50,union_all
+"cheese, tilsit","Cheese, tilsit",Dairy and Egg Products,0.0,0.046511627906976744,43,union_all
+"beef, short loin, porterhouse steak, separable lean only, trimmed to 1/8"" fat, all grade, cooked, grilled","Beef, short loin, porterhouse steak, separable lean only,  trimmed to 1/8"" fat, all grades, cooked, grilled",Beef Products,0.0,0.5454545454545454,44,union_all
+"cheese, provolone","Cheese, provolone",Dairy and Egg Products,0.0,0.21568627450980393,51,union_all
+"sweetener, tabletop, fructose, dry, powder","Sweeteners, tabletop, fructose, dry, powder",Sweets,0.0,0.020833333333333332,48,union_all
+"beef, round, eye of round steak, boneless, separable lean only, trimmed to 0"" fat, select, cooked, grilled","Beef, round, eye of round steak, boneless, separable lean only, trimmed to 0"" fat, select, cooked, grilled",Beef Products,0.0,0.1956521739130435,46,union_all
+"veal, australian, shank, fore, bone-in, separable lean only, raw","Veal, Australian, shank, fore, bone-in, separable lean only, raw","Lamb, Veal, and Game Products",0.0,0.08888888888888889,45,union_all
+"yogurt, greek, nonfat, plain, chobani","Yogurt, Greek, nonfat, plain, CHOBANI",Dairy and Egg Products,0.0,0.0851063829787234,47,union_all
+"beef, rib eye roast, bone-in, lip-on, separable lean only, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, rib eye roast, bone-in, lip-on, separable lean only, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,0.525,40,union_all
+dessert sauce,Dessert sauce,"Soups, Sauces, and Gravies",0.0,0.02040816326530612,49,union_all
+"beef, round, eye of round roast, boneless, separable lean only, trimmed to 0"" fat, all grade, cooked, roasted","Beef, round, eye of round roast, boneless, separable lean only, trimmed to 0"" fat, all grades, cooked, roasted",Beef Products,0.0,0.11363636363636363,44,union_all
+"beef, australian, imported, wagyu, loin, tenderloin steak/roast, boneless, separable lean and fat, aust. marble score 4/5, raw","Beef, Australian, imported, Wagyu, loin, tenderloin steak/roast, boneless, separable lean and fat, Aust. marble score 4/5, raw",Beef Products,0.0,0.02127659574468085,47,union_all
+"cheese, port de salut","Cheese, port de salut",Dairy and Egg Products,0.0,0.04,50,union_all
+"beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, all grade, cooked, grilled","Beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, all grades, cooked, grilled",Beef Products,0.0,0.08695652173913043,46,union_all
+"veal, australian, rib, rib roast, separable lean and fat, raw","Veal, Australian, rib, rib roast, separable lean and fat, raw","Lamb, Veal, and Game Products",0.0,0.022727272727272728,44,union_all
+"yogurt, greek, 2% fat, key lime blend, chobani","Yogurt, Greek, 2% fat, key lime blend, CHOBANI",Dairy and Egg Products,0.0,0.020833333333333332,48,union_all
+"yogurt, greek, 2% fat,mixed berry blend, chobani","Yogurt, Greek, 2% fat,mixed berry blend, CHOBANI",Dairy and Egg Products,0.0,0.046511627906976744,43,union_all
+"beef, rib eye steak, boneless, lip off, separable lean only, trimmed to 0"" fat, select, cooked, grilled","Beef, rib eye steak, boneless, lip off, separable lean only, trimmed to 0"" fat, select, cooked, grilled",Beef Products,0.0,0.5,48,union_all
+"oil, babassu","Oil, babassu",Fats and Oils,0.0,0.019230769230769232,52,union_all
+"beef, australian, imported, grass-fed, rib, ribeye steak/roast lip-on, boneless, separable lean and fat, raw","Beef, Australian, imported, grass-fed, rib, ribeye steak/roast lip-on, boneless, separable lean and fat, raw",Beef Products,0.0,0.0625,48,union_all
+"beef, loin, top sirloin filet, boneless, separable lean only, trimmed to 0"" fat, select, cooked, grilled","Beef, loin, top sirloin filet, boneless, separable lean only, trimmed to 0"" fat, select, cooked, grilled",Beef Products,0.0,0.020833333333333332,48,union_all
+"beef, round, eye of round roast, boneless, separable lean only, trimmed to 0"" fat, select, raw","Beef, round, eye of round roast, boneless, separable lean only, trimmed to 0"" fat, select, raw",Beef Products,0.0,0.3333333333333333,48,union_all
+"beef, australian, imported, wagyu, loin, top loin steak/roast, boneless, separable lean only, aust. marble score 4/5, raw","Beef, Australian, imported, Wagyu, loin, top loin steak/roast, boneless, separable lean only, Aust. marble score 4/5, raw",Beef Products,0.0,0.0425531914893617,47,union_all
+"beef, australian, imported, grass-fed, loin, top sirloin cap-off steak/roast, boneless, separable lean only, raw","Beef, Australian, imported, grass-fed, loin, top sirloin cap-off steak/roast, boneless, separable lean only, raw",Beef Products,0.0,0.06521739130434782,46,union_all
+"egg, white, raw, frozen, pasteurized","Egg, white, raw, frozen, pasteurized",Dairy and Egg Products,0.0,0.061224489795918366,49,union_all
+"beef, australian, imported, wagyu, loin, tenderloin steak/roast, boneless, separable lean only, aust. marble score 4/5, raw","Beef, Australian, imported, Wagyu, loin, tenderloin steak/roast, boneless, separable lean only, Aust. marble score 4/5, raw",Beef Products,0.0,0.06,50,union_all
+"candy, mar snackfood us, skittle original bite size candy","Candies, MARS SNACKFOOD US, SKITTLES Original Bite Size Candies",Sweets,0.0,0.02,50,union_all
+garlic sauce,Garlic sauce,"Soups, Sauces, and Gravies",0.0,0.021739130434782608,46,union_all
+"beef, short loin, porterhouse steak, separable lean only, trimmed to 1/8"" fat, select, raw","Beef, short loin, porterhouse steak, separable lean only, trimmed to 1/8"" fat, select, raw",Beef Products,0.0,0.9,50,union_all
+"beef, short loin, porterhouse steak, separable lean and fat, trimmed to 1/8"" fat, choice, raw","Beef, short loin, porterhouse steak, separable lean and fat, trimmed to 1/8"" fat, choice, raw",Beef Products,0.0,0.07547169811320754,53,union_all
+"beef, short loin, porterhouse steak, separable lean only, trimmed to 1/8"" fat, all grade, raw","Beef, short loin, porterhouse steak, separable lean only, trimmed to 1/8"" fat, all grades, raw",Beef Products,0.0,0.7959183673469388,49,union_all
+"candy, taffy-from","Candies, taffy, prepared-from-recipe",Sweets,0.0,0.022222222222222223,45,union_all
+"cheese, mexican, queso asadero","Cheese, mexican, queso asadero",Dairy and Egg Products,0.0,0.02,50,union_all
+"cheese, limburger","Cheese, limburger",Dairy and Egg Products,0.0,0.020833333333333332,48,union_all
+"beef, new zealand, imported, oyster blade, separable lean and fat, cooked, braised","Beef, New Zealand, imported, oyster blade, separable lean and fat, cooked, braised",Beef Products,0.0,0.02127659574468085,47,union_all
+"beef, loin, tenderloin steak, boneless, separable lean and fat, trimmed to 0"" fat, select, cooked, grilled","Beef, loin, tenderloin steak, boneless, separable lean and fat, trimmed to 0"" fat, select, cooked, grilled",Beef Products,0.0,0.3541666666666667,48,union_all
+"beef, short loin, t-bone steak, separable lean and fat, trimmed to 1/8"" fat, select, cooked, grilled","Beef, short loin, t-bone steak, separable lean and fat, trimmed to 1/8"" fat, select, cooked, grilled",Beef Products,0.0,0.04,50,union_all
+"cheese, blue","Cheese, blue",Dairy and Egg Products,0.0,0.04,50,union_all
+"sugar substitute, powder","Sugar substitute, powder, NFS",Sweets,0.0,0.019230769230769232,52,union_all
+"dessert topping, semi solid, frozen","Dessert topping, semi solid, frozen",Dairy and Egg Products,0.0,0.021739130434782608,46,union_all
+"cheese, mozzarella, whole milk, low moisture","Cheese, mozzarella, whole milk, low moisture",Dairy and Egg Products,0.0,0.10638297872340426,47,union_all
+"beef, rib, back rib, bone-in, separable lean only, trimmed to 0"" fat, all grade, cooked, braised","Beef, rib, back ribs, bone-in, separable lean only, trimmed to 0"" fat, all grades, cooked, braised",Beef Products,0.0,0.019230769230769232,52,union_all
+"beef, loin, top loin steak, boneless, lip-on, separable lean and fat, trimmed to 1/8"" fat, select, raw","Beef, loin, top loin steak, boneless, lip-on, separable lean and fat, trimmed to 1/8"" fat, select, raw",Beef Products,0.0,0.5555555555555556,45,union_all
+"cheese, gouda","Cheese, gouda",Dairy and Egg Products,0.0,0.08333333333333333,48,union_all
+"cheese, parmesan, shredded","Cheese, parmesan, shredded",Dairy and Egg Products,0.0,0.12244897959183673,49,union_all
+"chicken breast, oven-roasted, fat-free, sliced","Chicken breast, oven-roasted, fat-free, sliced",Sausages and Luncheon Meats,0.0,0.022222222222222223,45,union_all
+"beef, australian, imported, grass-fed, round, bottom round steak/roast, boneless, separable lean and fat, raw","Beef, Australian, imported, grass-fed, round, bottom round steak/roast, boneless, separable lean and fat, raw",Beef Products,0.0,0.2708333333333333,48,union_all
+"beef, australian, imported, wagyu, loin, tenderloin steak/roast, boneless, separable lean only, aust. marble score 9, raw","Beef, Australian, imported, Wagyu, loin, tenderloin steak/roast, boneless, separable lean only, Aust. marble score 9, raw",Beef Products,0.0,0.02127659574468085,47,union_all
+"cheese, romano","Cheese, romano",Dairy and Egg Products,0.0,0.043478260869565216,46,union_all
+"beef, rib, back rib, bone-in, separable lean only, trimmed to 0"" fat, select, raw","Beef, rib, back ribs, bone-in, separable lean only, trimmed to 0"" fat, select, raw",Beef Products,0.0,0.0851063829787234,47,union_all
+"beef, rib eye roast, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, select, cooked, roasted","Beef, rib eye roast, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,0.4897959183673469,49,union_all
+"beef, round, eye of round steak, boneless, separable lean only, trimmed to 0"" fat, all grade, raw","Beef, round, eye of round steak, boneless, separable lean only, trimmed to 0"" fat, all grades, raw",Beef Products,0.0,0.06818181818181818,44,union_all
+"butter, without salt","Butter, without salt",Dairy and Egg Products,0.0,0.041666666666666664,48,union_all
+"sweetener, tabletop, saccharin","Sweeteners, tabletop, saccharin (sodium saccharin)",Sweets,0.0,0.02,50,union_all
+"beef, plate steak, boneless, inside skirt, separable lean only, trimmed to 0"" fat, select, cooked, grilled","Beef, plate steak, boneless, inside skirt, separable lean only, trimmed to 0"" fat, select, cooked, grilled",Beef Products,0.0,0.5490196078431373,51,union_all
+"beef, chuck, under blade steak, boneless, separable lean and fat, trimmed to 0"" fat, select, cooked, braised","Beef, chuck, under blade steak, boneless, separable lean and fat, trimmed to 0"" fat, select, cooked, braised",Beef Products,0.0,0.037037037037037035,54,union_all
+"beef, round, eye of round steak, boneless, separable lean only, trimmed to 0"" fat, select, raw","Beef, round, eye of round steak, boneless, separable lean only, trimmed to 0"" fat, select, raw",Beef Products,0.0,0.39215686274509803,51,union_all
+"cheese, pasteurized process, swiss","Cheese, pasteurized process, swiss",Dairy and Egg Products,0.0,0.058823529411764705,51,union_all
+"butter, stick, salted","Butter, stick, salted",Dairy and Egg Products,0.0,0.04878048780487805,41,union_all
+"seal, bearded , meat, dried","Seal, bearded (Oogruk), meat, dried (Alaska Native)",American Indian/Alaska Native Foods,0.0,0.044444444444444446,45,union_all
+"beef, loin, tenderloin roast, boneless, separable lean only, trimmed to 0"" fat, all grade, raw","Beef, loin, tenderloin roast, boneless, separable lean only, trimmed to 0"" fat, all grades, raw",Beef Products,0.0,0.5714285714285714,49,union_all
+"oil, industrial, palm kernel , confection fat, intermediate grade product","Oil, industrial, palm kernel (hydrogenated), confection fat, intermediate grade product",Fats and Oils,0.0,0.020833333333333332,48,union_all
+"beef, new zealand, imported, flat, separable lean only, cooked, braised","Beef, New Zealand, imported, flat, separable lean only, cooked, braised",Beef Products,0.0,0.043478260869565216,46,union_all
+"beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, choice, cooked, grilled","Beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, choice, cooked, grilled",Beef Products,0.0,0.020833333333333332,48,union_all
+"cheese, brick","Cheese, brick",Dairy and Egg Products,0.0,0.13043478260869565,46,union_all
+"oil, industrial, palm kernel , used for whipped topping, non-dairy","Oil, industrial, palm kernel (hydrogenated) , used for whipped toppings, non-dairy",Fats and Oils,0.0,0.022222222222222223,45,union_all
+"egg, white, dried","Egg, white, dried",Dairy and Egg Products,0.0,0.04081632653061224,49,union_all
+"beverage, coffee, instant, vanilla, sweetened, decaffeinated, with non dairy creamer","Beverages, coffee, instant, vanilla, sweetened, decaffeinated, with non dairy creamer",Beverages,0.0,0.022222222222222223,45,union_all
+"beef, loin, tenderloin roast, boneless, separable lean only, trimmed to 0"" fat, choice, raw","Beef, loin, tenderloin roast, boneless, separable lean only, trimmed to 0"" fat, choice, raw",Beef Products,0.0,0.20930232558139536,43,union_all
+"beef, loin, top loin steak, boneless, lip-on, separable lean and fat, trimmed to 1/8"" fat, all grade, raw","Beef, loin, top loin steak, boneless, lip-on, separable lean and fat, trimmed to 1/8"" fat, all grades, raw",Beef Products,0.0,0.12244897959183673,49,union_all
+"veal, australian, shank, fore, bone-in, separable lean and fat, raw","Veal, Australian, shank, fore, bone-in, separable lean and fat, raw","Lamb, Veal, and Game Products",0.0,0.08163265306122448,49,union_all
+"cheese, cottage, lowfat, 1% milkfat","Cheese, cottage, lowfat, 1% milkfat",Dairy and Egg Products,0.0,0.07547169811320754,53,union_all
+"beef, rib eye steak, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, select, cooked, grilled","Beef, rib eye steak, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, select, cooked, grilled",Beef Products,0.0,0.4583333333333333,48,union_all
+"egg, white, dried, powder, stabilized, glucose reduced","Egg, white, dried, powder, stabilized, glucose reduced",Dairy and Egg Products,0.0,0.018867924528301886,53,union_all
+"beef, round, top round steak, boneless, separable lean only, trimmed to 0"" fat, select, raw","Beef, round, top round steak, boneless, separable lean only, trimmed to 0"" fat, select, raw",Beef Products,0.0,0.17391304347826086,46,union_all
+"beef, short loin, porterhouse steak, separable lean and fat, trimmed to 1/8"" fat, all grade, raw","Beef, short loin, porterhouse steak, separable lean and fat, trimmed to 1/8"" fat, all grades, raw",Beef Products,0.0,0.2826086956521739,46,union_all
+"beef, chuck eye country-style rib, boneless, separable lean only, trimmed to 0"" fat, all grade, cooked, braised","Beef, chuck eye Country-Style ribs, boneless, separable lean only, trimmed to 0"" fat, all grades, cooked, braised",Beef Products,0.0,0.08,50,union_all
+"egg, white, dried, flake, stabilized, glucose reduced","Egg, white, dried, flakes, stabilized, glucose reduced",Dairy and Egg Products,0.0,0.04,50,union_all
+"beef, new zealand, imported, oyster blade, separable lean only, cooked, braised","Beef, New Zealand, imported, oyster blade, separable lean only, cooked, braised",Beef Products,0.0,0.017857142857142856,56,union_all
+"cheese, colby","Cheese, colby",Dairy and Egg Products,0.0,0.0392156862745098,51,union_all
+"cheese, cottage, with vegetable","Cheese, cottage, with vegetables",Dairy and Egg Products,0.0,0.6595744680851063,47,union_all
+"beef, australian, imported, grass-fed, loin, tenderloin steak/roast, boneless, separable lean and fat, raw","Beef, Australian, imported, grass-fed, loin, tenderloin steak/roast, boneless, separable lean and fat, raw",Beef Products,0.0,0.17391304347826086,46,union_all
+"beverage, tropical punch","Beverages, Tropical Punch, ready-to-drink",Beverages,0.0,0.021739130434782608,46,union_all
+"salt, table","Salt, table",Spices and Herbs,0.0,0.02,50,union_all
+"cheese, pasteurized process, pimento","Cheese, pasteurized process, pimento",Dairy and Egg Products,0.0,0.038461538461538464,52,union_all
+"beef, top loin petite roast, boneless, separable lean only, trimmed to 1/8"" fat, select, cooked, roasted","Beef, top loin petite roast, boneless, separable lean only, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,0.022222222222222223,45,union_all
+"yogurt, greek, nonfat, lemon blend, chobani","Yogurt, Greek, nonfat, lemon blend, CHOBANI",Dairy and Egg Products,0.0,0.0625,48,union_all
+"cheese, mexican blend","Cheese, Mexican blend",Dairy and Egg Products,0.0,0.09615384615384616,52,union_all
+"beef, rib eye roast, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, rib eye roast, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,0.11904761904761904,42,union_all
+"beef, new zealand, imported, flat, separable lean and fat, cooked, braised","Beef, New Zealand, imported, flat, separable lean and fat, cooked, braised",Beef Products,0.0,0.11538461538461539,52,union_all
+"veal, australian, shank, hind, bone-in, separable lean and fat, raw","Veal, Australian, shank, hind, bone-in, separable lean and fat, raw","Lamb, Veal, and Game Products",0.0,0.07407407407407407,54,union_all
+"cream, fluid, heavy whipping","Cream, fluid, heavy whipping",Dairy and Egg Products,0.0,0.02,50,union_all
+"beef, round, top round roast, boneless, separable lean only, trimmed to 0"" fat, all grade, cooked, roasted","Beef, round, top round roast, boneless, separable lean only, trimmed to 0"" fat, all grades, cooked, roasted",Beef Products,0.0,0.08,50,union_all
+"veal, australian, rib, rib roast, separable lean only, raw","Veal, Australian, rib, rib roast, separable lean only, raw","Lamb, Veal, and Game Products",0.0,0.0625,48,union_all
+"cheese, fontina","Cheese, fontina",Dairy and Egg Products,0.0,0.37037037037037035,54,union_all
+"beef, australian, imported, grass-fed, rib, ribeye steak/roast lip-on, boneless, separable lean only, raw","Beef, Australian, imported, grass-fed, rib, ribeye steak/roast lip-on, boneless, separable lean only, raw",Beef Products,0.0,0.4222222222222222,45,union_all
+"beef, rib eye steak, bone-in, lip-on, separable lean only, trimmed to 1/8"" fat, all grade, cooked, grilled","Beef, rib eye steak, bone-in, lip-on, separable lean only, trimmed to 1/8"" fat, all grades, cooked, grilled",Beef Products,0.0,0.2777777777777778,54,union_all
+"beef, loin, top loin steak, boneless, lip off, separable lean only, trimmed to 0"" fat, choice, raw","Beef, loin, top loin steak, boneless, lip off, separable lean only, trimmed to 0"" fat, choice, raw",Beef Products,0.0,0.4444444444444444,45,union_all
+"butter, whipped, with salt","Butter, whipped, with salt",Dairy and Egg Products,0.0,0.044444444444444446,45,union_all
+"cheese, edam","Cheese, edam",Dairy and Egg Products,0.0,0.10204081632653061,49,union_all
+"cheese, mexican, queso chihuahua","Cheese, mexican, queso chihuahua",Dairy and Egg Products,0.0,0.02127659574468085,47,union_all
+"cheese, brie","Cheese, brie",Dairy and Egg Products,0.0,0.20833333333333334,48,union_all
+"beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, select, cooked, grilled","Beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, select, cooked, grilled",Beef Products,0.0,0.2,50,union_all
+"beef, australian, imported, grass-fed, round, top round cap-off steak/roast, boneless, separable lean and fat, raw","Beef, Australian, imported, grass-fed, round, top round cap-off steak/roast, boneless, separable lean and fat, raw",Beef Products,0.0,0.1836734693877551,49,union_all
+"yogurt, greek, blueberry, chobani","Yogurt, Greek, Blueberry, CHOBANI",Dairy and Egg Products,0.0,0.0625,48,union_all
+"beef, rib, back rib, bone-in, separable lean only, trimmed to 0"" fat, select, cooked, braised","Beef, rib, back ribs, bone-in, separable lean only, trimmed to 0"" fat, select, cooked, braised",Beef Products,0.0,0.06521739130434782,46,union_all
+"beef, chuck eye country-style rib, boneless, separable lean only, trimmed to 0"" fat, choice, cooked, braised","Beef, chuck eye Country-Style ribs, boneless, separable lean only, trimmed to 0"" fat, choice, cooked, braised",Beef Products,0.0,0.043478260869565216,46,union_all
+"beef, loin, top loin steak, boneless, lip off, separable lean and fat, trimmed to 0"" fat, select, cooked, grilled","Beef, loin, top loin steak, boneless, lip off, separable lean and fat, trimmed to 0"" fat, select, cooked, grilled",Beef Products,0.0,0.5918367346938775,49,union_all
+"butter, salted","Butter, salted",Dairy and Egg Products,0.0,0.04,50,union_all
+"beef, loin, top loin steak, boneless, lip off, separable lean only, trimmed to 0"" fat, select, cooked, grilled","Beef, loin, top loin steak, boneless, lip off, separable lean only, trimmed to 0"" fat, select, cooked, grilled",Beef Products,0.0,0.8333333333333334,48,union_all
+"cheese, camembert","Cheese, camembert",Dairy and Egg Products,0.0,0.14583333333333334,48,union_all
+"yogurt, greek, 2%fat, coconut blend, chobani","Yogurt, Greek, 2%fat, coconut blend, CHOBANI",Dairy and Egg Products,0.0,0.0392156862745098,51,union_all
+"duck, young duckling, domesticated, white pekin, leg, meat only, bone in, cooked without skin, braised","Duck, young duckling, domesticated, White Pekin, leg, meat only, bone in, cooked without skin, braised",Poultry Products,0.0,0.06666666666666667,45,union_all
+"beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, all grade, raw","Beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, all grades, raw",Beef Products,0.0,0.5833333333333334,48,union_all
+"beef, australian, imported, wagyu, rib, small end rib steak/roast, boneless, separable lean only, aust. marble score 4/5, raw","Beef, Australian, imported, Wagyu, rib, small end rib steak/roast, boneless, separable lean only, Aust. marble score 4/5, raw",Beef Products,0.0,0.0392156862745098,51,union_all
+"beef, new zealand, imported, brisket navel end, separable lean only, cooked, braised","Beef, New Zealand, imported, brisket navel end, separable lean only, cooked, braised",Beef Products,0.0,0.020833333333333332,48,union_all
+"cheese, cream","Cheese, cream",Dairy and Egg Products,0.0,0.0392156862745098,51,union_all
+"beef, loin, top loin steak, boneless, lip off, separable lean only, trimmed to 0"" fat, all grade, raw","Beef, loin, top loin steak, boneless, lip off, separable lean only, trimmed to 0"" fat, all grades, raw",Beef Products,0.0,0.5918367346938775,49,union_all
+"egg, white, dried, stabilized, glucose reduced","Egg, white, dried, stabilized, glucose reduced",Dairy and Egg Products,0.0,0.020833333333333332,48,union_all
+"cheese, gruyere","Cheese, gruyere",Dairy and Egg Products,0.0,0.06382978723404255,47,union_all
+"shortening confectionery, coconut and or palm kernel","Shortening confectionery, coconut (hydrogenated) and or palm kernel (hydrogenated)",Fats and Oils,0.0,0.02,50,union_all
+"beef, loin, top loin steak, boneless, lip off, separable lean and fat, trimmed to 0"" fat, choice, raw","Beef, loin, top loin steak, boneless, lip off, separable lean and fat, trimmed to 0"" fat, choice, raw",Beef Products,0.0,0.02040816326530612,49,union_all
+"beef, australian, imported, grass-fed, loin, top loin steak/roast, boneless, separable lean only, raw","Beef, Australian, imported, grass-fed, loin, top loin steak/roast, boneless, separable lean only, raw",Beef Products,0.0,0.3181818181818182,44,union_all
+"beef, short loin, porterhouse steak, separable lean and fat, trimmed to 1/8"" fat, select, cooked, grilled","Beef, short loin, porterhouse steak, separable lean and fat, trimmed to 1/8"" fat, select, cooked, grilled",Beef Products,0.0,0.1794871794871795,39,union_all
+"beef, round, eye of round roast, boneless, separable lean and fat, trimmed to 0"" fat, select, cooked, roasted","Beef, round, eye of round roast, boneless, separable lean and fat, trimmed to 0"" fat, select, cooked, roasted",Beef Products,0.0,0.0784313725490196,51,union_all
+"oil, industrial, palm kernel , filling fat","Oil, industrial, palm kernel (hydrogenated), filling fat",Fats and Oils,0.0,0.02040816326530612,49,union_all
+"beef, loin, tenderloin roast, boneless, separable lean only, trimmed to 0"" fat, select, raw","Beef, loin, tenderloin roast, boneless, separable lean only, trimmed to 0"" fat, select, raw",Beef Products,0.0,0.68,50,union_all
+"beef, chuck for stew, separable lean and fat, choice, cooked, braised","Beef, chuck for stew, separable lean and fat, choice, cooked, braised",Beef Products,0.0,0.06666666666666667,45,union_all
+"gelatin dessert, dry mix, reduced calorie, with aspartame, added phosphorus, potassium, sodium, vitamin c","Gelatin desserts, dry mix, reduced calorie, with aspartame, added phosphorus, potassium, sodium, vitamin C",Sweets,0.0,0.041666666666666664,48,union_all
+"beef, rib eye roast, bone-in, lip-on, separable lean only, trimmed to 1/8"" fat, select, cooked, roasted","Beef, rib eye roast, bone-in, lip-on, separable lean only, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,0.8431372549019608,51,union_all
+"beef, loin, tenderloin steak, boneless, separable lean only, trimmed to 0"" fat, select, cooked, grilled","Beef, loin, tenderloin steak, boneless, separable lean only, trimmed to 0"" fat, select, cooked, grilled",Beef Products,0.0,0.8085106382978723,47,union_all
+"beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, select, raw","Beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8"" fat, select, raw",Beef Products,0.0,0.02040816326530612,49,union_all
+"oil, industrial, coconut, confection fat, typical basis for ice cream coating","Oil, industrial, coconut, confection fat, typical basis for ice cream coatings",Fats and Oils,0.0,0.02040816326530612,49,union_all
+"beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8"" fat, select, raw","Beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8"" fat, select, raw",Beef Products,0.0,0.7450980392156863,51,union_all
+"beef, short loin, porterhouse steak, separable lean and fat, trimmed to 1/8"" fat, select, raw","Beef, short loin, porterhouse steak, separable lean and fat, trimmed to 1/8"" fat, select, raw",Beef Products,0.0,0.6458333333333334,48,union_all
+"cheese, swiss","Cheese, swiss",Dairy and Egg Products,0.0,0.058823529411764705,51,union_all
+"sweetener, tabletop, sucralose, splenda packet","Sweeteners, tabletop, sucralose, SPLENDA packets",Sweets,0.0,0.02040816326530612,49,union_all
+"beef, rib eye steak, boneless, lip off, separable lean only, trimmed to 0"" fat, all grade, cooked, grilled","Beef, rib eye steak, boneless, lip off, separable lean only, trimmed to 0"" fat, all grades, cooked, grilled",Beef Products,0.0,0.02,50,union_all
+"beef, round, top round roast, boneless, separable lean only, trimmed to 0"" fat, select, cooked, roasted","Beef, round, top round roast, boneless, separable lean only, trimmed to 0"" fat, select, cooked, roasted",Beef Products,0.0,0.5510204081632653,49,union_all
+"beef, rib eye roast, bone-in, lip-on, separable lean only, trimmed to 1/8"" fat, choice, cooked, roasted","Beef, rib eye roast, bone-in, lip-on, separable lean only, trimmed to 1/8"" fat, choice, cooked, roasted",Beef Products,0.0,0.04081632653061224,49,union_all
+"beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8"" fat, choice, cooked, grilled","Beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8"" fat, choice, cooked, grilled",Beef Products,0.0,0.5681818181818182,44,union_all
+"sugar substitute, sucralose, powder","Sugar substitute, sucralose, powder",Sweets,0.0,0.021739130434782608,46,union_all
+"candy, confectioner's coating, butterscotch","Candies, confectioner's coating, butterscotch",Sweets,0.0,0.022727272727272728,44,union_all
+"oil, industrial, palm kernel , confection fat, use similar to 95 degree hard butter","Oil, industrial, palm kernel (hydrogenated), confection fat, uses similar to 95 degree hard butter",Fats and Oils,0.0,0.0196078431372549,51,union_all
+"yogurt, greek, 2% fat, strawberry banana, chobani","Yogurt, Greek, 2% fat, strawberry banana, CHOBANI",Dairy and Egg Products,0.0,0.02040816326530612,49,union_all
+"beef, new zealand, imported, brisket point end, separable lean and fat, cooked, braised","Beef, New Zealand, imported, brisket point end, separable lean and fat, cooked, braised",Beef Products,0.0,0.020833333333333332,48,union_all
+"beef, loin, top loin steak, boneless, lip off, separable lean only, trimmed to 0"" fat, all grade, cooked, grilled","Beef, loin, top loin steak, boneless, lip off, separable lean only, trimmed to 0"" fat, all grades, cooked, grilled",Beef Products,0.0,0.4222222222222222,45,union_all
+"beef, cured, corned beef, canned","Beef, cured, corned beef, canned",Sausages and Luncheon Meats,0.0,0.022222222222222223,45,union_all
+"beef, loin, top loin steak, boneless, lip off, separable lean and fat, trimmed to 0"" fat, all grade, raw","Beef, loin, top loin steak, boneless, lip off, separable lean and fat, trimmed to 0"" fat, all grades, raw",Beef Products,0.0,0.09302325581395349,43,union_all
+"beef, new zealand, imported, bolar blade, separable lean only, cooked, fast roasted","Beef, New Zealand, imported, bolar blade, separable lean only, cooked, fast roasted",Beef Products,0.0,0.021739130434782608,46,union_all
+lemon-butter sauce,Lemon-butter sauce,"Soups, Sauces, and Gravies",0.0,0.041666666666666664,48,union_all
+"yogurt, greek, whole, plain, chobani","Yogurt, Greek, whole, plain, CHOBANI",Dairy and Egg Products,0.0,0.07692307692307693,52,union_all
+"beef, short loin, porterhouse steak, separable lean only, trimmed to 1/8"" fat, choice, raw","Beef, short loin, porterhouse steak, separable lean only, trimmed to 1/8"" fat, choice, raw",Beef Products,0.0,0.14893617021276595,47,union_all
+"cheese, parmesan, grated","Cheese, parmesan, grated",Dairy and Egg Products,0.0,0.0196078431372549,51,union_all
+"beef, loin, top loin steak, boneless, lip off, separable lean only, trimmed to 0"" fat, choice, cooked, grilled","Beef, loin, top loin steak, boneless, lip off, separable lean only, trimmed to 0"" fat, choice, cooked, grilled",Beef Products,0.0,0.40816326530612246,49,union_all
+"cheese, cottage, creamed, large or small curd","Cheese, cottage, creamed, large or small curd",Dairy and Egg Products,0.0,0.10204081632653061,49,union_all
+"candy, toffee-from","Candies, toffee, prepared-from-recipe",Sweets,0.0,0.02127659574468085,47,union_all
+"egg, white, raw, fresh","Egg, white, raw, fresh",Dairy and Egg Products,0.0,0.038461538461538464,52,union_all

@@ -1,0 +1,359 @@
+food_key,food_name,food_group,top_rate,bot_rate,n_seen,설정
+"artichoke, raw","Artichokes, (globe or french), raw",Vegetables and Vegetable Products,0.9166666666666666,0.0,48,effect+nhanes
+"loganberry, frozen","Loganberries, frozen",Fruits and Fruit Juices,0.84,0.0,50,effect+nhanes
+"beverage, nutritional shake mix, high protein, powder","Beverages, nutritional shake mix, high protein, powder",Beverages,0.8,0.0,50,effect+nhanes
+"raspberry, canned, red, heavy syrup pack, solid and liquid","Raspberries, canned, red, heavy syrup pack, solids and liquids",Fruits and Fruit Juices,0.7906976744186046,0.0,43,effect+nhanes
+"blackberry, frozen, unsweetened","Blackberries, frozen, unsweetened",Fruits and Fruit Juices,0.7755102040816326,0.0,49,effect+nhanes
+"pear, asian, raw","Pears, asian, raw",Fruits and Fruit Juices,0.7446808510638298,0.0,47,effect+nhanes
+"blackberry, frozen","Blackberries, frozen",Fruits and Fruit Juices,0.7358490566037735,0.0,53,effect+nhanes
+"pear, raw, green anjou","Pears, raw, green anjou (Includes foods for USDA's Food Distribution Program)",Fruits and Fruit Juices,0.7291666666666666,0.0,48,effect+nhanes
+"lima bean and corn, cooked, no added fat","Lima beans and corn, cooked, no added fat",Vegetables and Vegetable Products,0.7272727272727273,0.0,44,effect+nhanes
+"raspberry, frozen","Raspberries, frozen",Fruits and Fruit Juices,0.7142857142857143,0.0,42,effect+nhanes
+"raspberry, raw","Raspberries, raw",Fruits and Fruit Juices,0.7073170731707317,0.0,41,effect+nhanes
+"eggplant, cooked, no added fat","Eggplant, cooked, no added fat",Vegetables and Vegetable Products,0.6666666666666666,0.0,45,effect+nhanes
+"pear, raw","Pears, raw",Fruits and Fruit Juices,0.6444444444444445,0.0,45,effect+nhanes
+"beverage, instant breakfast powder, chocolate, not reconstituted","Beverage, instant breakfast powder, chocolate, not reconstituted",Dairy and Egg Products,0.6170212765957447,0.0,47,effect+nhanes
+"eggplant, raw","Eggplant, raw",Vegetables and Vegetable Products,0.6170212765957447,0.0,47,effect+nhanes
+"artichoke, cooked, boiled, drained, with salt","Artichokes, (globe or french), cooked, boiled, drained, with salt",Vegetables and Vegetable Products,0.6122448979591837,0.0,49,effect+nhanes
+"eggplant, cooked, as ingredient","Eggplant, cooked, as ingredient",Dairy and Egg Products,0.6,0.0,45,effect+nhanes
+"artichoke, cooked, boiled, drained, without salt","Artichokes, (globe or french), cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.58,0.0,50,effect+nhanes
+"okra, fresh, cooked, no added fat","Okra, fresh, cooked, no added fat",Vegetables and Vegetable Products,0.5686274509803921,0.0,51,effect+nhanes
+artichoke,Artichoke,Vegetables and Vegetable Products,0.5510204081632653,0.0,49,effect+nhanes
+"beverage, nestle, boost plus, nutritional drink","Beverages, NESTLE, Boost plus, nutritional drink, ready-to-drink",Beverages,0.5434782608695652,0.0,46,effect+nhanes
+"okra, raw","Okra, raw",Vegetables and Vegetable Products,0.54,0.0,50,effect+nhanes
+nutritional powder mix,"Nutritional powder mix, NFS",Dairy and Egg Products,0.5384615384615384,0.0,52,effect+nhanes
+"apple, raw, red delicious, with skin","Apples, raw, red delicious, with skin (Includes foods for USDA's Food Distribution Program)",Fruits and Fruit Juices,0.5319148936170213,0.0,47,effect+nhanes
+"pear, raw, red anjou","Pears, raw, red anjou",Fruits and Fruit Juices,0.5217391304347826,0.0,46,effect+nhanes
+"nutritional drink or shake, high protein, light","Nutritional drink or shake, high protein, light, ready-to-drink, NFS",Beverages,0.5192307692307693,0.0,52,effect+nhanes
+"pear, raw, bartlett","Pears, raw, bartlett",Fruits and Fruit Juices,0.5111111111111111,0.0,45,effect+nhanes
+"nutritional drink or shake, liquid, soy-based","Nutritional drink or shake, liquid, soy-based",Beverages,0.5106382978723404,0.0,47,effect+nhanes
+"applesauce, canned, unsweetened, without added ascorbic acid","Applesauce, canned, unsweetened, without added ascorbic acid (Includes foods for USDA's Food Distribution Program)",Fruits and Fruit Juices,0.5102040816326531,0.0,49,effect+nhanes
+"blackberry, canned, heavy syrup, solid and liquid","Blackberries, canned, heavy syrup, solids and liquids",Fruits and Fruit Juices,0.5,0.0,50,effect+nhanes
+"raspberry, frozen, red, unsweetened","Raspberries, frozen, red, unsweetened",Fruits and Fruit Juices,0.4883720930232558,0.0,43,effect+nhanes
+"cherry, canned","Cherries, canned",Fruits and Fruit Juices,0.45098039215686275,0.0,51,effect+nhanes
+"berry, frozen","Berries, frozen",Fruits and Fruit Juices,0.4375,0.0,48,effect+nhanes
+"beverage, abbott, ensure, nutritional shake","Beverages, ABBOTT, ENSURE, Nutritional Shake, Ready-to-Drink",Beverages,0.42857142857142855,0.0,49,effect+nhanes
+"nutritional drink or shake, light","Nutritional drink or shake, ready-to-drink, light (Muscle Milk)",Beverages,0.42857142857142855,0.0,42,effect+nhanes
+vegetable sandwich on wheat,Vegetable sandwich on wheat,Fast Foods,0.425531914893617,0.0,47,effect+nhanes
+"okra, pickled","Okra, pickled",Vegetables and Vegetable Products,0.4230769230769231,0.0,52,effect+nhanes
+"cherry, sweet, canned, water pack, solid and liquid","Cherries, sweet, canned, water pack, solids and liquids",Fruits and Fruit Juices,0.3877551020408163,0.0,49,effect+nhanes
+nutritional drink or shake,"Nutritional drink or shake, ready-to-drink (Boost)",Beverages,0.375,0.0,48,effect+nhanes
+"apple, raw, golden delicious, with skin","Apples, raw, golden delicious, with skin",Fruits and Fruit Juices,0.37254901960784315,0.0,51,effect+nhanes
+"blackberry, raw","Blackberries, raw",Fruits and Fruit Juices,0.3695652173913043,0.0,46,effect+nhanes
+"squash, summer, scallop, cooked, boiled, drained, with salt","Squash, summer, scallop, cooked, boiled, drained, with salt",Vegetables and Vegetable Products,0.36538461538461536,0.0,52,effect+nhanes
+"nutritional drink or shake, sugar free","Nutritional drink or shake, ready-to-drink, sugar free (Slim Fast)",Beverages,0.36363636363636365,0.0,44,effect+nhanes
+"squash, summer, scallop, cooked, boiled, drained, without salt","Squash, summer, scallop, cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.35294117647058826,0.0,51,effect+nhanes
+"cereal ready-to-eat, health valley, fiber 7 flake","Cereals ready-to-eat, HEALTH VALLEY, FIBER 7 Flakes",Breakfast Cereals,0.34782608695652173,0.0,46,effect+nhanes
+"protein supplement, milk based, muscle milk, powder","Protein supplement, milk based, Muscle Milk, powder",Dairy and Egg Products,0.3469387755102041,0.0,49,effect+nhanes
+"nutritional powder mix, light","Nutritional powder mix, light (Muscle Milk)",Dairy and Egg Products,0.34615384615384615,0.0,52,effect+nhanes
+"protein supplement, milk based, muscle milk light, powder","Protein supplement, milk based, Muscle Milk Light, powder",Dairy and Egg Products,0.34,0.0,50,effect+nhanes
+"nutritional powder mix, protein, light","Nutritional powder mix, protein, light, NFS",Dairy and Egg Products,0.3333333333333333,0.0,45,effect+nhanes
+"bagel, multigrain","Bagels, multigrain",Baked Products,0.32653061224489793,0.0,49,effect+nhanes
+"pie filling, cherry, low calorie","Pie fillings, cherry, low calorie",Sweets,0.3191489361702128,0.0,47,effect+nhanes
+"raspberry, frozen, red, sweetened","Raspberries, frozen, red, sweetened",Fruits and Fruit Juices,0.30612244897959184,0.0,49,effect+nhanes
+idli,Idli,Cereal Grains and Pasta,0.24444444444444444,0.0,45,effect+nhanes
+"beverage, whey protein powder isolate","Beverages, Whey protein powder isolate",Beverages,0.2391304347826087,0.0,46,effect+nhanes
+wheat germ,Wheat germ,Unclassified,0.22448979591836735,0.0,49,effect+nhanes
+"cherry, sweet, canned, light syrup pack, solid and liquid","Cherries, sweet, canned, light syrup pack, solids and liquids",Fruits and Fruit Juices,0.21739130434782608,0.0,46,effect+nhanes
+"refried bean, canned, vegetarian","Refried beans, canned, vegetarian",Legumes and Legume Products,0.21153846153846154,0.0,52,effect+nhanes
+"rye flour, light","Rye flour, light",Cereal Grains and Pasta,0.20408163265306123,0.0,49,effect+nhanes
+"corn, sweet, white, frozen, kernel on cob","Corn, sweet, white, frozen, kernels on cob, unprepared",Vegetables and Vegetable Products,0.20408163265306123,0.0,49,effect+nhanes
+"nutritional powder mix, high protein","Nutritional powder mix, high protein (Slim Fast)",Dairy and Egg Products,0.2,0.0,45,effect+nhanes
+"eggplant, cooked, boiled, drained, without salt","Eggplant, cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.18604651162790697,0.0,43,effect+nhanes
+"rye flour, medium","Rye flour, medium",Cereal Grains and Pasta,0.18181818181818182,0.0,44,effect+nhanes
+"barley, pearled, cooked","Barley, pearled, cooked",Cereal Grains and Pasta,0.18181818181818182,0.0,44,effect+nhanes
+"cereal ready-to-eat, wheat germ, toasted, plain","Cereals ready-to-eat, wheat germ, toasted, plain",Breakfast Cereals,0.16326530612244897,0.0,49,effect+nhanes
+"cereal ready-to-eat, wheat and bran, presweetened with nut and fruit","Cereals ready-to-eat, wheat and bran, presweetened with nuts and fruits",Breakfast Cereals,0.16326530612244897,0.0,49,effect+nhanes
+"snack, potato chip, fat-free, made with olestra","Snacks, potato chips, fat-free, made with olestra",Snacks,0.15217391304347827,0.0,46,effect+nhanes
+"corn, sweet, white, frozen, kernel on cob, cooked, boiled, drained, without salt","Corn, sweet, white, frozen, kernels on cob, cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.15217391304347827,0.0,46,effect+nhanes
+"beverage, instant breakfast powder, chocolate, sugar-free, not reconstituted","Beverage, instant breakfast powder, chocolate, sugar-free, not reconstituted",Dairy and Egg Products,0.1346153846153846,0.0,52,effect+nhanes
+"corn, sweet, white, frozen, kernel on cob, cooked, boiled, drained, with salt","Corn, sweet, white, frozen, kernels on cob, cooked, boiled, drained, with salt",Vegetables and Vegetable Products,0.125,0.0,48,effect+nhanes
+"chayote, fruit, cooked, boiled, drained, without salt","Chayote, fruit, cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.12244897959183673,0.0,49,effect+nhanes
+"cherry, sweet, canned, pitted, heavy syrup pack, solid and liquid","Cherries, sweet, canned, pitted, heavy syrup pack, solids and liquids",Fruits and Fruit Juices,0.12244897959183673,0.0,49,effect+nhanes
+flavored rice mixture with cheese,Flavored rice mixture with cheese,Dairy and Egg Products,0.11363636363636363,0.0,44,effect+nhanes
+"bean, navy, mature seed, canned","Beans, navy, mature seeds, canned",Legumes and Legume Products,0.1111111111111111,0.0,45,effect+nhanes
+"beverage, unilever, slimfast, meal replacement, 3-2-1 plan","Beverages, UNILEVER, SLIMFAST, meal replacement, regular, ready-to-drink,  3-2-1 Plan",Beverages,0.1111111111111111,0.0,45,effect+nhanes
+"white bean, from dried, no added fat","White beans, from dried, no added fat",Legumes and Legume Products,0.10869565217391304,0.0,46,effect+nhanes
+"jelly sandwich, on wheat bread","Jelly sandwich, on wheat bread",Fast Foods,0.10869565217391304,0.0,46,effect+nhanes
+"apple, raw, with skin","Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",Fruits and Fruit Juices,0.10869565217391304,0.0,46,effect+nhanes
+"bean, white, mature seed, cooked, boiled, with salt","Beans, white, mature seeds, cooked, boiled, with salt",Legumes and Legume Products,0.10638297872340426,0.0,47,effect+nhanes
+"chicken in soy-based sauce, rice and vegetable, frozen meal","Chicken in soy-based sauce, rice and vegetables, frozen meal",Poultry Products,0.10638297872340426,0.0,47,effect+nhanes
+"chickpea , mature seed, canned, solid and liquid, low sodium","Chickpeas (garbanzo beans, bengal gram), mature seeds, canned, solids and liquids, low sodium",Legumes and Legume Products,0.10416666666666667,0.0,48,effect+nhanes
+"apple, raw, granny smith, with skin","Apples, raw, granny smith, with skin (Includes foods for USDA's Food Distribution Program)",Fruits and Fruit Juices,0.10416666666666667,0.0,48,effect+nhanes
+breakfast bar,"Breakfast bar, NFS",Cereal Grains and Pasta,0.10204081632653061,0.0,49,effect+nhanes
+"chili, white","Chili, white",Poultry Products,0.1,0.0,50,effect+nhanes
+"kidney bean, from canned, reduced sodium","Kidney beans, from canned, reduced sodium",Legumes and Legume Products,0.1,0.0,50,effect+nhanes
+"snack, balance bar","Snack, BALANCE, original bar",Snacks,0.09803921568627451,0.0,51,effect+nhanes
+"bean, kidney, red, mature seed, canned, solid and liquid, low sodium","Beans, kidney, red, mature seeds, canned, solids and liquid, low sodium",Legumes and Legume Products,0.09803921568627451,0.0,51,effect+nhanes
+"beverage, abbott, ea whey protein powder","Beverages, ABBOTT, EAS whey protein powder",Beverages,0.09615384615384616,0.0,52,effect+nhanes
+"nutritional powder mix, sugar free","Nutritional powder mix, sugar free (Slim Fast)",Dairy and Egg Products,0.09615384615384616,0.0,52,effect+nhanes
+meat extender,Meat extender,Legumes and Legume Products,0.09302325581395349,0.0,43,effect+nhanes
+"squash, winter, acorn, raw","Squash, winter, acorn, raw",Vegetables and Vegetable Products,0.09090909090909091,0.0,44,effect+nhanes
+"lima bean, large, mature seed, canned","Lima beans, large, mature seeds, canned",Legumes and Legume Products,0.09090909090909091,0.0,55,effect+nhanes
+"pumpkin leave, raw","Pumpkin leaves, raw",Vegetables and Vegetable Products,0.09090909090909091,0.0,44,effect+nhanes
+"bean, white, mature seed, cooked, boiled, without salt","Beans, white, mature seeds, cooked, boiled, without salt",Legumes and Legume Products,0.08888888888888889,0.0,45,effect+nhanes
+"fish sandwich, from school cafeteria","Fish sandwich, from school cafeteria",Fast Foods,0.08695652173913043,0.0,46,effect+nhanes
+"bean, baked, canned, with pork","Beans, baked, canned, with pork",Legumes and Legume Products,0.08333333333333333,0.0,48,effect+nhanes
+"pancake, school","Pancakes, school",Baked Products,0.0784313725490196,0.0,51,effect+nhanes
+"vegetable, mixed, frozen","Vegetables, mixed, frozen, unprepared",Vegetables and Vegetable Products,0.0784313725490196,0.0,51,effect+nhanes
+"wheat germ, crude","Wheat germ, crude",Cereal Grains and Pasta,0.07692307692307693,0.0,52,effect+nhanes
+chicken or turkey hash,Chicken or turkey hash,Poultry Products,0.07692307692307693,0.0,52,effect+nhanes
+"potato, baked, flesh and skin, without salt","Potatoes, baked, flesh and skin, without salt",Vegetables and Vegetable Products,0.07317073170731707,0.0,41,effect+nhanes
+"potato, red, flesh and skin, baked","Potatoes, red, flesh and skin, baked",Vegetables and Vegetable Products,0.07142857142857142,0.0,42,effect+nhanes
+"bagel, wheat","Bagels, wheat",Baked Products,0.06976744186046512,0.0,43,effect+nhanes
+"bean, kidney, california red, mature seed, cooked, boiled, without salt","Beans, kidney, california red, mature seeds, cooked, boiled, without salt",Legumes and Legume Products,0.06976744186046512,0.0,43,effect+nhanes
+"nutritional drink or shake, high protein","Nutritional drink or shake, high protein, ready-to-drink (Slim Fast)",Beverages,0.06818181818181818,0.0,44,effect+nhanes
+"soup, beef barley","Soup, beef barley, ready to serve","Soups, Sauces, and Gravies",0.06666666666666667,0.0,45,effect+nhanes
+"kidney bean, from canned, no added fat","Kidney beans, from canned, no added fat",Legumes and Legume Products,0.06666666666666667,0.0,45,effect+nhanes
+"lima bean and corn, cooked, fat added","Lima beans and corn, cooked, fat added",Vegetables and Vegetable Products,0.06666666666666667,0.0,45,effect+nhanes
+"soy protein concentrate, produced by alcohol extraction","Soy protein concentrate, produced by alcohol extraction",Legumes and Legume Products,0.06521739130434782,0.0,46,effect+nhanes
+"bread, oatmeal","Bread, oatmeal",Baked Products,0.06521739130434782,0.0,46,effect+nhanes
+"bagel, whole wheat","Bagel, whole wheat",Baked Products,0.06521739130434782,0.0,46,effect+nhanes
+roast beef sandwich on wheat,Roast beef sandwich on wheat,Fast Foods,0.0625,0.0,48,effect+nhanes
+"bean, kidney, red, mature seed, canned, solid and liquid","Beans, kidney, red, mature seeds, canned, solids and liquids",Legumes and Legume Products,0.0625,0.0,48,effect+nhanes
+"bean, kidney, california red, mature seed, cooked, boiled, with salt","Beans, kidney, california red, mature seeds, cooked, boiled, with salt",Legumes and Legume Products,0.061224489795918366,0.0,49,effect+nhanes
+"bean, from canned, ns as to type, no added fat","Beans, from canned, NS as to type, no added fat",Legumes and Legume Products,0.061224489795918366,0.0,49,effect+nhanes
+"kidney bean, from canned, fat added","Kidney beans, from canned, fat added",Legumes and Legume Products,0.06,0.0,50,effect+nhanes
+"cracker, flatbread","Crackers, flatbread",Baked Products,0.06,0.0,50,effect+nhanes
+dragon fruit,Dragon fruit,Fruits and Fruit Juices,0.06,0.0,50,effect+nhanes
+"black bean, from canned, reduced sodium","Black beans, from canned, reduced sodium",Legumes and Legume Products,0.06,0.0,50,effect+nhanes
+"semolina, unenriched","Semolina, unenriched",Cereal Grains and Pasta,0.06,0.0,50,effect+nhanes
+"rice, brown, with dark green vegetable, no added fat","Rice, brown, with dark green vegetables, no added fat",Cereal Grains and Pasta,0.057692307692307696,0.0,52,effect+nhanes
+"chili con carne with bean, canned entree","Chili con carne with beans, canned entree","Meals, Entrees, and Side Dishes",0.046511627906976744,0.0,43,effect+nhanes
+"lo mein, with chicken","Lo mein, with chicken",Cereal Grains and Pasta,0.046511627906976744,0.0,43,effect+nhanes
+"bread, cracked-wheat","Bread, cracked-wheat",Baked Products,0.046511627906976744,0.0,43,effect+nhanes
+"white bean, from canned, reduced sodium","White beans, from canned, reduced sodium",Legumes and Legume Products,0.046511627906976744,0.0,43,effect+nhanes
+"bagel, multigrain, with raisin","Bagel, multigrain, with raisins",Baked Products,0.046511627906976744,0.0,43,effect+nhanes
+"lo mein, with shrimp","Lo mein, with shrimp",Cereal Grains and Pasta,0.045454545454545456,0.0,44,effect+nhanes
+"chickpea, from canned, no added fat","Chickpeas, from canned, no added fat",Legumes and Legume Products,0.045454545454545456,0.0,44,effect+nhanes
+"rice mix, cheese flavor, dry mix","Rice mix, cheese flavor, dry mix, unprepared","Meals, Entrees, and Side Dishes",0.044444444444444446,0.0,45,effect+nhanes
+"white bean, from canned, no added fat","White beans, from canned, no added fat",Legumes and Legume Products,0.044444444444444446,0.0,45,effect+nhanes
+"soy flour, low-fat","Soy flour, low-fat",Legumes and Legume Products,0.043478260869565216,0.0,46,effect+nhanes
+"wild rice, cooked","Wild rice, cooked",Cereal Grains and Pasta,0.043478260869565216,0.0,46,effect+nhanes
+"split pea, from dried, no added fat","Split peas, from dried, no added fat",Legumes and Legume Products,0.043478260869565216,0.0,46,effect+nhanes
+"mungo bean, mature seed, cooked, boiled, without salt","Mungo beans, mature seeds, cooked, boiled, without salt",Legumes and Legume Products,0.0425531914893617,0.0,47,effect+nhanes
+"okra, cooked, boiled, drained, with salt","Okra, cooked, boiled, drained, with salt",Vegetables and Vegetable Products,0.0425531914893617,0.0,47,effect+nhanes
+"okra, cooked, boiled, drained, without salt","Okra, cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.0425531914893617,0.0,47,effect+nhanes
+"soy milk, unsweetened, plain, shelf stable","Soy milk, unsweetened, plain, shelf stable",Legumes and Legume Products,0.041666666666666664,0.0,48,effect+nhanes
+"bagel, wheat bran","Bagel, wheat bran",Baked Products,0.041666666666666664,0.0,48,effect+nhanes
+"potato, roasted, from fresh, peel eaten, no added fat","Potato, roasted, from fresh, peel eaten, no added fat",Baked Products,0.04081632653061224,0.0,49,effect+nhanes
+"beverage, slimfast, meal replacement, high protein shake, 3-2-1 plan","Beverages, SLIMFAST, Meal replacement,  High Protein Shake, Ready-To-Drink, 3-2-1 plan",Beverages,0.04081632653061224,0.0,49,effect+nhanes
+"tortilla, ready-to-bake or -fry, corn, without added salt","Tortillas, ready-to-bake or -fry, corn, without added salt",Baked Products,0.04081632653061224,0.0,49,effect+nhanes
+"bread, oatmeal, toasted","Bread, oatmeal, toasted",Baked Products,0.04,0.0,50,effect+nhanes
+"potato, white, flesh and skin, baked","Potatoes, white, flesh and skin, baked",Vegetables and Vegetable Products,0.04,0.0,50,effect+nhanes
+"eggplant, cooked, boiled, drained, with salt","Eggplant, cooked, boiled, drained, with salt",Vegetables and Vegetable Products,0.0392156862745098,0.0,51,effect+nhanes
+"bean, yellow, mature seed, cooked, boiled, without salt","Beans, yellow, mature seeds, cooked, boiled, without salt",Legumes and Legume Products,0.0392156862745098,0.0,51,effect+nhanes
+"campbell's chunky, hearty beef barley soup","CAMPBELL'S CHUNKY, Hearty Beef Barley Soup","Soups, Sauces, and Gravies",0.038461538461538464,0.0,52,effect+nhanes
+"bagel, whole wheat, with raisin","Bagel, whole wheat, with raisins",Baked Products,0.038461538461538464,0.0,52,effect+nhanes
+refried bean with meat,Refried beans with meat,Legumes and Legume Products,0.038461538461538464,0.0,52,effect+nhanes
+"bagel, wheat, with raisin","Bagel, wheat, with raisins",Baked Products,0.03773584905660377,0.0,53,effect+nhanes
+"beverage, chocolate drink, milk and soy based, fortified","Beverages, chocolate drink, milk and soy based, ready to drink, fortified",Beverages,0.03773584905660377,0.0,53,effect+nhanes
+"black bean, from canned, no added fat","Black beans, from canned, no added fat",Legumes and Legume Products,0.03773584905660377,0.0,53,effect+nhanes
+"rice, brown, with dark green vegetable, fat added","Rice, brown, with dark green vegetables, fat added",Cereal Grains and Pasta,0.025,0.0,40,effect+nhanes
+"bean, from canned, ns as to type, fat added","Beans, from canned, NS as to type, fat added",Legumes and Legume Products,0.024390243902439025,0.0,41,effect+nhanes
+biryani with chicken,Biryani with chicken,Poultry Products,0.023809523809523808,0.0,42,effect+nhanes
+"bean, kidney, red, mature seed, canned, drained solid","Beans, kidney, red, mature seeds, canned, drained solids",Legumes and Legume Products,0.023255813953488372,0.0,43,effect+nhanes
+kidney bean and brown rice,Kidney beans and brown rice,Legumes and Legume Products,0.023255813953488372,0.0,43,effect+nhanes
+"hamburger, from school cafeteria","Hamburger, from school cafeteria",Fast Foods,0.022727272727272728,0.0,44,effect+nhanes
+"fast food, potato, mashed","Fast foods, potato, mashed",Fast Foods,0.022727272727272728,0.0,44,effect+nhanes
+"potato, boiled, from fresh, peel eaten, no added fat","Potato, boiled, from fresh,  peel eaten, no added fat",Baked Products,0.022727272727272728,0.0,44,effect+nhanes
+"pea and carrot, canned pack, solid and liquid","Peas and carrots, canned, regular pack, solids and liquids",Vegetables and Vegetable Products,0.022727272727272728,0.0,44,effect+nhanes
+"bean, snap, green, microwaved","Beans, snap, green, microwaved",Vegetables and Vegetable Products,0.022727272727272728,0.0,44,effect+nhanes
+"yellow rice, cooked, no added fat","Yellow rice, cooked, no added fat",Cereal Grains and Pasta,0.022222222222222223,0.0,45,effect+nhanes
+"apple, raw, fuji, with skin","Apples, raw, fuji, with skin (Includes foods for USDA's Food Distribution Program)",Fruits and Fruit Juices,0.022222222222222223,0.0,45,effect+nhanes
+"cherry, sweet, canned, pitted, heavy syrup, drained","Cherries, sweet, canned, pitted, heavy syrup, drained",Fruits and Fruit Juices,0.021739130434782608,0.0,46,effect+nhanes
+chili with chicken and bean,Chili with chicken and beans,Poultry Products,0.021739130434782608,0.0,46,effect+nhanes
+"jai, monk's food","Jai, Monk's Food",Vegetables and Vegetable Products,0.021739130434782608,0.0,46,effect+nhanes
+"beverage, cytosport, muscle milk","Beverages, CYTOSPORT, Muscle Milk, ready-to-drink",Beverages,0.021739130434782608,0.0,46,effect+nhanes
+"corn with red and green pepper, canned, solid and liquid","Corn with red and green peppers, canned, solids and liquids",Vegetables and Vegetable Products,0.021739130434782608,0.0,46,effect+nhanes
+"babyfood, plum, banana and rice, strained","Babyfood, plums, bananas and rice, strained",Baby Foods,0.021739130434782608,0.0,46,effect+nhanes
+"muffin, english, oat bran, with raisin","Muffin, English, oat bran, with raisins",Baked Products,0.021739130434782608,0.0,46,effect+nhanes
+"pea, split, mature seed, cooked, boiled, without salt","Peas, split, mature seeds, cooked, boiled, without salt",Legumes and Legume Products,0.021739130434782608,0.0,46,effect+nhanes
+"okra, fresh, cooked, fat added","Okra, fresh, cooked, fat added",Vegetables and Vegetable Products,0.021739130434782608,0.0,46,effect+nhanes
+"cereal ready-to-eat, oat bran flake, health valley","Cereals ready-to-eat, OAT BRAN FLAKES, HEALTH VALLEY",Breakfast Cereals,0.021739130434782608,0.0,46,effect+nhanes
+"pear nectar, canned, without added ascorbic acid","Pear nectar, canned, without added ascorbic acid",Fruits and Fruit Juices,0.02127659574468085,0.0,47,effect+nhanes
+"babyfood, fruit, plum with tapioca, without ascorbic acid, strained","Babyfood, fruit, plums with tapioca, without ascorbic acid, strained",Baby Foods,0.02127659574468085,0.0,47,effect+nhanes
+"corn, sweet, white, frozen, kernel cut off cob, boiled, drained, without salt","Corn, sweet, white, frozen, kernels cut off cob, boiled, drained, without salt",Vegetables and Vegetable Products,0.02127659574468085,0.0,47,effect+nhanes
+"bagel, plain, unenriched, without calcium propionate","Bagels, plain, unenriched, without calcium propionate(includes onion, poppy, sesame)",Baked Products,0.02127659574468085,0.0,47,effect+nhanes
+"babyfood, dessert, fruit dessert, without ascorbic acid, junior","Babyfood, dessert, fruit dessert, without ascorbic acid, junior",Baby Foods,0.02127659574468085,0.0,47,effect+nhanes
+"barbecue chicken sandwich, on wheat bun","Barbecue chicken sandwich, on wheat bun",Fast Foods,0.020833333333333332,0.0,48,effect+nhanes
+"lo mein, with beef","Lo mein, with beef",Cereal Grains and Pasta,0.020833333333333332,0.0,48,effect+nhanes
+"refried bean, canned, traditional, reduced sodium","Refried beans, canned, traditional, reduced sodium",Legumes and Legume Products,0.020833333333333332,0.0,48,effect+nhanes
+"rice, wild, 100%, cooked, no added fat","Rice, wild, 100%, cooked, no added fat",Cereal Grains and Pasta,0.020833333333333332,0.0,48,effect+nhanes
+"cherry, sweet, canned, juice pack, solid and liquid","Cherries, sweet, canned, juice pack, solids and liquids",Fruits and Fruit Juices,0.020833333333333332,0.0,48,effect+nhanes
+"bread, pumpernickel, toasted","Bread, pumpernickel, toasted",Baked Products,0.020833333333333332,0.0,48,effect+nhanes
+bean and brown rice,Beans and brown rice,Legumes and Legume Products,0.020833333333333332,0.0,48,effect+nhanes
+"bagel, pumpernickel","Bagel, pumpernickel",Baked Products,0.020833333333333332,0.0,48,effect+nhanes
+"mungo bean, mature seed, cooked, boiled, with salt","Mungo beans, mature seeds, cooked, boiled, with salt",Legumes and Legume Products,0.02040816326530612,0.0,49,effect+nhanes
+ham sandwich on wheat,Ham sandwich on wheat,Sausages and Luncheon Meats,0.02040816326530612,0.0,49,effect+nhanes
+"cherry, sweet, raw","Cherries, sweet, raw",Fruits and Fruit Juices,0.02040816326530612,0.0,49,effect+nhanes
+"cereal, multigrain","Cereal, multigrain",Sweets,0.02040816326530612,0.0,49,effect+nhanes
+"potato, baked, peel eaten","Potato, baked, peel eaten",Baked Products,0.02040816326530612,0.0,49,effect+nhanes
+"bread, raisin, unenriched","Bread, raisin, unenriched",Baked Products,0.02040816326530612,0.0,49,effect+nhanes
+"broadbean , mature seed, canned","Broadbeans (fava beans), mature seeds, canned",Legumes and Legume Products,0.02040816326530612,0.0,49,effect+nhanes
+"soy meal, defatted, raw","Soy meal, defatted, raw",Legumes and Legume Products,0.02040816326530612,0.0,49,effect+nhanes
+"bacon, lettuce, tomato sandwich on wheat","Bacon, lettuce, tomato sandwich on wheat",Sausages and Luncheon Meats,0.02040816326530612,0.0,49,effect+nhanes
+"cracker, crispbread","Crackers, crispbread",Baked Products,0.02040816326530612,0.0,49,effect+nhanes
+poi,Poi,Vegetables and Vegetable Products,0.02040816326530612,0.0,49,effect+nhanes
+"cereal, o's","Cereal, O's, NFS",Sweets,0.02040816326530612,0.0,49,effect+nhanes
+"baby toddler cereal, multigrain","Baby Toddler cereal, multigrain, ready-to-eat",Cereal Grains and Pasta,0.02040816326530612,0.0,49,effect+nhanes
+"potato, mashed, from fast food, with gravy","Potato, mashed, from fast food, with gravy",Fast Foods,0.02040816326530612,0.0,49,effect+nhanes
+"turkey, stuffing, mashed potato w/gravy, assorted vegetable, frozen, microwaved","Turkey, stuffing, mashed potatoes w/gravy, assorted vegetables, frozen, microwaved","Meals, Entrees, and Side Dishes",0.02040816326530612,0.0,49,effect+nhanes
+"bean, yellow, mature seed, cooked, boiled, with salt","Beans, yellow, mature seeds, cooked, boiled, with salt",Legumes and Legume Products,0.02040816326530612,0.0,49,effect+nhanes
+"apple, raw, gala, with skin","Apples, raw, gala, with skin (Includes foods for USDA's Food Distribution Program)",Fruits and Fruit Juices,0.02,0.0,50,effect+nhanes
+"spinach, baby","Spinach, baby",Vegetables and Vegetable Products,0.02,0.0,50,effect+nhanes
+"okra, ns as to form, cooked","Okra, NS as to form, cooked",Vegetables and Vegetable Products,0.02,0.0,50,effect+nhanes
+"potato, french fried, steak fry, salt added in processing, frozen, oven","Potatoes, french fried, steak fries, salt added in processing, frozen, oven-heated",Vegetables and Vegetable Products,0.02,0.0,50,effect+nhanes
+"chayote, fruit, cooked, boiled, drained, with salt","Chayote, fruit, cooked, boiled, drained, with salt",Vegetables and Vegetable Products,0.0196078431372549,0.0,51,effect+nhanes
+"noodle, japanese, soba, cooked","Noodles, japanese, soba, cooked",Cereal Grains and Pasta,0.0196078431372549,0.0,51,effect+nhanes
+"pea, green, canned, drained solid, rinsed in tap water","Peas, green, canned, drained solids, rinsed in tap water",Vegetables and Vegetable Products,0.0196078431372549,0.0,51,effect+nhanes
+"refried bean, from canned, reduced sodium","Refried beans, from canned, reduced sodium",Legumes and Legume Products,0.0196078431372549,0.0,51,effect+nhanes
+"soupy rice with chicken, puerto rican style","Soupy rice with chicken, Puerto Rican style",Poultry Products,0.0196078431372549,0.0,51,effect+nhanes
+"black bean, from canned, fat added","Black beans, from canned, fat added",Legumes and Legume Products,0.0196078431372549,0.0,51,effect+nhanes
+"vegetable, mixed, canned, solid and liquid","Vegetables, mixed, canned, solids and liquids",Vegetables and Vegetable Products,0.0196078431372549,0.0,51,effect+nhanes
+"soybean, mature seed, sprouted, cooked, stir-fried, with salt","Soybeans, mature seeds, sprouted, cooked, stir-fried, with salt",Vegetables and Vegetable Products,0.0196078431372549,0.0,51,effect+nhanes
+"bean, black, mature seed, canned, low sodium","Beans, black, mature seeds, canned, low sodium",Legumes and Legume Products,0.019230769230769232,0.0,52,effect+nhanes
+"rice bowl with chicken, frozen entree","Rice bowl with chicken, frozen entree, prepared (includes fried, teriyaki, and sweet and sour varieties)","Meals, Entrees, and Side Dishes",0.019230769230769232,0.0,52,effect+nhanes
+"cereal ready-to-eat, barbara's puffin","Cereals ready-to-eat, BARBARA'S PUFFINS, original",Breakfast Cereals,0.019230769230769232,0.0,52,effect+nhanes
+"popover, dry mix, unenriched","Popovers, dry mix, unenriched",Baked Products,0.019230769230769232,0.0,52,effect+nhanes
+"babyfood, dessert, fruit dessert, without ascorbic acid, strained","Babyfood, dessert, fruit dessert, without ascorbic acid, strained",Baby Foods,0.019230769230769232,0.0,52,effect+nhanes
+"lupin, mature seed, cooked, boiled, without salt","Lupins, mature seeds, cooked, boiled, without salt",Legumes and Legume Products,0.018867924528301886,0.0,53,effect+nhanes
+"bean, kidney, mature seed, canned","Beans, kidney, all types, mature seeds, canned",Legumes and Legume Products,0.018867924528301886,0.0,53,effect+nhanes
+"potato, mashed, from fast food","Potato, mashed, from fast food",Fast Foods,0.018867924528301886,0.0,53,effect+nhanes
+"white bean, from canned, fat added","White beans, from canned, fat added",Legumes and Legume Products,0.018867924528301886,0.0,53,effect+nhanes
+"pepper, pasilla, dried","Peppers, pasilla, dried",Vegetables and Vegetable Products,0.018518518518518517,0.0,54,effect+nhanes
+"pear, raw, bosc","Pears, raw, bosc (Includes foods for USDA's Food Distribution Program)",Fruits and Fruit Juices,0.018518518518518517,0.0,54,effect+nhanes
+"vegetable oil-butter spread, reduced calorie","Vegetable oil-butter spread, reduced calorie",Fats and Oils,0.0,0.018518518518518517,54,effect+nhanes
+"sugar substitute, saccharin, powder","Sugar substitute, saccharin, powder",Sweets,0.0,0.40816326530612246,49,effect+nhanes
+"beef, australian, imported, grass-fed, rib, ribeye steak/roast lip-on, boneless, separable lean and fat, raw","Beef, Australian, imported, grass-fed, rib, ribeye steak/roast lip-on, boneless, separable lean and fat, raw",Beef Products,0.0,0.3958333333333333,48,effect+nhanes
+"yogurt, greek, 2% fat,mixed berry blend, chobani","Yogurt, Greek, 2% fat,mixed berry blend, CHOBANI",Dairy and Egg Products,0.0,0.5581395348837209,43,effect+nhanes
+"oil, babassu","Oil, babassu",Fats and Oils,0.0,0.3076923076923077,52,effect+nhanes
+"beverage, coconut milk, sweetened, fortified with calcium, vitamin a, b12, d2","Beverages, coconut milk, sweetened, fortified with calcium, vitamins A, B12, D2",Beverages,0.0,0.4166666666666667,48,effect+nhanes
+"candy, rolo caramel in milk chocolate","Candies, ROLO Caramels in Milk Chocolate",Sweets,0.0,0.32608695652173914,46,effect+nhanes
+"sugar substitute, liquid","Sugar substitute, liquid, NFS",Sweets,0.0,0.34146341463414637,41,effect+nhanes
+wheat germ oil,Wheat germ oil,Vegetables and Vegetable Products,0.0,0.041666666666666664,48,effect+nhanes
+"beverage, tropical punch","Beverages, Tropical Punch, ready-to-drink",Beverages,0.0,0.45652173913043476,46,effect+nhanes
+"sugar substitute, powder","Sugar substitute, powder, NFS",Sweets,0.0,0.3076923076923077,52,effect+nhanes
+"leavening agent, baking soda","Leavening agents, baking soda",Baked Products,0.0,0.4222222222222222,45,effect+nhanes
+"candy, butterscotch","Candies, butterscotch",Sweets,0.0,0.7291666666666666,48,effect+nhanes
+"yogurt, greek, nonfat, lemon blend, chobani","Yogurt, Greek, nonfat, lemon blend, CHOBANI",Dairy and Egg Products,0.0,0.625,48,effect+nhanes
+"beverage, the coca-cola company, hi-c flashin' fruit punch","Beverages, The COCA-COLA company, Hi-C Flashin' Fruit Punch",Beverages,0.0,0.020833333333333332,48,effect+nhanes
+"beef, australian, imported, grass-fed, external fat, raw","Beef, Australian, imported, grass-fed,  external fat, raw",Beef Products,0.0,0.37209302325581395,43,effect+nhanes
+"oil, tomatoseed","Oil, tomatoseed",Fats and Oils,0.0,0.045454545454545456,44,effect+nhanes
+"veal, australian, shank, hind, bone-in, separable lean and fat, raw","Veal, Australian, shank, hind, bone-in, separable lean and fat, raw","Lamb, Veal, and Game Products",0.0,0.5,54,effect+nhanes
+"beverage, energy drink, citrus","Beverages,  Energy drink, Citrus",Beverages,0.0,0.018867924528301886,53,effect+nhanes
+"tea, iced, bottled, black, unsweetened","Tea, iced, bottled, black, unsweetened",Beverages,0.0,0.09090909090909091,44,effect+nhanes
+"leavening agent, cream of tartar","Leavening agents, cream of tartar",Baked Products,0.0,0.17307692307692307,52,effect+nhanes
+"oil, palm","Oil, palm",Fats and Oils,0.0,0.06,50,effect+nhanes
+"syrup, sugar free","Syrups, sugar free",Sweets,0.0,0.3877551020408163,49,effect+nhanes
+"oil, industrial, coconut , used for whipped topping and coffee whitener","Oil, industrial, coconut (hydrogenated), used for whipped toppings and coffee whiteners",Fats and Oils,0.0,0.25,44,effect+nhanes
+"oil, flaxseed, contain added sliced flaxseed","Oil, flaxseed, contains added sliced flaxseed",Fats and Oils,0.0,0.020833333333333332,48,effect+nhanes
+"oil, flaxseed, cold pressed","Oil, flaxseed, cold pressed",Fats and Oils,0.0,0.6,45,effect+nhanes
+"alcoholic beverage, distilled, all 100 proof","Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 100 proof",Beverages,0.0,0.022727272727272728,44,effect+nhanes
+"gum, seed gum","Gums, seed gums (includes locust bean, guar)",Sweets,0.0,0.6666666666666666,45,effect+nhanes
+"yogurt, greek, 2%fat, coconut blend, chobani","Yogurt, Greek, 2%fat, coconut blend, CHOBANI",Dairy and Egg Products,0.0,0.5294117647058824,51,effect+nhanes
+"beef, australian, imported, wagyu, rib, small end rib steak/roast, boneless, separable lean only, aust. marble score 4/5, raw","Beef, Australian, imported, Wagyu, rib, small end rib steak/roast, boneless, separable lean only, Aust. marble score 4/5, raw",Beef Products,0.0,0.0392156862745098,51,effect+nhanes
+"alcoholic beverage, distilled, vodka, 80 proof","Alcoholic beverage, distilled, vodka, 80 proof",Beverages,0.0,0.0196078431372549,51,effect+nhanes
+marmalade,Marmalade,"Soups, Sauces, and Gravies",0.0,0.3333333333333333,42,effect+nhanes
+"chewing gum, sugarless","Chewing gum, sugarless",Sweets,0.0,0.0196078431372549,51,effect+nhanes
+"shortening frying , palm","Shortening frying (heavy duty), palm (hydrogenated)",Fats and Oils,0.0,0.14893617021276595,47,effect+nhanes
+"beef, australian, imported, wagyu, rib, small end rib steak/roast, boneless, separable lean only, aust. marble score 9, raw","Beef, Australian, imported, Wagyu, rib, small end rib steak/roast, boneless, separable lean only, Aust. marble score 9, raw",Beef Products,0.0,0.08333333333333333,48,effect+nhanes
+seafood salad,Seafood salad,Finfish and Shellfish Products,0.0,0.020833333333333332,48,effect+nhanes
+"beef, australian, imported, grass-fed, round, top round cap-off steak/roast, boneless, separable lean and fat, raw","Beef, Australian, imported, grass-fed, round, top round cap-off steak/roast, boneless, separable lean and fat, raw",Beef Products,0.0,0.32653061224489793,49,effect+nhanes
+"margarine, margarine-like vegetable oil spread, 67-70% fat, tub","Margarine, margarine-like vegetable oil spread, 67-70% fat, tub",Fats and Oils,0.0,0.3191489361702128,47,effect+nhanes
+"gelatin dessert, dry mix, reduced calorie, with aspartame, added phosphorus, potassium, sodium, vitamin c","Gelatin desserts, dry mix, reduced calorie, with aspartame, added phosphorus, potassium, sodium, vitamin C",Sweets,0.0,0.125,48,effect+nhanes
+"beverage, tea, lemon, diet","Beverages, tea, ready-to-drink, lemon, diet",Beverages,0.0,0.20754716981132076,53,effect+nhanes
+"yogurt, greek, whole, plain, chobani","Yogurt, Greek, whole, plain, CHOBANI",Dairy and Egg Products,0.0,0.5769230769230769,52,effect+nhanes
+"butter replacement, without fat, powder","Butter replacement, without fat, powder",Fats and Oils,0.0,0.6727272727272727,55,effect+nhanes
+"acerola juice, raw","Acerola juice, raw",Fruits and Fruit Juices,0.0,0.044444444444444446,45,effect+nhanes
+"oil, industrial, coconut, confection fat, typical basis for ice cream coating","Oil, industrial, coconut, confection fat, typical basis for ice cream coatings",Fats and Oils,0.0,0.32653061224489793,49,effect+nhanes
+"beverage, tea, green, instant, decaffeinated, lemon, unsweetened, fortified with vitamin c","Beverages, tea, green, instant, decaffeinated, lemon, unsweetened, fortified with vitamin C",Beverages,0.0,0.16666666666666666,48,effect+nhanes
+"chewing gum, sugar free","Chewing gum, sugar free",Sweets,0.0,0.023255813953488372,43,effect+nhanes
+"beverage, coffee, instant, vanilla, sweetened, decaffeinated, with non dairy creamer","Beverages, coffee, instant, vanilla, sweetened, decaffeinated, with non dairy creamer",Beverages,0.0,0.5111111111111111,45,effect+nhanes
+"veal, australian, separable fat, raw","Veal, Australian, separable fat, raw","Lamb, Veal, and Game Products",0.0,0.43478260869565216,46,effect+nhanes
+"bologna, classic","Bologna, classic",Sausages and Luncheon Meats,0.0,0.045454545454545456,44,effect+nhanes
+"beef, australian, imported, grass-fed, round, bottom round steak/roast, boneless, separable lean only, raw","Beef, Australian, imported, grass-fed, round, bottom round steak/roast, boneless, separable lean only, raw",Beef Products,0.0,0.2,50,effect+nhanes
+flaxseed oil,Flaxseed oil,Nut and Seed Products,0.0,0.5918367346938775,49,effect+nhanes
+"pudding, vanilla, dry mix","Puddings, vanilla, dry mix, regular",Sweets,0.0,0.14583333333333334,48,effect+nhanes
+"beverage, aloe vera juice drink, fortified with vitamin c","Beverages, aloe vera juice drink, fortified with Vitamin C",Beverages,0.0,0.02040816326530612,49,effect+nhanes
+"beef, australian, imported, wagyu, seam fat, aust. marble score 4/5, raw","Beef, Australian, imported, Wagyu, seam fat, Aust. marble score 4/5, raw",Beef Products,0.0,0.038461538461538464,52,effect+nhanes
+quesadilla,"Quesadilla, NFS",Unclassified,0.0,0.0784313725490196,51,effect+nhanes
+"oil, coconut","Oil, coconut",Fats and Oils,0.0,0.3541666666666667,48,effect+nhanes
+"yogurt, greek, nonfat, peach, chobani","Yogurt, Greek, nonfat, peach, CHOBANI",Dairy and Egg Products,0.0,0.10204081632653061,49,effect+nhanes
+"ghee, clarified butter","Ghee, clarified butter",Fats and Oils,0.0,0.6037735849056604,53,effect+nhanes
+"vegetable oil, palm kernel","Vegetable oil, palm kernel",Fats and Oils,0.0,0.0196078431372549,51,effect+nhanes
+"babyfood, gerber, 2nd food, apple, carrot and squash, organic","Babyfood, GERBER, 2nd Foods, apple, carrot and squash, organic",Baby Foods,0.0,0.21568627450980393,51,effect+nhanes
+"beef, australian, imported, grass-fed, ground, 85% lean / 15% fat, raw","Beef, Australian, imported, grass-fed, ground, 85% lean / 15% fat, raw",Beef Products,0.0,0.2727272727272727,44,effect+nhanes
+"shortening, confectionery, fractionated palm","Shortening, confectionery, fractionated palm",Fats and Oils,0.0,0.3695652173913043,46,effect+nhanes
+"beef, australian, imported, wagyu, loin, top loin steak/roast, boneless, separable lean and fat, aust. marble score 4/5, raw","Beef, Australian, imported, Wagyu, loin, top loin steak/roast, boneless, separable lean and fat, Aust. marble score 4/5, raw",Beef Products,0.0,0.0392156862745098,51,effect+nhanes
+"beef, australian, imported, grass-fed, loin, tenderloin steak/roast, boneless, separable lean only, raw","Beef, Australian, imported, grass-fed, loin, tenderloin steak/roast, boneless, separable lean only, raw",Beef Products,0.0,0.4666666666666667,45,effect+nhanes
+"coffee, instant, decaffeinated, pre-lightened and pre-sweetened with sugar, not reconstituted","Coffee, instant, decaffeinated, pre-lightened and pre-sweetened with sugar, not reconstituted",Sweets,0.0,0.4888888888888889,45,effect+nhanes
+cottonseed oil,Cottonseed oil,Nut and Seed Products,0.0,0.020833333333333332,48,effect+nhanes
+"yogurt, greek, blueberry, chobani","Yogurt, Greek, Blueberry, CHOBANI",Dairy and Egg Products,0.0,0.16666666666666666,48,effect+nhanes
+"interstate brand corp, wonder hamburger roll","Interstate Brands Corp, Wonder Hamburger Rolls",Baked Products,0.0,0.5882352941176471,51,effect+nhanes
+"pork, bacon, rendered fat, cooked","Pork, bacon, rendered fat, cooked",Pork Products,0.0,0.043478260869565216,46,effect+nhanes
+luncheon meat,"Luncheon meat, NFS",Sausages and Luncheon Meats,0.0,0.13043478260869565,46,effect+nhanes
+"oil, industrial, palm kernel , confection fat, use similar to 95 degree hard butter","Oil, industrial, palm kernel (hydrogenated), confection fat, uses similar to 95 degree hard butter",Fats and Oils,0.0,0.0196078431372549,51,effect+nhanes
+"water, tonic","Water, tonic",Beverages,0.0,0.08163265306122448,49,effect+nhanes
+"sugar substitute, sucralose, powder","Sugar substitute, sucralose, powder",Sweets,0.0,0.3695652173913043,46,effect+nhanes
+"water, non-carbonated, flavored","Water, non-carbonated, flavored",Beverages,0.0,0.6122448979591837,49,effect+nhanes
+"alcoholic beverage, creme de menthe, 72 proof","Alcoholic beverage, creme de menthe, 72 proof",Beverages,0.0,0.041666666666666664,48,effect+nhanes
+"yogurt, greek, 2% fat, strawberry banana, chobani","Yogurt, Greek, 2% fat, strawberry banana, CHOBANI",Dairy and Egg Products,0.0,0.5306122448979592,49,effect+nhanes
+aloe vera juice drink,Aloe vera juice drink,Fruits and Fruit Juices,0.0,0.02127659574468085,47,effect+nhanes
+"yogurt, greek, 2% fat, key lime blend, chobani","Yogurt, Greek, 2% fat, key lime blend, CHOBANI",Dairy and Egg Products,0.0,0.5625,48,effect+nhanes
+"yogurt, greek, nonfat, raspberry, chobani","Yogurt, Greek, nonfat, raspberry, CHOBANI",Dairy and Egg Products,0.0,0.56,50,effect+nhanes
+"beef, australian, imported, grass-fed, round, top round cap-off steak/roast, boneless, separable lean only, raw","Beef, Australian, imported, grass-fed, round, top round cap-off steak/roast, boneless, separable lean only, raw",Beef Products,0.0,0.3469387755102041,49,effect+nhanes
+"yogurt, greek, 2% fat, pineapple, chobani","Yogurt, Greek, 2% fat, pineapple, CHOBANI",Dairy and Egg Products,0.0,0.42857142857142855,49,effect+nhanes
+"yogurt, greek, nonfat, fruit on bottom, blackberry, chobani","Yogurt, Greek, nonfat, Fruit on Bottom, Blackberry, CHOBANI",Dairy and Egg Products,0.0,0.27906976744186046,43,effect+nhanes
+dessert sauce,Dessert sauce,"Soups, Sauces, and Gravies",0.0,0.02040816326530612,49,effect+nhanes
+"veal, australian, rib, rib roast, separable lean and fat, raw","Veal, Australian, rib, rib roast, separable lean and fat, raw","Lamb, Veal, and Game Products",0.0,0.36363636363636365,44,effect+nhanes
+"beef, australian, imported, wagyu, rib, small end rib steak/roast, boneless, separable lean and fat, aust. marble score 4/5, raw","Beef, Australian, imported, Wagyu, rib, small end rib steak/roast, boneless, separable lean and fat, Aust. marble score 4/5, raw",Beef Products,0.0,0.058823529411764705,51,effect+nhanes
+"beverage, water, bottled, perrier","Beverages, water, bottled, PERRIER",Beverages,0.0,0.6458333333333334,48,effect+nhanes
+"sweetener, tabletop, fructose, liquid","Sweeteners, tabletop, fructose, liquid",Sweets,0.0,0.06521739130434782,46,effect+nhanes
+"beef, australian, imported, grass-fed, loin, top sirloin cap-off steak/roast, boneless, separable lean and fat, raw","Beef, Australian, imported, grass-fed, loin, top sirloin cap-off steak/roast, boneless, separable lean and fat, raw",Beef Products,0.0,0.36363636363636365,55,effect+nhanes
+"yogurt, greek, nonfat, fruit on bottom, pomegranate, chobani","Yogurt, Greek, nonfat, Fruit on Bottom, Pomegranate, CHOBANI",Dairy and Egg Products,0.0,0.12244897959183673,49,effect+nhanes
+"alcoholic beverage, distilled, all 94 proof","Alcoholic beverage, distilled, all (gin, rum, vodka, whiskey) 94 proof",Beverages,0.0,0.021739130434782608,46,effect+nhanes
+"george weston bakery, brownberry sage and onion stuffing mix, dry","George Weston Bakeries, Brownberry Sage and Onion Stuffing Mix, dry",Baked Products,0.0,0.08695652173913043,46,effect+nhanes
+"shortening, special purpose for baking, soybean palm and cottonseed","Shortening, special purpose for baking, soybean (hydrogenated) palm and cottonseed",Fats and Oils,0.0,0.04,50,effect+nhanes
+"veal, australian, shank, hind, bone-in, separable lean only, raw","Veal, Australian, shank, hind, bone-in, separable lean only, raw","Lamb, Veal, and Game Products",0.0,0.48,50,effect+nhanes
+"yogurt, greek, nonfat, plain, chobani","Yogurt, Greek, nonfat, plain, CHOBANI",Dairy and Egg Products,0.0,0.5957446808510638,47,effect+nhanes
+"oil, industrial, palm and palm kernel, filling fat","Oil, industrial, palm and palm kernel, filling fat (non-hydrogenated)",Fats and Oils,0.0,0.3191489361702128,47,effect+nhanes
+"sweetener, tabletop, sucralose, splenda packet","Sweeteners, tabletop, sucralose, SPLENDA packets",Sweets,0.0,0.32653061224489793,49,effect+nhanes
+"beverage, zevia, cola","Beverages, ZEVIA, cola",Beverages,0.0,0.11363636363636363,44,effect+nhanes
+"lamb, australian, ground, 85% lean / 15% fat, raw","Lamb, Australian, ground,  85% lean / 15% fat, raw","Lamb, Veal, and Game Products",0.0,0.4807692307692308,52,effect+nhanes
+"candy, fruit snack, with high vitamin c","Candies, fruit snacks, with high vitamin C",Sweets,0.0,0.075,40,effect+nhanes
+coconut oil,Coconut oil,Nut and Seed Products,0.0,0.3877551020408163,49,effect+nhanes
+"yogurt, greek, 2% fat, apricot, chobani","Yogurt, Greek, 2% fat, apricot, CHOBANI",Dairy and Egg Products,0.0,0.05555555555555555,54,effect+nhanes
+"beef, australian, imported, wagyu, loin, tenderloin steak/roast, boneless, separable lean and fat, aust. marble score 4/5, raw","Beef, Australian, imported, Wagyu, loin, tenderloin steak/roast, boneless, separable lean and fat, Aust. marble score 4/5, raw",Beef Products,0.0,0.3404255319148936,47,effect+nhanes
+"candy, sprinkle","Candy, sprinkles",Sweets,0.0,0.5111111111111111,45,effect+nhanes
+"oil, industrial, coconut, principal use candy coating, oil spray, roasting nut","Oil, industrial, coconut, principal uses candy coatings, oil sprays, roasting nuts",Fats and Oils,0.0,0.09803921568627451,51,effect+nhanes
+"animal fat, bacon grease","Animal fat, bacon grease",Fats and Oils,0.0,0.0196078431372549,51,effect+nhanes
+"beef, australian, imported, grass-fed, round, bottom round steak/roast, boneless, separable lean and fat, raw","Beef, Australian, imported, grass-fed, round, bottom round steak/roast, boneless, separable lean and fat, raw",Beef Products,0.0,0.2916666666666667,48,effect+nhanes
+gin and tonic,Gin and tonic,Beverages,0.0,0.022222222222222223,45,effect+nhanes
+"fish oil, menhaden, fully hydrogenated","Fish oil, menhaden, fully hydrogenated",Fats and Oils,0.0,0.5,48,effect+nhanes
+"sugar substitute, stevia, liquid","Sugar substitute, stevia, liquid",Sweets,0.0,0.35,40,effect+nhanes
+"sweetener, tabletop, saccharin","Sweeteners, tabletop, saccharin (sodium saccharin)",Sweets,0.0,0.36,50,effect+nhanes
+"water, non-carbonated, bottle, natural fruit flavor, sweetened with low calorie sweetener","Water, non-carbonated, bottles, natural fruit flavors, sweetened with low calorie sweetener",Beverages,0.0,0.5102040816326531,49,effect+nhanes
+"beef, australian, imported, grass-fed, seam fat, raw","Beef, Australian, imported, grass-fed, seam fat, raw",Beef Products,0.0,0.46808510638297873,47,effect+nhanes
+"goji berry, dried","Goji berries, dried",Fruits and Fruit Juices,0.0,0.09803921568627451,51,effect+nhanes
+"beverage, carbonated, tonic water","Beverages, carbonated, tonic water",Beverages,0.0,0.08695652173913043,46,effect+nhanes
+"beef, australian, imported, grass-fed, loin, top loin steak/roast, boneless, separable lean only, raw","Beef, Australian, imported, grass-fed, loin, top loin steak/roast, boneless, separable lean only, raw",Beef Products,0.0,0.5227272727272727,44,effect+nhanes
+"sweetener, tabletop, fructose, dry, powder","Sweeteners, tabletop, fructose, dry, powder",Sweets,0.0,0.14583333333333334,48,effect+nhanes
+"butter oil, anhydrous","Butter oil, anhydrous",Dairy and Egg Products,0.0,0.625,48,effect+nhanes
+"beef, australian, imported, wagyu, loin, tenderloin steak/roast, boneless, separable lean only, aust. marble score 9, raw","Beef, Australian, imported, Wagyu, loin, tenderloin steak/roast, boneless, separable lean only, Aust. marble score 9, raw",Beef Products,0.0,0.3191489361702128,47,effect+nhanes
+"veal, australian, shank, fore, bone-in, separable lean and fat, raw","Veal, Australian, shank, fore, bone-in, separable lean and fat, raw","Lamb, Veal, and Game Products",0.0,0.14285714285714285,49,effect+nhanes
+"oil, wheat germ","Oil, wheat germ",Fats and Oils,0.0,0.038461538461538464,52,effect+nhanes
+"candy, taffy-from","Candies, taffy, prepared-from-recipe",Sweets,0.0,0.7555555555555555,45,effect+nhanes
+"beef, australian, imported, wagyu, loin, tenderloin steak/roast, boneless, separable lean and fat, aust. marble score 9, raw","Beef, Australian, imported, Wagyu, loin, tenderloin steak/roast, boneless, separable lean and fat, Aust. marble score 9, raw",Beef Products,0.0,0.3404255319148936,47,effect+nhanes
+"beverage, tea, black","Beverages, tea, black, ready to drink",Beverages,0.0,0.08888888888888889,45,effect+nhanes
+"beef, australian, imported, grass-fed, loin, top sirloin cap-off steak/roast, boneless, separable lean only, raw","Beef, Australian, imported, grass-fed, loin, top sirloin cap-off steak/roast, boneless, separable lean only, raw",Beef Products,0.0,0.32608695652173914,46,effect+nhanes
+"beef, australian, imported, wagyu, loin, tenderloin steak/roast, boneless, separable lean only, aust. marble score 4/5, raw","Beef, Australian, imported, Wagyu, loin, tenderloin steak/roast, boneless, separable lean only, Aust. marble score 4/5, raw",Beef Products,0.0,0.4,50,effect+nhanes
+"tea, kombucha","Tea, kombucha",Beverages,0.0,0.023255813953488372,43,effect+nhanes
+"beef, australian, imported, grass-fed, loin, top loin steak/roast, boneless, separable lean and fat, raw","Beef, Australian, imported, grass-fed, loin, top loin steak/roast, boneless, separable lean and fat, raw",Beef Products,0.0,0.4444444444444444,54,effect+nhanes
+"beverage, zevia, cola, caffeine free","Beverages, ZEVIA, cola, caffeine free",Beverages,0.0,0.49056603773584906,53,effect+nhanes
+"shortening industrial, lard and vegetable oil","Shortening industrial, lard and vegetable oil",Fats and Oils,0.0,0.019230769230769232,52,effect+nhanes
+"butter replacement, powder","Butter replacement, powder",Fats and Oils,0.0,0.6666666666666666,45,effect+nhanes
+vodka and tonic,Vodka and tonic,Beverages,0.0,0.022222222222222223,45,effect+nhanes
+"beef, australian, imported, grass-fed, loin, tenderloin steak/roast, boneless, separable lean and fat, raw","Beef, Australian, imported, grass-fed, loin, tenderloin steak/roast, boneless, separable lean and fat, raw",Beef Products,0.0,0.4782608695652174,46,effect+nhanes
+"beef, australian, imported, grass-fed, rib, ribeye steak/roast lip-on, boneless, separable lean only, raw","Beef, Australian, imported, grass-fed, rib, ribeye steak/roast lip-on, boneless, separable lean only, raw",Beef Products,0.0,0.4444444444444444,45,effect+nhanes
+"salt, table","Salt, table",Spices and Herbs,0.0,0.62,50,effect+nhanes
