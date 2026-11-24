@@ -18,11 +18,12 @@
 | 음식 온톨로지 | FoodOn | **EBI OLS API** + 캐시 | 클래스 1,096 · 음식 8,165 |
 | 음식 카테고리 | FDC SR / WWEIA | 로컬 덤프 | 세분 265 · 상위 27 |
 | 우울증-대사물 | ProMENDA | 로컬 xlsx | 레코드 22,519 → compound 1,412 |
-| 미생물 | NCBI taxonomy | efetch + 캐시 | **485 taxid** (127 + Disbiome 333 + 보탠 30) |
+| 미생물 | NCBI taxonomy | efetch + 캐시 | **798 taxid** (127 + Disbiome 333 + gutMDisorder 309 + 보탠 29) |
 | compound-미생물 | KEGG REST | REST + 캐시 | 10,257 링크 · compound 76 (**55% 는 속 수준**) |
 | compound-미생물 (예측) | **VMH / AGORA2** | 벌크 zip + 캐시 | 44,094 링크 · compound 1,069 |
 | 미생물-정신질환 | MiKG 원본 TTL | 로컬 ttl | 406 쌍 |
 | 미생물-질환 (외부) | **Disbiome** | REST 전수 + 캐시 | 1,193 관계 · 균 457 · 질환 23 |
+| 미생물-질환 (외부) | **gutMDisorder v3** | xlsx 2 개 + 캐시 | 1,239 관계 · 균 499 · 질환 18 |
 | compound-미생물 (관측) | **분변 대사체 13 코호트** | GitHub raw + 캐시 | 39,574 쌍 · 속 1,859 · compound 315 |
 | 섭취-결과 | **NHANES 2017-18** | CDC xpt + 캐시 | 표본 4,774 · compound 47 |
 | 1 회 섭취량 | **FDC food_portion** | 배포 zip + 캐시 | 13,129 음식 (코호트 커버리지 56%) |
@@ -124,8 +125,9 @@ KG 에서도 사라진다.
 
 - **받는 법**: `efetch.fcgi` 로 taxid 의 학명·rank·lineage 를 **현재 값**으로 갱신.
   `cache/ncbi_taxonomy.json`
-- **규모**: **485 taxid** (논문 322,917). 배포 `Disease_Bacteria` 의 정신질환·
-  신경퇴행 연관 127 종 + **Disbiome 333 종** + 수작업으로 보탠 30 종.
+- **규모**: **798 taxid** (논문 322,917). 배포 `Disease_Bacteria` 의 정신질환·
+  신경퇴행 연관 127 종 + **Disbiome 333 종** + **gutMDisorder 309 종**(§12b)
+  + 수작업으로 보탠 29 종.
 - **보탠 근거** (`setup/microbes_added.csv`): MiKG 가 말하는 균 36 종과 평가가
   요구하는 균(논문 Table 3·5, 방법 1 `#6` 의 `Adlercreutzia equolifaciens`)이
   배포본에 없었다. **compound 링크를 17 배로 늘려도 균이 없으면 소용없다**는 것이
@@ -140,7 +142,7 @@ KG 에서도 사라진다.
 
 | | 이전 | 지금 |
 |---|---:|---:|
-| 미생물 | 162 | **485** |
+| 미생물 | 162 | **798** |
 | KEGG 경로 연결 | 127 종 · 3,103 링크 | **167 종 · 4,571 링크** |
 | compound 연결 합집합 (KEGG ∪ VMH) | 143 종 | **종 수준 182 종(38%)** / 속 포함 379 종(78%) |
 
@@ -162,14 +164,14 @@ Disbiome 은 속·과 수준으로도 보고하는데 우리는 **종 이름 2 �
 있었다. KEGG genome 이름의 첫 단어가 속이므로 **종 → 속 사다리**를 두면
 추가 네트워크 요청 없이 붙는다.
 
-| | 이전 | 지금 |
-|---|---:|---:|
-| KEGG organism 매칭 | 167/485 | **378/485** (종 167 · 속 211) |
-| KEGG 경로 연결 | 167 종 · 4,571 링크 | **378 종 · 10,257 링크** |
-| compound | 63 | **76** |
-| Disbiome 균 중 연결됨 | 153/457 (33%) | **343/457 (75%)** |
+| | 이전 | 사다리 적용 | gutMDisorder 추가 후 |
+|---|---:|---:|---:|
+| KEGG organism 매칭 | 167/485 | 378/485 (종 167 · 속 211) | **564/791** (종 242 · 속 322) |
+| KEGG 경로 연결 | 167 종 · 4,571 링크 | 378 종 · 10,257 링크 | **564 종 · 14,918 링크** |
+| compound | 63 | **76** | 76 |
+| Disbiome 균 중 연결됨 | 153/457 (33%) | **343/457 (75%)** | 343/457 |
 
-> **속 수준 링크는 더 약한 주장이다.** 10,257 링크 중 **5,686(55%)**이 속 수준이고,
+> **속 수준 링크는 더 약한 주장이다.** 14,918 링크 중 **8,518(57%)**이 속 수준이고,
 > "이 종이 이 compound 를 대사한다" 가 아니라 **"이 속의 어떤 유전체가"** 를
 > 뜻한다.
 
@@ -225,9 +227,10 @@ KG 의 종 수준 항목이라 속 링크가 그 경로엔 끼어들지 않았�
 ## 7. compound-미생물 — KEGG REST
 
 - **경로**: `compound → EC → KO → organism`. KEGG organism 에 매칭된 균
-  **378/485** (종 167 · 속 211 — §6 의 사다리).
-- **규모**: **10,257 링크 · compound 76 · 미생물 378** (`out/compound_microbe.csv`).
-  **55% 가 속 수준 매칭**이다 — `match_rank` 열로 거른다.
+  **564/791** (종 242 · 속 322 — §6 의 사다리).
+- **규모**: **14,918 링크 · compound 76 · 미생물 564** (`out/compound_microbe.csv`).
+  **57% 가 속 수준 매칭**이다 — `match_rank` 열로 거른다. 종 수준만 쓰면
+  6,400 링크 · 미생물 242 · compound 63.
 - **한계**: KEGG 는 유전체가 등록된 균만 담는다. `Adlercreutzia equolifaciens` 의
   citric acid 경로, `Bifidobacterium longum` 의 ascorbic acid 경로가 없어
   §5.1 방법 1 `#6`·`#7` 이 △ 에 머문다.
@@ -375,10 +378,14 @@ MiKG(Liu et al. 2021) **원본 TTL**(2,465 triple)을 직접 읽는다.
 
 - **받는 법**: `https://disbiome.ugent.be:8080/experiment` 전수 덤프 하나.
   6.4 MB · 실험 10,866. `cache/disbiome_experiment.json`
-- **왜 이것인가**: 논문 §2 가 VMH 와 나란히 든 **gutMDisorder 는 호스트가 죽었다**
-  (`bio-annotation.cn` 연결 실패, Disbiome 으로 리다이렉트된다). Disbiome 이
-  같은 자리를 메우고, 우리 평가와 무관하게 큐레이션돼 있어 **축 확장의 자기참조를
-  끊는다**.
+- **왜 이것인가**: 우리 평가와 무관하게 큐레이션돼 있어 **축 확장의 자기참조를
+  끊는다**. 그 전까지 미생물 축을 넓히는 길은 `setup/microbes_added.csv` 하나였고
+  기준이 '평가가 요구하는 균' 이었다 — 이미 아는 균만 늘어난다.
+- **처음 고른 이유는 틀렸다.** 논문 §2 가 VMH 와 나란히 든 gutMDisorder 가
+  호스트(`bio-annotation.cn`) 연결 실패라 Disbiome 을 그 대체재로 적었는데,
+  죽은 것은 **옛 호스트**였고 v3 는 하얼빈의대 새 호스트에 살아 있다
+  ([§12b](#12b-미생물-질환--gutmdisorder-v3)). Disbiome 자체는 뺄 이유가 없어
+  둘 다 올리고 출처 태그로 분리한다.
 - **규모**: 정신·신경질환으로 걸러 **관계 1,193 · 균 457 · 질환 23**
   (`out/microbe_disease_disbiome.csv`)
 
@@ -424,6 +431,75 @@ Disbiome 의 `disease_name` 은 MedDRA 계열 자유 표기라 그대로는 MeSH
 아니다. `hasPositiveAssociation`/`hasNegativeAssociation` 으로 바꾸면 뜻이
 달라지므로 중립 `mpq:hasAssociation` 에 `our:abundanceIn` 속성(`질환|방향`)으로
 붙인다. 출처 태그는 `Disbiome` 으로 MiKG 와 **분리**한다.
+
+---
+
+## 12b. 미생물-질환 — gutMDisorder v3
+
+**§12 가 대체재였다. 원본이 살아 있었다.**
+
+- **받는 법**: `https://bio-computing.hrbmu.edu.cn/gutMDisorder/` (하얼빈의대).
+  페이지는 SPA 라 표가 HTML 에 없고, 번들의
+  `/gutMDisorder_api/api/resource/download?fileName=<파일>` 이 xlsx 를 준다.
+  두 파일을 받는다 — `..._Literature-based_All.xlsx` (1.5 MB) ·
+  `..._Rawdata-based_All.xlsx` (1.3 MB). `common.gutmdisorder` ·
+  `cache/gutMDisorder_v3_*.xlsx`
+- **왜 돌아왔나**: §12 에 "gutMDisorder 는 호스트가 죽었다" 고 적었다. 죽은 것은
+  **옛 호스트**(`bio-annotation.cn`, 지금도 타임아웃)였고 v3 가 새 호스트에
+  올라와 있다. 논문 §2 가 든 바로 그 DB 라 **대체재가 아니라 원본**이다.
+  Disbiome 은 뺄 이유가 없어 둘 다 올린다(출처 태그로 분리).
+- **Disbiome 보다 나은 두 가지**
+  1. **질환이 MeSH descriptor 로 원본에 붙어 있다** (`Condition1ID = D003093`).
+     §12 에서 가장 약한 고리였던 이름 매칭 사다리를 **안 탄다** — mesh_lookup
+     해소율 38%, 잘못 붙은 contains 를 별칭표로 덮던 수작업이 여기엔 없다.
+  2. 행마다 **방향**(increase/decrease) · **p값** · **분류 계급** ·
+     근거(PMID 또는 BioProject 번호)가 있다. Rawdata 쪽은 LDA score 까지 있다.
+
+### 방향을 믿을 수 있는 행만 남긴다 — 이게 이 소스의 함정이다
+
+메타 시트의 `Condition1` vs `Condition2` 가 비교쌍이고 `Alteration` 은 1 의 2
+대비 증감이다. **Condition2 가 Health 인 행만** "질환에서 증가/감소" 로 읽을 수
+있다. 나머지 비-Health 행은
+
+| 실제로 무엇인가 | 예 |
+|---|---|
+| 중재 vs 대조 | Yogurt vs No yogurt · Inulin vs Placebos · Exercise vs Sedentary |
+| 질환 vs 질환 | 궤양성대장염 vs 크론병 · 위암 vs 위축성위염 |
+| 중증도 | 임상적 악화 vs 자연완화 |
+| 인구집단 | African American vs Non-Hispanic white |
+
+라서 질환 방향이 아니다. 그대로 합치면 **"요구르트를 먹으면 늘어나는 균"이
+"질환에서 늘어나는 균"으로 뒤집혀 들어간다.** 그래서
+
+- `HumanOrMouse == Human` (마우스 행은 식품 추천의 근거가 못 된다),
+- `Condition2ID == D006262` (MeSH *Health*),
+- `ResearchType == 'Gut microbiota associated with phenotype'`
+
+세 조건을 걸었다. Human 24,750 행 중 남는 것이 **9,374 행**(38%)이다. Health 는
+항상 Condition2 쪽에 있어 방향을 뒤집을 일은 없다 — 반대 배치 0 행으로 확인했다.
+
+- `Condition1ID` 는 동반질환이 `;` 로 붙고 MeSH 가 없으면 `*` 다
+  (`D010300;D018680`, `D003424;*`). `D\d{6,}` 만 뽑아 한 질환씩 행으로 펼친다.
+- `present`/`absent` 135 행은 **검출 여부**라 존재비 방향이 아니다. 표에는 두되
+  `our:abundanceIn` 에는 올리지 않는다.
+- `increased`/`decreased` 표기 혼용(36 행)은 `increase`/`decrease` 로 합친다.
+- 질환 라벨은 우리 MeSH 라벨로 덮는다 — 원본 `Condition1` 에 전각 콤마가
+  섞여 있어(`Colitis，Ulcerative`) 그대로 두면 같은 질환이 갈라진다.
+
+### 규모
+
+- 정제 후 **연관 9,374 · 균 1,253 · 질환 150**
+  (`out/microbe_disease_gutmdisorder.csv`)
+- 계급: 속 3,989 · 종 1,999 · 과 1,556 · 목 861 · 강 495 · 문 448
+- **기존 485 균 대비 신규 936** (그중 종 계급 419). 미생물 축이 3 배가 된다.
+- 같은 (균, 질환, 방향) 이 여러 논문·프로젝트에서 나오면 `n_evidence` 에 근거
+  수로 접는다 — KG 에도 올린다.
+
+### KG 반영
+
+§12 와 동일한 취급이다. `Elevated`/`Reduced` 는 존재비 변화이지 이로움/해로움이
+아니므로 중립 `mpq:hasAssociation` + `our:abundanceIn`(`질환|방향|근거수`).
+출처 태그는 `gutMDisorder` 로 Disbiome · MiKG 와 **분리**한다.
 
 ---
 
@@ -504,7 +580,7 @@ p<0.05 쌍이 **41%** 였다. 그래서 ① 코호트 안 BH q<0.05, ② 서로 
 
 | 소스 | 왜 |
 |---|---|
-| **gutMDisorder** | 서버가 닫혀 있다. `bio-annotation.cn` 은 DNS 는 해석되나(47.76.215.223) http·https·8080 전부 connection refused. NAR 논문(2020 v1 · 2022 v2) 보충자료가 대안이다 |
+| ~~**gutMDisorder**~~ | **받았다** — 닫힌 것은 옛 호스트(`bio-annotation.cn`, 여전히 timeout)였고 v3 는 하얼빈의대 새 호스트에 있다. [§12b](#12b-미생물-질환--gutmdisorder-v3) |
 | **SNOMED CT 전체** | 라이선스. 배포본에 라벨·계층이 없다 |
 | **중국 식품 온톨로지** | 배포 KG 의 subset 만 쓴다 (카테고리 39 · 음식 174) |
 
@@ -521,4 +597,9 @@ cache/mesh_tree.json          MeSH 트리 번호 → 기술어 1,227
 cache/ncbi_taxonomy.json      NCBI efetch 결과
 cache/kegg_*.txt              KEGG REST 응답
 cache/vmh_*.csv               VMH SPARQL·REST 결과
+cache/gutMDisorder_v3_*.xlsx  gutMDisorder v3 전수 2 개 (2.8 MB)
 ```
+
+바이너리(xlsx)는 `common.cached_bytes` 로 받는다. 텍스트판과 달리 **임시 파일에
+받아서 다 받은 뒤에 옮긴다** — 받다가 끊긴 파일을 캐시로 굳히면 다음 실행이
+조용히 깨진다.

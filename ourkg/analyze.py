@@ -2423,9 +2423,25 @@ def emicrobe():
     E = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
     db = pd.read_csv(os.path.join(OUT, 'microbe_disease_disbiome.csv'),
                      dtype={'taxid': str})
+    # gutMDisorder v3 — Disbiome 과 맞먹는 두 번째 큐레이션 소스. 우울증 관계가
+    # 배포 KG 1 건 · Disbiome 소수에서 23 건으로 늘어, **같은 검정을 독립된
+    # 소스로 한 번 더** 할 수 있다. 한 소스의 우연을 두 소스가 같이 낼 확률은 낮다.
+    _gp = os.path.join(OUT, 'microbe_disease_gutmdisorder.csv')
+    gmd = (pd.read_csv(_gp, dtype={'taxid': str}) if os.path.exists(_gp)
+           else pd.DataFrame(columns=db.columns))
+    gmd = gmd[gmd.outcome.isin(('Elevated', 'Reduced'))]
+    _dep = r'[Dd]epressive'
+    scopes = [('Disbiome/정신질환 전체', db[db.is_mental]),
+              ('Disbiome/우울증만', db[db.disease == 'Major Depressive Disorder'])]
+    if not gmd.empty:
+        scopes += [('gutMD/정신·신경 전체', gmd[gmd.is_mental | gmd.is_neuro]),
+                   ('gutMD/우울증만',
+                    gmd[gmd.disease.astype(str).str.contains(_dep)]),
+                   ('두 소스 합/정신질환', pd.concat(
+                       [db[db.is_mental][['taxid', 'outcome', 'disease']],
+                        gmd[gmd.is_mental][['taxid', 'outcome', 'disease']]]))]
     rows = []
-    for scope, dsel in (('정신질환 전체', db[db.is_mental]),
-                        ('우울증만', db[db.disease == 'Major Depressive Disorder'])):
+    for scope, dsel in scopes:
         # 균별로 그 질환에서 늘었는지(Elevated) 줄었는지(Reduced)
         for src in ('both', 'measured'):
             cm = (compound_microbe() if src == 'both'
@@ -2456,16 +2472,23 @@ def emicrobe():
                              'compound': int(nz.sum()),
                              '부호일치': round(agree, 3), 'p': round(bt.pvalue, 4),
                              'rho': round(float(rho), 3)})
-                if scope == '정신질환 전체' and src == 'both' and assume == '감소=이로움':
+                if (scope == 'Disbiome/정신질환 전체' and src == 'both'
+                        and assume == '감소=이로움'):
                     pd.DataFrame({'kegg': e.index, 'e_microbe': e.values,
                                   'n_reduced': dn.reindex(e.index).values,
                                   'n_elevated': up.reindex(e.index).values}
                                  ).to_csv(os.path.join(OUT, 'e_microbe.csv'), index=False)
     t = pd.DataFrame(rows)
+    # 20 칸을 뒤지고 그중 가장 작은 p 를 집는 것은 검정이 아니다 — BH 로 보정한다.
+    from scipy.stats import false_discovery_control
+    if len(t):
+        t['q'] = false_discovery_control(t['p'].values).round(3)
     t.to_csv(os.path.join(OUT, 'e_microbe_compare.csv'), index=False)
     print(t.to_string(index=False))
     print('\n  부호일치 0.5 · rho 0 이 우연 수준이다. 두 방향 가정이 대칭이므로')
     print('  한쪽이 0.5 보다 높으면 다른 쪽은 그만큼 낮다 — **크기**를 봐야 한다.')
+    print(f'  BH 보정 후 q<0.05 {int((t.get("q", pd.Series(dtype=float)) < 0.05).sum())}'
+          f'/{len(t)} — 보정 없이 집은 p 는 근거가 아니다.')
     return t
 
 

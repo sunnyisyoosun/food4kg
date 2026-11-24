@@ -30,7 +30,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (BASE, OUT, FDC_RAW, UNIT_TO_G, FDC_CATEGORY, cached_get, kegg_rest,
                     normalize_label, normalize_category, kegg_map, normkey,
-                    mesh_lookup, cached_covering)
+                    mesh_lookup, cached_covering, gutmdisorder)
 
 
 def food():
@@ -469,7 +469,8 @@ def microbe():
     # '평가가 요구하는 균' 이었다. 그러면 **이미 아는 균만 늘어난다** — 평가가
     # 묻지 않는 균은 영원히 안 들어온다. 자기참조다.
     # Disbiome 은 우리 평가와 무관하게 큐레이션된 목록이라 그 고리가 끊긴다.
-    # (논문 §2 가 든 gutMDisorder 는 호스트가 죽어 Disbiome 으로 리다이렉트된다.)
+    # (논문 §2 가 든 gutMDisorder 는 **옛** 호스트가 죽은 것이었다. 새 호스트의
+    #  v3 는 아래 [1c/5] 에서 받는다 — Disbiome 은 대체재가 아니라 병렬 소스다.)
     #
     # 질환명이 자유 표기(MedDRA 계열)라 MeSH descriptor 로 해소해야 F03 판정을
     # 같은 자리에서 할 수 있다 — common.mesh_lookup 참조.
@@ -498,7 +499,26 @@ def microbe():
         for r in _db if r.get('organism_ncbi_id') and r['disease_name'] in _d2m])
     print(f'  실험 {len(disb):,} / 균 {disb.taxid.nunique():,} / 질환 {disb.mesh_id.nunique()}')
 
-    meshids = sorted({d for _, d in pairs} | set(disb.mesh_id))
+    # ------------------------------------------------------------------
+    # gutMDisorder v3 — 논문 §2 가 든 바로 그 DB. 이전 호스트가 죽어서 Disbiome
+    # 으로 갈음했는데, 하얼빈의대 새 호스트에서 v3 가 살아 있다.
+    #
+    # Disbiome 보다 두 군데가 낫다.
+    #   (1) **질환이 MeSH descriptor 로 이미 붙어 있다.** Disbiome 은 자유 표기라
+    #       mesh_lookup 의 변형 사다리를 타야 했고 거기서 새는 게 가장 약한 고리였다.
+    #   (2) 방향(increase/decrease)·p값·분류 계급이 행마다 있다.
+    # 대신 비교쌍이 Health 가 아닌 행이 절반이라 방향을 못 쓴다 — common.gutmdisorder
+    # 가 거기서 걸러낸다.
+    print('[1c/5] gutMDisorder v3 → 미생물-질환 (외부 큐레이션)')
+    gmd = gutmdisorder(S)
+    gmd['outcome'] = gmd['alteration'].map(
+        {'increase': 'Elevated', 'decrease': 'Reduced',
+         'present': 'Present', 'absent': 'Absent'}).fillna('')
+    gmd['disease'] = gmd['disease_name']
+    print(f'  연관 {len(gmd):,} / 균 {gmd.taxid.nunique():,} / 질환 {gmd.mesh_id.nunique()}'
+          f' / 방향 있는 행 {int(gmd.outcome.isin(("Elevated", "Reduced")).sum()):,}')
+
+    meshids = sorted({d for _, d in pairs} | set(disb.mesh_id) | set(gmd.mesh_id))
 
     # ------------------------------------------------------------------
     print('[2/5] MeSH tree number (id.nlm.nih.gov SPARQL) → F03 판정')
@@ -540,6 +560,17 @@ def microbe():
     disb['is_mental'] = disb['mesh_id'].isin(mental)
     disb['is_neuro'] = disb['mesh_id'].isin(neuro)
     disb.to_csv(os.path.join(OUT, 'microbe_disease_disbiome.csv'), index=False)
+    gmd['is_mental'] = gmd['mesh_id'].isin(mental)
+    gmd['is_neuro'] = gmd['mesh_id'].isin(neuro)
+    # MeSH 라벨을 우리 쪽 표기로 덮는다 — gutMDisorder 의 Condition1 은
+    # "Colitis，Ulcerative" 처럼 전각 콤마가 섞여 있어 질환을 합칠 때 갈라진다.
+    gmd['disease'] = gmd['mesh_id'].map(
+        lambda d: labels.get(f'http://id.nlm.nih.gov/mesh/{d}', '')
+    ).replace('', pd.NA).fillna(gmd['disease_name'])
+    gmd.to_csv(os.path.join(OUT, 'microbe_disease_gutmdisorder.csv'), index=False)
+    _gsel = gmd[gmd.is_mental | gmd.is_neuro]
+    print(f'  gutMDisorder 정신·신경 관계 {len(_gsel):,} '
+          f'(미생물 {_gsel.taxid.nunique()} 종, 질환 {_gsel.mesh_id.nunique()} 종)')
     _dsel = disb[disb.is_mental | disb.is_neuro]
     print(f'  Disbiome 정신·신경 관계 {len(_dsel):,} '
           f'(미생물 {_dsel.taxid.nunique()} 종, 질환 {_dsel.mesh_id.nunique()} 종)')
@@ -558,9 +589,12 @@ def microbe():
         _added = set(pd.read_csv(_add, dtype=str).fillna('').taxid) - {''}
     _base = set(md[md.is_mental | md.is_neuro]['taxid'])
     _disb = set(_dsel['taxid'])
-    focus = sorted(_base | _disb | _added)
+    _gmd = set(_gsel['taxid'])
+    focus = sorted(_base | _disb | _gmd | _added)
     print(f'  대상 {len(focus)} 종 = 배포 KG {len(_base)}'
-          f' + Disbiome {len(_disb - _base)} + 보탠 {len(_added - _base - _disb)}')
+          f' + Disbiome {len(_disb - _base)}'
+          f' + gutMDisorder {len(_gmd - _base - _disb)}'
+          f' + 보탠 {len(_added - _base - _disb - _gmd)}')
 
 
     def fetch_tax():
@@ -1110,6 +1144,32 @@ def kg():
             n_disb += 1
         print(f'  Disbiome 미생물-질환 {n_disb:,} (균 {_db.taxid.nunique()} · 질환 {_db.mesh_id.nunique()})')
 
+    # gutMDisorder v3 — Disbiome 과 같은 취급. 출처만 분리한다.
+    # present/absent 는 검출 여부라 존재비 방향이 아니므로 abundanceIn 에 안 올린다.
+    _gp = os.path.join(OUT, 'microbe_disease_gutmdisorder.csv')
+    n_gmd = 0
+    _gm = pd.DataFrame(columns=['taxid', 'mesh_id'])
+    if os.path.exists(_gp):
+        _gm = pd.read_csv(_gp, dtype={'taxid': str})
+        _gm = _gm[_gm.is_mental | _gm.is_neuro]
+        _seen = set()
+        for _, r in _gm.iterrows():
+            du = NS['mesh'] + r['mesh_id']
+            W.t(NS['mic'] + r['taxid'], NS['mpq'] + 'hasAssociation', du, 'gutMDisorder')
+            W.t(du, A, NS['ent'] + 'Disease', 'gutMDisorder')
+            if isinstance(r['disease'], str):
+                W.t(du, LABEL, r['disease'], 'gutMDisorder', literal=True)
+            if r['outcome'] in ('Elevated', 'Reduced'):
+                key = (r['taxid'], r['mesh_id'], r['outcome'])
+                if key not in _seen:
+                    _seen.add(key)
+                    W.t(NS['mic'] + r['taxid'], NS['our'] + 'abundanceIn',
+                        f"{r['disease']}|{r['outcome']}|{r['n_evidence']}건",
+                        'gutMDisorder', literal=True)
+            n_gmd += 1
+        print(f'  gutMDisorder 미생물-질환 {n_gmd:,} '
+              f'(균 {_gm.taxid.nunique()} · 질환 {_gm.mesh_id.nunique()})')
+
     print('[5/6] 신경전달물질 경로 (MiKG)')
     mn = pd.read_csv(os.path.join(OUT, 'microbe_neurotransmitter.csv'))
     nd = pd.read_csv(os.path.join(OUT, 'neurotransmitter_disease.csv'))
@@ -1536,6 +1596,8 @@ def kg():
          '분변 대사체 13 코호트 — 추론도 예측도 아닌 관측'),
         ('microbe', '미생물-질환 (Disbiome)', n_disb,
          '외부 큐레이션 — 축 확장의 자기참조를 끊는다'),
+        ('microbe', '미생물-질환 (gutMDisorder v3)', n_gmd,
+         '논문 §2 의 DB — MeSH 가 원본에 붙어 있어 이름 매칭을 안 탄다'),
         ('ontology', 'FoodOn ↔ 카테고리 (배포 KG 부분집합)', n_fo_link, '§3.1 FoodOn'),
         ('ontology', 'FoodOn 클래스 링크 (음식, OLS)', fl.get('foodon_food'),
          '배포 subset 에 없는 계층 — foodon_match.py'),

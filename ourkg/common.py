@@ -1,4 +1,5 @@
 """ourkg 공통 유틸 — 재현 파이프라인(reconstruct.py 등)과 분리된 확장판."""
+import io
 import os
 import re
 import pandas as pd
@@ -96,6 +97,90 @@ def cached_covering(name, fetch, keys):
         os.remove(os.path.join(CACHE, name))
         data = json.loads(cached_get(name, fetch))
     return data
+
+
+def cached_bytes(name, fetch, ttl_days=30):
+    """`cached_get` 의 바이너리판 — xlsx 같은 것을 받는다.
+
+    텍스트판과 달리 디코딩하지 않는다. 받다가 끊긴 파일을 캐시로 굳히면 다음
+    실행이 조용히 깨지므로, **임시 파일에 받아서 다 받은 뒤에 옮긴다.**
+    """
+    os.makedirs(CACHE, exist_ok=True)
+    import time
+    p = os.path.join(CACHE, name)
+    if os.path.exists(p) and (time.time() - os.path.getmtime(p)) < ttl_days * 86400:
+        return open(p, 'rb').read()
+    blob = fetch()
+    tmp = p + '.part'
+    open(tmp, 'wb').write(blob)
+    os.replace(tmp, p)
+    return blob
+
+
+# gutMDisorder v3 (bio-computing.hrbmu.edu.cn) — 논문 §2 가 든 미생물-질환 DB.
+# 이전 호스트(bio-annotation.cn)가 죽어 Disbiome 으로 대체했는데, 하얼빈의대
+# 새 호스트에서 v3 가 살아 있다. SPA 라 페이지에는 표가 없고 번들의
+# /gutMDisorder_api/api/resource/download?fileName=... 가 xlsx 를 준다.
+GMD_URL = ('https://bio-computing.hrbmu.edu.cn/gutMDisorder_api/api'
+           '/resource/download?fileName=')
+# (파일, 메타시트, 연관시트, taxid 열, 근거 열)
+GMD_FILES = (
+    ('gutMDisorder_v3_Literature-based_All.xlsx', 'Literature', 'Association',
+     'GutMicrobiataNCBIID', 'PMID'),
+    ('gutMDisorder_v3_Rawdata-based_All.xlsx', 'projectr', 'associationr',
+     'GutMicrobeNCBIID', 'Projectnumber'),
+)
+GMD_HEALTH = 'D006262'          # MeSH "Health" — 대조군
+GMD_PHENOTYPE = 'Gut microbiota associated with phenotype'
+
+
+def gutmdisorder(session=None):
+    """gutMDisorder v3 → (taxid, mesh_id, 증감) 표.
+
+    **방향을 신뢰할 수 있는 행만 남긴다.** 메타 시트의 Condition1 vs Condition2
+    가 비교쌍이고 `Alteration` 은 1 기준 2 대비 증감인데, Condition2 가 Health
+    인 행만 "질환에서 증가/감소" 로 읽을 수 있다. 나머지는
+      - 중재 vs 대조 (Yogurt vs No yogurt),
+      - 질환 vs 질환 (궤양성대장염 vs 크론병),
+      - 중증도 (악화 vs 자연완화), 인구집단 (African American vs Non-Hispanic white)
+    라서 질환 방향이 아니다. ResearchType 도 phenotype 으로 제한한다.
+    Human 만 쓴다 — 마우스 행은 식품 추천의 근거가 될 수 없다.
+
+    Condition1ID 는 동반질환이 `;` 로 붙고 MeSH 가 없으면 `*` 다. `D\d{6,}` 만
+    뽑아 한 질환씩 행으로 펼친다.
+    """
+    import requests
+    S = session or requests.Session()
+    rows = []
+    for fn, msheet, asheet, txcol, evcol in GMD_FILES:
+        blob = cached_bytes(fn, lambda fn=fn: S.get(
+            GMD_URL + fn, timeout=300).content)
+        meta = pd.read_excel(io.BytesIO(blob), sheet_name=msheet)
+        assoc = pd.read_excel(io.BytesIO(blob), sheet_name=asheet)
+        keep = meta[(meta.HumanOrMouse.astype(str).str.strip() == 'Human')
+                    & (meta.Condition2ID.astype(str).str.strip() == GMD_HEALTH)
+                    & (meta.ResearchType == GMD_PHENOTYPE)]
+        a = assoc.rename(columns={assoc.columns[0]: 'Index'}).merge(
+            keep[['Index', 'Condition1', 'Condition1ID', evcol]], on='Index')
+        for _, r in a.iterrows():
+            if pd.isna(r[txcol]):
+                continue
+            alt = str(r['Alteration']).strip().lower()
+            # increased/decreased 표기 혼용을 합치고, present/absent 는 증감이
+            # 아니라 검출 여부라 방향으로 쓰지 않는다.
+            alt = {'increased': 'increase', 'decreased': 'decrease'}.get(alt, alt)
+            for mid in re.findall(r'D\d{6,}', str(r['Condition1ID'])):
+                rows.append({
+                    'taxid': str(int(r[txcol])), 'organism': r['GutMicrobe'],
+                    'gmd_rank': str(r['Classification']).strip().lower(),
+                    'mesh_id': mid, 'disease_name': str(r['Condition1']),
+                    'alteration': alt, 'pvalue': r.get('PValue'),
+                    'evidence': str(r[evcol]), 'gmd_source': msheet})
+    g = pd.DataFrame(rows)
+    # 같은 (균, 질환, 방향) 이 여러 논문/프로젝트에서 나오면 근거 수로 접는다.
+    g['n_evidence'] = g.groupby(['taxid', 'mesh_id', 'alteration'])['evidence'
+                                                                   ].transform('nunique')
+    return g
 
 
 def kegg_rest(path, session=None, timeout=180):
