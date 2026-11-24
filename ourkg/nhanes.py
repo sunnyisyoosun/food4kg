@@ -91,6 +91,18 @@ def _load(cycle):
     return out
 
 
+def _joined(cycle):
+    """한 주기의 식이 x PHQ-9 x 인구 조인."""
+    d = _load(cycle)
+    q = [c for c in d['DPQ'].columns if c.startswith('DPQ') and c != 'DPQ100']
+    x = d['DPQ'][q].replace({7: np.nan, 9: np.nan})
+    dpq = d['DPQ'].assign(phq9=x.sum(axis=1).where(x.notna().all(axis=1)))
+    j = (d['DR1TOT'].merge(dpq[['SEQN', 'phq9']], on='SEQN')
+         .merge(d['DEMO'][['SEQN', 'RIAGENDR', 'RIDAGEYR', 'INDFMPIR']], on='SEQN'))
+    j = j[(j.DR1DRSTZ == 1) & j.phq9.notna() & (j.RIDAGEYR >= 18) & (j.DR1TKCAL > 0)]
+    return j.assign(cycle=cycle)
+
+
 def build(cycle=None):
     """섭취 -> PHQ-9 연관으로 E 를 만든다 -> out/compound_depression_nhanes.csv
 
@@ -100,23 +112,29 @@ def build(cycle=None):
     부호 규약은 우리 `E` 와 맞춘다 — **+ 가 이로움(우울 감소)**. 회귀계수가
     음수(섭취가 늘수록 PHQ-9 가 낮다)면 E 는 +다.
     """
-    cycle = cycle or os.environ.get('NHANES_CYCLE', '2017')
-    d = _load(cycle)
-    q = [c for c in d['DPQ'].columns if c.startswith('DPQ') and c != 'DPQ100']
-    x = d['DPQ'][q].replace({7: np.nan, 9: np.nan})
-    d['DPQ'] = d['DPQ'].assign(phq9=x.sum(axis=1).where(x.notna().all(axis=1)))
-
-    j = (d['DR1TOT'].merge(d['DPQ'][['SEQN', 'phq9']], on='SEQN')
-         .merge(d['DEMO'][['SEQN', 'RIAGENDR', 'RIDAGEYR', 'INDFMPIR']], on='SEQN'))
-    j = j[(j.DR1DRSTZ == 1) & j.phq9.notna() & (j.RIDAGEYR >= 18)]
-    j = j[j.DR1TKCAL > 0]
-    print(f'[1/3] {cycle} 주기 — 표본 {len(j):,} / PHQ-9>=10 '
+    # 여러 주기를 합친다. 한 주기(4,774)로는 compound 47 중 24 만 유의해
+    # **E 의 음수 쪽 커버리지가 얇다** — effect 공간에서 바닥이 약한 원인이다
+    # (RESULTS §17d·§20). 주기를 합치면 표본이 늘어 유의 compound 가 는다.
+    # 주기는 **고정효과로 보정한다** — 조사 연도마다 식이 보고 방식과 PHQ-9
+    # 분포가 달라 합치기만 하면 주기 간 차이가 영양소 계수에 실린다.
+    # **기본값은 단주기다.** 3 주기(14,792)로 합치면 유의 compound 가 24 -> 38 로
+    # 늘지만 **추천이 더 나빠진다** — 늘어난 것의 상당수가 인·아연·티아민·
+    # 나이아신처럼 "고기를 많이 먹는 사람" 을 가리키는 영양소라 Top 1 이 소고기
+    # 타코가 된다(RESULTS §20). 통계적 강도와 추천 품질이 반대로 간 사례다.
+    cycles = (cycle or os.environ.get('NHANES_CYCLE', '2017')).split(',')
+    parts = [_joined(c.strip()) for c in cycles]
+    j = pd.concat(parts, ignore_index=True)
+    print(f'[1/3] 주기 {",".join(cycles)} — 표본 {len(j):,} '
+          f'({" + ".join(f"{len(p):,}" for p in parts)}) / PHQ-9>=10 '
           f'{int((j.phq9 >= 10).sum()):,} ({(j.phq9 >= 10).mean() * 100:.1f}%)')
 
     # 섭취는 오른쪽으로 길게 늘어진다 — log1p 로 펴고 표준화해 계수를 비교 가능하게
     cov = pd.DataFrame({
         'age': j.RIDAGEYR, 'female': (j.RIAGENDR == 2).astype(float),
-        'kcal': np.log1p(j.DR1TKCAL), 'pir': j.INDFMPIR.fillna(j.INDFMPIR.median())})
+        'kcal': np.log1p(j.DR1TKCAL), 'pir': j.INDFMPIR.fillna(j.INDFMPIR.median())},
+        index=j.index)
+    for c in cycles[1:]:                      # 주기 고정효과 (첫 주기가 기준)
+        cov[f'cyc{c.strip()}'] = (j.cycle == c.strip()).astype(float).values
     rows = []
     for var, kegg in NUT2KEGG.items():
         if var not in j:
