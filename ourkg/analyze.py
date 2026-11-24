@@ -166,6 +166,48 @@ def serving_grams(foods):
 
 
 def recommend(e_mode=None, path=None, save=True):
+    """(앞부분은 아래 docstring 참조)"""
+    # --- 순위 앙상블 (기본 경로, RESULTS §25) ---------------------------------
+    # `E` 를 **한 벡터에** 합치면(§22 union) 의미가 다른 값이 섞여 비추천군
+    # sd 가 1.96 -> 6.91 이 된다. 각 `E` 로 끝까지 점수를 낸 뒤 **백분위 순위**
+    # 를 평균하면 그 이질성이 사라진다 — sd 3.18 로 절반이 준다.
+    #
+    # 여기서 한 번 가로채고 각 모드를 _ENS_CHILD 로 재귀 호출한다. 그래야
+    # 쓸기·부트스트랩·평가가 전부 앙상블을 쓴다.
+    _ens = os.environ.get('ENSEMBLE', 'shrunk,nhanes_all')
+    if _ens and _ens != 'none' and not os.environ.get('_ENS_CHILD') and not e_mode:
+        modes = [m.strip() for m in _ens.split(',') if m.strip()]
+        print(f'[앙상블] {" + ".join(modes)} — 각각 끝까지 돌려 백분위 순위를 평균한다')
+        os.environ['_ENS_CHILD'] = '1'
+        try:
+            parts, meta = {}, None
+            for m in modes:
+                r = recommend(e_mode=m, path=path, save=False)
+                parts[m] = r.set_index('food_key')['score'].rank(pct=True)
+                if meta is None:
+                    meta = r.set_index('food_key')[['food_name', 'food_group',
+                                                    'n_compound', 'data_type']]
+        finally:
+            os.environ.pop('_ENS_CHILD', None)
+        R = pd.DataFrame(parts).dropna()
+        res = meta.loc[R.index].copy()
+        res['score'] = R.mean(axis=1)
+        for m in modes:
+            res[f'pct_{m}'] = R[m]
+        res = res.sort_values('score', ascending=False).reset_index()
+        res.insert(0, 'rank', res.index + 1)
+        if len(modes) == 2:
+            print(f'  두 순위의 Spearman rho = '
+                  f'{R.corr(method="spearman").values[0, 1]:.3f} '
+                  f'(낮을수록 상보적이다)')
+        if save:
+            res.to_csv(os.path.join(OUT, 'recommendation.csv'), index=False)
+            print(f'\n저장: {os.path.join(OUT, "recommendation.csv")}')
+        return res
+    return _recommend_one(e_mode=e_mode, path=path, save=save)
+
+
+def _recommend_one(e_mode=None, path=None, save=True):
     """05 — 논문 Algorithm 1 을 우리 KG 에 적용 (depression).
 
     §4.2.1  D = E x F^T

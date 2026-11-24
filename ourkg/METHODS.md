@@ -116,7 +116,8 @@ P = D × S           Threshold & Top K        (식 2)
 
 | 설정 | 기본값 | 근거 |
 |---|---|---|
-| `E_MODE` | **`union_all`** | ProMENDA `shrunk` 66 열 + NHANES 섭취-결과 `E` 로 빈 칸 18 개(미네랄·카로티노이드). 겹치면 ProMENDA 우선. **수치가 아니라 Top-K 목록을 보고 고른 것** ([`RESULTS.md`](RESULTS.md) §24). `shrunk` 로 되돌아간다 |
+| `ENSEMBLE` | **`shrunk,nhanes_all`** | **순위 앙상블이 기본 경로다.** 각 `E` 로 끝까지 점수를 내고 **백분위 순위를 평균**한다. 한 벡터에 합치면(§22) 의미가 다른 값이 섞여 불안정해진다 — 순위로 합치면 비추천군 sd 가 6.91 → 3.18 이다. 두 순위의 ρ=0.188 로 거의 독립이다 ([`RESULTS.md`](RESULTS.md) §25). `none` 으로 끈다 |
+| `E_MODE` | `union_all` | 앙상블을 끄면 쓰이는 단일 `E`. ProMENDA 66 열 + NHANES 로 빈 칸 18 개 (§24) |
 | `F_COLUMNS` | `linked` | 논문 §4.2.1 의 `F` 제한에 대응 |
 | `PCA_COMPONENTS` | `0` | 논문은 5 를 명시하지만, `F` 제한과 함께 켜면 Top 30 이 무너진다 ([`RESULTS.md`](RESULTS.md) §13) |
 | `SIM_NORM` | `none` | 논문 식 (2) 그대로. 공식 코드의 `colsum` 나눗셈은 성분 적은 음식의 점수를 폭발시킨다 |
