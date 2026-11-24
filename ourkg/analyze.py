@@ -242,7 +242,10 @@ def recommend(e_mode=None, path=None, save=True):
     #
     # 여기서 한 번 가로채고 각 모드를 _ENS_CHILD 로 재귀 호출한다. 그래야
     # 쓸기·부트스트랩·평가가 전부 앙상블을 쓴다.
-    _ens = os.environ.get('ENSEMBLE', 'shrunk,nhanes_all')
+    # **기본값은 꺼져 있다** (2026-11-24, RESULTS §27). §25 에서 켰다가
+    # Top-K 오류 지표(§27)로 재니 6/30 으로 가장 나빴다 — 캐러멜 딥은 사라졌지만
+    # 시럽 통조림 4 개와 과일펀치가 들어왔다. `shrunk,nhanes_all` 로 켠다.
+    _ens = os.environ.get('ENSEMBLE', 'none')
     if _ens and _ens != 'none' and not os.environ.get('_ENS_CHILD') and not e_mode:
         modes = [m.strip() for m in _ens.split(',') if m.strip()]
         print(f'[앙상블] {" + ".join(modes)} — 각각 끝까지 돌려 백분위 순위를 평균한다')
@@ -402,11 +405,12 @@ def _recommend_one(e_mode=None, path=None, save=True):
     #   E_MODE=sig       BH q<0.05 인 compound 만 ±1
     #   E_MODE=weighted  네 근거의 가중 합의 (build.py evidence)
     #   E_MODE=priority  우선순위 첫 비영 값 (build.py evidence)
-    # 기본값은 **union_all** 이다 (2026-11-24, RESULTS §24).
-    # ProMENDA 비영 66 열에 NHANES 섭취-결과 E 로 빈 칸 18 개를 메운 것 —
-    # 미네랄·카로티노이드 축이 들어온다. 겹치는 곳은 ProMENDA 우선.
-    # `shrunk` 로 되돌리면 2026-11-24 이전 동작이다.
-    E_MODE = e_mode or os.environ.get('E_MODE', 'union_all')
+    # 기본값은 **shrunk** 다 (RESULTS §27 에서 되돌렸다).
+    # §24 에서 `union_all`, §25 에서 앙상블로 바꿨는데 **둘 다 목록을 눈으로 보고
+    # 내린 판단**이었고, 그 판단을 규칙으로 적어 재니(§27) 둘 다 원래보다
+    # 나빴다 — 앙상블 6/30 · union_all 1/30 · shrunk 1/30 이고 shrunk 가
+    # 안정성(비추천군 sd 1.96 vs 6.91)과 바닥 품질에서 앞선다.
+    E_MODE = e_mode or os.environ.get('E_MODE', 'shrunk')
     col = resolve_e(E_MODE, E_df)
     e = np.array([col.get(c, 0.0) for c in compounds], dtype=float)
     # 특정 compound 의 E 를 0 으로 둔다 (진단용).
