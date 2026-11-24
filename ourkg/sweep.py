@@ -59,6 +59,16 @@ def _simthr():
 
 
 SWEEPS = {
+    # §21 — 지도학습 점수를 직접 쓰면. E 를 거치는 경로와 비교.
+    'learned': ('learned_comparison.csv',
+                [(lab, {'E_MODE': em, 'NO_SIM': ns, 'SIM_SPACE': 'composition',
+                        'SIM_SIGN': 'none', 'SIM_THRESHOLD': 'none',
+                        'GUTBRAIN_ALPHA': '0', 'E_ZERO': '', 'DEDUP': 'none',
+                        'F_SCALE': 'per100g'})
+                 for lab, em, ns in (('현행 shrunk x S', 'shrunk', '0'),
+                                     ('learned x S', 'learned', '0'),
+                                     ('learned 단독(=지도학습 점수)', 'learned', '1'),
+                                     ('shrunk 단독', 'shrunk', '1'))]),
     # §19 — 중복 변종을 묶으면. 두 기준 x 두 E 모드.
     'dedup': ('dedup_comparison.csv',
               [(f'{dd}/{em}', {'DEDUP': dd, 'E_MODE': em, 'SIM_SPACE': 'composition',
