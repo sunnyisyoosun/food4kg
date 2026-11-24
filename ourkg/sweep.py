@@ -32,6 +32,12 @@ REC = {'Finfish and Shellfish Products', 'Fruits and Fruit Juices',
        'Vegetables and Vegetable Products'}
 NOT = {'Sausages and Luncheon Meats', 'Baked Products', 'Sweets',
        'Beef Products', 'Pork Products'}
+# **두 기준이 엇갈리는 음식.** 논문 §4.2.3 은 `Beef/Pork Products` 를 통째로
+# 비추천으로 보는데 ModiMedDiet 은 **살코기 적색육을 주 3-4 회 처방**한다.
+# 코호트에 500 개(비추천 군의 14%)가 있고, 설정에 따라 바닥을 메운다 —
+# `union_all` 은 비추천군 28 중 **25 개가 이것**이었다(§29).
+# 어느 쪽이 맞다고 정하지 않고 **개수를 함께 낸다.**
+LEAN = r'separable lean only'
 
 # 이름: (출력 파일, [(라벨, {환경변수}), ...]).  RESULTS 의 해당 절을 함께 적는다.
 def _gutbrain():
@@ -189,6 +195,8 @@ def run(name):
             # `bot30_extras`(ModiMedDiet 가 제한하는 군)를 **나란히** 둔다.
             # 어느 쪽을 셀지 우리가 정하지 않기 위해서다.
             'bot30_비추천군': int(bot.food_group.isin(NOT).sum()),
+            'bot30_충돌(살코기)': int((bot.food_group.isin(NOT) & bot.food_name.astype(str)
+                                      .str.contains(LEAN, case=False, regex=True)).sum()),
             'bot30_extras(외부)': sc.get('bot30_extras'),
             'top30_위반': int(top.food_group.isin(NOT).sum()),
             # 참고 — 폭 16 으로 흔들린다. 차이 5 이하는 읽지 않는다
