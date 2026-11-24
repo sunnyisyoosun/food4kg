@@ -612,7 +612,7 @@ Disbiome 의 `disease_name` 은 MedDRA 계열 자유 표기라 그대로는 MeSH
   `cache/gmm/<코호트>/` · `ourkg/metabolome_check.py build`
 - **왜 이것인가**: KEGG 는 "유전체에 효소가 있다" 는 **추론**이고 VMH 는
   **예측**이다. 둘 다 실제 장내 대사량이 아니고, 측정된 분변 대사체와 무관함이
-  확인됐다([`RESULTS.md`](RESULTS.md) §15b 검정 ④). 이쪽은 **관측**이다.
+  확인됐다([`RESULTS.md`](RESULTS.md) §15c 검정 ④). 이쪽은 **관측**이다.
 - **규모**: 13 코호트 · 268 만 쌍 → BH q<0.05 437,149 → **2 개 이상 코호트에서
   같은 부호로 재현 39,574** (속 1,859 · compound 315).
   우리 taxid 로 펼치면 7,052 쌍 · 균 298 · compound 252.

@@ -142,7 +142,7 @@ SWEEPS = {
                                        ('all+auto(기각)', 'all', 'auto'))]),
     # §15b·§15c — 미생물 매개 가중. 균 집합 x 링크 출처 x 세기.
     'gutbrain': ('gutbrain_comparison.csv', None),
-    # §15b 검정 ⑧ — 에탄올·설탕의 E 를 0 으로 두면 무엇이 바뀌나.
+    # §15c 검정 ⑧ — 에탄올·설탕의 E 를 0 으로 두면 무엇이 바뀌나.
     'ezero': ('ezero_comparison.csv', None),
     # §15e — F 를 1 회 섭취량 기준으로. E 소스와 교차해서 본다.
     'fscale': ('fscale_comparison.csv',
@@ -159,7 +159,7 @@ SWEEPS = {
 
 
 def _ezero():
-    """에탄올·설탕의 E 를 0 으로 두면 무엇이 바뀌나 (RESULTS §15b 검정 ⑧).
+    """에탄올·설탕의 E 를 0 으로 두면 무엇이 바뀌나 (RESULTS §15c 검정 ⑧).
 
     유사도 평활화가 이 오류를 덮고 있다는 진단을 검증한다 — 덮고 있다면
     기본(`none`)에서는 거의 안 바뀌고 희소화(`topn:100`)에서는 크게 바뀐다.

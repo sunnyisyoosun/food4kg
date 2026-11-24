@@ -416,7 +416,7 @@ def _recommend_one(e_mode=None, path=None, save=True):
     col = resolve_e(E_MODE, E_df)
     e = np.array([col.get(c, 0.0) for c in compounds], dtype=float)
     # 특정 compound 의 E 를 0 으로 둔다 (진단용).
-    # §15b 검정 ⑦ 에서 에탄올(C00469 e=+0.200)·설탕(C00089 e=+0.259)이 양수인
+    # §15c 검정 ⑦ 에서 에탄올(C00469 e=+0.200)·설탕(C00089 e=+0.259)이 양수인
     # 것이 드러났다. ProMENDA 의 up/down 은 "우울증 환자에서 이 대사물이 높다"
     # 이지 "먹으면 좋다" 가 아니다(§9) — 그 불일치가 F 열에 남은 자리다.
     # 유사도 평활화가 덮고 있을 뿐이라, 영향 크기를 재려고 둔다.
@@ -2402,7 +2402,7 @@ def groups():
 def emicrobe():
     """미생물 경로에서 **독립된 E** 를 유도해 ProMENDA 의 E 와 대조한다.
 
-    §15b 에서 미생물 매개 가중이 안 먹히는 이유를 **구조**로 진단했다 —
+    §15c 에서 미생물 매개 가중이 안 먹히는 이유를 **구조**로 진단했다 —
     `P = D x S` 에서 `S` 가 99.3% 꽉 차 있어 `D` 의 compound 별 변조가 평균에
     묻힌다(ALPHA 를 9 배로 걸어도 순위상관 0.99).
 

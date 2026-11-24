@@ -23,8 +23,8 @@ BUILD = ['food', 'form', 'promenda', 'evidence', 'microbe', 'kg']
 ANALYZE = ['recommend', 'compare', 'external', 'invert', 'stype',
            'pathcheck', 'groups', 'evaluate']
 # 외부 자로 재는 단계. 네트워크를 쓰고 캐시가 비면 오래 걸린다.
-VERIFY = {'probiotic': ('probiotic_rct.py', ['test']),     # RESULTS §15b 검정 ①②
-          'metabolome': ('metabolome_check.py', []),        # RESULTS §15b 검정 ④
+VERIFY = {'probiotic': ('probiotic_rct.py', ['test']),     # RESULTS §15c 검정 ①②
+          'metabolome': ('metabolome_check.py', []),        # RESULTS §15c 검정 ④
           'nhanes': ('nhanes.py', []),                      # RESULTS §15d
           'diet_iv': ('diet_intervention.py', []),          # RESULTS §33 (중재로 E 검정)
           'e_autism': ('e_autism.py', []),                  # RESULTS §34 (검정력 반론)

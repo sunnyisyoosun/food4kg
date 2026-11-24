@@ -148,7 +148,7 @@ def _pairs(cohort, min_prev=0.5):
 def build_links(q_max=0.05, min_cohorts=2):
     """측정 상관으로 compound-미생물 링크를 만든다 -> out/compound_microbe_measured.csv
 
-    §15b 검정 ④ 에서 우리 예측 링크(KEGG 추론 · VMH 예측)가 측정된 분변
+    §15c 검정 ④ 에서 우리 예측 링크(KEGG 추론 · VMH 예측)가 측정된 분변
     대사체와 **무관함**이 드러났다. 측정에서 직접 만든다.
 
     **재현성을 요구한다.** 한 코호트 안에서는 다중검정으로 상관이 쉽게 나온다

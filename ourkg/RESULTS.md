@@ -4463,7 +4463,7 @@ Health 인 행만** "질환에서 증가/감소" 로 읽을 수 있다. 나머�
 `emicrobe` 에 넣었다: **q<0.05 가 0/20**. 코드가 그 줄을 직접 출력한다.
 
 > **판정**: 미생물 축의 데이터를 1.6 배로 늘리고 질환 식별을 개선했는데도
-> E 를 유도할 방향 신호는 **없다**. §15b 에서 구조 진단(`S` 가 99.3% 꽉 차
+> E 를 유도할 방향 신호는 **없다**. §15c 에서 구조 진단(`S` 가 99.3% 꽉 차
 > `D` 의 변조가 묻힌다)으로 기각했던 미생물 매개 가중은, 이제 **구조와 무관하게
 > 재료 쪽에도 신호가 없다**는 것으로 두 번 기각된다. 데이터를 더 모아서
 > 풀 문제가 아니다.
@@ -4798,11 +4798,11 @@ microbe_disease_direction()` 이 쌍마다 판정하고 `kg()` 이 그 결과만
 | `out/gutbrain_comparison.csv` | **미생물 매개 가중** `ALPHA` 쓸기 (§15c) |
 | `out/modimed_rho_comparison.csv` | **빈도 가중 순위 상관** vs Top-K (§13b) |
 | `setup/probiotic_rct.csv` | **외부 정답표** — 우울/불안 RCT 에서 시험된 균 25 종 |
-| `out/metabolome_check_*.csv` | **측정 분변 대사체** vs 우리 예측 링크 (§15b 검정 ④) |
-| `out/compound_microbe_measured.csv` | **측정 상관 링크** 39,574 — 13 코호트 재현 (§15b 검정 ⑤) |
-| `out/e_microbe.csv`, `out/e_microbe_compare.csv` | **미생물 경로에서 유도한 E** 와 ProMENDA 대조 (§15b 검정 ⑥) |
-| `out/simthr_comparison.csv` | **유사도 희소화** 쓸기 (§15b 검정 ⑦) |
-| `out/ezero_comparison.csv` | **에탄올·설탕 제거** 영향 (§15b 검정 ⑧) |
+| `out/metabolome_check_*.csv` | **측정 분변 대사체** vs 우리 예측 링크 (§15c 검정 ④) |
+| `out/compound_microbe_measured.csv` | **측정 상관 링크** 39,574 — 13 코호트 재현 (§15c 검정 ⑤) |
+| `out/e_microbe.csv`, `out/e_microbe_compare.csv` | **미생물 경로에서 유도한 E** 와 ProMENDA 대조 (§15c 검정 ⑥) |
+| `out/simthr_comparison.csv` | **유사도 희소화** 쓸기 (§15c 검정 ⑦) |
+| `out/ezero_comparison.csv` | **에탄올·설탕 제거** 영향 (§15c 검정 ⑧) |
 | `out/compound_depression_nhanes.csv` | **NHANES 섭취-결과 E** (§15d) |
 | `out/emode_comparison.csv` | E 소스 다섯 비교 (§15d) |
 | `out/fscale_comparison.csv` | **서빙 기준 F** x E 소스 (§15e) |
