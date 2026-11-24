@@ -59,6 +59,14 @@ def _simthr():
 
 
 SWEEPS = {
+    # §19 — 중복 변종을 묶으면. 두 기준 x 두 E 모드.
+    'dedup': ('dedup_comparison.csv',
+              [(f'{dd}/{em}', {'DEDUP': dd, 'E_MODE': em, 'SIM_SPACE': 'composition',
+                               'NO_SIM': '0', 'SIM_SIGN': 'none',
+                               'SIM_THRESHOLD': 'none', 'GUTBRAIN_ALPHA': '0',
+                               'E_ZERO': '', 'F_SCALE': 'per100g'})
+               for dd in ('none', 'composition', 'name2')
+               for em in ('shrunk',)]),
     # §17e — 나쁜 음식의 기여를 0 이하로 묶으면. E 모드 x 유사도 공간과 교차.
     'simsign': ('simsign_comparison.csv',
                 [(f'{sg}/{sp}/{em}', {'SIM_SIGN': sg, 'SIM_SPACE': sp, 'E_MODE': em,

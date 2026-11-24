@@ -241,6 +241,42 @@ def recommend(e_mode=None, path=None, save=True):
     #
     # 복원추출 대신 **비복원 부분표집**을 쓴다. 복원추출은 같은 음식이 여러 번
     # 뽑혀 Top-K 칸을 중복 점유하므로 순위 문제에서 지표가 부풀려진다.
+    # 중복 변종 병합. §17 에서 추천군이 폭 16 으로 흔들리는 원인이
+    # "오렌지주스 4 종" 처럼 **거의 같은 음식의 변종**이 Top-K 칸을 나눠
+    # 점유하는 것이었다(§17b). 묶으면 흔들림이 줄어든다.
+    #
+    #   none         안 묶는다 (기본, 논문은 135 개 큐레이션 목록을 쓴다)
+    #   composition  **성분 구성이 같은 것**을 묶는다(소수 3 자리). 탄산음료·
+    #                증류주처럼 측정 성분이 거의 없어 알고리즘이 구별하지 못하는
+    #                음식들이 묶인다. 12,420 -> 11,158.
+    #   name2        이름 앞 두 구간이 같은 것을 묶는다. `orange juice, 100%`
+    #                7 종이 하나가 된다 — 노린 것은 이쪽이다. 다만 `pork, fresh`
+    #                194 개도 묶여 12,513 -> 5,957 로 절반이 준다.
+    #
+    # 대표는 **그 군에서 측정 compound 가 가장 많은 것**을 쓴다. 평균을 내면
+    # 존재하지 않는 음식을 만들게 되고, 첫 번째를 쓰면 정렬 순서에 의존한다.
+    DEDUP = os.environ.get('DEDUP', 'none')
+    if DEDUP != 'none':
+        _n0 = len(foods)
+        if DEDUP == 'name2':
+            key = (foods['food_name'].astype(str).str.lower()
+                   .str.split(',').str[:2].str.join(',').str.strip())
+        elif DEDUP == 'composition':
+            _w = (long[long.food_key.isin(set(foods.index))]
+                  .pivot_table(index='food_key', columns='kegg', values='amount_g',
+                               fill_value=0.0).reindex(foods.index).fillna(0.0))
+            _mx = _w.max(axis=0).replace(0, 1.0)
+            key = pd.Series([tuple(r) for r in (_w / _mx).round(3).values],
+                            index=foods.index)
+        else:
+            sys.exit(f'DEDUP 은 none|composition|name2. 받은 값: {DEDUP}')
+        rep = (foods.assign(_k=key.values)
+               .sort_values('n_compound', ascending=False)
+               .drop_duplicates('_k').index)
+        foods = foods.loc[foods.index.isin(set(rep))]
+        long = long[long['food_key'].isin(set(foods.index))]
+        print(f'  DEDUP={DEDUP} — 음식 {_n0:,} -> {len(foods):,}')
+
     _bf = float(os.environ.get('BOOT_FRAC', '0'))
     if _bf:
         foods = foods.sample(frac=_bf, random_state=int(os.environ.get('BOOT_SEED', '0')))

@@ -71,12 +71,16 @@ def run(configs, R=None, frac=None):
 # 이름 붙인 후보 — 기본값을 바꿀지 판단할 때 쓴다 (RESULTS §17f)
 BASE = {'SIM_THRESHOLD': 'none', 'GUTBRAIN_ALPHA': '0', 'E_ZERO': '',
         'F_SCALE': 'per100g', 'F_COLUMNS': 'linked', 'PCA_COMPONENTS': '0',
-        'NO_SIM': '0', 'SIM_SIGN': 'none'}
+        'NO_SIM': '0', 'SIM_SIGN': 'none', 'DEDUP': 'none'}
 CANDIDATES = {
     '현행': {'E_MODE': 'shrunk', 'SIM_SPACE': 'composition'},
     'effect+nhanes': {'E_MODE': 'nhanes_all', 'SIM_SPACE': 'effect'},
     'effect+shrunk': {'E_MODE': 'shrunk', 'SIM_SPACE': 'effect'},
     'comp+nhanes': {'E_MODE': 'nhanes_all', 'SIM_SPACE': 'composition'},
+    'dedup-comp': {'E_MODE': 'shrunk', 'SIM_SPACE': 'composition',
+                   'DEDUP': 'composition'},
+    'dedup-name2': {'E_MODE': 'shrunk', 'SIM_SPACE': 'composition',
+                    'DEDUP': 'name2'},
 }
 
 
