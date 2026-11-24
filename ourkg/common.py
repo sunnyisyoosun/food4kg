@@ -423,6 +423,25 @@ def gutmdisorder_intervention(session=None):
     return pd.DataFrame(rows)
 
 
+def measured_links():
+    """측정 상관 링크(`metabolome_check.py build`)를 taxid 로 펼친다.
+
+    원 표는 **속 수준**이다(분변 대사체 코호트가 속까지만 분해한다). 우리
+    taxid 의 속명과 맞춰 펼친다. analyze.py 에만 있던 것을 두 모듈이 쓰게
+    되면서 여기로 옮겼다 — compound_microbe 와 같은 자리에 둔다.
+    """
+    import pandas as pd
+    p = os.path.join(OUT, 'compound_microbe_measured.csv')
+    if not os.path.exists(p):
+        return pd.DataFrame(columns=['taxid', 'kegg'])
+    m = pd.read_csv(p)
+    mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'),
+                      dtype={'taxid': str}).fillna('')
+    mic['genus'] = mic['name'].astype(str).str.split().str[0]
+    return m.merge(mic[['taxid', 'genus']], on='genus')[['taxid', 'kegg']
+                                                        ].drop_duplicates()
+
+
 def microbe_disease_direction():
     """(균, 질환) 쌍마다 **방향을 믿을 수 있는지** 판정해서 돌려준다.
 

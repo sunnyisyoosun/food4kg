@@ -28,7 +28,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'eval'))
 from common import (OUT, BASE, CACHE, compound_microbe,
-                    microbe_disease_direction)
+                    microbe_disease_direction,
+                    measured_links as _measured_links)
 
 
 def mental_taxids():
@@ -2500,17 +2501,6 @@ def emicrobe():
     print(f'  BH 보정 후 q<0.05 {int((t.get("q", pd.Series(dtype=float)) < 0.05).sum())}'
           f'/{len(t)} — 보정 없이 집은 p 는 근거가 아니다.')
     return t
-
-
-def _measured_links():
-    """측정 상관 링크를 taxid 로 펼친 것 (metabolome_check.py build)."""
-    p = os.path.join(OUT, 'compound_microbe_measured.csv')
-    if not os.path.exists(p):
-        return pd.DataFrame(columns=['taxid', 'kegg'])
-    m = pd.read_csv(p)
-    mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str}).fillna('')
-    mic['genus'] = mic['name'].astype(str).str.split().str[0]
-    return m.merge(mic[['taxid', 'genus']], on='genus')[['taxid', 'kegg']].drop_duplicates()
 
 
 STEPS = {'recommend': recommend, 'compare': compare, 'external': external,
