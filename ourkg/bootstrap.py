@@ -81,6 +81,8 @@ CANDIDATES = {
                    'DEDUP': 'composition'},
     'dedup-name2': {'E_MODE': 'shrunk', 'SIM_SPACE': 'composition',
                     'DEDUP': 'name2'},
+    'learned-name2': {'E_MODE': 'learned', 'SIM_SPACE': 'composition',
+                      'DEDUP': 'name2'},
 }
 
 

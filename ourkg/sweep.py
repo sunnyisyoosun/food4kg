@@ -69,6 +69,14 @@ SWEEPS = {
                                      ('learned x S', 'learned', '0'),
                                      ('learned 단독(=지도학습 점수)', 'learned', '1'),
                                      ('shrunk 단독', 'shrunk', '1'))]),
+    # §21b — learned x S 에서 중복 변종을 묶으면 위반이 줄어드나.
+    'learned_dedup': ('learned_dedup_comparison.csv',
+                      [(f'{em}/{dd}', {'E_MODE': em, 'DEDUP': dd, 'NO_SIM': '0',
+                                       'SIM_SPACE': 'composition', 'SIM_SIGN': 'none',
+                                       'SIM_THRESHOLD': 'none', 'GUTBRAIN_ALPHA': '0',
+                                       'E_ZERO': '', 'F_SCALE': 'per100g'})
+                       for em in ('shrunk', 'learned')
+                       for dd in ('none', 'composition', 'name2')]),
     # §19 — 중복 변종을 묶으면. 두 기준 x 두 E 모드.
     'dedup': ('dedup_comparison.csv',
               [(f'{dd}/{em}', {'DEDUP': dd, 'E_MODE': em, 'SIM_SPACE': 'composition',
