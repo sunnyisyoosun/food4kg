@@ -401,9 +401,15 @@ def check_hooks():
     if not os.path.exists(hook):
         return _say('SKIP', '커밋 훅', 'hooks/pre-commit 이 없다')
     bad = []
+    # **`cwd` 만으로는 부족하다.** `git commit` 은 GIT_DIR·GIT_WORK_TREE 를
+    # 환경에 내보내고 그게 cwd 를 이긴다 — 훅 안에서 이 검사를 돌리면 BASE 가
+    # 아니라 *훅을 띄운* 레포의 설정을 읽는다. 실제 레포에서는 우연히 같은 답이
+    # 나와 안 보였고, 임시 레포로 보는 메타 시험이 커밋 때만 깨져서 드러났다.
+    env = {k: v for k, v in os.environ.items() if not k.startswith('GIT_')}
     try:
         got = subprocess.run(['git', 'config', '--get', 'core.hooksPath'],
-                             cwd=BASE, capture_output=True, text=True).stdout.strip()
+                             cwd=BASE, env=env,
+                             capture_output=True, text=True).stdout.strip()
     except Exception as e:                       # git 이 없는 환경
         return _say('SKIP', '커밋 훅', f'git 을 못 불렀다: {e}')
     if got != 'hooks':
@@ -518,6 +524,14 @@ def facts():
         out['links.vmh_compounds'] = f'{v.kegg.nunique():,}'
     if os.path.exists(g('compound_microbe_measured.csv')):
         out['links.measured'] = f'{len(pd.read_csv(g("compound_microbe_measured.csv"))):,}'
+    if os.path.exists(g('power_bound.csv')):
+        pw = pd.read_csv(g('power_bound.csv'))
+        bh = [c for c in pw.columns if c.startswith('최소검출효과(BH')][0]
+        tight = pw.loc[pw[bh].idxmin()]
+        out['power.rows'] = str(len(pw))
+        out['power.n'] = f'{int(tight.n):,}'
+        out['power.mdes'] = f'{tight[bh]:.3f}'
+        out['power.over'] = str(int(pw['≥경계라면 잡혔다'].sum()))
     if os.path.exists(g('foods.csv')):
         f = pd.read_csv(g('foods.csv'))
         out['foods.count'] = f'{len(f):,}'
@@ -599,7 +613,7 @@ DOCS_EXCLUDED = ('RESULTS.md',)
 # 세 번 당했다 — 처음 `[a-z_.]+` 는 대변자를(`chk:F.compounds`), 그 다은
 # `[A-Za-z_.]+` 는 숫자를(`chk:repro.t5_diet`) 못 봤다. 틀린 이름은
 # "모르는 앨커" 로 잡힐니 클래스를 정교하게 만드는 것이 아니다.
-_ANCHOR = re.compile(r'([0-9][0-9,]*)\**<!--\s*chk:([^\s>]+?)\s*-->')
+_ANCHOR = re.compile(r'([0-9][0-9,]*(?:\.[0-9]+)?)\**<!--\s*chk:([^\s>]+?)\s*-->')
 # **형식이 안 맞는 앵커를 조용히 넘기지 않는다.** 처음 판은 이름을 `[a-z_.]+` 로
 # 받아 `chk:F.compounds` · `chk:E.nonzero` 같은 대문자 앵커를 **아예 못 봤다**.
 # 그런데도 "앵커 15 개 통과" 라고 보고했다 — 검사가 있는 척만 한 것이다.

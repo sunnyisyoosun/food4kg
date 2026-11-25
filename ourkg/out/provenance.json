@@ -28,6 +28,11 @@
   "argv": "complication.py",
   "env": {}
  },
+ "complication_literature_curated.csv": {
+  "at": "2026-11-25 17:06:13",
+  "argv": "complication.py literature",
+  "env": {}
+ },
  "complication_paper_eval.csv": {
   "at": "2026-11-25 16:56:36",
   "argv": "complication.py",
@@ -59,8 +64,8 @@
   "env": {}
  },
  "compound_autism.csv": {
-  "at": "2026-11-25 14:43:24",
-  "argv": "e_autism.py",
+  "at": "2026-11-25 17:06:13",
+  "argv": "complication.py literature",
   "env": {}
  },
  "compound_class.csv": {
@@ -151,12 +156,9 @@
   "env": {}
  },
  "e_autism_microbe.csv": {
-  "at": "2026-11-25 15:21:33",
-  "argv": "bootstrap.py",
-  "env": {
-   "E_MODE": "union_all",
-   "NO_SIM": "0"
-  }
+  "at": "2026-11-25 17:06:13",
+  "argv": "complication.py literature",
+  "env": {}
  },
  "e_microbe.csv": {
   "at": "2026-11-25 13:19:16",
@@ -401,6 +403,11 @@
  "ourkg.nt": {
   "at": "2026-11-25 14:35:42",
   "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "power_bound.csv": {
+  "at": "2026-11-25 17:06:28",
+  "argv": "-c",
   "env": {}
  },
  "promenda_records.csv": {

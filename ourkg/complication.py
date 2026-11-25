@@ -224,6 +224,117 @@ def paper_eval(source='curated'):
     return pd.DataFrame(rows), source
 
 
+# ----------------------------------------------------------------------
+# 문헌 점검 — **쌍마다 판정하지 않고 분포를 비교한다.**
+#
+# `curated` 에서 통과 못 한 336 쌍이 -1 후보다. 그 336 개를 PubMed 로 하나씩
+# 판정하려 하면 안 된다. 두 가지 이유다.
+#   ① 질환 쌍의 공출현은 **연구량에 좌우된다.** `Anxiety AND depression` 은
+#      19 만 건인데 그건 "두 주제가 함께 연구된다" 는 뜻이고 동반이환의 크기가
+#      아니다 (§4.3 에서 같은 이유로 색인 2 항 공출현을 버렸다).
+#   ② 논문이 없는 것은 **관계가 없다는 뜻이 아니다** (§41 ①과 같은 오류).
+#
+# 그래서 **lift** 를 쓴다 — 우리 초기하수 검정과 같은 모양이다.
+#     lift = 관측 공출현 / 기대 공출현,  기대 = n_A * n_B / N
+# 그리고 336 개를 개별 판정하는 대신 **통과군 129 vs 비통과군 336 의 lift 분포**를
+# 비교한다. 우리 q 가 신호를 담고 있으면 통과군의 lift 가 높아야 한다.
+# 대조가 없으면 아무것도 말할 수 없으므로 **465 쌍 전부**를 본다.
+EUTILS = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
+PUBMED_N = 38_000_000      # PubMed 전체 규모(근사). lift 의 분모 상수다.
+
+
+def _mesh_term(descriptor, session):
+    """MeSH descriptor id -> 정식 용어 (PubMed `[MeSH Terms]` 에 쓴다).
+
+    소스 라벨은 자유 표기라 그대로 질의하면 어긋난다 (`Parkinson's Disease` vs
+    MeSH `Parkinson Disease`). id 에서 정식 용어를 받아 쓴다.
+    """
+    import json
+    from common import cached_get
+    txt = cached_get(f'mesh_term_{descriptor}.json', lambda: session.get(
+        f'https://id.nlm.nih.gov/mesh/lookup/details?descriptor={descriptor}',
+        timeout=60).text)
+    d = json.loads(txt)
+    for t in d.get('terms', []):
+        if t.get('preferred'):
+            return t['label']
+    return None
+
+
+def _pubmed_count(query, session):
+    import json
+    import time
+    from common import cached_get
+    key = 'pubmed_' + ''.join(c if c.isalnum() else '_' for c in query)[:120] + '.json'
+
+    def fetch():
+        time.sleep(0.35)                       # NCBI 레이트 리밋
+        r = session.get(EUTILS, params={'db': 'pubmed', 'term': query,
+                                        'rettype': 'count', 'retmode': 'json'},
+                        timeout=60)
+        r.raise_for_status()
+        return r.text
+    try:
+        return int(json.loads(cached_get(key, fetch))['esearchresult']['count'])
+    except Exception:
+        return None
+
+
+def literature(source='curated'):
+    """통과군 vs 비통과군의 **PubMed lift 분포**를 비교한다."""
+    import requests
+    from scipy.stats import mannwhitneyu
+    S = requests.Session()
+    S.headers.update({'User-Agent': 'ourkg/1.0 (food4health reconstruction)'})
+    p = os.path.join(OUT, f'complication_hypergeom_{source}.csv')
+    if not os.path.exists(p):
+        sys.exit(f'{os.path.basename(p)} 가 없다. python3 ourkg/complication.py')
+    h = pd.read_csv(p)
+    mids = sorted({k.rsplit('[', 1)[-1].rstrip(']')
+                   for k in set(h.a) | set(h.b)})
+    term, n1 = {}, {}
+    for i, m in enumerate(mids, 1):
+        t = _mesh_term(m, S)
+        if not t:
+            continue
+        term[m] = t
+        n1[m] = _pubmed_count(f'"{t}"[MeSH Terms]', S)
+        print(f'\r  질환 {i}/{len(mids)}  {t[:40]:42s}', end='', flush=True)
+    print()
+    rows = []
+    for i, r in enumerate(h.itertuples(index=False), 1):
+        am = r.a.rsplit('[', 1)[-1].rstrip(']')
+        bm = r.b.rsplit('[', 1)[-1].rstrip(']')
+        if am not in term or bm not in term or not n1.get(am) or not n1.get(bm):
+            continue
+        both = _pubmed_count(f'"{term[am]}"[MeSH Terms] AND "{term[bm]}"[MeSH Terms]', S)
+        if both is None:
+            continue
+        exp = n1[am] * n1[bm] / PUBMED_N
+        rows.append({'a': r.a, 'b': r.b, 'q': r.q, '통과': bool(r.q < 0.05),
+                     'n_a': n1[am], 'n_b': n1[bm], '공출현': both,
+                     '기대': round(exp, 1),
+                     'lift': round(both / exp, 2) if exp > 0 else None})
+        print(f'\r  쌍 {i}/{len(h)}', end='', flush=True)
+    print()
+    t = pd.DataFrame(rows)
+    t.to_csv(os.path.join(OUT, f'complication_literature_{source}.csv'), index=False)
+    ok = t[t['통과']].lift.dropna()
+    no = t[~t['통과']].lift.dropna()
+    print(f'\n  쌍 {len(t)} (통과 {len(ok)} · 비통과 {len(no)})'
+          f'  -> out/complication_literature_{source}.csv')
+    if len(ok) < 5 or len(no) < 5:
+        print('  한쪽이 너무 적어 비교하지 않는다.')
+        return t
+    u = mannwhitneyu(ok, no, alternative='greater')
+    auc = u.statistic / (len(ok) * len(no))
+    print(f'  lift 중앙값 — 통과 {ok.median():.1f} / 비통과 {no.median():.1f}')
+    print(f'  Mann-Whitney (통과 > 비통과)  AUC {auc:.3f}  p {u.pvalue:.4f}')
+    print('  AUC 0.5 가 우연이다. lift 는 연구량을 보정한 값이지만 **동반이환의')
+    print('  크기가 아니라 함께 연구된 정도**다 — 그 한계를 넘겨 읽지 않는다.')
+    return t
+
+
 def main():
     """**네 소스를 모두 본다.** 거부는 정상 결과이므로 exit 0 이다.
 
@@ -252,4 +363,7 @@ def main():
 
 
 if __name__ == '__main__':
+    if len(sys.argv) > 1 and sys.argv[1] == 'literature':
+        literature(os.environ.get('COMP_SOURCE', 'curated'))
+        sys.exit(0)
     sys.exit(main())

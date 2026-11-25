@@ -518,6 +518,38 @@ class ComplicationGateTest(unittest.TestCase):
                 os.environ['COMP_SOURCE'] = old
 
 
+class MdesTest(unittest.TestCase):
+    """최소검출효과 — 검정력 경계를 계산으로 고정한다 (§34)."""
+
+    def setUp(self):
+        import e_autism
+        self.e = e_autism
+
+    def test_monotone_in_n(self):
+        # n 이 커지면 잡아낼 수 있는 효과는 **작아진다.** 이 단조성이 깨지면
+        # 경계를 "n 이 가장 큰 검정" 에서 읽는 §34 의 논법이 무너진다.
+        v = [self.e.mdes(n, 0.05) for n in (45, 100, 200, 384)]
+        self.assertEqual(v, sorted(v, reverse=True))
+        self.assertTrue(all(0.5 < x < 1 for x in v))
+
+    def test_stricter_alpha_raises_bound(self):
+        # BH 보정은 alpha 를 낮춘다 -> 경계는 올라간다(더 큰 효과만 잡힌다).
+        self.assertGreater(self.e.mdes(384, 0.05 / 28), self.e.mdes(384, 0.05))
+
+    def test_report_picks_tightest_not_largest_effect(self):
+        # **처음에 틀린 자리.** 부호일치가 가장 큰 행을 골라 0.77 이라는 느슨한
+        # 경계를 냈다. 경계는 MDES 가 가장 작은 행에서 읽어야 한다.
+        import pandas as pd, os
+        f = os.path.join(self.e.OUT, 'power_bound.csv')
+        if not os.path.exists(f):
+            self.skipTest('power_bound.csv 없음')
+        t = pd.read_csv(f)
+        bh = [c for c in t.columns if c.startswith('최소검출효과(BH')][0]
+        self.assertEqual(int(t.loc[t[bh].idxmin()].n), int(t.n.max()))
+        # 경계를 넘은 관측이 있으면 "배제된다" 고 쓸 수 없다.
+        self.assertEqual(int(t['≥경계라면 잡혔다'].sum()), 0)
+
+
 class AnchorRegexTest(unittest.TestCase):
     """문서 수치 앵커 — 검사가 **스스로를 속였던** 자리의 회귀 시험."""
 
@@ -827,6 +859,17 @@ class MetaHooksTest(_CheckFixture):
         # 훅 파일은 있는데 core.hooksPath 가 없다 — 새로 클론한 상태.
         self._repo(with_config=False)
         self.assertFails(_chk.check_hooks)
+
+    def test_ignores_ambient_git_env(self):
+        # **커밋 훅 안에서만 깨졌던 자리.** `git commit` 이 GIT_DIR 을 내보내면
+        # cwd 가 무시되고 훅을 띄운 레포의 설정을 읽는다 — 임시 레포를 본다는
+        # 전제가 무너진다. 검사는 GIT_* 를 걷어내고 불러야 한다.
+        self._repo(with_config=False)
+        os.environ['GIT_DIR'] = os.path.join(self._base, '.git')
+        try:
+            self.assertFails(_chk.check_hooks)
+        finally:
+            os.environ.pop('GIT_DIR', None)
 
     def test_fails_without_exec_bit(self):
         self._repo(with_config=True, executable=False)

@@ -203,6 +203,78 @@ def test_microbe(ea, n_perm=None):
     return t
 
 
+def mdes(n, alpha, power=0.80):
+    """부호검정의 **최소검출효과** — n 과 유의수준에서 `power` 로 잡히는 부호일치.
+
+    §34 를 처음 쓸 때 "검정력 반론을 닫지 못했다" 로 끝냈다. **닫는 방법을
+    데이터에서만 찾은 것이 잘못이었다** — 검정력은 계산할 수 있다.
+
+    "효과가 없다" 를 증명할 수는 없지만 **"이 크기 이상은 없다"** 는 말할 수
+    있다. 그게 열린 반론보다 훨씬 강한 진술이다.
+
+    정규근사로 단측 검정력을 쓴다. `alpha` 에 BH 보정값을 넣으면 다중검정
+    상황의 경계가 나온다 — 우리는 28 칸을 재므로 가장 작은 p 가 살아남으려면
+    대략 `0.05/28` 이 필요하다.
+    """
+    from math import sqrt
+    import numpy as np
+    from scipy.stats import norm
+    z = norm.isf(alpha)
+    crit = 0.5 + z * sqrt(0.25 / n)
+    for p in np.arange(0.50, 0.999, 0.001):
+        if norm.sf((crit - p) / sqrt(p * (1 - p) / n)) >= power:
+            return round(float(p), 3)
+    return None
+
+
+def power_report(n_tests=28, alpha=0.05, power=0.80):
+    """관측값이 **검출 가능한 구간 안**이었는지 표로 낸다.
+
+    출력 `out/power_bound.csv` — n · 관측 부호일치 · 그 n 에서의 최소검출효과 ·
+    배제 여부.
+    """
+    rows = []
+    for fn, col_q in (('e_microbe_compare.csv', 'q'),
+                      ('e_autism_microbe.csv', 'q(BH)')):
+        p = os.path.join(OUT, fn)
+        if not os.path.exists(p):
+            continue
+        d = pd.read_csv(p)
+        for r in d.itertuples(index=False):
+            n = int(r.compound)
+            m = {'출처': fn, 'n': n, '부호일치': float(r.부호일치),
+                 'p': float(r.p),
+                 f'최소검출효과(a={alpha})': mdes(n, alpha, power),
+                 f'최소검출효과(BH,{n_tests}검정)': mdes(n, alpha / n_tests, power)}
+            m['≥경계라면 잡혔다'] = m['부호일치'] >= m[f'최소검출효과(BH,{n_tests}검정)']
+            rows.append(m)
+    t = pd.DataFrame(rows)
+    if not len(t):
+        print('  관측 표가 없다. analyze.py emicrobe · e_autism.py 를 먼저 돌려라.')
+        return t
+    bh = f'최소검출효과(BH,{n_tests}검정)'
+    t = t.sort_values('n', ascending=False)
+    t.to_csv(os.path.join(OUT, 'power_bound.csv'), index=False)
+    # **경계는 n 이 가장 큰 검정에서 가장 조여진다.** 부호일치가 가장 큰 행을
+    # 고르면 안 된다 — 그 행은 n 이 작아 경계가 느슨하다(처음에 그렇게 적어
+    # 0.77 이라는 과한 수를 냈다).
+    tight = t.loc[t[bh].idxmin()]
+    obs_max = t.loc[t['부호일치'].idxmax()]
+    print(f'  가장 조인 경계: n={int(tight.n)} 에서 '
+          f'alpha={alpha} -> {tight[f"최소검출효과(a={alpha})"]} · '
+          f'BH({n_tests}검정) -> {tight[bh]}')
+    print(f'  그 검정의 관측 부호일치 {tight["부호일치"]:.3f} '
+          f'(전체 최대 {obs_max["부호일치"]:.3f}, n={int(obs_max.n)})')
+    print(f'  경계를 넘은 관측 {int(t["≥경계라면 잡혔다"].sum())}/{len(t)}')
+    print(f'  => **부호일치 {tight[bh]} 이상인 효과는 배제된다** (있었으면 잡혔다).')
+    print(f'     0.50 ~ {tight[bh]} 구간은 열려 있다 — 그건 "모른다" 가 아니라')
+    print('     **경계가 있는 모름**이다.')
+    print('     그리고 그 구간의 크기는 쓰면 손해다 — gutbrain 쓸기에서 alpha 를')
+    print('     키울수록 비추천군이 26 -> 20 으로 단조 감소한다.')
+    print('  -> out/power_bound.csv')
+    return t
+
+
 def main():
     ea = build_e()
     compare_depression(ea)
@@ -223,9 +295,10 @@ def main():
     print('\n  ** 둘을 동시에 가진 적이 없다 **')
     print('   우울증 — E 는 넓고(1,412) 미생물이 얇다(관계 23)')
     print('   자폐   — 미생물은 두텁고(117~290) E 가 좁다(57, 그중 BH 유의 0)')
-    print('  그래서 "신호가 없다" 와 "검정력이 없다" 를 이 자료로는 끝까지')
-    print('  가를 수 없다. 다만 **막히는 자리가 질환마다 다른데 결과는 같다** —')
-    print('  검정력 하나로 설명하려면 두 번의 실패를 같은 이유로 묶어야 한다.')
+    print('  막히는 자리가 질환마다 다른데 결과는 같다 — 검정력 하나로 설명하려면')
+    print('  두 번의 실패를 같은 이유로 묶어야 한다.')
+    print('\n[5/5] 검정력의 경계를 계산한다 — "못 닫는다" 가 아니라 "여기까지 닫힌다"')
+    power_report()
     return t
 
 
