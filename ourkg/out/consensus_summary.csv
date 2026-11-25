@@ -1,6 +1,2 @@
 설정,R,합의_추천군,합의_비추천군,합의_위반,top_rate 중앙값,1위
-현행,60,19,28,0,0.825,"Caramel dip, light"
-learned-name2,60,25,13,1,0.667,"Kale, frozen, cooked, boiled, drained, w"
-union_all,60,21,28,1,0.838,"Rice, brown, with peas, no added fat"
-effect+nhanes,60,23,7,0,0.615,"Artichokes, (globe or french), raw"
-dedup-comp,60,18,27,1,0.798,"Cranberry juice blend, 100% juice, bottl"
+현행,100,19,29,0,0.766,"Vegetable juice, BOLTHOUSE FARMS, DAILY "

@@ -1,5 +1,5 @@
-설정,bot30_비추천군,bot30_extras(외부),top30_위반,top30_추천군(참고),MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
-composition/shrunk,26,8,0,21,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
-composition/nhanes_all,17,16,8,3,11,16,0.417,-0.176,"Bacon, lettuce, tomato sandwich on whe"
-effect/shrunk,10,7,0,0,0,15,0.448,0.323,"Whale, beluga, flipper, raw (Alaska Na"
-effect/nhanes_all,10,10,10,1,11,12,0.406,-0.197,"Fast foods, taco with beef, cheese and"
+설정,bot30_비추천군,bot30_충돌(살코기),bot30_extras(외부),top30_위반,top30_추천군(참고),MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
+composition/shrunk,26,0,8,0,21,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+composition/nhanes_all,2,0,2,3,19,21,5,0.673,0.165,"Nutritional powder mix, high protein ("
+effect/shrunk,10,0,7,0,0,0,15,0.448,0.323,"Whale, beluga, flipper, raw (Alaska Na"
+effect/nhanes_all,18,6,3,1,27,27,2,0.636,0.151,"Artichokes, (globe or french), raw"

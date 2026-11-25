@@ -1,48 +1,117 @@
 {
+ "bootstrap_ci.csv": {
+  "at": "2026-11-25 15:23:52",
+  "argv": "consensus.py",
+  "env": {
+   "BOOT_FRAC": "0.8",
+   "BOOT_SEED": "99",
+   "NO_SIM": "0"
+  }
+ },
  "category_ontology.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
  "compound_autism.csv": {
-  "at": "2026-11-25 13:23:47",
+  "at": "2026-11-25 14:43:24",
   "argv": "e_autism.py",
   "env": {}
  },
  "compound_class.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "compound_depression.csv": {
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "compound_depression_menda.csv": {
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "compound_depression_nhanes.csv": {
+  "at": "2026-11-25 14:43:22",
+  "argv": "diet_intervention.py",
+  "env": {}
+ },
+ "compound_depression_stype.csv": {
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "env": {}
+ },
+ "compound_evidence.csv": {
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "compound_learned.csv": {
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
   "env": {}
  },
  "compound_microbe.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
  "compound_microbe_vmh.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
+ "consensus_summary.csv": {
+  "at": "2026-11-25 15:24:04",
+  "argv": "toperr.py",
+  "env": {
+   "ENSEMBLE": "none",
+   "E_MODE": "nhanes_all",
+   "SIM_SPACE": "effect",
+   "NO_SIM": "0"
+  }
+ },
+ "consensus_현행.csv": {
+  "at": "2026-11-25 15:24:04",
+  "argv": "toperr.py",
+  "env": {
+   "ENSEMBLE": "none",
+   "E_MODE": "nhanes_all",
+   "SIM_SPACE": "effect",
+   "NO_SIM": "0"
+  }
+ },
+ "dedup_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
  "diet_intervention.csv": {
-  "at": "2026-11-25 13:24:34",
+  "at": "2026-11-25 14:43:22",
   "argv": "diet_intervention.py",
   "env": {}
  },
  "diet_intervention_score.csv": {
-  "at": "2026-11-25 13:24:43",
-  "argv": "check.py",
+  "at": "2026-11-25 14:43:24",
+  "argv": "e_autism.py",
   "env": {}
  },
  "disease_tree.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
  "e_autism_microbe.csv": {
-  "at": "2026-11-25 13:24:34",
-  "argv": "diet_intervention.py",
-  "env": {}
+  "at": "2026-11-25 15:21:33",
+  "argv": "bootstrap.py",
+  "env": {
+   "E_MODE": "union_all",
+   "NO_SIM": "0"
+  }
  },
  "e_microbe.csv": {
   "at": "2026-11-25 13:19:16",
@@ -54,109 +123,292 @@
   "argv": "analyze.py evaluate",
   "env": {}
  },
+ "e_mode_comparison.csv": {
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "env": {}
+ },
+ "emode_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
  "eval_method1.csv": {
-  "at": "2026-11-25 13:22:00",
-  "argv": "analyze.py evaluate",
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
   "env": {}
  },
  "eval_method2.csv": {
-  "at": "2026-11-25 13:22:00",
-  "argv": "analyze.py evaluate",
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
   "env": {}
  },
  "eval_method2_calibration.csv": {
-  "at": "2026-11-25 13:22:00",
-  "argv": "analyze.py evaluate",
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
   "env": {}
  },
  "eval_sparql.json": {
-  "at": "2026-11-25 13:22:00",
-  "argv": "analyze.py evaluate",
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
   "env": {}
  },
+ "ezero_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
+ "fcolumns_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
+ "food_compound_kg.csv": {
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "food_compound_long.csv": {
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "food_foodon.csv": {
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "food_form.csv": {
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "food_link.json": {
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "foods.csv": {
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "fscale_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
+ "group_comparison.csv": {
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "env": {}
+ },
+ "group_comparison.png": {
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "env": {}
+ },
+ "group_composition.csv": {
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "env": {}
+ },
+ "gutbrain_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
  "gutbrain_compounds.json": {
-  "at": "2026-11-25 13:23:33",
-  "argv": "analyze.py pathcheck",
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "env": {}
+ },
+ "invert_comparison.csv": {
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
   "env": {}
  },
  "kegg_class.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
  "kg_stats.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
   "env": {}
  },
+ "learned_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
+ "learned_dedup_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
  "linking_stats.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "metabolome_check_KANG_AUTISM_2017.csv": {
+  "at": "2026-11-25 14:42:45",
+  "argv": "metabolome_check.py",
+  "env": {}
+ },
+ "metabolome_check_MARS_IBS_2020.csv": {
+  "at": "2026-11-25 14:42:45",
+  "argv": "metabolome_check.py",
   "env": {}
  },
  "microbe_disease.csv": {
-  "at": "2026-11-25 13:18:41",
-  "argv": "build.py microbe",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
  "microbe_disease_agreement.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
  "microbe_disease_disbiome.csv": {
-  "at": "2026-11-25 13:18:41",
-  "argv": "build.py microbe",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
  "microbe_disease_gutmdisorder.csv": {
-  "at": "2026-11-25 13:18:41",
-  "argv": "build.py microbe",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
  "microbe_disease_mikg.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
  "microbe_neurotransmitter.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
  "microbes.csv": {
-  "at": "2026-11-25 13:18:41",
-  "argv": "build.py microbe",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
  "mikg_xref.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
+ "modimed_labels.csv": {
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "env": {}
+ },
+ "modimed_rho_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
+ "negw_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
  "neurotransmitter_disease.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
  "neurotransmitter_pathway.csv": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
+ "nosim_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
  "ourkg.nt": {
-  "at": "2026-11-25 13:18:58",
-  "argv": "build.py kg",
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "promenda_records.csv": {
+  "at": "2026-11-25 14:35:42",
+  "argv": "build.py food form promenda evidence microbe kg",
   "env": {}
  },
  "recommendation.csv": {
-  "at": "2026-11-25 13:19:13",
-  "argv": "analyze.py recommend",
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
   "env": {}
  },
  "recommendation.png": {
-  "at": "2026-11-25 13:19:16",
-  "argv": "analyze.py emicrobe",
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
   "env": {}
+ },
+ "simsign_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
+ "simspace_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
+ "simthr_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
+ },
+ "stype_comparison.csv": {
+  "at": "2026-11-25 14:40:49",
+  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "env": {}
+ },
+ "toperr_comparison.csv": {
+  "at": "2026-11-25 15:24:11",
+  "argv": "check.py",
+  "env": {}
+ },
+ "union_comparison.csv": {
+  "at": "2026-11-25 15:28:50",
+  "argv": "sweep.py",
+  "env": {
+   "E_MODE": "learned"
+  }
  }
 }

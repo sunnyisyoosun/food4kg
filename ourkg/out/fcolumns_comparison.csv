@@ -1,7 +1,7 @@
-F열,PCA,음식,AUC,추천군,비추천군,위반,MMD_top30_처방,MMD_top30_extras,top
-linked,0,12420,0.585,21,26,0,23,1,"Vegetable juice, BOLTHOUSE FAR"
-linked,5,12420,0.698,3,19,9,7,12,"Turkey, skin from whole (light"
-linked,auto,12420,0.693,0,16,1,0,18,"Liqueur, cream"
-all,0,12508,0.631,5,25,12,4,17,"Sugar substitute, sucralose, p"
-all,5,12508,0.697,2,22,9,9,6,"Muffins, wheat bran, dry mix"
-all,auto,12508,0.706,22,14,1,23,0,"Spices, paprika"
+설정,bot30_비추천군,bot30_충돌(살코기),bot30_extras(외부),top30_위반,top30_추천군(참고),MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
+linked+0,26,0,8,0,21,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+linked+5,18,0,8,9,9,11,10,0.533,0.39,"Chocolate beverage powder, light, dry "
+linked+auto,19,0,2,6,6,16,5,0.552,0.355,"Cereals ready-to-eat, BARBARA'S PUFFIN"
+all+0,25,0,6,12,5,5,17,0.492,0.371,"Sugar substitute, sucralose, powder"
+all+5,11,1,2,4,11,15,4,0.545,0.419,"Syrup, NESTLE, chocolate"
+all+auto,24,0,0,3,14,16,8,0.533,0.387,"Chokecherries, raw, pitted (Northern P"

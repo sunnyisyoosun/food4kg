@@ -1,5 +1,5 @@
-설정,top30_추천군,bot30_비추천군,top30_위반,MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
-기본,21,26,0,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
-all+0,5,25,12,5,17,0.492,0.371,"Sugar substitute, sucralose, powder"
-linked+PCA,0,16,1,0,18,0.544,0.332,"Liqueur, cream"
-all+auto(기각),22,14,1,23,0,0.539,0.382,"Spices, paprika"
+설정,bot30_비추천군,bot30_충돌(살코기),bot30_extras(외부),top30_위반,top30_추천군(참고),MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
+기본,26,0,8,0,21,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+all+0,25,0,6,12,5,5,17,0.492,0.371,"Sugar substitute, sucralose, powder"
+linked+PCA,19,0,2,6,6,16,5,0.552,0.355,"Cereals ready-to-eat, BARBARA'S PUFFIN"
+all+auto(기각),24,0,0,3,14,16,8,0.533,0.387,"Chokecherries, raw, pitted (Northern P"

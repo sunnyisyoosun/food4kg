@@ -1,7 +1,7 @@
-설정,bot30_비추천군,bot30_extras(외부),top30_위반,top30_추천군(참고),MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
-shrunk/none,26,8,0,21,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
-shrunk/composition,24,6,0,20,23,2,0.462,0.323,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
-shrunk/name2,25,23,0,1,3,11,0.618,0.169,Michelada
-learned/none,18,20,13,9,30,0,0.687,-0.187,"Fish, haddock, raw"
-learned/composition,19,20,12,9,30,0,0.691,-0.209,"Fish, haddock, raw"
-learned/name2,17,24,2,22,26,2,0.696,0.091,"Drumstick leaves, cooked, boiled, drai"
+설정,bot30_비추천군,bot30_충돌(살코기),bot30_extras(외부),top30_위반,top30_추천군(참고),MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
+shrunk/none,26,0,8,0,21,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+shrunk/composition,24,0,6,0,20,23,2,0.462,0.323,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+shrunk/name2,25,0,23,0,1,3,11,0.618,0.169,Michelada
+learned/none,18,0,20,13,9,30,0,0.687,-0.187,"Fish, haddock, raw"
+learned/composition,19,0,20,12,9,30,0,0.691,-0.209,"Fish, haddock, raw"
+learned/name2,17,0,24,2,22,26,2,0.696,0.091,"Drumstick leaves, cooked, boiled, drai"

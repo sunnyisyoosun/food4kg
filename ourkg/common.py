@@ -505,6 +505,10 @@ def gutmdisorder_intervention(session=None):
     return pd.DataFrame(rows)
 
 
+# 이 모듈을 처음 들일 때의 환경. `recommend_under` 가 여기로 되돌린다.
+_ENV_BASE = dict(os.environ)
+
+
 def recommend_under(env, quiet=True, boot=None):
     """환경변수를 걸고 `analyze.recommend` 를 한 번 돌려 결과를 돌려준다.
 
@@ -518,12 +522,27 @@ def recommend_under(env, quiet=True, boot=None):
     자리가 있어서다. 그걸 잊으면 **앞 설정의 결과가 그대로 나온다** — 조용히
     틀리는 종류라 한 곳에 둔다.
 
+    **먼저 처음 환경으로 되돌린다.** `update` 만 하면 설정에 적힌 키만 덮고
+    앞 설정이 켠 키는 남는다. 한 프로세스에서 쓸기 15 종을 이어 돌리면 그게
+    새어 `run_all.py` 가 마지막 단계에서 죽었다 — `simspace` 가 남긴
+    `SIM_SPACE=effect` 와 `fcolumns` 의 `PCA_COMPONENTS=5` 가 겹쳐
+    `(5916,5) x (66,)` broadcast 오류가 났다. 단독 실행은 되고 이어 돌리면
+    깨지는 종류라 20 일 넘게 안 보였다 (§40).
+
+    처음 환경으로 되돌리므로 **명령줄에서 준 값은 살고** 앞 쓸기가 남긴 것만
+    지워진다 — 한 번의 호출 결과가 `env` 와 `boot` 로만 정해진다.
+
     `boot=(frac, seed)` 를 주면 부분표집 설정도 같이 건다(`consensus`·`bootstrap`).
     `quiet` 면 recommend 의 진행 출력을 삼킨다(반복이 수십 번이다).
     """
     import contextlib
     import importlib
     import io as _io
+    for k in [k for k in os.environ if k not in _ENV_BASE]:
+        del os.environ[k]
+    for k, v in _ENV_BASE.items():
+        if os.environ.get(k) != v:
+            os.environ[k] = v
     os.environ.update(env or {})
     if boot:
         os.environ['BOOT_FRAC'], os.environ['BOOT_SEED'] = str(boot[0]), str(boot[1])

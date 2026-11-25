@@ -1,15 +1,28 @@
 # ourkg 결과 정리
 
 논문 Fu et al. (2023) *Food4healthKG* 의 **구축 방식과 평가 방식**을 그대로 쓰고,
-데이터만 최신 공개본(FDC 2026-09 전체 + ProMENDA 2024 + KEGG/NCBI/MeSH 현재 조회)으로
-바꿔 만든 지식그래프의 결과다.
+데이터를 최신 공개본(FDC 2026-09 전체 + ProMENDA 2024 + KEGG/NCBI/MeSH 현재 조회)으로
+바꿔 **다시 만들고 축을 넓힌** 결과다.
 
-원 논문 **재현**(`reconstruct.py` → `run_recommendation.py`)과는 분리된 별도 산출물이다.
-재현 수치는 [`REPRODUCTION.md`](../REPRODUCTION.md), 미해결 문제는
-[`PROBLEMS.md`](../PROBLEMS.md), 파이프라인 사용법·설계 결정은
-[`README.md`](README.md) 에 있다.
+루트의 `reconstruct.py` → `run_recommendation.py` 트랙과는 **분리된** 산출물이다
+(두 트랙을 왜 "재현"·"개선" 이라 부르지 않는지는
+[`METHODS.md`](METHODS.md) §0).
 
-재현 방법: `python3 ourkg/run_all.py`
+| 찾는 것 | 문서 |
+|---|---|
+| 이 문서 — **실험과 기각 기록** (절 번호로 인용) | `RESULTS.md` |
+| **절차에서 틀린 것들** — 무엇이 틀렸고 어떻게 드러났고 무엇으로 막았나 | [`PROCESS.md`](PROCESS.md) |
+| 데이터 출처·받는 법·함정 | [`DATA.md`](DATA.md) |
+| 전제·구축·추천·평가 자·정합 검사 | [`METHODS.md`](METHODS.md) |
+| 전체 지도·실행법·설계 결정 | [`README.md`](README.md) |
+| 루트 트랙 수치·미해결 | [`REPRODUCTION.md`](../REPRODUCTION.md) · [`PROBLEMS.md`](../PROBLEMS.md) |
+
+다시 만드는 법: `python3 ourkg/run_all.py` (약 50 분) ·
+검사: `python3 ourkg/check.py` (29 항목, 2 초)
+
+> **읽는 순서.** 결론만 필요하면 [`README.md`](README.md) 의 "지금까지 찾은 것
+> 세 가지". 이 문서는 시간순 기록이라 **옛 절의 수치는 그때 값**이다 — 현재 값은
+> 각 절의 갱신 주석이나 README 를 본다.
 
 ---
 
@@ -5136,7 +5149,65 @@ KG 는 3,443,485 고유 triple (MiKG 7,193 → 7,196).
 
 ---
 
-## 16. 한계
+## 40. `run_all.py` 를 처음 끝까지 돌렸다 — 마지막 단계에서 죽었다 (2026-11-25)
+
+`logs/` 최신이 **11-04** 였다. 그 뒤로 나는 늘 단계별로만 돌렸고 24 단계를
+**순서대로 돌린 적이 없었다.** 돌려 보니 23 단계는 통과하고 **마지막 `sweep`
+에서 죽었다**(exit 1).
+
+```
+ValueError: operands could not be broadcast together with shapes (5916,5) (66,)
+sweep.py [] 실패 (exit 1)
+```
+
+### 원인 — 쓸기 사이로 환경변수가 샌다
+
+`recommend_under` 가 `os.environ.update(env)` 만 하고 **이전 설정을 지우지
+않았다.** 한 프로세스에서 쓸기 15 종을 이어 돌리면 앞 설정이 남는다.
+
+| | |
+|---|---|
+| `simspace` 쓸기 | `SIM_SPACE=effect` 를 설정 |
+| 그다음 `fcolumns` 쓸기 | `PCA_COMPONENTS=5` 를 설정 |
+| 충돌 | PCA 로 5 열로 줄인 행렬 × compound 66 개 벡터 → broadcast 실패 |
+
+재현으로 확정했다.
+
+| | 전 | 후 |
+|---|---|---|
+| `sweep.py fcolumns` (단독) | 정상 | 정상 |
+| `sweep.py simspace fcolumns` | **ValueError** | 정상 · **값이 단독 실행과 동일** |
+
+> **단독 실행은 되고 이어 돌리면 깨지는 종류다.** 그래서 단계별로만 돌리는 동안
+> 20 일 넘게 보이지 않았다. `check.py` 도 못 잡는다 — 산출물 **정합**은 보지만
+> **생성 가능성**은 보지 않는다.
+
+### 고친 것 — 호출 결과가 `env` 로만 정해지게
+
+`recommend_under` 가 설정을 걸기 전에 **프로세스 최초 환경으로 되돌린다**
+(`common._ENV_BASE`). 최초 환경으로 되돌리므로 **명령줄에서 준 값은 살고** 앞
+쓸기가 남긴 것만 지워진다 — 한 번의 호출 결과가 `env` 와 `boot` 로만 정해진다.
+
+### 완주 확인
+
+| | |
+|---|---|
+| 단계 | **24/24 통과** (exit 0) |
+| 쓸기 | **15/15** |
+| 마지막 `check` 단계 | **29/29 통과** |
+| 소요 | 약 50 분 (FDC 2,700 만 행 재스트리밍 포함) |
+
+**전체 재빌드가 단계별 실행과 같은 결과를 낸다** — `bootstrap` 현행 전체값
+추천군 21 · 비추천군 26 · 위반 0, `emode` 쓸기 전부 동일
+(`shrunk` 26/0/8/0/21/24/1/0.462/0.316). 즉 데이터는 건전했고 깨진 것은
+**오케스트레이션**이었다.
+
+> 이 절을 포함한 절차상 실수는 [`PROCESS.md`](PROCESS.md) 에 유형별로 모았다 —
+> 발견 경로가 **우연 9 · 사용자 지적 3 · 자동 검사 5** 다.
+
+---
+
+## 41. 한계
 
 - **식품 온톨로지를 넣어도 분류 질문이 풀리지 않는다** (2026-11-09 통합 완료).
   FoodOn·중국 식품 온톨로지를 넣었으나 논문이 요구하는 카테고리 이름("Milk substitutes",
@@ -5171,7 +5242,7 @@ KG 는 3,443,485 고유 triple (MiKG 7,193 → 7,196).
 
 ---
 
-## 17. 산출물
+## 42. 산출물
 
 | 파일 | 내용 |
 |---|---|

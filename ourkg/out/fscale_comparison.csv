@@ -1,5 +1,5 @@
-설정,top30_추천군,bot30_비추천군,top30_위반,MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
-per100g/shrunk,21,26,0,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
-per100g/nhanes_all,19,2,3,21,5,0.673,0.165,"Nutritional powder mix, high protein ("
-serving/shrunk,14,2,1,22,0,0.611,0.233,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
-serving/nhanes_all,2,4,5,10,5,0.668,0.084,"Beverages, Whey protein powder isolate"
+설정,bot30_비추천군,bot30_충돌(살코기),bot30_extras(외부),top30_위반,top30_추천군(참고),MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
+per100g/shrunk,26,0,8,0,21,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+per100g/nhanes_all,2,0,2,3,19,21,5,0.673,0.165,"Nutritional powder mix, high protein ("
+serving/shrunk,2,0,1,1,14,22,0,0.611,0.233,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+serving/nhanes_all,4,0,4,5,2,10,5,0.668,0.084,"Beverages, Whey protein powder isolate"

@@ -1,6 +1,6 @@
-설정,bot30_비추천군,top30_위반,top30_추천군(참고),MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
-neg:0,26,0,0,1,18,0.459,0.313,"Alcoholic beverage, beer, light, low c"
-neg:0.25,26,0,0,2,14,0.459,0.314,Fuzzy Navel
-neg:0.5,26,0,0,2,13,0.46,0.315,Fuzzy Navel
-neg:0.75,26,0,12,16,6,0.461,0.315,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
-neg:1,26,0,21,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+설정,bot30_비추천군,bot30_충돌(살코기),bot30_extras(외부),top30_위반,top30_추천군(참고),MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
+neg:0,26,0,8,0,0,1,18,0.459,0.313,"Alcoholic beverage, beer, light, low c"
+neg:0.25,26,0,8,0,0,2,14,0.459,0.314,Fuzzy Navel
+neg:0.5,26,0,8,0,0,2,13,0.46,0.315,Fuzzy Navel
+neg:0.75,26,0,8,0,12,16,6,0.461,0.315,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+neg:1,26,0,8,0,21,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
