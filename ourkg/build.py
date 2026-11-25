@@ -1164,6 +1164,29 @@ def kg():
                          for f in _srcs]).drop_duplicates()
         _ag['kegg'] = _ag.met_abbr.map(_a2k).fillna('')
         _vl = _ag[_ag.kegg != ''][['taxid', 'kegg']].drop_duplicates()
+        # **한 VMH 대사물이 KEGG 두 개에 매핑되는 경우를 쪼갠다.**
+        # vmh_metabolites 의 kegg 열에 `C00094|C11481` 처럼 파이프로 묶인 값이
+        # 있다. 그대로 두면 두 가지가 틀어진다 —
+        #   ① KG 에 `kegg.jp/entry/C00094|C11481` 이라는 **잘못된 IRI** 가
+        #      올라가 SPARQL 로 못 쓴다(링크의 5.3% = 2,323 건).
+        #   ② 그 안의 KEGG id 81 개 중 80 개가 **복합으로만 존재**해 닿지
+        #      않는다. 그중 30 개가 E 에, 8 개가 F 층에 있다(C00047 L-Lysine 등).
+        # 어느 쪽이 맞는 매핑인지 VMH 가 가리지 않았으므로 **둘 다 올린다** —
+        # 예측 소스이고 출처 태그로 구분돼 있다.
+        # 쪼개면서 표기도 씻는다 — vmh_metabolites 에 `C05450` 뒤에
+        # non-breaking space 가 붙은 값, 뒤 공백이 붙은 값이 있다(링크에는
+        # 닿지 않지만 매핑표에 남아 있다). COMPOUND 외에 DRUG(D·31 링크)·
+        # GLYCAN(G·18 링크)도 실재하는 KEGG 항목이라 **버리지 않는다** —
+        # 다만 F·E 층은 COMPOUND 전용이라 그쪽과는 조인되지 않는다.
+        _n_before = len(_vl)
+        _vl = _vl.assign(
+            kegg=_vl.kegg.astype(str).str.replace('\xa0', ' ').str.split('|')
+        ).explode('kegg')
+        _vl['kegg'] = _vl.kegg.str.strip()
+        _vl = _vl[_vl.kegg.str.fullmatch(r'[CDG]\d{5}', na=False)].drop_duplicates()
+        if len(_vl) != _n_before:
+            print(f'  VMH KEGG 매핑 정리: 링크 {_n_before:,} -> {len(_vl):,} '
+                  f'(복합 값 쪼개기 · 표기 씻기)')
         _vl.to_csv(os.path.join(OUT, 'compound_microbe_vmh.csv'), index=False)
         _known = set(cm[['taxid', 'kegg']].itertuples(index=False, name=None))
         for _t, _k in _vl.itertuples(index=False, name=None):

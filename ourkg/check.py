@@ -316,18 +316,35 @@ def check_kg():
     nt = os.path.join(OUT, 'ourkg.nt')
     if not os.path.exists(nt):
         return _say('SKIP', 'KG 파일', 'ourkg.nt 없다 (gitignore)')
-    n = seen = 0
-    dup = 0
-    s = set()
+    # IRI 에 들어가면 안 되는 문자 — 공백·꺾쇠·따옴표·파이프·역따옴표 등.
+    # `kegg.jp/entry/C00094|C11481` 같은 값이 2,323 건 있었다(§37). rdflib 는
+    # 경고만 하고 넘어가므로 **사람이 로그를 봐야** 알았다. 여기서 막는다.
+    ILLEGAL = re.compile(r'[\s<>"{}|\\^`]')
+    n, dup, bad_iri = 0, 0, {}
+    seen = set()
     with open(nt, encoding='utf-8') as f:
         for line in f:
             n += 1
             h = hash(line)
-            if h in s:
+            if h in seen:
                 dup += 1
             else:
-                s.add(h)
-    seen = len(s)
+                seen.add(h)
+            # **N-Triples 구조대로 읽는다.** 그냥 `<...>` 를 긁으면 리터럴
+            # 안의 꺾쇠를 잡는다 — FoodOn 라벨 "fat content < 50%, > 35% pufa"
+            # 가 그렇게 오탐으로 걸렸다. 리터럴 안의 꺾쇠는 N-Triples 에서
+            # 정상이다(`"`·`\`·개행만 escape 가 필요하다).
+            # 줄 모양은 `<주어> <술어> <목적어> .` 또는 `… "리터럴" .` 이고
+            # IRI 에는 `>` 가 들어갈 수 없으므로 `[^>]*` 로 끊어 읽으면 된다.
+            m = re.match(r'<([^>]*)> <([^>]*)> (?:<([^>]*)>)?', line)
+            if not m:
+                bad_iri.setdefault('(파싱 실패)', 0)
+                bad_iri['(파싱 실패)'] += 1
+                continue
+            for iri in m.groups():
+                if iri and ILLEGAL.search(iri):
+                    bad_iri.setdefault(iri, 0)
+                    bad_iri[iri] += 1
     bad = []
     if n != uniq:
         bad.append(f'줄 수 {n:,} != kg_stats Total {uniq:,}')
@@ -335,6 +352,10 @@ def check_kg():
         bad.append(f'중복 statement {dup:,}')
     _say('FAIL' if bad else 'PASS', 'KG 파일 중복',
          '; '.join(bad) if bad else f'{n:,} 줄 · 중복 0')
+    _say('FAIL' if bad_iri else 'PASS', 'KG IRI 유효성',
+         f'허용 안 되는 문자가 든 IRI {len(bad_iri)} 종 '
+         f'{sum(bad_iri.values()):,} 건: {list(bad_iri)[:3]}' if bad_iri else
+         'IRI 에 공백·파이프 등이 없다')
 
 
 # ---------------------------------------------------------------- 6. 문서
