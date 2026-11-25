@@ -384,6 +384,36 @@ def check_pathcheck():
          f"CSV {d.get('n_csv')}종 = KG {d.get('n_kg')}종")
 
 
+def check_hooks():
+    """커밋 훅이 **켜져 있는지**.
+
+    `hooks/pre-commit` 은 레포에 있지만 `git config core.hooksPath hooks` 를
+    한 번 쳐야 돈다. 그 설정은 `.git/config` 에 있어 **버전 관리되지 않으므로
+    새로 클론한 사람은 훅 없이 커밋한다.** git 은 클론 시 훅 자동 활성화를
+    보안상 막으니(임의 코드 실행이 된다) 할 수 있는 것은 **알려 주는 것**이다.
+
+    훅을 쓰지 않기로 했으면 `OURKG_NO_HOOK_CHECK=1` 로 끈다.
+    """
+    import subprocess
+    if os.environ.get('OURKG_NO_HOOK_CHECK') == '1':
+        return _say('SKIP', '커밋 훅', 'OURKG_NO_HOOK_CHECK=1')
+    hook = os.path.join(BASE, 'hooks', 'pre-commit')
+    if not os.path.exists(hook):
+        return _say('SKIP', '커밋 훅', 'hooks/pre-commit 이 없다')
+    bad = []
+    try:
+        got = subprocess.run(['git', 'config', '--get', 'core.hooksPath'],
+                             cwd=BASE, capture_output=True, text=True).stdout.strip()
+    except Exception as e:                       # git 이 없는 환경
+        return _say('SKIP', '커밋 훅', f'git 을 못 불렀다: {e}')
+    if got != 'hooks':
+        bad.append(f'core.hooksPath 가 {got!r} 다 — `git config core.hooksPath hooks`')
+    if not os.access(hook, os.X_OK):
+        bad.append('hooks/pre-commit 에 실행 권한이 없다 — `chmod +x hooks/pre-commit`')
+    _say('FAIL' if bad else 'PASS', '커밋 훅',
+         '; '.join(bad) if bad else 'core.hooksPath=hooks · 실행 가능')
+
+
 # ------------------------------------------------- 5b. 산출물 출처 (provenance)
 #
 # **정본 산출물**은 기본값으로 만들어야 한다. 쓸기 산출물(`*_comparison.csv` 등)은
@@ -571,7 +601,8 @@ CHECKS = {'schema': check_schema, 'microbe': check_microbe, 'links': check_links
           'deadcode': check_deadcode,
           'emode': check_emode, 'env': check_env, 'recommend': check_recommend,
           'pathcheck': check_pathcheck, 'kg': check_kg,
-          'provenance': check_provenance, 'docs': check_docs}
+          'provenance': check_provenance, 'hooks': check_hooks,
+          'docs': check_docs}
 
 
 def main(argv):

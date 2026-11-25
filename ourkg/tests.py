@@ -690,6 +690,63 @@ class MetaProvenanceTest(_CheckFixture):
         self.assertFails(_chk.check_provenance)
 
 
+class MetaHooksTest(_CheckFixture):
+    """커밋 훅 검사 — **새 클론**(설정 없음)을 잡는지.
+
+    `BASE` 를 임시 git 레포로 돌려서 본다. 실제 레포의 설정을 건드리지 않는다.
+    """
+
+    def _repo(self, with_config, executable=True):
+        import subprocess
+        root = os.path.join(self._dir.name, 'repo')
+        os.makedirs(os.path.join(root, 'hooks'), exist_ok=True)
+        subprocess.run(['git', 'init', '-q'], cwd=root, check=True)
+        h = os.path.join(root, 'hooks', 'pre-commit')
+        open(h, 'w').write('#!/bin/sh\nexit 0\n')
+        os.chmod(h, 0o755 if executable else 0o644)
+        if with_config:
+            subprocess.run(['git', 'config', 'core.hooksPath', 'hooks'],
+                           cwd=root, check=True)
+        _chk.BASE = root
+        return root
+
+    def setUp(self):
+        super().setUp()
+        self._base = _chk.BASE
+        os.environ.pop('OURKG_NO_HOOK_CHECK', None)
+
+    def tearDown(self):
+        _chk.BASE = self._base
+        super().tearDown()
+
+    def test_passes_when_configured(self):
+        self._repo(with_config=True)
+        self.assertPasses(_chk.check_hooks)
+
+    def test_fails_on_fresh_clone(self):
+        # 훅 파일은 있는데 core.hooksPath 가 없다 — 새로 클론한 상태.
+        self._repo(with_config=False)
+        self.assertFails(_chk.check_hooks)
+
+    def test_fails_without_exec_bit(self):
+        self._repo(with_config=True, executable=False)
+        self.assertFails(_chk.check_hooks)
+
+    def test_skips_when_opted_out(self):
+        self._repo(with_config=False)
+        os.environ['OURKG_NO_HOOK_CHECK'] = '1'
+        try:
+            sts = self.run_check(_chk.check_hooks)
+        finally:
+            os.environ.pop('OURKG_NO_HOOK_CHECK', None)
+        self.assertEqual(sts, ['SKIP'])
+
+    def test_skips_when_hook_absent(self):
+        root = self._repo(with_config=True)
+        os.remove(os.path.join(root, 'hooks', 'pre-commit'))
+        self.assertEqual(self.run_check(_chk.check_hooks), ['SKIP'])
+
+
 class MetaDocsTest(_CheckFixture):
     """`docs` 검사 — 앵커 값·형식·부재를 모두 잡는지."""
 
