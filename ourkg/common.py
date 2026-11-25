@@ -319,7 +319,7 @@ def compound_microbe(sources=('kegg', 'vmh'), rank=None):
 
     네 곳이 각자 `read_csv` 하고 있었고 아무도 `match_rank` 를 보지 않았다.
     그대로 두면 속 수준 링크가 종 수준과 같은 무게로 집계된다 — KEGG 링크
-    10,257 중 **5,686(55%)**이 속 수준이라 과대평가가 작지 않다. 읽는 자리를
+    14,918 중 **8,626(58%)**이 속 수준이라 과대평가가 작지 않다. 읽는 자리를
     하나로 합치고 거르는 기준을 여기 둔다.
 
     `rank`:
@@ -348,7 +348,11 @@ def compound_microbe(sources=('kegg', 'vmh'), rank=None):
         out.append(df)
     if not out:
         return pd.DataFrame(columns=['taxid', 'kegg', 'source'])
-    return pd.concat(out).drop_duplicates(['taxid', 'kegg'])
+    df = pd.concat(out)
+    # **정본 id 로 모은다.** 안 모으면 병합 taxid 를 가진 균이 두 번 세어진다
+    # (taxid_alias 참조). 조인하는 쪽도 정본으로 맞춰야 한다.
+    df['taxid'] = canon(df['taxid'])
+    return df.drop_duplicates(['taxid', 'kegg'])
 
 
 # 중재 행에서 "무중재 대조" 를 가리는 패턴. 대조군이 다른 식단이면 증감이
@@ -423,6 +427,37 @@ def gutmdisorder_intervention(session=None):
     return pd.DataFrame(rows)
 
 
+def taxid_alias():
+    """원 taxid → **정본(canonical) taxid** 표.
+
+    외부 큐레이션은 폐기·병합된 NCBI taxid 를 들고 있다. NCBI 는 그런 id 로
+    조회하면 현재 id 로 돌려주고 요청한 id 를 `AkaTaxIds` 에 넣는다
+    (Disbiome 의 Klebsiella 160674, gutMDisorder 의 570 → 둘 다 570 이다).
+
+    `build.microbe()` 가 요청 id 로도 키를 걸어 **더는 잃지 않는다**. 그런데
+    요청 id 를 그대로 정체성으로 쓰면 두 가지가 틀어진다.
+      ① 같은 균을 두 번 센다 — compound 링크 147 행이 중복이었다.
+      ② 두 소스가 **서로 다른 균으로 보인다** — 그래서 방향 교차검사가 7 균을
+         비교하지 못했다(공유 쌍 125 → 정규화하면 128).
+    그래서 **정체성은 정본 id 로 모으고 원 id 는 별칭으로 남긴다.**
+    """
+    import pandas as pd
+    p = os.path.join(OUT, 'microbes.csv')
+    if not os.path.exists(p):
+        return {}
+    m = pd.read_csv(p, dtype={'taxid': str, 'taxid_current': str})
+    if 'taxid_current' not in m:
+        return {}
+    return {t: (c if isinstance(c, str) and c else t)
+            for t, c in zip(m.taxid, m.taxid_current)}
+
+
+def canon(series, alias=None):
+    """taxid 열을 정본 id 로 바꾼다. 표에 없는 id 는 그대로 둔다."""
+    a = alias if alias is not None else taxid_alias()
+    return series.astype(str).map(lambda t: a.get(t, t))
+
+
 def measured_links():
     """측정 상관 링크(`metabolome_check.py build`)를 taxid 로 펼친다.
 
@@ -438,8 +473,9 @@ def measured_links():
     mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'),
                       dtype={'taxid': str}).fillna('')
     mic['genus'] = mic['name'].astype(str).str.split().str[0]
-    return m.merge(mic[['taxid', 'genus']], on='genus')[['taxid', 'kegg']
-                                                        ].drop_duplicates()
+    out = m.merge(mic[['taxid', 'genus']], on='genus')[['taxid', 'kegg']].copy()
+    out['taxid'] = canon(out['taxid'])
+    return out.drop_duplicates()
 
 
 def microbe_disease_direction():
@@ -473,6 +509,9 @@ def microbe_disease_direction():
         d = d[(d.get('is_mental', False) | d.get('is_neuro', False))
               & d.outcome.isin(DIRECTIONAL)]
         d = d[['taxid', 'mesh_id', 'disease', 'outcome']].copy()
+        # 두 소스가 같은 균을 다른(병합 전/후) taxid 로 들고 있다 — 정본으로
+        # 모아야 **같은 균으로 비교**된다. 안 모으면 7 균이 비교에서 빠진다.
+        d['taxid'] = canon(d['taxid'])
         d['source'] = src
         parts.append(d)
     cols = ['taxid', 'mesh_id', 'disease', 'status', 'direction',

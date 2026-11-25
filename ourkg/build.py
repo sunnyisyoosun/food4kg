@@ -31,7 +31,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (BASE, OUT, FDC_RAW, UNIT_TO_G, FDC_CATEGORY, cached_get, kegg_rest,
                     normalize_label, normalize_category, kegg_map, normkey,
                     mesh_lookup, cached_covering, gutmdisorder,
-                    microbe_disease_direction)
+                    microbe_disease_direction, taxid_alias)
 
 
 def food():
@@ -419,7 +419,8 @@ def microbe():
 
     출력 (모두 out/)
       microbe_disease.csv       taxid, name, mesh_id, disease, tree_numbers, is_mental
-      microbes.csv              taxid, name(NCBI 현재), rank, lineage, kegg_org
+      microbes.csv              taxid, name(NCBI 현재), rank, lineage, kegg_org,
+                                match_rank, taxid_current(병합 전 id 로 조회한 경우)
       compound_microbe.csv      kegg, taxid, kegg_org, n_ko   (hasMetabolites)
     캐시: ourkg/cache/
     """
@@ -608,11 +609,26 @@ def microbe():
             r.raise_for_status()
             import xml.etree.ElementTree as ET
             for tx in ET.fromstring(r.text).findall('Taxon'):
-                recs[tx.findtext('TaxId')] = {
+                cur = tx.findtext('TaxId')
+                rec = {
                     'name': tx.findtext('ScientificName'),
                     'rank': tx.findtext('Rank'),
                     'lineage': tx.findtext('Lineage') or '',
+                    'taxid_current': cur,
                 }
+                # **병합된 taxid 를 잃지 않는다.** 폐기·병합된 id 로 조회하면
+                # NCBI 는 **현재** TaxId 로 돌려주고 요청한 id 를 AkaTaxIds 에
+                # 넣는다 (1532 -> 33035 Blautia producta · 156454 -> 906
+                # Megasphaera · 81850 -> 33958 Lactobacillaceae).
+                # 반환 id 로만 키를 걸면 요청한 id 가 캐시에 영원히 안 들어와
+                #   ① microbes.csv 에서 그 균이 빠지고(12 종),
+                #   ② 그 taxid 로 걸린 미생물-질환 관계가 끊기고(32 건),
+                #   ③ cached_covering 이 매 실행마다 전체를 다시 받는다.
+                # 외부 큐레이션(Disbiome·gutMDisorder)은 옛 id 를 들고 있으므로
+                # **요청한 id 로도 키를 건다.** 현재 id 는 열에 남겨 추적한다.
+                for key in {cur, *(x.text for x in tx.findall('AkaTaxIds/TaxId'))}:
+                    if key:
+                        recs[key] = rec
             time.sleep(0.4)
             print(f'\r  {min(i+200, len(focus))}/{len(focus)}', end='', flush=True)
         print()
@@ -622,7 +638,17 @@ def microbe():
     # 캐시가 요청을 덮는지 common.cached_covering 이 확인한다 — 안 그러면 focus 가
     # 늘어도 옛 캐시가 돌아와 보탠 균이 조용히 빠진다(실제로 127 종에 머물렀다).
     tax = cached_covering('ncbi_taxonomy.json', fetch_tax, focus)
+    _lost = sorted(set(focus) - set(tax))
     print(f'  갱신된 taxon {len(tax)}')
+    # 조용히 빠지는 것을 더는 허용하지 않는다 — 몇 개인지, 어느 id 인지 적는다.
+    if _lost:
+        print(f'  ** NCBI 가 돌려주지 않은 taxid {len(_lost)}: '
+              f'{", ".join(_lost[:12])}{" …" if len(_lost) > 12 else ""}')
+    _merged = {k: v['taxid_current'] for k, v in tax.items()
+               if v.get('taxid_current') and v['taxid_current'] != k}
+    if _merged:
+        print(f'  병합된 taxid {len(_merged)} 건을 요청 id 로 유지했다 '
+              f'(예: {list(_merged.items())[0][0]} → {list(_merged.items())[0][1]})')
 
     # ------------------------------------------------------------------
     print('[4/5] KEGG organism 매칭')
@@ -651,8 +677,14 @@ def microbe():
         by_species[' '.join(w[:2]).lower()].append(o['org'])
         by_genus[re.sub(r'[^a-z]', '', w[0].lower())].append(o['org'])
 
+    # **focus 로 돈다.** tax(캐시)로 돌면 ① 병합 taxid 가 두 키를 가져 같은 균의
+    # compound 링크가 두 번 생기고, ② 지난 실행의 taxid 까지 링크를 받는다.
+    # microbes.csv 와 compound_microbe.csv 가 같은 모집단을 봐야 집계가 맞는다.
     tax_org, tax_lv = {}, {}
-    for t, rec in tax.items():
+    for t in focus:
+        rec = tax.get(t)
+        if not rec:
+            continue
         w = rec['name'].split()
         for lv, key, table in (('species', ' '.join(w[:2]).lower(), by_species),
                                ('genus', re.sub(r'[^a-z]', '', w[0].lower()), by_genus)):
@@ -660,13 +692,23 @@ def microbe():
                 tax_org[t], tax_lv[t] = table[key][0], lv
                 break
     _n = collections.Counter(tax_lv.values())
-    print(f'  KEGG organism 코드 연결 {len(tax_org)}/{len(tax)} '
+    print(f'  KEGG organism 코드 연결 {len(tax_org)}/{len([t for t in focus if t in tax])} '
           f'(종 {_n["species"]} · 속 {_n["genus"]})')
 
-    micro = pd.DataFrame([{'taxid': t, **rec, 'kegg_org': tax_org.get(t, ''),
+    # **캐시가 아니라 focus 로 적재한다.** 둘을 구분해야 하는 이유가 둘이다.
+    #   ① 병합 taxid 를 요청 id 로도 키 걸면서 한 균이 두 키를 갖는다. 캐시를
+    #      그대로 쏟으면 같은 균이 두 행이 되어 링크 수가 부푼다.
+    #   ② 캐시는 지난 실행의 taxid 도 들고 있다 — focus 가 줄어도 안 빠진다.
+    micro = pd.DataFrame([{'taxid': t, **tax[t], 'kegg_org': tax_org.get(t, ''),
                            'match_rank': tax_lv.get(t, '')}
-                          for t, rec in tax.items()])
+                          for t in focus if t in tax])
+    # 옛 id 와 새 id 가 **둘 다** focus 에 있으면 같은 균이 두 행이다. 소스마다
+    # 다른 id 를 들고 있어서 생기는 일이라 지우지 않고 센다 — 집계할 때 알아야 한다.
+    _dupn = int(micro.taxid_current.duplicated().sum()) if 'taxid_current' in micro else 0
     micro.to_csv(os.path.join(OUT, 'microbes.csv'), index=False)
+    print(f'  microbes.csv {len(micro)} 행 (focus {len(focus)}) = '
+          f'고유 균 {micro.taxid_current.nunique() if "taxid_current" in micro else len(micro)} 종'
+          + (f' + 같은 균이 두 id 로 들어온 것 {_dupn} 쌍' if _dupn else ''))
     md.to_csv(os.path.join(OUT, 'microbe_disease.csv'), index=False)
 
     # ------------------------------------------------------------------
@@ -704,7 +746,12 @@ def microbe():
             for c, cko in c2ko.items():
                 n = len(cko & kos)
                 if n:
-                    rows.append({'kegg': c, 'taxid': t, 'kegg_org': org, 'n_ko': n,
+                    rows.append({'kegg': c, 'taxid': t,
+                                 # 병합 id 를 요청 id 로 유지하면 같은 균이 두
+                                 # 행이 된다(7 쌍). 조인은 taxid 로 하되 **셀
+                                 # 때는 균을 두 번 세지 않도록** 정본 id 를 싣는다.
+                                 'taxid_current': tax[t].get('taxid_current', t),
+                                 'kegg_org': org, 'n_ko': n,
                                  'match_rank': tax_lv.get(t, '')})
         print(f'\r  organism {i}/{len(orgcodes)}  링크 {len(rows):,}', end='', flush=True)
     print()
@@ -712,8 +759,12 @@ def microbe():
     cm.to_csv(os.path.join(OUT, 'compound_microbe.csv'), index=False)
     print(f'  그중 속 수준 매칭 {int((cm["match_rank"] == "genus").sum()):,} 링크 '
           f'— "이 속의 어떤 유전체가" 라는 더 약한 주장이다')
-    print(f'  compound-미생물 {len(cm):,} 링크 / compound {cm["kegg"].nunique()} '
-          f'/ 미생물 {cm["taxid"].nunique()}')
+    # **고유 쌍을 같이 낸다.** 병합 id 를 요청 id 로도 유지하므로 행 수는 같은
+    # 균을 두 번 센다. 집계·문서에 쓸 숫자는 정본 기준 고유 쌍이다.
+    _uniq = len(cm.drop_duplicates(['kegg', 'taxid_current']))
+    print(f'  compound-미생물 {len(cm):,} 행 = 고유 (균, compound) 쌍 {_uniq:,} '
+          f'/ compound {cm["kegg"].nunique()} '
+          f'/ 미생물 {cm["taxid"].nunique()} id = {cm["taxid_current"].nunique()} 균')
 
 
     # ------------------------------------------------------------------
@@ -879,23 +930,49 @@ def kg():
         def __init__(self, path):
             self.f = open(path, 'w', encoding='utf-8')
             self.n = 0
+            self.dup = 0
+            self.seen = set()
 
         def t(self, s, p, o, source, literal=False, dtype=None):
             obj = o if not literal else (
                 f'"{esc(o)}"^^<{NS["xsd"]}{dtype}>' if dtype else f'"{esc(o)}"')
             if not literal:
                 obj = f'<{o}>'
-            self.f.write(f'<{s}> <{p}> {obj} .\n')
-            self.n += 1
+            line = f'<{s}> <{p}> {obj} .\n'
+            # **같은 statement 를 두 번 쓰지 않는다.**
+            # RDF 그래프에는 중복 statement 가 없다. 그런데 우리는 음식마다 ·
+            # 트리 번호마다 루프를 돌면서 같은 삼중항을 다시 썼고, 그래서
+            # 3,554,795 줄 중 113,473(3.2%)이 중복이었다 — subClassOf 95,113 ·
+            # label 5,615 · meshTree 4,624 · type 4,340. 그 줄 수를 "총 triple"
+            # 로 보고해 논문(13,346,991)과 비교하고 있었다. 부풀린 수치다.
+            # 뿌리(아래 FoodOn/OLS · MeSH tree 루프)도 고쳤지만, 출처가 더
+            # 있을 수 있으므로 쓰는 자리에서 막는다.
+            # 메모리: 128 비트 digest 를 int 로만 들고 있다(3.4M 건 ~160MB).
+            # **출처 집계는 중복 제거 전에 한다.** 한 삼중항을 여러 출처가
+            # 주장할 수 있고, 그건 사실이다 — VMH 와 KEGG 가 같은
+            # hasMetabolites 1,353 건을 독립적으로 주장한다(서로 교차검증이다).
+            # 중복 제거 후에 세면 **먼저 쓴 출처가 가져가** 뒤에 쓰는 출처가
+            # 줄어든다(gutMDisorder 3,717 -> 745 가 그렇게 생겼다). 순서에
+            # 의존하는 수치는 쓸 수 없다. 그래서 '주장 수' 로 센다.
             st = stats[source]
             st['triples'] += 1
             st['relations'].add(p)
             st['entities'].add(s)
             if not literal:
                 st['entities'].add(o)
+            h = int.from_bytes(hashlib.blake2b(line.encode(), digest_size=16).digest(), 'big')
+            if h in self.seen:
+                self.dup += 1
+                return
+            self.seen.add(h)
+            self.f.write(line)
+            self.n += 1
 
         def close(self):
             self.f.close()
+            if self.dup:
+                print(f'  중복 statement {self.dup:,} 건을 쓰지 않았다 '
+                      f'(RDF 그래프에 중복은 없다)')
 
 
     W = Writer(OUT_NT)
@@ -1034,15 +1111,29 @@ def kg():
               '(python3 ourkg/build.py evidence)')
 
     print('[4/6] Microbe (NCBI) · compound-microbe (KEGG) · microbe-disease')
-    mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str})
+    mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'),
+                      dtype={'taxid': str, 'taxid_current': str})
+    # **미생물 노드는 정본 taxid 로 만든다.** 외부 소스가 폐기된 id 를 들고 있어
+    # 요청 id 로도 적재하는데, 그 id 를 그대로 URI 로 쓰면 같은 균이 두 노드가
+    # 된다 — 집계는 두 번 세고 교차검사는 다른 균으로 본다 (common.taxid_alias).
+    # 원 id 는 our:akaTaxid 로 남겨 어느 소스가 무엇을 들고 있었는지 추적한다.
+    _alias = taxid_alias()
+    _seen_mic = set()
     for _, r in mic.iterrows():
-        u = NS['mic'] + r['taxid']
+        cu = _alias.get(r['taxid'], r['taxid'])
+        u = NS['mic'] + cu
+        if r['taxid'] != cu:
+            W.t(u, NS['our'] + 'akaTaxid', r['taxid'], 'NCBI taxonomy', literal=True)
+        if cu in _seen_mic:
+            continue
+        _seen_mic.add(cu)
         W.t(u, A, NS['ent'] + 'Microbe', 'NCBI taxonomy')
         W.t(u, LABEL, r['name'], 'NCBI taxonomy', literal=True)
         W.t(u, NS['our'] + 'rank', str(r['rank']), 'NCBI taxonomy', literal=True)
         W.t(u, NS['our'] + 'lineage', str(r['lineage']), 'NCBI taxonomy', literal=True)
         if isinstance(r['kegg_org'], str) and r['kegg_org']:
             W.t(u, SAMEAS, f'https://www.kegg.jp/entry/gn:{r["kegg_org"]}', 'NCBI taxonomy')
+    print(f'  미생물 노드 {len(_seen_mic)} (행 {len(mic)} — 병합 id 는 정본으로 모았다)')
 
     cm = pd.read_csv(os.path.join(OUT, 'compound_microbe.csv'), dtype={'taxid': str})
     # 속 수준 매칭은 **출처를 갈라서** 담는다. 버리지 않는다 — 실재하는 정보다.
@@ -1051,7 +1142,7 @@ def kg():
     _n_genus = 0
     for _, r in cm.iterrows():
         _g = str(r.get('match_rank', '')) == 'genus'
-        W.t(NS['mic'] + r['taxid'], NS['mpq'] + 'hasMetabolites',
+        W.t(NS['mic'] + _alias.get(r['taxid'], r['taxid']), NS['mpq'] + 'hasMetabolites',
             NS['kegg'] + r['kegg'], 'KEGG(속 수준)' if _g else 'KEGG')
         _n_genus += _g
     print(f'  compound-미생물 {len(cm):,} (종 수준 {len(cm) - _n_genus:,} · '
@@ -1076,7 +1167,7 @@ def kg():
         _vl.to_csv(os.path.join(OUT, 'compound_microbe_vmh.csv'), index=False)
         _known = set(cm[['taxid', 'kegg']].itertuples(index=False, name=None))
         for _t, _k in _vl.itertuples(index=False, name=None):
-            W.t(NS['mic'] + _t, NS['mpq'] + 'hasMetabolites',
+            W.t(NS['mic'] + _alias.get(_t, _t), NS['mpq'] + 'hasMetabolites',
                 NS['kegg'] + _k, 'VMH/AGORA2')
             n_vmh += 1
         _both = len(_known & set(_vl.itertuples(index=False, name=None)))
@@ -1099,7 +1190,7 @@ def kg():
         _g['genus'] = _g['name'].astype(str).str.split().str[0]
         _ms = _ms.merge(_g[['taxid', 'genus']], on='genus')
         for _, r in _ms.drop_duplicates(['taxid', 'kegg', 'sign']).iterrows():
-            u = NS['mic'] + str(r['taxid'])
+            u = NS['mic'] + _alias.get(str(r['taxid']), str(r['taxid']))
             W.t(u, NS['mpq'] + 'hasMetabolites', NS['kegg'] + r['kegg'], '측정 상관')
             W.t(u, NS['our'] + 'measuredCorrelation',
                 f"{r['kegg']}|{'-' if r['sign'] < 0 else '+'}|{r['n_cohorts']}코호트",
@@ -1113,7 +1204,7 @@ def kg():
     md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
     for _, r in md.iterrows():
         du = NS['mesh'] + r['mesh_id']
-        W.t(NS['mic'] + r['taxid'], NS['mpq'] + 'hasAssociation', du, 'MiKG')
+        W.t(NS['mic'] + _alias.get(r['taxid'], r['taxid']), NS['mpq'] + 'hasAssociation', du, 'MiKG')
         W.t(du, A, NS['ent'] + 'Disease', 'MiKG')
         if isinstance(r['disease'], str):
             W.t(du, LABEL, r['disease'], 'MiKG', literal=True)
@@ -1134,7 +1225,7 @@ def kg():
         _db = _db[_db.is_mental | _db.is_neuro]
         for _, r in _db.iterrows():
             du = NS['mesh'] + r['mesh_id']
-            W.t(NS['mic'] + r['taxid'], NS['mpq'] + 'hasAssociation', du, 'Disbiome')
+            W.t(NS['mic'] + _alias.get(r['taxid'], r['taxid']), NS['mpq'] + 'hasAssociation', du, 'Disbiome')
             W.t(du, A, NS['ent'] + 'Disease', 'Disbiome')
             n_disb += 1
         print(f'  Disbiome 미생물-질환 {n_disb:,} (균 {_db.taxid.nunique()} · 질환 {_db.mesh_id.nunique()})')
@@ -1149,7 +1240,7 @@ def kg():
         _gm = _gm[_gm.is_mental | _gm.is_neuro]
         for _, r in _gm.iterrows():
             du = NS['mesh'] + r['mesh_id']
-            W.t(NS['mic'] + r['taxid'], NS['mpq'] + 'hasAssociation', du, 'gutMDisorder')
+            W.t(NS['mic'] + _alias.get(r['taxid'], r['taxid']), NS['mpq'] + 'hasAssociation', du, 'gutMDisorder')
             W.t(du, A, NS['ent'] + 'Disease', 'gutMDisorder')
             if isinstance(r['disease'], str):
                 W.t(du, LABEL, r['disease'], 'gutMDisorder', literal=True)
@@ -1170,7 +1261,7 @@ def kg():
     if len(_ag):
         _ag.to_csv(os.path.join(OUT, 'microbe_disease_agreement.csv'), index=False)
         for _, r in _ag.iterrows():
-            mu, du = NS['mic'] + r['taxid'], NS['mesh'] + r['mesh_id']
+            mu, du = NS['mic'] + _alias.get(r['taxid'], r['taxid']), NS['mesh'] + r['mesh_id']
             if r['status'] == 'agreed':
                 W.t(mu, NS['our'] + 'abundanceIn',
                     f"{r['disease']}|{r['direction']}", '방향 합의', literal=True)
@@ -1459,6 +1550,7 @@ def kg():
     if os.path.exists(_mtp):
         _MT = json.load(open(_mtp))
         _rows = []
+        _seen_tree = set()
         for _mid, _dis, _tns in md[['mesh_id', 'disease', 'tree_numbers']].dropna(
                 subset=['tree_numbers']).drop_duplicates().values:
             _du = NS['mesh'] + str(_mid)
@@ -1468,6 +1560,11 @@ def kg():
                     _a = _MT.get('.'.join(_p[:_i]))
                     if not _a or _a['mesh_id'] == _mid:
                         continue
+                    # 한 질환이 트리 번호를 여럿 가지면 같은 조상이 여러 번
+                    # 나온다. 조상 라벨도 조상마다 한 번이면 된다.
+                    if (_mid, _a['mesh_id']) in _seen_tree:
+                        continue
+                    _seen_tree.add((_mid, _a['mesh_id']))
                     W.t(_du, SUBCLASS, NS['mesh'] + _a['mesh_id'], 'MeSH tree')
                     W.t(NS['mesh'] + _a['mesh_id'], LABEL, _a['label'], 'MeSH tree',
                         literal=True)
@@ -1498,12 +1595,16 @@ def kg():
             if _fu:
                 W.t(_fu, SAMEAS, _uri(_oid), 'FoodOn/OLS')
                 n_fo_ols += 1
-        for _fk, _g in _d[_d.rel == 'ancestor'].groupby('food_key'):
-            _c = _cls.get(_fk)
-            if _c:
-                for _a in _g['foodon'].unique():
-                    W.t(_uri(_c), SUBCLASS, _uri(_a), 'FoodOn/OLS')
-                    n_fo_ols += 1
+        # **클래스 계층은 음식 수와 무관하다.** 음식마다 돌면서 올리면 같은
+        # (클래스, 조상) 삼중항이 그 클래스를 가진 음식 수만큼 반복된다 —
+        # subClassOf 중복 95,113 의 거의 전부가 여기였다. 쌍을 먼저 모은다.
+        _pairs = {(_cls[_fk], _a)
+                  for _fk, _g in _d[_d.rel == 'ancestor'].groupby('food_key')
+                  if _cls.get(_fk)
+                  for _a in _g['foodon'].unique()}
+        for _c, _a in sorted(_pairs):
+            W.t(_uri(_c), SUBCLASS, _uri(_a), 'FoodOn/OLS')
+            n_fo_ols += 1
     print(f'  FoodOn {n_fo:,} triple, 우리 카테고리와 연결 {n_fo_link}'
           f' · OLS 축 {n_fo_ols:,} triple')
 
@@ -1639,14 +1740,22 @@ def kg():
         print(f'  {r["axis"]:9s} {r["item"][:36]:38s} {v:>10s}  {r["paper"]}')
 
     W.close()
-    print(f'\n총 triple {W.n:,}  →  {OUT_NT}')
+    # 그래프 크기는 **고유 statement** 수다. 출처별 표는 '주장 수' 라서
+    # 겹치는 만큼 합이 이보다 크다 — 논문 Table 1 과 비교할 때는 이 줄을 쓴다.
+    print(f'\n고유 triple {W.n:,}  (출처별 주장 합 {W.n + W.dup:,}'
+          f' — 여러 출처가 같은 statement 를 주장한 몫 {W.dup:,})'
+          f'\n  →  {OUT_NT}')
 
     rows = [{'source': s, 'relation': len(v['relations']),
              'entity': len(v['entities']), 'triples': v['triples']}
             for s, v in sorted(stats.items(), key=lambda kv: -kv[1]['triples'])]
     all_rel = set().union(*[v['relations'] for v in stats.values()])
     all_ent = set().union(*[v['entities'] for v in stats.values()])
-    rows.append({'source': 'Total', 'relation': len(all_rel),
+    # 출처 열은 '주장 수' 라 겹치는 만큼 합이 고유 그래프보다 크다. 표만 보고
+    # 산수가 틀렸다고 읽지 않게 두 줄을 따로 적는다.
+    rows.append({'source': 'Σ 출처 주장(겹침 포함)', 'relation': len(all_rel),
+                 'entity': len(all_ent), 'triples': W.n + W.dup})
+    rows.append({'source': 'Total (고유 그래프)', 'relation': len(all_rel),
                  'entity': len(all_ent), 'triples': W.n})
     st = pd.DataFrame(rows)
     st.to_csv(os.path.join(OUT, 'kg_stats.csv'), index=False)

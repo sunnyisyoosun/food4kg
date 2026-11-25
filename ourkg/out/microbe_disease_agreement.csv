@@ -188,7 +188,6 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 1392389,D000544,Alzheimer's Disease,agreed,Elevated,1,gutMDisorder,1,0
 1392389,D000856,Anorexia Nervosa,agreed,Elevated,1,gutMDisorder,1,0
 1392389,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
-1400058,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,Disbiome,0,1
 1404,D010300,Parkinson Disease,agreed,Reduced,1,Disbiome,0,1
 140625,D000067877,Autism Spectrum Disorder,agreed,Elevated,1,Disbiome,1,0
 140625,D010300,Parkinson Disease,agreed,Elevated,1,Disbiome,1,0
@@ -249,9 +248,6 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 1505652,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
 1505657,D000067877,Autism Spectrum Disorder,conflict,,2,Disbiome+gutMDisorder,1,1
 1505657,D010300,Parkinson's Disease,agreed,Reduced,1,gutMDisorder,0,1
-1505663,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,Disbiome,0,1
-1505663,D000544,Alzheimer's Disease,agreed,Elevated,1,gutMDisorder,1,0
-1505663,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
 1506,D000437,Alcoholism,agreed,Elevated,1,Disbiome,1,0
 1506,D000544,Alzheimer Disease,agreed,Reduced,1,Disbiome,0,1
 1506,D000690,Amyotrophic Lateral Sclerosis,agreed,Reduced,1,Disbiome,0,1
@@ -279,12 +275,9 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 1526,D000067877,Autism Spectrum Disorder,agreed,Elevated,1,Disbiome,1,0
 1531,D000067877,Autism Spectrum Disorder,agreed,Elevated,1,Disbiome,1,0
 1531,D008881,Migraine Disorders,agreed,Elevated,1,Disbiome,1,0
-1532,D010300,Parkinson's Disease,agreed,Reduced,2,Disbiome+gutMDisorder,0,2
 1535,D000067877,Autism Spectrum Disorder,conflict,,2,Disbiome+gutMDisorder,1,2
 1535,D000544,Alzheimer's Disease,agreed,Elevated,1,gutMDisorder,1,0
 1535,D010300,Parkinson's Disease,conflict,,2,Disbiome+gutMDisorder,1,2
-1535326,D000067877,Autism Spectrum Disorder,agreed,Elevated,1,Disbiome,1,0
-1535326,D006816,Huntington Disease,agreed,Elevated,1,Disbiome,1,0
 154,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,Disbiome,0,1
 154046,D000067877,Autism Spectrum Disorder,agreed,Elevated,1,Disbiome,1,0
 154046,D008881,Migraine Disorders,agreed,Elevated,1,Disbiome,1,0
@@ -301,9 +294,6 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 155900,D010300,Parkinson's Disease,conflict,,1,gutMDisorder,1,1
 155900,D060825,Cognitive Dysfunction,agreed,Reduced,1,gutMDisorder,0,1
 1561,D010300,Parkinson's Disease,agreed,Reduced,1,gutMDisorder,0,1
-156454,D000544,Alzheimer's Disease,agreed,Elevated,1,gutMDisorder,1,0
-156454,D003865,Major depressive disorder,agreed,Elevated,1,gutMDisorder,1,0
-156454,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
 156456,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
 1569,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
 157,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
@@ -352,7 +342,6 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 1598,D010300,Parkinson Disease,agreed,Elevated,1,Disbiome,1,0
 160404,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,gutMDisorder,0,1
 160404,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
-160674,D000098647,Generalized Anxiety Disorder,agreed,Elevated,1,Disbiome,1,0
 1610,D010300,Parkinson's Disease,agreed,Reduced,1,gutMDisorder,0,1
 1613,D010300,Parkinson's Disease,conflict,,2,Disbiome+gutMDisorder,2,1
 1613,D012559,Schizophrenia,agreed,Elevated,1,Disbiome,1,0
@@ -651,8 +640,6 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 209,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
 2093818,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,gutMDisorder,0,1
 2093818,D000856,Anorexia Nervosa,agreed,Reduced,1,gutMDisorder,0,1
-209879,D000067877,Autism Spectrum Disorder,agreed,Elevated,1,Disbiome,1,0
-209879,D010300,Parkinson Disease,agreed,Reduced,1,Disbiome,0,1
 212791,D010300,Parkinson Disease,agreed,Elevated,1,Disbiome,1,0
 213115,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
 213115,D010911,Pituitary Neoplasms,agreed,Elevated,1,gutMDisorder,1,0
@@ -665,12 +652,16 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 2159,D010300,Parkinson's Disease,conflict,,1,gutMDisorder,1,1
 2159,D010661,Phenylketonurias,agreed,Reduced,1,gutMDisorder,0,1
 2163168,D000690,Amyotrophic Lateral Sclerosis,agreed,Elevated,1,Disbiome,1,0
-216572,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,gutMDisorder,0,1
-216572,D000544,Alzheimer's Disease,agreed,Reduced,1,gutMDisorder,0,1
+216572,D000067877,Autism Spectrum Disorder,conflict,,2,Disbiome+gutMDisorder,1,2
+216572,D000098647,Generalized Anxiety Disorder,agreed,Reduced,1,Disbiome,0,1
+216572,D000544,Alzheimer's Disease,conflict,,2,Disbiome+gutMDisorder,1,1
+216572,D000690,Amyotrophic Lateral Sclerosis,agreed,Elevated,1,Disbiome,1,0
 216572,D000856,Anorexia Nervosa,conflict,,1,gutMDisorder,1,1
-216572,D010300,Parkinson's Disease,conflict,,1,gutMDisorder,1,1
+216572,D001714,Bipolar Disorder,agreed,Reduced,1,Disbiome,0,1
+216572,D010300,Parkinson's Disease,conflict,,2,Disbiome+gutMDisorder,2,2
 216572,D010661,Phenylketonurias,agreed,Reduced,1,gutMDisorder,0,1
 216572,D010911,Pituitary Neoplasms,agreed,Elevated,1,gutMDisorder,1,0
+216572,D012559,Schizophrenia,agreed,Reduced,1,Disbiome,0,1
 216572,D018792,"Encephalitis, Viral;Meningitis, Viral",agreed,Elevated,1,gutMDisorder,1,0
 216816,D000067877,Autism Spectrum Disorder,conflict,,2,Disbiome+gutMDisorder,1,1
 216816,D000544,Alzheimer's Disease,agreed,Elevated,1,gutMDisorder,1,0
@@ -767,14 +758,12 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 265975,D010661,Phenylketonurias,agreed,Reduced,1,gutMDisorder,0,1
 2701,D010300,Parkinson Disease,agreed,Elevated,1,Disbiome,1,0
 2702,D010300,Parkinson Disease,agreed,Elevated,1,Disbiome,1,0
-270497,D010300,Parkinson Disease,agreed,Elevated,1,Disbiome,1,0
 270498,D010300,Parkinson's Disease,agreed,Elevated,2,Disbiome+gutMDisorder,2,0
 2717,D000067877,Autism Spectrum Disorder,agreed,Elevated,1,Disbiome,1,0
 2717,D000437,Alcoholism,agreed,Elevated,1,Disbiome,1,0
 2717,D012893,Sleep Wake Disorders,agreed,Reduced,1,gutMDisorder,0,1
 2718,D010300,Parkinson's Disease,agreed,Reduced,1,gutMDisorder,0,1
 272548,D010300,Parkinson's Disease,agreed,Reduced,1,gutMDisorder,0,1
-27316,D000437,Alcoholism,agreed,Reduced,1,Disbiome,0,1
 2740,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,Disbiome,0,1
 2740,D000437,Alcoholism,agreed,Reduced,1,Disbiome,0,1
 2740,D010300,Parkinson's Disease,agreed,Reduced,1,gutMDisorder,0,1
@@ -909,6 +898,9 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 301302,D003704,Parkinson Disease;Dementia,agreed,Reduced,1,gutMDisorder,0,1
 301302,D010300,Parkinson's Disease,agreed,Reduced,1,gutMDisorder,0,1
 301302,D012559,Schizophrenia,agreed,Reduced,1,Disbiome,0,1
+3025755,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,Disbiome,0,1
+3025755,D000544,Alzheimer's Disease,agreed,Elevated,1,gutMDisorder,1,0
+3025755,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
 3031449,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
 3031449,D010911,Pituitary Neoplasms,agreed,Elevated,1,gutMDisorder,1,0
 3068309,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
@@ -934,6 +926,7 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 310298,D010300,Parkinson's Disease,conflict,,2,Disbiome+gutMDisorder,1,2
 310298,D019578,Multiple System Atrophy,agreed,Reduced,1,Disbiome,0,1
 3120435,D010300,Parkinson's Disease,conflict,,1,gutMDisorder,1,1
+315422,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,Disbiome,0,1
 316625,D012559,Schizophrenia,agreed,Elevated,1,Disbiome,1,0
 31953,D000544,Alzheimer's Disease,agreed,Elevated,1,gutMDisorder,1,0
 31953,D003865,Major Depressive Disorder,agreed,Elevated,1,Disbiome,1,0
@@ -991,6 +984,7 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 33024,D018792,"Encephalitis, Viral;Meningitis, Viral",agreed,Elevated,1,gutMDisorder,1,0
 33024,D019578,Multiple System Atrophy,agreed,Elevated,1,Disbiome,1,0
 33025,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,Disbiome,0,1
+33035,D010300,Parkinson's Disease,agreed,Reduced,2,Disbiome+gutMDisorder,0,2
 33035,D012559,Schizophrenia,agreed,Reduced,1,Disbiome,0,1
 33038,D000067877,Autism Spectrum Disorder,agreed,Elevated,1,Disbiome,1,0
 33038,D000098647,Generalized Anxiety Disorder,agreed,Elevated,1,Disbiome,1,0
@@ -1025,7 +1019,9 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 33958,D000083242,Ischemic Stroke,agreed,Elevated,1,Disbiome,1,0
 33958,D000544,Alzheimer's Disease,agreed,Elevated,2,Disbiome+gutMDisorder,2,0
 33958,D006501,Hepatic Encephalopathy,agreed,Elevated,1,Disbiome,1,0
-33958,D010300,Parkinson's Disease,agreed,Elevated,2,Disbiome+gutMDisorder,2,0
+33958,D009157,Myasthenia Gravis,agreed,Reduced,1,Disbiome,0,1
+33958,D010300,Parkinson's Disease,conflict,,2,Disbiome+gutMDisorder,2,1
+33958,D012559,Schizophrenia,agreed,Reduced,1,Disbiome,0,1
 33958,D060825,Cognitive Dysfunction,agreed,Reduced,1,gutMDisorder,0,1
 341027,D010300,Parkinson Disease,conflict,,1,Disbiome,1,1
 341694,D010300,Parkinson's Disease,agreed,Reduced,1,gutMDisorder,0,1
@@ -1097,13 +1093,13 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 397864,D000067877,Autism Spectrum Disorder,conflict,,2,Disbiome+gutMDisorder,2,1
 397864,D010300,Parkinson's Disease,conflict,,2,Disbiome+gutMDisorder,2,1
 397864,D010661,Phenylketonurias,agreed,Reduced,1,gutMDisorder,0,1
-39948,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,Disbiome,0,1
+39948,D000067877,Autism Spectrum Disorder,conflict,,1,Disbiome,1,1
 39948,D000098647,Generalized Anxiety Disorder,agreed,Reduced,1,Disbiome,0,1
 39948,D000437,Alcoholism,agreed,Elevated,1,Disbiome,1,0
 39948,D000544,Alzheimer's Disease,agreed,Reduced,2,Disbiome+gutMDisorder,0,2
 39948,D001289,Attention Deficit Disorder with Hyperactivity,agreed,Reduced,1,Disbiome,0,1
 39948,D003865,Major Depressive Disorder,agreed,Reduced,1,Disbiome,0,1
-39948,D010300,Parkinson's Disease,conflict,,2,Disbiome+gutMDisorder,1,1
+39948,D010300,Parkinson's Disease,conflict,,2,Disbiome+gutMDisorder,1,2
 39950,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
 402384,D010300,Parkinson Disease,agreed,Reduced,1,Disbiome,0,1
 40323,D010300,Parkinson Disease,agreed,Reduced,1,Disbiome,0,1
@@ -1124,7 +1120,6 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 40544,D012559,Schizophrenia,agreed,Reduced,1,Disbiome,0,1
 40544,D018792,"Encephalitis, Viral;Meningitis, Viral",agreed,Elevated,1,gutMDisorder,1,0
 40545,D000067877,Autism Spectrum Disorder,agreed,Elevated,1,Disbiome,1,0
-40620,D012559,Schizophrenia,agreed,Elevated,1,Disbiome,1,0
 407,D000544,Alzheimer's Disease,agreed,Elevated,1,gutMDisorder,1,0
 409,D010300,Parkinson Disease,conflict,,1,Disbiome,1,1
 41200,D000067877,Autism Spectrum Disorder,conflict,,1,Disbiome,1,1
@@ -1170,6 +1165,7 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 437897,D009157,Myasthenia Gravis,agreed,Elevated,1,Disbiome,1,0
 437897,D019578,Multiple System Atrophy,agreed,Reduced,1,Disbiome,0,1
 438033,D012559,Schizophrenia,agreed,Reduced,1,Disbiome,0,1
+43987,D000437,Alcoholism,agreed,Reduced,1,Disbiome,0,1
 43996,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,Disbiome,0,1
 44008,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
 44258,D000067877,Autism Spectrum Disorder,agreed,Elevated,1,Disbiome,1,0
@@ -1290,13 +1286,6 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 538,D000437,Alcoholism,agreed,Elevated,1,Disbiome,1,0
 538,D010300,Parkinson Disease,agreed,Reduced,1,Disbiome,0,1
 539738,D010661,Phenylketonurias,agreed,Elevated,1,gutMDisorder,1,0
-541000,D000067877,Autism Spectrum Disorder,conflict,,1,Disbiome,1,1
-541000,D000098647,Generalized Anxiety Disorder,agreed,Reduced,1,Disbiome,0,1
-541000,D000544,Alzheimer Disease,agreed,Elevated,1,Disbiome,1,0
-541000,D000690,Amyotrophic Lateral Sclerosis,agreed,Elevated,1,Disbiome,1,0
-541000,D001714,Bipolar Disorder,agreed,Reduced,1,Disbiome,0,1
-541000,D010300,Parkinson Disease,conflict,,1,Disbiome,1,1
-541000,D012559,Schizophrenia,agreed,Reduced,1,Disbiome,0,1
 543,D000067877,Autism Spectrum Disorder,conflict,,2,Disbiome+gutMDisorder,1,1
 543,D000083242,Ischemic Stroke,agreed,Elevated,1,Disbiome,1,0
 543,D000098647,Generalized Anxiety Disorder,agreed,Elevated,1,Disbiome,1,0
@@ -1316,9 +1305,12 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 544,D010300,Parkinson Disease,agreed,Elevated,1,Disbiome,1,0
 544580,D010911,Pituitary Neoplasms,agreed,Elevated,1,gutMDisorder,1,0
 545,D000437,Alcoholism,agreed,Elevated,1,Disbiome,1,0
+5475,D000067877,Autism Spectrum Disorder,agreed,Elevated,1,Disbiome,1,0
+5475,D006816,Huntington Disease,agreed,Elevated,1,Disbiome,1,0
 5476,D000437,Alcoholism,agreed,Elevated,1,Disbiome,1,0
 5476,D010300,Parkinson Disease,agreed,Elevated,1,Disbiome,1,0
 550,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,Disbiome,0,1
+5506,D012559,Schizophrenia,agreed,Elevated,1,Disbiome,1,0
 55193,D006816,Huntington Disease,agreed,Elevated,1,Disbiome,1,0
 5533,D006816,Huntington Disease,agreed,Elevated,1,Disbiome,1,0
 5543,D012559,Schizophrenia,agreed,Reduced,1,Disbiome,0,1
@@ -1337,6 +1329,7 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 562,D006816,Huntington Disease,agreed,Elevated,1,Disbiome,1,0
 56688,D012559,Schizophrenia,agreed,Elevated,1,Disbiome,1,0
 56774,D010300,Parkinson's Disease,agreed,Reduced,1,gutMDisorder,0,1
+570,D000098647,Generalized Anxiety Disorder,agreed,Elevated,1,Disbiome,1,0
 570,D000437,Alcoholism,agreed,Elevated,1,Disbiome,1,0
 570,D003865,Major depressive disorder,agreed,Elevated,1,gutMDisorder,1,0
 570,D010300,Parkinson Disease,agreed,Elevated,1,Disbiome,1,0
@@ -1513,9 +1506,6 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 817,D010300,Parkinson's Disease,agreed,Reduced,2,Disbiome+gutMDisorder,0,2
 817,D012559,Schizophrenia,agreed,Elevated,1,Disbiome,1,0
 817,D019578,Multiple System Atrophy,agreed,Elevated,1,Disbiome,1,0
-81850,D009157,Myasthenia Gravis,agreed,Reduced,1,Disbiome,0,1
-81850,D010300,Parkinson Disease,agreed,Reduced,1,Disbiome,0,1
-81850,D012559,Schizophrenia,agreed,Reduced,1,Disbiome,0,1
 81852,D000067877,Autism Spectrum Disorder,agreed,Reduced,1,gutMDisorder,0,1
 81852,D000544,Alzheimer's Disease,agreed,Elevated,2,Disbiome+gutMDisorder,2,0
 81852,D010300,Parkinson's Disease,agreed,Elevated,2,Disbiome+gutMDisorder,2,0
@@ -1632,7 +1622,9 @@ taxid,mesh_id,disease,status,direction,n_sources,sources,n_elevated,n_reduced
 904,D010661,Phenylketonurias,agreed,Reduced,1,gutMDisorder,0,1
 904,D013313,"Stress Disorders, Post-Traumatic",agreed,Elevated,1,Disbiome,1,0
 906,D000067877,Autism Spectrum Disorder,conflict,,2,Disbiome+gutMDisorder,2,1
+906,D000544,Alzheimer's Disease,agreed,Elevated,1,gutMDisorder,1,0
 906,D002532,Intracranial Aneurysm,agreed,Reduced,1,gutMDisorder,0,1
+906,D003865,Major depressive disorder,agreed,Elevated,1,gutMDisorder,1,0
 906,D006501,Hepatic Encephalopathy,agreed,Elevated,1,Disbiome,1,0
 906,D010300,Parkinson's Disease,agreed,Elevated,1,gutMDisorder,1,0
 906,D012559,Schizophrenia,conflict,,1,Disbiome,1,1
