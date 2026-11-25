@@ -178,6 +178,52 @@ def one(source):
     return row
 
 
+# 논문 Table 5 의 **합병증 8 문항**을 우리 MeSH id 로 옮긴 표.
+# 논문 자신이 `paper` 열에 +1(confirmed) / 0(unknown) 을 준다 — **그게 -1 정답셋
+# 이다.** 외부에서 구할 필요가 없었다(§41 ②). 8 문항 중 2 는 `Learning
+# disabilities` 가 Disbiome·gutMDisorder 의 정신·신경 집합에 없어 못 잰다.
+PAPER_PAIRS = (
+    #  no, 문항,                        a MeSH,        b MeSH,        논문 판정
+    (0, 'Autistic disorder and depression', 'D000067877', 'D003865', 1),
+    (1, 'Parkinson disorder and depression', 'D010300', 'D003865', 1),
+    (2, 'Learning disabilities and autism', None, 'D000067877', 1),
+    (3, 'Anxiety and depression', 'D000098647', 'D003865', 1),
+    (4, 'Bipolar disorder and depression', 'D001714', 'D003865', 1),
+    (5, 'Learning disabilities and depression', None, 'D003865', 0),
+    (6, 'Parkinson disorder and autism', 'D010300', 'D000067877', 0),
+    (7, 'Alzheimer Disease and autism', 'D000544', 'D000067877', 1),
+)
+
+
+def paper_eval(source='curated'):
+    """논문 Table 5 합병증 8 문항을 **그 소스로** 다시 잰다.
+
+    `mikg` 는 포개짐 때문에 검정을 못 돌리므로(§41 ③) 기본은 `curated` 다.
+    논문이 0 으로 둔 문항을 우리가 +1 로 통과시키면 **위양성**이다 — 전에
+    MiKG 경로로는 8/8 을 통과시켜 그 둘이 다 위양성이었다.
+    """
+    sets, source = disease_sets(source)
+    mesh = {k.rsplit('[', 1)[-1].rstrip(']'): k for k in sets}
+    h = hypergeom(sets)
+    idx = {}
+    for r in h.itertuples(index=False):
+        idx[frozenset((r.a, r.b))] = r
+    rows = []
+    for no, q, am, bm, paper in PAPER_PAIRS:
+        ka, kb = mesh.get(am), mesh.get(bm)
+        if not ka or not kb:
+            rows.append({'no': no, '문항': q, '논문': paper, '우리': '',
+                         '판정': '못 잼', '공유': '', '기대': '', 'q': '',
+                         '사유': f'{"a" if not ka else "b"} 질환이 {source} 에 없다'})
+            continue
+        r = idx.get(frozenset((ka, kb)))
+        ours = 1 if (r is not None and r.q < 0.05) else 0
+        rows.append({'no': no, '문항': q, '논문': paper, '우리': ours,
+                     '판정': '일치' if ours == paper else '불일치',
+                     '공유': r.공유, '기대': r.기대, 'q': f'{r.q:.2e}', '사유': ''})
+    return pd.DataFrame(rows), source
+
+
 def main():
     """**네 소스를 모두 본다.** 거부는 정상 결과이므로 exit 0 이다.
 
@@ -190,6 +236,18 @@ def main():
     t.to_csv(os.path.join(OUT, 'complication_summary.csv'), index=False)
     print('\n== 요약  -> out/complication_summary.csv')
     print(t.to_string(index=False))
+
+    # 논문 Table 5 합병증 8 문항을 검정이 가능한 소스로 다시 잰다.
+    pe, src = paper_eval(os.environ.get('COMP_PAPER_SOURCE', 'curated'))
+    pe.to_csv(os.path.join(OUT, 'complication_paper_eval.csv'), index=False)
+    ok = int((pe['판정'] == '일치').sum())
+    na = int((pe['판정'] == '못 잼').sum())
+    print(f'\n== 논문 Table 5 합병증 8 문항 ({src})'
+          f'  -> out/complication_paper_eval.csv')
+    print(pe.to_string(index=False))
+    print(f'\n  일치 {ok} / 잴 수 있는 {len(pe) - na} (못 잼 {na})')
+    print('  논문이 0 으로 둔 문항을 우리가 1 로 통과시키면 위양성이다 —')
+    print('  MiKG 경로로는 8/8 을 통과시켜 그 둘이 다 위양성이었다.')
     return 0
 
 

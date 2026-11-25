@@ -5298,12 +5298,45 @@ Cochrane 의 "insufficient evidence" 는 **치료 효과**에 근거가 없다�
 > 제대로 넣었다 — `run_all.py` 의 `complication` 단계. 거부는 정상 결과이므로
 > **exit 0** 이다(파이프라인이 거기서 멈추면 안 된다).
 
+### ★★ −1 정답셋은 **논문 자신이 주고 있었다**
+
+외부에서 구할 것이 아니었다. 논문 Table 5 의 합병증 **8 문항**에 논문이 직접
+`+1`(confirmed) / `0`(unknown) 을 붙여 둔다 — **그게 −1 정답셋이다.** 6 개가 +1,
+**2 개가 0** 이다(#5 Learning disabilities–depression, #6 Parkinson–autism).
+
+MiKG 경로로는 **8/8 을 통과**시켰다. 즉 논문이 0 으로 둔 둘이 **다 위양성**이었다.
+`curated` 로 다시 재면:
+
+| # | 문항 | 논문 | 우리 | 공유 | 기대 | q | |
+|---|---|---:|---:|---:|---:|---:|---|
+| 0 | Autistic disorder and depression | 1 | 1 | 39 | 18.3 | 1.1e-07 | 일치 |
+| 1 | Parkinson disorder and depression | 1 | 1 | 48 | 30.0 | 3.4e-07 | 일치 |
+| 2 | Learning disabilities and autism | 1 | — | | | | **못 잼** |
+| 3 | Anxiety and depression | 1 | 1 | 14 | 2.2 | 1.5e-07 | 일치 |
+| 4 | Bipolar disorder and depression | 1 | 1 | 8 | 1.1 | 6.8e-05 | 일치 |
+| 5 | Learning disabilities and depression | 0 | — | | | | **못 잼** |
+| 6 | **Parkinson disorder and autism** | **0** | **0** | 143 | **160.8** | **1.00** | **일치** |
+| 7 | Alzheimer Disease and autism | 1 | 1 | 83 | 50.7 | 7.5e-08 | 일치 |
+
+**잴 수 있는 6 개가 6/6 일치**한다. 핵심은 **#6** 이다 — 논문이 0 으로 둔 문항이
+`q = 1.00` 으로 **올바르게 기각**된다. 공유 143 인데 **기대가 160.8** 이라
+기대보다 **적다**. 미생물을 많이 공유한다고 합병증이 되는 것이 아니라는
+반례를, 우리 데이터가 스스로 낸다.
+
+**못 재는 2 개는 커버리지 한계다** — `Learning disabilities` 가 Disbiome ·
+gutMDisorder 의 정신·신경 집합에 없다. 지어내지 않고 `못 잼` 으로 적는다.
+
+`ourkg/complication.py` 의 `PAPER_PAIRS` · `paper_eval()` 이 이 표를 만든다
+(`out/complication_paper_eval.csv`). 시험 셋으로 고정했다 — 문항 수 8 과 음성 2,
+잴 수 있는 6 개의 전원 일치, **#6 이 0 으로 기각되는지**.
+
 ### 남은 것
 
-`curated` 로 ~28% 만 통과하므로 **우리 데이터 안에서 −1 후보가 생겼다**. 그
-후보를 문헌으로 점검하는 것은 다음 과제이고, 그때는 ② 때문에 **정신 × 신체**
-쌍을 써야 한다 — 레지스트리 연구가 HR ≈ 1 (CI 가 1 포함)로 보고하는 쌍이 거기
-있다. 지금 `curated` 에는 신체질환이 섞여 있어 그 쌍을 만들 수 있다.
+`curated` 로 ~28% 만 통과하므로 **우리 데이터 안에서 −1 후보가 더 생겼다**
+(336 쌍). 그 후보를 문헌으로 점검하는 것이 다음이고, ② 때문에 **정신 × 신체**
+쌍이 적합하다 — 레지스트리 연구가 HR ≈ 1 (CI 가 1 포함)로 보고하는 쌍이 거기
+있다. 지금 `curated` 에는 신체질환(뇌졸중 · 뇌동맥류 · 하수체종양 등)이 섞여
+있어 그 쌍을 만들 수 있다.
 
 ---
 

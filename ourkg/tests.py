@@ -476,6 +476,34 @@ class ComplicationGateTest(unittest.TestCase):
         self.assertEqual(cd['공유'], 0)
         self.assertAlmostEqual(cd['p'], 1.0, places=6)
 
+    def test_paper_pairs_table_shape(self):
+        # 논문 Table 5 의 합병증 문항은 8 개이고, 그중 2 개가 논문 판정 0 이다
+        # — **그게 -1 정답셋이다**(외부에서 구할 필요가 없었다).
+        self.assertEqual(len(self.c.PAPER_PAIRS), 8)
+        labels = [p[4] for p in self.c.PAPER_PAIRS]
+        self.assertEqual(sum(1 for x in labels if x == 0), 2)
+        self.assertEqual(sum(1 for x in labels if x == 1), 6)
+
+    def test_paper_eval_on_curated(self):
+        # 잴 수 있는 6 개가 전부 일치하고, 못 재는 2 개는 사유가 적혀야 한다.
+        pe, src = self.c.paper_eval('curated')
+        self.assertEqual(src, 'curated')
+        self.assertEqual(len(pe), 8)
+        na = pe[pe['판정'] == '못 잼']
+        self.assertEqual(len(na), 2)
+        self.assertTrue((na['사유'] != '').all())
+        got = pe[pe['판정'] != '못 잼']
+        self.assertEqual(len(got), 6)
+        self.assertTrue((got['판정'] == '일치').all(), got.to_string())
+
+    def test_paper_negative_is_rejected(self):
+        # #6 파킨슨-자폐는 논문이 0 으로 둔 문항이다. MiKG 경로로는 우리가 1 로
+        # 통과시켰다(위양성). curated 에서는 0 이어야 한다.
+        pe, _ = self.c.paper_eval('curated')
+        r = pe[pe.no == 6].iloc[0]
+        self.assertEqual(r['논문'], 0)
+        self.assertEqual(r['우리'], 0)
+
     def test_source_must_be_known(self):
         import os
         old = os.environ.get('COMP_SOURCE')
