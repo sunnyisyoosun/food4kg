@@ -144,10 +144,9 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 | `bootstrap.py` | Top-K 지표의 **표집 변동** (주지표 선정 근거) |
 | `consensus.py` | **합의 Top-K** — 부분표집에서 반복 선택되는 음식 |
 | `toperr.py` | Top-K **규칙 기반 오류 수** (외부 임상 · 섭취량 · 분말 · 시럽) |
-| `ensemble.py` | 순위 앙상블 비교 (기본값 아님 — §27 에서 기각) |
+| `check.py` | **정합 검사** — 산출물·문서가 서로 맞는지 네트워크 없이 1.9 초에 25 항목 |
 | `foodon_match.py` | FoodOn 매칭 (EBI OLS) |
-| `common.py` | 경로 · 단위 환산 · 라벨 정규화 · **읽는 자리 통합**(`compound_microbe` · `measured_links` · `microbe_disease_direction`) |
-| `check.py` | **정합 검사** — 산출물·문서가 서로 맞는지 네트워크 없이 1.9 초에 23 항목 |
+| `common.py` | 경로 · 단위 환산 · 라벨 정규화 · **읽는·돌리는 자리 통합**(`compound_microbe` · `measured_links` · `microbe_disease_direction` · `depression_e` · `taxid_alias` · `recommend_under`) |
 | `run_all.py` | 위를 순서대로. `--env` 로 환경변수 전수 |
 
 ---

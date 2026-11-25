@@ -31,7 +31,7 @@ warnings.filterwarnings('ignore')
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import pandas as pd  # noqa: E402
-from common import BASE, CACHE, OUT  # noqa: E402
+from common import BASE, CACHE, OUT, recommend_under  # noqa: E402
 
 POWDER = r'powder|\bmix\b|isolate|shake|supplement|instant breakfast|formula'
 SYRUP = r'heavy syrup|light syrup|in syrup|syrup pack'
@@ -80,12 +80,7 @@ if __name__ == '__main__':
         else:
             env['ENSEMBLE'] = 'none'
             env.update(CANDIDATES.get(name, {'E_MODE': name}))
-        os.environ.update(env)
-        import analyze
-        importlib.reload(analyze)
-        import contextlib, io as _io
-        with contextlib.redirect_stdout(_io.StringIO()):
-            res = analyze.recommend(save=False)
+        res, _ = recommend_under(env)
         if 'fdc_id' not in res:
             foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
             res = res.merge(foods[['food_key', 'fdc_id']], on='food_key', how='left')

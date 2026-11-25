@@ -1,2 +1,6 @@
 extras,작은섭취량,분말,시럽,합계(중복 제외),설정,Top1
 1,0,0,0,1,현행,"Vegetable juice, BOLTHOUSE FARMS, "
+1,0,0,1,1,union_all,"Soup, vegetable, canned, reduced s"
+6,0,1,4,6,ensemble,"Okra, fresh, cooked, no added fat"
+2,0,0,0,2,learned-name2,"Drumstick leaves, cooked, boiled, "
+2,0,1,2,3,effect+nhanes,"Artichokes, (globe or french), raw"

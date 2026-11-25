@@ -27,7 +27,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'eval'))
-from common import (OUT, BASE, CACHE, compound_microbe,
+from common import (OUT, BASE, CACHE, compound_microbe, depression_e,
                     microbe_disease_direction,
                     measured_links as _measured_links)
 
@@ -180,7 +180,7 @@ def resolve_e(mode, E_df=None):
     모르는 이름은 **소리 내고 멈춘다.** 조용한 기본값 복귀가 위 둘의 원인이다.
     """
     if E_df is None:
-        E_df = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+        E_df = depression_e()
 
     def _need(path, how):
         if not os.path.exists(path):
@@ -337,7 +337,7 @@ def _recommend_one(e_mode=None, path=None, save=True):
     print('[1/5] 행렬 구성')
     long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
     foods = pd.read_csv(os.path.join(OUT, 'foods.csv')).set_index('food_key')
-    E_df = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+    E_df = depression_e()
 
     # 추천 대상 음식 범위.
     # 논문 §4.2 의 135개 음식은 전부 분석 측정 기반(Foundation / SR Legacy / FNDDS)이다.
@@ -834,7 +834,7 @@ def evaluate():
                 # 속 수준 매칭으로 답하면 "이 속의 어떤 유전체가" 를 "이 종이" 로
                 # 바꿔 읽는 것이다 (KEGG 링크의 55% 가 속 수준이다).
                 cm = compound_microbe(rank='species')
-                cd = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
+                cd = depression_e().reset_index()
 
                 self.food = dict(zip(foods.fdc_id, foods.food_name))
                 key2fdc = dict(zip(foods.food_key, foods.fdc_id))
@@ -1013,7 +1013,7 @@ def evaluate():
                           ).set_index('taxid')['name'].to_dict()
         mdis = pd.read_csv(os.path.join(OUT, 'microbe_disease_mikg.csv'))
         rec = pd.read_csv(os.path.join(OUT, 'recommendation.csv'))
-        E = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+        E = depression_e()
         long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
         foods = pd.read_csv(os.path.join(OUT, 'foods.csv')).set_index('food_key')
 
@@ -1449,7 +1449,7 @@ def compare():
 
     # 모드별로 실제로 몇 개 compound 가 0 이 아닌지
     ev_path = os.path.join(OUT, 'compound_evidence.csv')
-    dep = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+    dep = depression_e()
     ev = pd.read_csv(ev_path).set_index('kegg') if os.path.exists(ev_path) else None
     long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
     cpds = sorted(long['kegg'].unique())
@@ -1910,7 +1910,7 @@ def invert():
         return
 
     print('[4/5] 공개 소스 E 와 부호 대조')
-    dep = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+    dep = depression_e()
     ev = pd.read_csv(os.path.join(OUT, 'compound_evidence.csv')).set_index('kegg')
     # 이름은 ProMENDA/evidence 에 없을 수 있다 — FDC 영양소 이름으로 보충한다.
     nmap = pd.read_csv(os.path.join(BASE, 'setup', 'nutrient_kegg_map.csv'))
@@ -2062,7 +2062,7 @@ def stype():
         'semantic': {'Type1': -1, 'Type2': +1, 'Type4': +1},
     }
     E = {name: build(spec) for name, spec in VARIANTS.items()}
-    dep = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+    dep = depression_e()
     E['paper'] = dep['e_shrunk'].to_dict()
 
     print('[2/4] 음식 행렬과 ModiMedDiet 라벨')
@@ -2422,7 +2422,7 @@ def emicrobe():
     from scipy.stats import spearmanr
 
     K = float(os.environ.get('SHRINK_K', '10'))
-    E = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+    E = depression_e()
     db = pd.read_csv(os.path.join(OUT, 'microbe_disease_disbiome.csv'),
                      dtype={'taxid': str})
     # gutMDisorder v3 — Disbiome 과 맞먹는 두 번째 큐레이션 소스. 우울증 관계가

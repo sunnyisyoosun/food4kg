@@ -31,7 +31,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (BASE, OUT, FDC_RAW, UNIT_TO_G, FDC_CATEGORY, cached_get, kegg_rest,
                     normalize_label, normalize_category, kegg_map, normkey,
                     mesh_lookup, cached_covering, gutmdisorder,
-                    microbe_disease_direction, taxid_alias)
+                    microbe_disease_direction, taxid_alias, depression_e)
 
 
 def food():
@@ -1027,7 +1027,7 @@ def kg():
     print(f'\r  중량 triple {len(long)*4:,}')
 
     print('[3/6] Compound (KEGG) · depression 관계 (ProMENDA)')
-    E = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
+    E = depression_e().reset_index()
     DEPRESSION = NS['mesh'] + 'D003865'
     W.t(DEPRESSION, A, NS['ent'] + 'Disease', 'ProMENDA')
     W.t(DEPRESSION, LABEL, 'Major depressive disorder', 'ProMENDA', literal=True)
@@ -1339,7 +1339,7 @@ def kg():
     # 논문 §3.1 이 든 세 축이다. 원본은 레포의 공개 KG 에서 가져온다 — 외부 재수집은
     # 하지 않는다. 다리(우리 엔티티와의 연결)가 몇 개나 생기는지 함께 센다.
     FKG = os.path.join(BASE, 'foodkg_triply')
-    cdep = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
+    cdep = depression_e().reset_index()
 
     def _ld(fn):
         with open(os.path.join(FKG, fn)) as fh:
@@ -1809,7 +1809,7 @@ def evidence():
     meta = {}       # kegg -> name
 
     # --- 1. ProMENDA
-    pm = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
+    pm = depression_e().reset_index()
     src['promenda'] = dict(zip(pm['kegg'], pm['e_shrunk']))
     meta.update(dict(zip(pm['kegg'], pm['name'])))
     print(f'  promenda  {sum(1 for c in cpds if src["promenda"].get(c, 0)):3d} compound')

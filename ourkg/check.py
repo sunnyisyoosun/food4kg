@@ -177,6 +177,52 @@ def check_registry():
          f'단계 {len(run_all.STEPS)} 전부 정의됨')
 
 
+def check_deadcode():
+    """`if __name__` **뒤에** 정의된 함수와 아무도 쓰지 않는 모듈을 찾는다.
+
+    같은 함정을 두 번 당했다 — `SWEEPS['ezero']` 를 `if __name__` 뒤에 등록해
+    쓸기가 한 번도 안 돌았고, `ensemble.py` 의 `boot()` 도 거기 있었다.
+    모듈로 import 하면 정의되지만 **스크립트로 돌리면 그 줄에 닿지 않는다.**
+    """
+    import ast
+    late, orphan = [], []
+    files = sorted(f for f in os.listdir(HERE) if f.endswith('.py'))
+    for fn in files:
+        src = open(os.path.join(HERE, fn), encoding='utf-8').read()
+        tree = ast.parse(src)
+        guard = None
+        for node in tree.body:
+            if (isinstance(node, ast.If) and isinstance(node.test, ast.Compare)
+                    and getattr(node.test.left, 'id', '') == '__name__'):
+                guard = node.lineno
+        if guard:
+            for node in tree.body:
+                if (isinstance(node, (ast.FunctionDef, ast.Assign))
+                        and node.lineno > guard):
+                    nm = (node.name if isinstance(node, ast.FunctionDef)
+                          else getattr(node.targets[0], 'id', '?'))
+                    late.append(f'{fn}:{nm}')
+        # 아무 모듈도 import 하지 않고 run_all 단계도 아니면 고아다.
+        stem = fn[:-3]
+        # common 은 전부가 import 하고, run_all·check 는 입구다.
+        # build·analyze 는 run_all 이 단계 이름이 아니라 **스크립트로** 부른다.
+        if stem in ('check', 'run_all', 'common', 'build', 'analyze'):
+            continue
+        used = any(re.search(rf'\b(import {stem}\b|from {stem} import)',
+                             open(os.path.join(HERE, g), encoding='utf-8').read())
+                   for g in files if g != fn)
+        import run_all
+        if not used and stem not in run_all.STEPS and not any(
+                v[0] == fn for v in {**run_all.VERIFY, **run_all.SWEEP}.values()):
+            orphan.append(fn)
+    _say('FAIL' if late else 'PASS', '__main__ 뒤 정의',
+         f'스크립트로 돌면 안 닿는다: {late}' if late else
+         f'{len(files)} 파일 전부 정의가 가드 앞에 있다')
+    _say('FAIL' if orphan else 'PASS', '고아 모듈',
+         f'아무도 안 쓰고 단계에도 없다: {orphan}' if orphan else
+         '모든 모듈이 import 되거나 run_all 단계다')
+
+
 def check_emode():
     """문서에 적힌 `E_MODE` 가 전부 해소되는가.
 
@@ -317,6 +363,7 @@ def check_docs():
 
 CHECKS = {'schema': check_schema, 'microbe': check_microbe, 'links': check_links,
           'agreement': check_agreement, 'registry': check_registry,
+          'deadcode': check_deadcode,
           'emode': check_emode, 'env': check_env, 'recommend': check_recommend,
           'kg': check_kg, 'docs': check_docs}
 

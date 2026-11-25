@@ -24,7 +24,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
-from common import OUT  # noqa: E402
+from common import OUT, recommend_under  # noqa: E402
 
 REC = {'Finfish and Shellfish Products', 'Fruits and Fruit Juices',
        'Vegetables and Vegetable Products'}
@@ -33,13 +33,7 @@ NOT = {'Sausages and Luncheon Meats', 'Baked Products', 'Sweets',
 
 
 def one(env, seed, frac):
-    os.environ.update(env)
-    os.environ['BOOT_FRAC'], os.environ['BOOT_SEED'] = str(frac), str(seed)
-    import analyze
-    importlib.reload(analyze)
-    import contextlib, io as _io
-    with contextlib.redirect_stdout(_io.StringIO()):       # 반복이 많아 조용히
-        res = analyze.recommend(save=False)
+    res, _ = recommend_under(env, boot=(frac, seed))
     t, b = res.head(30), res.tail(30)
     return {'추천군': int(t.food_group.isin(REC).sum()),
             '비추천군': int(b.food_group.isin(NOT).sum()),

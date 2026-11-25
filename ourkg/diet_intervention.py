@@ -46,7 +46,8 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import OUT, BASE, gutmdisorder_intervention, compound_microbe
+from common import (OUT, BASE, gutmdisorder_intervention, compound_microbe,
+                    depression_e)
 
 # 미리 고정한 대조. 키는 intervention 표기에 대한 정규식이다.
 PRESPECIFIED = (
@@ -57,8 +58,7 @@ PRESPECIFIED = (
 
 def _microbe_e(rank=None):
     """균 taxid → 그 균이 대사하는 compound 의 평균 E."""
-    E = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
-    e = E.set_index('kegg')['e_shrunk']
+    e = depression_e('e_shrunk')
     cm = compound_microbe(rank=rank)
     cm = cm[cm.kegg.isin(e.index)].copy()
     cm['e'] = cm.kegg.map(e)

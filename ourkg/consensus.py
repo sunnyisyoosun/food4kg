@@ -30,7 +30,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
-from common import OUT  # noqa: E402
+from common import OUT, recommend_under  # noqa: E402
 from bootstrap import BASE, CANDIDATES, REC, NOT  # noqa: E402
 
 
@@ -39,12 +39,7 @@ def consensus(env, R=100, frac=0.8, K=30):
     top, bot, seen = collections.Counter(), collections.Counter(), collections.Counter()
     meta = {}
     for seed in range(R):
-        os.environ.update(env)
-        os.environ['BOOT_FRAC'], os.environ['BOOT_SEED'] = str(frac), str(seed)
-        import analyze
-        importlib.reload(analyze)
-        with contextlib.redirect_stdout(_io.StringIO()):
-            res = analyze.recommend(save=False)
+        res, _ = recommend_under(env, boot=(frac, seed))
         seen.update(res['food_key'])
         top.update(res.head(K)['food_key'])
         bot.update(res.tail(K)['food_key'])

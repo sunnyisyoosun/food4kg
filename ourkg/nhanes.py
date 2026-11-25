@@ -29,7 +29,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import BASE, CACHE, OUT
+from common import BASE, CACHE, OUT, depression_e
 
 CYCLES = {'2017': ('2017', 'J'), '2015': ('2015', 'I'), '2013': ('2013', 'H')}
 URL = 'https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/{yr}/DataFiles/{f}.xpt'
@@ -169,7 +169,7 @@ def build(cycle=None):
               f'  E={r.e_nhanes:+.3f}')
 
     print('[3/3] ProMENDA E 와 대조')
-    E = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+    E = depression_e()
     j2 = t.set_index('kegg').join(E['e_shrunk'], how='inner')
     nz = j2[(j2.e_shrunk != 0) & (j2.e_nhanes != 0)]
     if len(nz) >= 10:

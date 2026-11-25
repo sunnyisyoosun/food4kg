@@ -18,7 +18,7 @@ import collections, json, os, re, sys, time, urllib.parse, urllib.request
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 import pandas as pd
-from common import BASE, OUT, cached_get, compound_microbe
+from common import BASE, OUT, cached_get, compound_microbe, depression_e
 
 UA = {'User-Agent': 'ourkg/1.0 (food4health reproduction+extension)'}
 QUERY = ('(probiotic*[tiab] OR Lactobacillus[tiab] OR Bifidobacterium[tiab] OR '
@@ -138,7 +138,7 @@ def test(n_perm=2000):
     print('  없는 종:', rct[~rct.taxid.isin(mic.taxid)].species.tolist())
 
     print('[2/2] 순열 검정 — RCT 종이 E>0 compound 를 더 대사하는가')
-    E = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')['e_shrunk']
+    E = depression_e('e_shrunk')
     cm = compound_microbe()
     cm = cm[cm.kegg.isin(E.index[E != 0])]
     pool = sorted(set(cm.taxid))

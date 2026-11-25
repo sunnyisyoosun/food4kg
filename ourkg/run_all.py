@@ -30,6 +30,7 @@ VERIFY = {'probiotic': ('probiotic_rct.py', ['test']),     # RESULTS §15c 검�
           'e_autism': ('e_autism.py', []),                  # RESULTS §34 (검정력 반론)
           'bootstrap': ('bootstrap.py', []),                # RESULTS §17 (주지표 근거)
           'consensus': ('consensus.py', []),                # RESULTS §23 (합의 Top-K)
+          'toperr': ('toperr.py', []),                      # RESULTS §27 (Top-K 오류 수)
           'check': ('check.py', [])}                        # 산출물·문서 정합 검사
 # 설정 쓸기. 하나하나가 recommend 를 여러 번 돌린다.
 SWEEP = {'sweep': ('sweep.py', [])}

@@ -26,7 +26,7 @@ warnings.filterwarnings('ignore')
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import pandas as pd  # noqa: E402
-from common import OUT  # noqa: E402
+from common import OUT, recommend_under  # noqa: E402
 
 REC = {'Finfish and Shellfish Products', 'Fruits and Fruit Juices',
        'Vegetables and Vegetable Products'}
@@ -180,10 +180,7 @@ def run(name):
                 'ezero': _ezero}[name]()
     rows = []
     for lab, env in cfgs:
-        os.environ.update(env)
-        import analyze
-        importlib.reload(analyze)
-        res = analyze.recommend(save=False)
+        res, analyze = recommend_under(env, quiet=False)
         sc = analyze.modimed_score(res, 30)
         top, bot = res.head(30), res.tail(30)
         rows.append({

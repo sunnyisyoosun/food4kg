@@ -427,6 +427,56 @@ def gutmdisorder_intervention(session=None):
     return pd.DataFrame(rows)
 
 
+def recommend_under(env, quiet=True, boot=None):
+    """환경변수를 걸고 `analyze.recommend` 를 한 번 돌려 결과를 돌려준다.
+
+    `sweep` · `toperr` · `consensus` · `bootstrap` 네 곳이 같은 네 줄을
+    각자 들고 있었다 —
+
+        os.environ.update(env); import analyze
+        importlib.reload(analyze); res = analyze.recommend(save=False)
+
+    `reload` 가 필요한 이유는 `analyze` 가 모듈 적재 시점에 환경변수를 읽는
+    자리가 있어서다. 그걸 잊으면 **앞 설정의 결과가 그대로 나온다** — 조용히
+    틀리는 종류라 한 곳에 둔다.
+
+    `boot=(frac, seed)` 를 주면 부분표집 설정도 같이 건다(`consensus`·`bootstrap`).
+    `quiet` 면 recommend 의 진행 출력을 삼킨다(반복이 수십 번이다).
+    """
+    import contextlib
+    import importlib
+    import io as _io
+    os.environ.update(env or {})
+    if boot:
+        os.environ['BOOT_FRAC'], os.environ['BOOT_SEED'] = str(boot[0]), str(boot[1])
+    import analyze
+    importlib.reload(analyze)
+    if not quiet:
+        return analyze.recommend(save=False), analyze
+    with contextlib.redirect_stdout(_io.StringIO()):
+        return analyze.recommend(save=False), analyze
+
+
+def depression_e(col=None):
+    """ProMENDA 기반 `E` 표를 읽는다 (`out/compound_depression.csv`).
+
+    같은 `read_csv(...).set_index('kegg')` 가 **11 곳**에 흩어져 있었다. 경로나
+    인덱스 규약을 바꾸면 그만큼 고쳐야 하고, 한 곳을 놓치면 조용히 다른 것을
+    본다 — `basis()` 가 점수와 다른 `E` 를 보여줬던 것이 그 계열이다.
+
+    `col` 을 주면 그 열(Series)을, 안 주면 표 전체(DataFrame, index=kegg)를
+    돌려준다. 없으면 만드는 법을 알려주고 멈춘다.
+    """
+    import sys
+    import pandas as pd
+    p = os.path.join(OUT, 'compound_depression.csv')
+    if not os.path.exists(p):
+        sys.exit('compound_depression.csv 가 없다. '
+                 'python3 ourkg/build.py promenda')
+    d = pd.read_csv(p).set_index('kegg')
+    return d[col] if col else d
+
+
 def taxid_alias():
     """원 taxid → **정본(canonical) taxid** 표.
 

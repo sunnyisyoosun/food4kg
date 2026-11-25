@@ -42,7 +42,7 @@ import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (OUT, CACHE, compound_microbe, microbe_disease_direction,
-                    measured_links)
+                    measured_links, depression_e)
 
 AUTISM_MESH = 'D000067877'          # MeSH Autism Spectrum Disorder
 CASE_HINT = 'autis'                 # Study.Group 의 'Autistic ' (뒤 공백 주의)
@@ -112,7 +112,7 @@ def compare_depression(ea):
     추천의 근거로서 약점이다. 없으면 질환 특이적이라는 쪽이다.
     """
     from scipy.stats import spearmanr, binomtest
-    ed = pd.read_csv(os.path.join(OUT, 'compound_depression.csv')).set_index('kegg')
+    ed = depression_e()
     both = ea.index.intersection(ed.index)
     x, y = ea.loc[both, 'e_autism'], ed.loc[both, 'e_shrunk']
     nz = (x != 0) & (y != 0)
@@ -212,7 +212,7 @@ def main():
     for nm, pat in (('우울증', r'[Dd]epressive'), ('자폐', r'Autism')):
         s = g[g.disease.astype(str).str.contains(pat, na=False)]
         print(f'  {nm}: gutMDisorder 관계 {len(s)} / 균 {s.taxid.nunique()}')
-    ed = pd.read_csv(os.path.join(OUT, 'compound_depression.csv'))
+    ed = depression_e()
     print(f'  E 의 폭: ProMENDA(우울증) compound {len(ed)} '
           f'/ KANG(자폐 측정) compound {len(ea)}')
     if len(t):
