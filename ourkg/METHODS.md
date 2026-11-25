@@ -330,6 +330,11 @@ gutMDisorder 의 식이 중재 행은 음식을 주고 균이 변하는 것을 �
 단계 간 의존이 깨졌는지는 `python3 ourkg/run_all.py` 를 끝까지 돌려야 안다.
 실제로 쓸기 사이로 설정이 새던 버그를 그 완주로 처음 찾았다 ([`RESULTS.md`](RESULTS.md) §40).
 현재 **24/24 통과**(약 50 분).
+
+**검사를 부르는 것도 자동으로 둔다** — `hooks/pre-commit` 이 커밋마다
+`check.py` 를 돌리고 실패하면 커밋을 막는다(2 초). `git config core.hooksPath
+hooks` 한 번으로 켠다. 검사가 작동하는데 **부르는 것이 사람 기억에 달려**
+있었던 것이 그 전까지의 구멍이다 ([`PROCESS.md`](PROCESS.md)).
 | `kg` | 출처 합 ≠ Σ 주장 · 파일에 중복 statement · **IRI 에 공백·파이프** |
 | `deadcode` | `if __name__` **뒤**에 정의된 함수 · 아무도 안 쓰는 모듈 |
 | `docs` | README 핵심 수치가 산출물과 다른 것 |

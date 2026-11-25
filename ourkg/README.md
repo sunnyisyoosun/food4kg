@@ -95,6 +95,19 @@ python3 ourkg/check.py                    # 산출물·문서 정합 검사 (29 
 **단계별로만 돌리면 드러나지 않는 결함이 있다** (설정이 쓸기 사이로 새던 버그를
 전체 실행으로 처음 찾았다, `PROCESS.md` 2.6).
 
+### 커밋 전 검사를 자동으로 — 레포마다 한 번
+
+```bash
+git config core.hooksPath hooks     # hooks/pre-commit 을 켠다
+```
+
+`hooks/pre-commit` 이 커밋 때마다 `check.py` 를 돌리고 **실패하면 커밋을 막는다**
+(2 초). 훅을 `.git/hooks/` 가 아니라 레포의 `hooks/` 에 두는 이유는 git 이
+`.git/hooks/` 를 추적하지 않아 **받는 사람에게 안 따라가기** 때문이다.
+
+의도한 상태를 커밋해야 하면 `SKIP_OURKG_CHECK=1 git commit ...` 또는
+`git commit --no-verify`.
+
 ### 미리 받아 둬야 하는 것 넷
 
 용량이나 수동 승인 때문에 실행 중 받지 않는다. 나머지(KEGG · NCBI · MeSH ·

@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# 커밋 전에 ourkg 정합 검사를 돌린다 (29 항목, 네트워크 없이 약 2 초).
+#
+# 왜 — 검사는 작동하는데 **부르는 것이 사람 기억에 달려 있었다.** 이번까지
+# `docs` 검사가 문서 갱신 누락을 두 번 잡았지만, 둘 다 내가 수동으로 돌렸을
+# 때였다. 2 초짜리를 커밋 경로에 박아 둔다 (ourkg/PROCESS.md A).
+#
+# 켜는 법 (레포마다 한 번):
+#     git config core.hooksPath hooks
+# 끄고 한 번만 넘기려면:
+#     SKIP_OURKG_CHECK=1 git commit ...
+# 또는 `git commit --no-verify`.
+set -uo pipefail
+
+if [ "${SKIP_OURKG_CHECK:-0}" = "1" ]; then
+    echo "pre-commit: SKIP_OURKG_CHECK=1 — 검사를 건너뛴다"
+    exit 0
+fi
+
+ROOT="$(git rev-parse --show-toplevel)"
+CHECK="$ROOT/ourkg/check.py"
+[ -f "$CHECK" ] || exit 0          # ourkg 가 없는 체크아웃에서는 할 일이 없다
+
+# `.venv` 가 있으면 그걸 쓴다 — 전역 python 에는 pandas 가 없을 수 있다.
+PY="python3"
+[ -x "$ROOT/.venv/bin/python" ] && PY="$ROOT/.venv/bin/python"
+
+# 산출물이 아직 없는 체크아웃(갓 clone)에서는 검사가 전부 SKIP 이고 통과한다.
+OUT=$("$PY" "$CHECK" 2>&1)
+STATUS=$?
+
+if [ $STATUS -ne 0 ]; then
+    echo "$OUT" | grep -E "^\s+FAIL|통과 [0-9]+" || echo "$OUT" | tail -20
+    cat <<'MSG'
+
+pre-commit: ourkg 정합 검사가 실패했다 — 커밋을 멈춘다.
+
+  전체 출력:   python3 ourkg/check.py
+  일부만:      python3 ourkg/check.py docs provenance
+  무엇을 왜 검사하는지: ourkg/METHODS.md, 어떤 사고를 막는지: ourkg/PROCESS.md
+
+의도한 상태라면 (예: 산출물을 일부러 낡은 채 커밋)
+  SKIP_OURKG_CHECK=1 git commit ...
+MSG
+    exit 1
+fi
+
+echo "$OUT" | grep -E "통과 [0-9]+ / 실패" | sed 's/^/pre-commit: /'
+exit 0
