@@ -1,0 +1,121 @@
+a,b,|A|,|B|,공유,"min(A,B)",포개짐,Jaccard
+Alzheimer's Disease [D000544],Amyotrophic lateral sclerosis [D000690],108,15,2,15,False,0.017
+Alzheimer's Disease [D000544],Anorexia Nervosa [D000856],108,34,15,34,False,0.118
+Alzheimer's Disease [D000544],Attention Deficit Disorder with Hyperactivity [D001289],108,6,4,6,False,0.036
+Alzheimer's Disease [D000544],Autism Spectrum Disorder [D000067877],108,106,47,106,False,0.281
+Alzheimer's Disease [D000544],"Encephalitis, Viral;Meningitis, Viral [D018792]",108,27,13,27,False,0.107
+Alzheimer's Disease [D000544],Food addiction [D000073932],108,6,1,6,False,0.009
+Alzheimer's Disease [D000544],Hepatolenticular Degeneration [D006527],108,7,5,7,False,0.045
+Alzheimer's Disease [D000544],Intracranial Aneurysm [D002532],108,37,6,37,False,0.043
+Alzheimer's Disease [D000544],Major depressive disorder [D003865],108,23,12,23,False,0.101
+Alzheimer's Disease [D000544],Parkinson Disease;Cognitive Dysfunction [D060825],108,18,7,18,False,0.059
+Alzheimer's Disease [D000544],Parkinson Disease;Dementia [D003704],108,6,1,6,False,0.009
+Alzheimer's Disease [D000544],Parkinson's Disease [D010300],108,331,80,108,False,0.223
+Alzheimer's Disease [D000544],Phenylketonurias [D010661],108,43,16,43,False,0.119
+Alzheimer's Disease [D000544],Pica [D010842],108,10,0,10,False,0.0
+Alzheimer's Disease [D000544],Pituitary Neoplasms [D010911],108,66,15,66,False,0.094
+Amyotrophic lateral sclerosis [D000690],Anorexia Nervosa [D000856],15,34,0,15,False,0.0
+Amyotrophic lateral sclerosis [D000690],Attention Deficit Disorder with Hyperactivity [D001289],15,6,0,6,False,0.0
+Amyotrophic lateral sclerosis [D000690],Autism Spectrum Disorder [D000067877],15,106,2,15,False,0.017
+Amyotrophic lateral sclerosis [D000690],"Encephalitis, Viral;Meningitis, Viral [D018792]",15,27,0,15,False,0.0
+Amyotrophic lateral sclerosis [D000690],Food addiction [D000073932],15,6,0,6,False,0.0
+Amyotrophic lateral sclerosis [D000690],Hepatolenticular Degeneration [D006527],15,7,0,7,False,0.0
+Amyotrophic lateral sclerosis [D000690],Intracranial Aneurysm [D002532],15,37,0,15,False,0.0
+Amyotrophic lateral sclerosis [D000690],Major depressive disorder [D003865],15,23,1,15,False,0.027
+Amyotrophic lateral sclerosis [D000690],Parkinson Disease;Cognitive Dysfunction [D060825],15,18,2,15,False,0.065
+Amyotrophic lateral sclerosis [D000690],Parkinson Disease;Dementia [D003704],15,6,1,6,False,0.05
+Amyotrophic lateral sclerosis [D000690],Parkinson's Disease [D010300],15,331,5,15,False,0.015
+Amyotrophic lateral sclerosis [D000690],Phenylketonurias [D010661],15,43,1,15,False,0.018
+Amyotrophic lateral sclerosis [D000690],Pica [D010842],15,10,0,10,False,0.0
+Amyotrophic lateral sclerosis [D000690],Pituitary Neoplasms [D010911],15,66,0,15,False,0.0
+Anorexia Nervosa [D000856],Attention Deficit Disorder with Hyperactivity [D001289],34,6,1,6,False,0.026
+Anorexia Nervosa [D000856],Autism Spectrum Disorder [D000067877],34,106,20,34,False,0.167
+Anorexia Nervosa [D000856],"Encephalitis, Viral;Meningitis, Viral [D018792]",34,27,6,27,False,0.109
+Anorexia Nervosa [D000856],Food addiction [D000073932],34,6,0,6,False,0.0
+Anorexia Nervosa [D000856],Hepatolenticular Degeneration [D006527],34,7,3,7,False,0.079
+Anorexia Nervosa [D000856],Intracranial Aneurysm [D002532],34,37,3,34,False,0.044
+Anorexia Nervosa [D000856],Major depressive disorder [D003865],34,23,8,23,False,0.163
+Anorexia Nervosa [D000856],Parkinson Disease;Cognitive Dysfunction [D060825],34,18,2,18,False,0.04
+Anorexia Nervosa [D000856],Parkinson Disease;Dementia [D003704],34,6,0,6,False,0.0
+Anorexia Nervosa [D000856],Parkinson's Disease [D010300],34,331,27,34,False,0.08
+Anorexia Nervosa [D000856],Phenylketonurias [D010661],34,43,9,34,False,0.132
+Anorexia Nervosa [D000856],Pica [D010842],34,10,0,10,False,0.0
+Anorexia Nervosa [D000856],Pituitary Neoplasms [D010911],34,66,9,34,False,0.099
+Attention Deficit Disorder with Hyperactivity [D001289],Autism Spectrum Disorder [D000067877],6,106,3,6,False,0.028
+Attention Deficit Disorder with Hyperactivity [D001289],"Encephalitis, Viral;Meningitis, Viral [D018792]",6,27,1,6,False,0.031
+Attention Deficit Disorder with Hyperactivity [D001289],Food addiction [D000073932],6,6,1,6,False,0.091
+Attention Deficit Disorder with Hyperactivity [D001289],Hepatolenticular Degeneration [D006527],6,7,1,6,False,0.083
+Attention Deficit Disorder with Hyperactivity [D001289],Intracranial Aneurysm [D002532],6,37,1,6,False,0.024
+Attention Deficit Disorder with Hyperactivity [D001289],Major depressive disorder [D003865],6,23,3,6,False,0.115
+Attention Deficit Disorder with Hyperactivity [D001289],Parkinson Disease;Cognitive Dysfunction [D060825],6,18,0,6,False,0.0
+Attention Deficit Disorder with Hyperactivity [D001289],Parkinson Disease;Dementia [D003704],6,6,0,6,False,0.0
+Attention Deficit Disorder with Hyperactivity [D001289],Parkinson's Disease [D010300],6,331,5,6,False,0.015
+Attention Deficit Disorder with Hyperactivity [D001289],Phenylketonurias [D010661],6,43,2,6,False,0.043
+Attention Deficit Disorder with Hyperactivity [D001289],Pica [D010842],6,10,0,6,False,0.0
+Attention Deficit Disorder with Hyperactivity [D001289],Pituitary Neoplasms [D010911],6,66,1,6,False,0.014
+Autism Spectrum Disorder [D000067877],"Encephalitis, Viral;Meningitis, Viral [D018792]",106,27,9,27,False,0.073
+Autism Spectrum Disorder [D000067877],Food addiction [D000073932],106,6,0,6,False,0.0
+Autism Spectrum Disorder [D000067877],Hepatolenticular Degeneration [D006527],106,7,3,7,False,0.027
+Autism Spectrum Disorder [D000067877],Intracranial Aneurysm [D002532],106,37,8,37,False,0.059
+Autism Spectrum Disorder [D000067877],Major depressive disorder [D003865],106,23,10,23,False,0.084
+Autism Spectrum Disorder [D000067877],Parkinson Disease;Cognitive Dysfunction [D060825],106,18,7,18,False,0.06
+Autism Spectrum Disorder [D000067877],Parkinson Disease;Dementia [D003704],106,6,1,6,False,0.009
+Autism Spectrum Disorder [D000067877],Parkinson's Disease [D010300],106,331,72,106,False,0.197
+Autism Spectrum Disorder [D000067877],Phenylketonurias [D010661],106,43,13,43,False,0.096
+Autism Spectrum Disorder [D000067877],Pica [D010842],106,10,0,10,False,0.0
+Autism Spectrum Disorder [D000067877],Pituitary Neoplasms [D010911],106,66,10,66,False,0.062
+"Encephalitis, Viral;Meningitis, Viral [D018792]",Food addiction [D000073932],27,6,0,6,False,0.0
+"Encephalitis, Viral;Meningitis, Viral [D018792]",Hepatolenticular Degeneration [D006527],27,7,5,7,False,0.172
+"Encephalitis, Viral;Meningitis, Viral [D018792]",Intracranial Aneurysm [D002532],27,37,1,27,False,0.016
+"Encephalitis, Viral;Meningitis, Viral [D018792]",Major depressive disorder [D003865],27,23,6,23,False,0.136
+"Encephalitis, Viral;Meningitis, Viral [D018792]",Parkinson Disease;Cognitive Dysfunction [D060825],27,18,2,18,False,0.047
+"Encephalitis, Viral;Meningitis, Viral [D018792]",Parkinson Disease;Dementia [D003704],27,6,0,6,False,0.0
+"Encephalitis, Viral;Meningitis, Viral [D018792]",Parkinson's Disease [D010300],27,331,17,27,False,0.05
+"Encephalitis, Viral;Meningitis, Viral [D018792]",Phenylketonurias [D010661],27,43,4,27,False,0.061
+"Encephalitis, Viral;Meningitis, Viral [D018792]",Pica [D010842],27,10,0,10,False,0.0
+"Encephalitis, Viral;Meningitis, Viral [D018792]",Pituitary Neoplasms [D010911],27,66,6,27,False,0.069
+Food addiction [D000073932],Hepatolenticular Degeneration [D006527],6,7,0,6,False,0.0
+Food addiction [D000073932],Intracranial Aneurysm [D002532],6,37,0,6,False,0.0
+Food addiction [D000073932],Major depressive disorder [D003865],6,23,0,6,False,0.0
+Food addiction [D000073932],Parkinson Disease;Cognitive Dysfunction [D060825],6,18,0,6,False,0.0
+Food addiction [D000073932],Parkinson Disease;Dementia [D003704],6,6,0,6,False,0.0
+Food addiction [D000073932],Parkinson's Disease [D010300],6,331,2,6,False,0.006
+Food addiction [D000073932],Phenylketonurias [D010661],6,43,0,6,False,0.0
+Food addiction [D000073932],Pica [D010842],6,10,0,6,False,0.0
+Food addiction [D000073932],Pituitary Neoplasms [D010911],6,66,0,6,False,0.0
+Hepatolenticular Degeneration [D006527],Intracranial Aneurysm [D002532],7,37,1,7,False,0.023
+Hepatolenticular Degeneration [D006527],Major depressive disorder [D003865],7,23,3,7,False,0.111
+Hepatolenticular Degeneration [D006527],Parkinson Disease;Cognitive Dysfunction [D060825],7,18,2,7,False,0.087
+Hepatolenticular Degeneration [D006527],Parkinson Disease;Dementia [D003704],7,6,0,6,False,0.0
+Hepatolenticular Degeneration [D006527],Parkinson's Disease [D010300],7,331,7,7,True,0.021
+Hepatolenticular Degeneration [D006527],Phenylketonurias [D010661],7,43,3,7,False,0.064
+Hepatolenticular Degeneration [D006527],Pica [D010842],7,10,0,7,False,0.0
+Hepatolenticular Degeneration [D006527],Pituitary Neoplasms [D010911],7,66,1,7,False,0.014
+Intracranial Aneurysm [D002532],Major depressive disorder [D003865],37,23,5,23,False,0.091
+Intracranial Aneurysm [D002532],Parkinson Disease;Cognitive Dysfunction [D060825],37,18,1,18,False,0.019
+Intracranial Aneurysm [D002532],Parkinson Disease;Dementia [D003704],37,6,0,6,False,0.0
+Intracranial Aneurysm [D002532],Parkinson's Disease [D010300],37,331,11,37,False,0.031
+Intracranial Aneurysm [D002532],Phenylketonurias [D010661],37,43,5,37,False,0.067
+Intracranial Aneurysm [D002532],Pica [D010842],37,10,1,10,False,0.022
+Intracranial Aneurysm [D002532],Pituitary Neoplasms [D010911],37,66,0,37,False,0.0
+Major depressive disorder [D003865],Parkinson Disease;Cognitive Dysfunction [D060825],23,18,1,18,False,0.025
+Major depressive disorder [D003865],Parkinson Disease;Dementia [D003704],23,6,0,6,False,0.0
+Major depressive disorder [D003865],Parkinson's Disease [D010300],23,331,18,23,False,0.054
+Major depressive disorder [D003865],Phenylketonurias [D010661],23,43,3,23,False,0.048
+Major depressive disorder [D003865],Pica [D010842],23,10,0,10,False,0.0
+Major depressive disorder [D003865],Pituitary Neoplasms [D010911],23,66,6,23,False,0.072
+Parkinson Disease;Cognitive Dysfunction [D060825],Parkinson Disease;Dementia [D003704],18,6,2,6,False,0.091
+Parkinson Disease;Cognitive Dysfunction [D060825],Parkinson's Disease [D010300],18,331,15,18,False,0.045
+Parkinson Disease;Cognitive Dysfunction [D060825],Phenylketonurias [D010661],18,43,2,18,False,0.034
+Parkinson Disease;Cognitive Dysfunction [D060825],Pica [D010842],18,10,0,10,False,0.0
+Parkinson Disease;Cognitive Dysfunction [D060825],Pituitary Neoplasms [D010911],18,66,0,18,False,0.0
+Parkinson Disease;Dementia [D003704],Parkinson's Disease [D010300],6,331,6,6,True,0.018
+Parkinson Disease;Dementia [D003704],Phenylketonurias [D010661],6,43,1,6,False,0.021
+Parkinson Disease;Dementia [D003704],Pica [D010842],6,10,0,6,False,0.0
+Parkinson Disease;Dementia [D003704],Pituitary Neoplasms [D010911],6,66,0,6,False,0.0
+Parkinson's Disease [D010300],Phenylketonurias [D010661],331,43,30,43,False,0.087
+Parkinson's Disease [D010300],Pica [D010842],331,10,1,10,False,0.003
+Parkinson's Disease [D010300],Pituitary Neoplasms [D010911],331,66,28,66,False,0.076
+Phenylketonurias [D010661],Pica [D010842],43,10,0,10,False,0.0
+Phenylketonurias [D010661],Pituitary Neoplasms [D010911],43,66,5,43,False,0.048
+Pica [D010842],Pituitary Neoplasms [D010911],10,66,0,10,False,0.0

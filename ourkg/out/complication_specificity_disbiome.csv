@@ -1,0 +1,232 @@
+a,b,|A|,|B|,공유,"min(A,B)",포개짐,Jaccard
+Alcoholism [D000437],Alzheimer Disease [D000544],72,44,21,44,False,0.221
+Alcoholism [D000437],Amyotrophic Lateral Sclerosis [D000690],72,24,10,24,False,0.116
+Alcoholism [D000437],Anorexia Nervosa [D000856],72,8,6,8,False,0.081
+Alcoholism [D000437],Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],72,5,3,5,False,0.041
+Alcoholism [D000437],Attention Deficit Disorder with Hyperactivity [D001289],72,23,6,23,False,0.067
+Alcoholism [D000437],Autism Spectrum Disorder [D000067877],72,202,41,72,False,0.176
+Alcoholism [D000437],Bipolar Disorder [D001714],72,17,8,17,False,0.099
+Alcoholism [D000437],"Child Development Disorders, Pervasive [D002659]",72,38,3,38,False,0.028
+Alcoholism [D000437],Drug Resistant Epilepsy [D000069279],72,16,8,16,False,0.1
+Alcoholism [D000437],"Epilepsies, Partial [D004828]",72,13,10,13,False,0.133
+Alcoholism [D000437],Generalized Anxiety Disorder [D000098647],72,33,12,33,False,0.129
+Alcoholism [D000437],Hepatic Encephalopathy [D006501],72,27,9,27,False,0.1
+Alcoholism [D000437],Huntington Disease [D006816],72,11,0,11,False,0.0
+Alcoholism [D000437],Ischemic Stroke [D000083242],72,13,8,13,False,0.104
+Alcoholism [D000437],Major Depressive Disorder [D003865],72,32,22,32,False,0.268
+Alcoholism [D000437],Migraine Disorders [D008881],72,16,1,16,False,0.011
+Alcoholism [D000437],Multiple System Atrophy [D019578],72,22,6,22,False,0.068
+Alcoholism [D000437],Myasthenia Gravis [D009157],72,30,12,30,False,0.133
+Alcoholism [D000437],Parkinson Disease [D010300],72,189,45,72,False,0.208
+Alcoholism [D000437],Schizophrenia [D012559],72,106,20,72,False,0.127
+Alcoholism [D000437],"Stress Disorders, Post-Traumatic [D013313]",72,13,4,13,False,0.049
+Alzheimer Disease [D000544],Amyotrophic Lateral Sclerosis [D000690],44,24,8,24,False,0.133
+Alzheimer Disease [D000544],Anorexia Nervosa [D000856],44,8,4,8,False,0.083
+Alzheimer Disease [D000544],Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],44,5,3,5,False,0.065
+Alzheimer Disease [D000544],Attention Deficit Disorder with Hyperactivity [D001289],44,23,5,23,False,0.081
+Alzheimer Disease [D000544],Autism Spectrum Disorder [D000067877],44,202,28,44,False,0.128
+Alzheimer Disease [D000544],Bipolar Disorder [D001714],44,17,8,17,False,0.151
+Alzheimer Disease [D000544],"Child Development Disorders, Pervasive [D002659]",44,38,4,38,False,0.051
+Alzheimer Disease [D000544],Drug Resistant Epilepsy [D000069279],44,16,4,16,False,0.071
+Alzheimer Disease [D000544],"Epilepsies, Partial [D004828]",44,13,5,13,False,0.096
+Alzheimer Disease [D000544],Generalized Anxiety Disorder [D000098647],44,33,11,33,False,0.167
+Alzheimer Disease [D000544],Hepatic Encephalopathy [D006501],44,27,7,27,False,0.109
+Alzheimer Disease [D000544],Huntington Disease [D006816],44,11,2,11,False,0.038
+Alzheimer Disease [D000544],Ischemic Stroke [D000083242],44,13,5,13,False,0.096
+Alzheimer Disease [D000544],Major Depressive Disorder [D003865],44,32,16,32,False,0.267
+Alzheimer Disease [D000544],Migraine Disorders [D008881],44,16,1,16,False,0.017
+Alzheimer Disease [D000544],Multiple System Atrophy [D019578],44,22,6,22,False,0.1
+Alzheimer Disease [D000544],Myasthenia Gravis [D009157],44,30,10,30,False,0.156
+Alzheimer Disease [D000544],Parkinson Disease [D010300],44,189,27,44,False,0.131
+Alzheimer Disease [D000544],Schizophrenia [D012559],44,106,16,44,False,0.119
+Alzheimer Disease [D000544],"Stress Disorders, Post-Traumatic [D013313]",44,13,3,13,False,0.056
+Amyotrophic Lateral Sclerosis [D000690],Anorexia Nervosa [D000856],24,8,2,8,False,0.067
+Amyotrophic Lateral Sclerosis [D000690],Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],24,5,3,5,False,0.115
+Amyotrophic Lateral Sclerosis [D000690],Attention Deficit Disorder with Hyperactivity [D001289],24,23,3,23,False,0.068
+Amyotrophic Lateral Sclerosis [D000690],Autism Spectrum Disorder [D000067877],24,202,14,24,False,0.066
+Amyotrophic Lateral Sclerosis [D000690],Bipolar Disorder [D001714],24,17,5,17,False,0.139
+Amyotrophic Lateral Sclerosis [D000690],"Child Development Disorders, Pervasive [D002659]",24,38,5,24,False,0.088
+Amyotrophic Lateral Sclerosis [D000690],Drug Resistant Epilepsy [D000069279],24,16,3,16,False,0.081
+Amyotrophic Lateral Sclerosis [D000690],"Epilepsies, Partial [D004828]",24,13,4,13,False,0.121
+Amyotrophic Lateral Sclerosis [D000690],Generalized Anxiety Disorder [D000098647],24,33,6,24,False,0.118
+Amyotrophic Lateral Sclerosis [D000690],Hepatic Encephalopathy [D006501],24,27,4,24,False,0.085
+Amyotrophic Lateral Sclerosis [D000690],Huntington Disease [D006816],24,11,1,11,False,0.029
+Amyotrophic Lateral Sclerosis [D000690],Ischemic Stroke [D000083242],24,13,5,13,False,0.156
+Amyotrophic Lateral Sclerosis [D000690],Major Depressive Disorder [D003865],24,32,9,24,False,0.191
+Amyotrophic Lateral Sclerosis [D000690],Migraine Disorders [D008881],24,16,1,16,False,0.026
+Amyotrophic Lateral Sclerosis [D000690],Multiple System Atrophy [D019578],24,22,1,22,False,0.022
+Amyotrophic Lateral Sclerosis [D000690],Myasthenia Gravis [D009157],24,30,2,24,False,0.038
+Amyotrophic Lateral Sclerosis [D000690],Parkinson Disease [D010300],24,189,13,24,False,0.065
+Amyotrophic Lateral Sclerosis [D000690],Schizophrenia [D012559],24,106,9,24,False,0.074
+Amyotrophic Lateral Sclerosis [D000690],"Stress Disorders, Post-Traumatic [D013313]",24,13,3,13,False,0.088
+Anorexia Nervosa [D000856],Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],8,5,1,5,False,0.083
+Anorexia Nervosa [D000856],Attention Deficit Disorder with Hyperactivity [D001289],8,23,0,8,False,0.0
+Anorexia Nervosa [D000856],Autism Spectrum Disorder [D000067877],8,202,6,8,False,0.029
+Anorexia Nervosa [D000856],Bipolar Disorder [D001714],8,17,3,8,False,0.136
+Anorexia Nervosa [D000856],"Child Development Disorders, Pervasive [D002659]",8,38,0,8,False,0.0
+Anorexia Nervosa [D000856],Drug Resistant Epilepsy [D000069279],8,16,2,8,False,0.091
+Anorexia Nervosa [D000856],"Epilepsies, Partial [D004828]",8,13,1,8,False,0.05
+Anorexia Nervosa [D000856],Generalized Anxiety Disorder [D000098647],8,33,1,8,False,0.025
+Anorexia Nervosa [D000856],Hepatic Encephalopathy [D006501],8,27,4,8,False,0.129
+Anorexia Nervosa [D000856],Huntington Disease [D006816],8,11,0,8,False,0.0
+Anorexia Nervosa [D000856],Ischemic Stroke [D000083242],8,13,3,8,False,0.167
+Anorexia Nervosa [D000856],Major Depressive Disorder [D003865],8,32,5,8,False,0.143
+Anorexia Nervosa [D000856],Migraine Disorders [D008881],8,16,1,8,False,0.043
+Anorexia Nervosa [D000856],Multiple System Atrophy [D019578],8,22,0,8,False,0.0
+Anorexia Nervosa [D000856],Myasthenia Gravis [D009157],8,30,3,8,False,0.086
+Anorexia Nervosa [D000856],Parkinson Disease [D010300],8,189,8,8,True,0.042
+Anorexia Nervosa [D000856],Schizophrenia [D012559],8,106,4,8,False,0.036
+Anorexia Nervosa [D000856],"Stress Disorders, Post-Traumatic [D013313]",8,13,3,8,False,0.167
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Attention Deficit Disorder with Hyperactivity [D001289],5,23,2,5,False,0.077
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Autism Spectrum Disorder [D000067877],5,202,4,5,False,0.02
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Bipolar Disorder [D001714],5,17,2,5,False,0.1
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],"Child Development Disorders, Pervasive [D002659]",5,38,2,5,False,0.049
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Drug Resistant Epilepsy [D000069279],5,16,1,5,False,0.05
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],"Epilepsies, Partial [D004828]",5,13,2,5,False,0.125
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Generalized Anxiety Disorder [D000098647],5,33,2,5,False,0.056
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Hepatic Encephalopathy [D006501],5,27,1,5,False,0.032
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Huntington Disease [D006816],5,11,0,5,False,0.0
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Ischemic Stroke [D000083242],5,13,1,5,False,0.059
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Major Depressive Disorder [D003865],5,32,3,5,False,0.088
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Migraine Disorders [D008881],5,16,0,5,False,0.0
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Multiple System Atrophy [D019578],5,22,1,5,False,0.038
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Myasthenia Gravis [D009157],5,30,2,5,False,0.061
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Parkinson Disease [D010300],5,189,3,5,False,0.016
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],Schizophrenia [D012559],5,106,1,5,False,0.009
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis [D060426],"Stress Disorders, Post-Traumatic [D013313]",5,13,1,5,False,0.059
+Attention Deficit Disorder with Hyperactivity [D001289],Autism Spectrum Disorder [D000067877],23,202,13,23,False,0.061
+Attention Deficit Disorder with Hyperactivity [D001289],Bipolar Disorder [D001714],23,17,1,17,False,0.026
+Attention Deficit Disorder with Hyperactivity [D001289],"Child Development Disorders, Pervasive [D002659]",23,38,6,23,False,0.109
+Attention Deficit Disorder with Hyperactivity [D001289],Drug Resistant Epilepsy [D000069279],23,16,1,16,False,0.026
+Attention Deficit Disorder with Hyperactivity [D001289],"Epilepsies, Partial [D004828]",23,13,2,13,False,0.059
+Attention Deficit Disorder with Hyperactivity [D001289],Generalized Anxiety Disorder [D000098647],23,33,5,23,False,0.098
+Attention Deficit Disorder with Hyperactivity [D001289],Hepatic Encephalopathy [D006501],23,27,4,23,False,0.087
+Attention Deficit Disorder with Hyperactivity [D001289],Huntington Disease [D006816],23,11,0,11,False,0.0
+Attention Deficit Disorder with Hyperactivity [D001289],Ischemic Stroke [D000083242],23,13,2,13,False,0.059
+Attention Deficit Disorder with Hyperactivity [D001289],Major Depressive Disorder [D003865],23,32,5,23,False,0.1
+Attention Deficit Disorder with Hyperactivity [D001289],Migraine Disorders [D008881],23,16,3,16,False,0.083
+Attention Deficit Disorder with Hyperactivity [D001289],Multiple System Atrophy [D019578],23,22,2,22,False,0.047
+Attention Deficit Disorder with Hyperactivity [D001289],Myasthenia Gravis [D009157],23,30,2,23,False,0.039
+Attention Deficit Disorder with Hyperactivity [D001289],Parkinson Disease [D010300],23,189,9,23,False,0.044
+Attention Deficit Disorder with Hyperactivity [D001289],Schizophrenia [D012559],23,106,7,23,False,0.057
+Attention Deficit Disorder with Hyperactivity [D001289],"Stress Disorders, Post-Traumatic [D013313]",23,13,0,13,False,0.0
+Autism Spectrum Disorder [D000067877],Bipolar Disorder [D001714],202,17,10,17,False,0.048
+Autism Spectrum Disorder [D000067877],"Child Development Disorders, Pervasive [D002659]",202,38,31,38,False,0.148
+Autism Spectrum Disorder [D000067877],Drug Resistant Epilepsy [D000069279],202,16,9,16,False,0.043
+Autism Spectrum Disorder [D000067877],"Epilepsies, Partial [D004828]",202,13,8,13,False,0.039
+Autism Spectrum Disorder [D000067877],Generalized Anxiety Disorder [D000098647],202,33,24,33,False,0.114
+Autism Spectrum Disorder [D000067877],Hepatic Encephalopathy [D006501],202,27,13,27,False,0.06
+Autism Spectrum Disorder [D000067877],Huntington Disease [D006816],202,11,4,11,False,0.019
+Autism Spectrum Disorder [D000067877],Ischemic Stroke [D000083242],202,13,9,13,False,0.044
+Autism Spectrum Disorder [D000067877],Major Depressive Disorder [D003865],202,32,22,32,False,0.104
+Autism Spectrum Disorder [D000067877],Migraine Disorders [D008881],202,16,13,16,False,0.063
+Autism Spectrum Disorder [D000067877],Multiple System Atrophy [D019578],202,22,10,22,False,0.047
+Autism Spectrum Disorder [D000067877],Myasthenia Gravis [D009157],202,30,15,30,False,0.069
+Autism Spectrum Disorder [D000067877],Parkinson Disease [D010300],202,189,62,189,False,0.188
+Autism Spectrum Disorder [D000067877],Schizophrenia [D012559],202,106,41,106,False,0.154
+Autism Spectrum Disorder [D000067877],"Stress Disorders, Post-Traumatic [D013313]",202,13,6,13,False,0.029
+Bipolar Disorder [D001714],"Child Development Disorders, Pervasive [D002659]",17,38,1,17,False,0.019
+Bipolar Disorder [D001714],Drug Resistant Epilepsy [D000069279],17,16,4,16,False,0.138
+Bipolar Disorder [D001714],"Epilepsies, Partial [D004828]",17,13,5,13,False,0.2
+Bipolar Disorder [D001714],Generalized Anxiety Disorder [D000098647],17,33,5,17,False,0.111
+Bipolar Disorder [D001714],Hepatic Encephalopathy [D006501],17,27,4,17,False,0.1
+Bipolar Disorder [D001714],Huntington Disease [D006816],17,11,0,11,False,0.0
+Bipolar Disorder [D001714],Ischemic Stroke [D000083242],17,13,3,13,False,0.111
+Bipolar Disorder [D001714],Major Depressive Disorder [D003865],17,32,8,17,False,0.195
+Bipolar Disorder [D001714],Migraine Disorders [D008881],17,16,0,16,False,0.0
+Bipolar Disorder [D001714],Multiple System Atrophy [D019578],17,22,1,17,False,0.026
+Bipolar Disorder [D001714],Myasthenia Gravis [D009157],17,30,3,17,False,0.068
+Bipolar Disorder [D001714],Parkinson Disease [D010300],17,189,11,17,False,0.056
+Bipolar Disorder [D001714],Schizophrenia [D012559],17,106,6,17,False,0.051
+Bipolar Disorder [D001714],"Stress Disorders, Post-Traumatic [D013313]",17,13,2,13,False,0.071
+"Child Development Disorders, Pervasive [D002659]",Drug Resistant Epilepsy [D000069279],38,16,2,16,False,0.038
+"Child Development Disorders, Pervasive [D002659]","Epilepsies, Partial [D004828]",38,13,2,13,False,0.041
+"Child Development Disorders, Pervasive [D002659]",Generalized Anxiety Disorder [D000098647],38,33,3,33,False,0.044
+"Child Development Disorders, Pervasive [D002659]",Hepatic Encephalopathy [D006501],38,27,0,27,False,0.0
+"Child Development Disorders, Pervasive [D002659]",Huntington Disease [D006816],38,11,1,11,False,0.021
+"Child Development Disorders, Pervasive [D002659]",Ischemic Stroke [D000083242],38,13,0,13,False,0.0
+"Child Development Disorders, Pervasive [D002659]",Major Depressive Disorder [D003865],38,32,1,32,False,0.014
+"Child Development Disorders, Pervasive [D002659]",Migraine Disorders [D008881],38,16,3,16,False,0.059
+"Child Development Disorders, Pervasive [D002659]",Multiple System Atrophy [D019578],38,22,5,22,False,0.091
+"Child Development Disorders, Pervasive [D002659]",Myasthenia Gravis [D009157],38,30,2,30,False,0.03
+"Child Development Disorders, Pervasive [D002659]",Parkinson Disease [D010300],38,189,13,38,False,0.061
+"Child Development Disorders, Pervasive [D002659]",Schizophrenia [D012559],38,106,7,38,False,0.051
+"Child Development Disorders, Pervasive [D002659]","Stress Disorders, Post-Traumatic [D013313]",38,13,1,13,False,0.02
+Drug Resistant Epilepsy [D000069279],"Epilepsies, Partial [D004828]",16,13,4,13,False,0.16
+Drug Resistant Epilepsy [D000069279],Generalized Anxiety Disorder [D000098647],16,33,2,16,False,0.043
+Drug Resistant Epilepsy [D000069279],Hepatic Encephalopathy [D006501],16,27,3,16,False,0.075
+Drug Resistant Epilepsy [D000069279],Huntington Disease [D006816],16,11,0,11,False,0.0
+Drug Resistant Epilepsy [D000069279],Ischemic Stroke [D000083242],16,13,3,13,False,0.115
+Drug Resistant Epilepsy [D000069279],Major Depressive Disorder [D003865],16,32,4,16,False,0.091
+Drug Resistant Epilepsy [D000069279],Migraine Disorders [D008881],16,16,0,16,False,0.0
+Drug Resistant Epilepsy [D000069279],Multiple System Atrophy [D019578],16,22,1,16,False,0.027
+Drug Resistant Epilepsy [D000069279],Myasthenia Gravis [D009157],16,30,1,16,False,0.022
+Drug Resistant Epilepsy [D000069279],Parkinson Disease [D010300],16,189,10,16,False,0.051
+Drug Resistant Epilepsy [D000069279],Schizophrenia [D012559],16,106,5,16,False,0.043
+Drug Resistant Epilepsy [D000069279],"Stress Disorders, Post-Traumatic [D013313]",16,13,2,13,False,0.074
+"Epilepsies, Partial [D004828]",Generalized Anxiety Disorder [D000098647],13,33,3,13,False,0.07
+"Epilepsies, Partial [D004828]",Hepatic Encephalopathy [D006501],13,27,3,13,False,0.081
+"Epilepsies, Partial [D004828]",Huntington Disease [D006816],13,11,0,11,False,0.0
+"Epilepsies, Partial [D004828]",Ischemic Stroke [D000083242],13,13,3,13,False,0.13
+"Epilepsies, Partial [D004828]",Major Depressive Disorder [D003865],13,32,7,13,False,0.184
+"Epilepsies, Partial [D004828]",Migraine Disorders [D008881],13,16,0,13,False,0.0
+"Epilepsies, Partial [D004828]",Multiple System Atrophy [D019578],13,22,3,13,False,0.094
+"Epilepsies, Partial [D004828]",Myasthenia Gravis [D009157],13,30,1,13,False,0.024
+"Epilepsies, Partial [D004828]",Parkinson Disease [D010300],13,189,10,13,False,0.052
+"Epilepsies, Partial [D004828]",Schizophrenia [D012559],13,106,4,13,False,0.035
+"Epilepsies, Partial [D004828]","Stress Disorders, Post-Traumatic [D013313]",13,13,1,13,False,0.04
+Generalized Anxiety Disorder [D000098647],Hepatic Encephalopathy [D006501],33,27,4,27,False,0.071
+Generalized Anxiety Disorder [D000098647],Huntington Disease [D006816],33,11,2,11,False,0.048
+Generalized Anxiety Disorder [D000098647],Ischemic Stroke [D000083242],33,13,4,13,False,0.095
+Generalized Anxiety Disorder [D000098647],Major Depressive Disorder [D003865],33,32,10,32,False,0.182
+Generalized Anxiety Disorder [D000098647],Migraine Disorders [D008881],33,16,2,16,False,0.043
+Generalized Anxiety Disorder [D000098647],Multiple System Atrophy [D019578],33,22,1,22,False,0.019
+Generalized Anxiety Disorder [D000098647],Myasthenia Gravis [D009157],33,30,4,30,False,0.068
+Generalized Anxiety Disorder [D000098647],Parkinson Disease [D010300],33,189,17,33,False,0.083
+Generalized Anxiety Disorder [D000098647],Schizophrenia [D012559],33,106,15,33,False,0.121
+Generalized Anxiety Disorder [D000098647],"Stress Disorders, Post-Traumatic [D013313]",33,13,2,13,False,0.045
+Hepatic Encephalopathy [D006501],Huntington Disease [D006816],27,11,1,11,False,0.027
+Hepatic Encephalopathy [D006501],Ischemic Stroke [D000083242],27,13,6,13,False,0.176
+Hepatic Encephalopathy [D006501],Major Depressive Disorder [D003865],27,32,8,27,False,0.157
+Hepatic Encephalopathy [D006501],Migraine Disorders [D008881],27,16,1,16,False,0.024
+Hepatic Encephalopathy [D006501],Multiple System Atrophy [D019578],27,22,0,22,False,0.0
+Hepatic Encephalopathy [D006501],Myasthenia Gravis [D009157],27,30,2,27,False,0.036
+Hepatic Encephalopathy [D006501],Parkinson Disease [D010300],27,189,13,27,False,0.064
+Hepatic Encephalopathy [D006501],Schizophrenia [D012559],27,106,9,27,False,0.073
+Hepatic Encephalopathy [D006501],"Stress Disorders, Post-Traumatic [D013313]",27,13,2,13,False,0.053
+Huntington Disease [D006816],Ischemic Stroke [D000083242],11,13,0,11,False,0.0
+Huntington Disease [D006816],Major Depressive Disorder [D003865],11,32,0,11,False,0.0
+Huntington Disease [D006816],Migraine Disorders [D008881],11,16,0,11,False,0.0
+Huntington Disease [D006816],Multiple System Atrophy [D019578],11,22,0,11,False,0.0
+Huntington Disease [D006816],Myasthenia Gravis [D009157],11,30,1,11,False,0.025
+Huntington Disease [D006816],Parkinson Disease [D010300],11,189,1,11,False,0.005
+Huntington Disease [D006816],Schizophrenia [D012559],11,106,0,11,False,0.0
+Huntington Disease [D006816],"Stress Disorders, Post-Traumatic [D013313]",11,13,0,11,False,0.0
+Ischemic Stroke [D000083242],Major Depressive Disorder [D003865],13,32,7,13,False,0.184
+Ischemic Stroke [D000083242],Migraine Disorders [D008881],13,16,1,13,False,0.036
+Ischemic Stroke [D000083242],Multiple System Atrophy [D019578],13,22,2,13,False,0.061
+Ischemic Stroke [D000083242],Myasthenia Gravis [D009157],13,30,2,13,False,0.049
+Ischemic Stroke [D000083242],Parkinson Disease [D010300],13,189,11,13,False,0.058
+Ischemic Stroke [D000083242],Schizophrenia [D012559],13,106,6,13,False,0.053
+Ischemic Stroke [D000083242],"Stress Disorders, Post-Traumatic [D013313]",13,13,2,13,False,0.083
+Major Depressive Disorder [D003865],Migraine Disorders [D008881],32,16,1,16,False,0.021
+Major Depressive Disorder [D003865],Multiple System Atrophy [D019578],32,22,4,22,False,0.08
+Major Depressive Disorder [D003865],Myasthenia Gravis [D009157],32,30,8,30,False,0.148
+Major Depressive Disorder [D003865],Parkinson Disease [D010300],32,189,23,32,False,0.116
+Major Depressive Disorder [D003865],Schizophrenia [D012559],32,106,14,32,False,0.113
+Major Depressive Disorder [D003865],"Stress Disorders, Post-Traumatic [D013313]",32,13,4,13,False,0.098
+Migraine Disorders [D008881],Multiple System Atrophy [D019578],16,22,0,16,False,0.0
+Migraine Disorders [D008881],Myasthenia Gravis [D009157],16,30,1,16,False,0.022
+Migraine Disorders [D008881],Parkinson Disease [D010300],16,189,3,16,False,0.015
+Migraine Disorders [D008881],Schizophrenia [D012559],16,106,4,16,False,0.034
+Migraine Disorders [D008881],"Stress Disorders, Post-Traumatic [D013313]",16,13,0,13,False,0.0
+Multiple System Atrophy [D019578],Myasthenia Gravis [D009157],22,30,3,22,False,0.061
+Multiple System Atrophy [D019578],Parkinson Disease [D010300],22,189,9,22,False,0.045
+Multiple System Atrophy [D019578],Schizophrenia [D012559],22,106,7,22,False,0.058
+Multiple System Atrophy [D019578],"Stress Disorders, Post-Traumatic [D013313]",22,13,0,13,False,0.0
+Myasthenia Gravis [D009157],Parkinson Disease [D010300],30,189,20,30,False,0.101
+Myasthenia Gravis [D009157],Schizophrenia [D012559],30,106,9,30,False,0.071
+Myasthenia Gravis [D009157],"Stress Disorders, Post-Traumatic [D013313]",30,13,2,13,False,0.049
+Parkinson Disease [D010300],Schizophrenia [D012559],189,106,39,106,False,0.152
+Parkinson Disease [D010300],"Stress Disorders, Post-Traumatic [D013313]",189,13,7,13,False,0.036
+Schizophrenia [D012559],"Stress Disorders, Post-Traumatic [D013313]",106,13,1,13,False,0.008

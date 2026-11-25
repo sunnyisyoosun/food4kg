@@ -431,6 +431,65 @@ class ModimedTest(unittest.TestCase):
         self.assertEqual(self.analyze.modimed_score(f, 1), {})
 
 
+class ComplicationGateTest(unittest.TestCase):
+    """합병증 추론 — **포개진 집합이면 검정을 돌리지 않는다.**
+
+    `-1` 정답셋이 없어서 판정 못 한다고 적어 뒀는데, 라벨 없이 답할 수 있다.
+    집합이 포개져 있으면 "기대보다 많다" 가 구조적으로 보장되기 때문이다.
+    """
+
+    def setUp(self):
+        import complication
+        self.c = complication
+
+    def test_nested_sets_detected(self):
+        # 한 질환이 universe 전체를 갖는다 — 모든 쌍에서 자동 통과한다.
+        sets = {'A': {1, 2, 3, 4}, 'B': {1, 2}, 'C': {3, 4}}
+        t, s = self.c.specificity(sets)
+        self.assertEqual(s['universe'], 4)
+        self.assertEqual(s['universe 를 다 가진 질환'], 1)
+        # A-B, A-C 는 포개짐, B-C 는 아니다
+        self.assertEqual(s['포개진 쌍'], 2)
+        self.assertAlmostEqual(s['포개짐 비율'], 2 / 3, places=3)
+
+    def test_specific_sets_pass(self):
+        sets = {'A': {1, 2, 3}, 'B': {4, 5, 6}, 'C': {7, 8, 9}}
+        _, s = self.c.specificity(sets)
+        self.assertEqual(s['포개진 쌍'], 0)
+        self.assertEqual(s['Jaccard 중앙값'], 0.0)
+
+    def test_jaccard_range(self):
+        t, _ = self.c.specificity({'A': {1, 2}, 'B': {1, 2}})
+        self.assertEqual(t.Jaccard.iloc[0], 1.0)
+        self.assertTrue(bool(t['포개짐'].iloc[0]))
+
+    def test_hypergeom_flags_excess_overlap(self):
+        # universe 는 **sets 의 합집합**이다(여기서 31). 10 개짜리 두 집합이
+        # 9 개를 공유하면 우연이 아니고, 안 겹치는 쌍은 p=1 이어야 한다.
+        sets = {'A': set(range(10)), 'B': set(range(1, 11)),
+                'C': set(range(50, 60)), 'D': set(range(90, 100))}
+        h = self.c.hypergeom(sets)
+        ab = h[(h.a == 'A') & (h.b == 'B')].iloc[0]
+        self.assertEqual(ab['공유'], 9)
+        self.assertLess(ab['p'], 1e-4)
+        cd = h[(h.a == 'C') & (h.b == 'D')].iloc[0]
+        self.assertEqual(cd['공유'], 0)
+        self.assertAlmostEqual(cd['p'], 1.0, places=6)
+
+    def test_source_must_be_known(self):
+        import os
+        old = os.environ.get('COMP_SOURCE')
+        os.environ['COMP_SOURCE'] = '없는소스'
+        try:
+            with self.assertRaises(SystemExit):
+                self.c.disease_sets()
+        finally:
+            if old is None:
+                os.environ.pop('COMP_SOURCE', None)
+            else:
+                os.environ['COMP_SOURCE'] = old
+
+
 class AnchorRegexTest(unittest.TestCase):
     """문서 수치 앵커 — 검사가 **스스로를 속였던** 자리의 회귀 시험."""
 
