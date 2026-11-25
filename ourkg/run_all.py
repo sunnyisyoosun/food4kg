@@ -29,19 +29,34 @@ VERIFY = {'probiotic': ('probiotic_rct.py', ['test']),     # RESULTS §15c 검�
           'diet_iv': ('diet_intervention.py', []),          # RESULTS §33 (중재로 E 검정)
           'e_autism': ('e_autism.py', []),                  # RESULTS §34 (검정력 반론)
           'bootstrap': ('bootstrap.py', []),                # RESULTS §17 (주지표 근거)
-          'consensus': ('consensus.py', [])}                # RESULTS §23 (합의 Top-K)
+          'consensus': ('consensus.py', []),                # RESULTS §23 (합의 Top-K)
+          'check': ('check.py', [])}                        # 산출물·문서 정합 검사
 # 설정 쓸기. 하나하나가 recommend 를 여러 번 돌린다.
 SWEEP = {'sweep': ('sweep.py', [])}
 STEPS = BUILD + ANALYZE + list(VERIFY) + list(SWEEP)
 
 
-def envs():
-    """환경변수를 **소스에서 긁어** 보여준다. 손으로 적은 목록은 낡는다."""
+def scan_env():
+    """환경변수를 **소스에서 긁는다**. 손으로 적은 목록은 낡는다.
+
+    `check.py` 가 "소스가 읽는 변수가 여기 다 나오는가" 를 검사하므로
+    긁는 쪽과 보여주는 쪽을 나눠 둔다.
+    """
     found = {}
     for fn in sorted(f for f in os.listdir(HERE) if f.endswith('.py')):
         src = open(os.path.join(HERE, fn), encoding='utf-8').read()
-        for m in re.finditer(r"environ\.get\('([A-Z_]+)'(?:,\s*'([^']*)')?", src):
+        # `os.environ.get(\n    'E_MODES', ...)` 처럼 **줄바꿈이 끼면** 못 잡았다
+        # (check.py 가 잡아낸 구멍이다). 괄호 뒤 공백·줄바꿈을 허용한다.
+        for m in re.finditer(
+                r"environ\.get\(\s*'([A-Z_]+)'(?:,\s*'([^']*)')?", src, re.S):
             found.setdefault(m.group(1), (fn, m.group(2)))
+        for m in re.finditer(r"environ\[\s*'([A-Z_]+)'", src, re.S):
+            found.setdefault(m.group(1), (fn, None))
+    return found
+
+
+def envs():
+    found = scan_env()
     print(f'환경변수 {len(found)} — 기본값은 해당 함수의 docstring·주석 참조\n')
     for k, (fn, d) in sorted(found.items()):
         print(f'  {k:22s} {("= " + d) if d is not None else "":16s} {fn}')

@@ -74,7 +74,12 @@ python3 ourkg/run_all.py --env            # 환경변수 전수 (소스에서 �
 
 python3 ourkg/analyze.py recommend        # 분석 한 단계만
 python3 ourkg/sweep.py emode              # 설정 쓸기 하나만
+python3 ourkg/check.py                    # 산출물·문서 정합 검사 (1.9 초, 네트워크 없음)
 ```
+
+**무언가 고친 뒤에는 `check.py` 를 돌린다.** 산출물이 조용히 어긋나는 것을
+막으려고 둔 것이고, 실패가 있으면 exit 1 이다 — 무엇을 검사하고 왜 그것을
+검사하는지는 [`METHODS.md`](METHODS.md) 의 검사 절에 있다.
 
 ### 미리 받아 둬야 하는 것 넷
 
@@ -142,6 +147,7 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 | `ensemble.py` | 순위 앙상블 비교 (기본값 아님 — §27 에서 기각) |
 | `foodon_match.py` | FoodOn 매칭 (EBI OLS) |
 | `common.py` | 경로 · 단위 환산 · 라벨 정규화 · **읽는 자리 통합**(`compound_microbe` · `measured_links` · `microbe_disease_direction`) |
+| `check.py` | **정합 검사** — 산출물·문서가 서로 맞는지 네트워크 없이 1.9 초에 23 항목 |
 | `run_all.py` | 위를 순서대로. `--env` 로 환경변수 전수 |
 
 ---
