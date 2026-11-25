@@ -25,18 +25,18 @@
 | 축 | 소스 | 받는 법 | 우리 규모 |
 |---|---|---|---|
 | 음식·성분 | FoodData Central | 로컬 덤프 `fdc_raw/` | 항목 2,101,279 → 병합 475,769 |
-| compound | KEGG | REST + 캐시 | KG 층 154 · F 층 135 |
+| compound | KEGG | REST + 캐시 | KG 층 154 · F 층 135<!--chk:F.compounds--> |
 | 음식 온톨로지 | FoodOn | **EBI OLS API** + 캐시 | 클래스 1,096 · 음식 8,165 |
 | 음식 카테고리 | FDC SR / WWEIA | 로컬 덤프 | 세분 265 · 상위 27 |
 | 우울증-대사물 | ProMENDA | 로컬 xlsx | 레코드 22,519 → compound 1,412 |
-| 미생물 | NCBI taxonomy | efetch + 캐시 | **798 taxid = 791 균** (127 + Disbiome 333 + gutMDisorder 309 + 보탠 29; 7 쌍이 병합 전/후 id) |
-| compound-미생물 | KEGG REST | REST + 캐시 | **고유 (균, compound) 쌍 14,918** · compound 76 (**58% 는 속 수준**) |
-| compound-미생물 (예측) | **VMH / AGORA2** | 벌크 zip + 캐시 | 46,495 링크 · compound 1,109 |
+| 미생물 | NCBI taxonomy | efetch + 캐시 | **798<!--chk:microbe.ids--> taxid = 791<!--chk:microbe.taxa--> 균** (127 + Disbiome 333 + gutMDisorder 309 + 보탠 29; 7 쌍이 병합 전/후 id) |
+| compound-미생물 | KEGG REST | REST + 캐시 | **고유 (균, compound) 쌍 14,918<!--chk:links.unique-->** · compound 76 (**58% 는 속 수준**) |
+| compound-미생물 (예측) | **VMH / AGORA2** | 벌크 zip + 캐시 | 46,495<!--chk:links.vmh--> 링크 · compound 1,109<!--chk:links.vmh_compounds--> |
 | 미생물-정신질환 | MiKG 원본 TTL | 로컬 ttl | 406 쌍 |
 | 미생물-질환 (외부) | **Disbiome** | REST 전수 + 캐시 | 1,193 관계 · 균 457 · 질환 23 |
 | 미생물-질환 (외부) | **gutMDisorder v3** | xlsx 2 개 + 캐시 | 1,239 관계 · 균 499 · 질환 18 |
 | 식이 중재 → 미생물 | **gutMDisorder v3** | 같은 xlsx | 603 관계 · 중재 58 · 균 243 (검정용) |
-| compound-미생물 (관측) | **분변 대사체 13 코호트** | GitHub raw + 캐시 | 39,574 쌍 · 속 1,859 · compound 315 |
+| compound-미생물 (관측) | **분변 대사체 13 코호트** | GitHub raw + 캐시 | 39,574<!--chk:links.measured--> 쌍 · 속 1,859 · compound 315 |
 | 섭취-결과 | **NHANES 2017-18** | CDC xpt + 캐시 | 표본 4,774 · compound 47 |
 | 1 회 섭취량 | **FDC food_portion** | 배포 zip + 캐시 | 13,129 음식 (코호트 커버리지 56%) |
 | 질환 분류 | MeSH | **SPARQL** + 캐시 | 링크 244 · 트리 1,227 |
@@ -212,12 +212,12 @@ Disbiome 은 속·과 수준으로도 보고하는데 우리는 **종 이름 2 �
 
 | | 이전 | 사다리 적용 | gutMDisorder 추가 후 |
 |---|---:|---:|---:|
-| KEGG organism 매칭 | 167/485 | 378/485 (종 167 · 속 211) | **569/798** (종 243 · 속 326) |
-| KEGG 경로 연결 | 167 종 · 4,571 링크 | 378 종 · 10,257 링크 | **569 종 · 고유 쌍 14,918** (행 15,065) |
+| KEGG organism 매칭 | 167/485 | 378/485 (종 167 · 속 211) | **569<!--chk:microbe.kegg_org-->/798<!--chk:microbe.ids-->** (종 243 · 속 326) |
+| KEGG 경로 연결 | 167 종 · 4,571 링크 | 378 종 · 10,257 링크 | **569 종 · 고유 쌍 14,918<!--chk:links.unique-->** (행 15,065<!--chk:links.rows-->) |
 | compound | 63 | **76** | 76 |
 | Disbiome 균 중 연결됨 | 153/457 (33%) | **343/457 (75%)** | 343/457 |
 
-> **속 수준 링크는 더 약한 주장이다.** 링크 중 **8,626(58%)**이 속 수준이고,
+> **속 수준 링크는 더 약한 주장이다.** 링크 중 **8,626<!--chk:links.genus-->(58%)**이 속 수준이고,
 > "이 종이 이 compound 를 대사한다" 가 아니라 **"이 속의 어떤 유전체가"** 를
 > 뜻한다.
 
@@ -605,13 +605,13 @@ Disbiome 의 `disease_name` 은 MedDRA 계열 자유 표기라 그대로는 MeSH
 
 | 술어 | 쌍 | 뜻 |
 |---|---:|---|
-| `our:abundanceIn` | **1,509** | 방향이 하나로 모인 쌍 (`질환\|방향`) |
+| `our:abundanceIn` | **1,509<!--chk:agree.agreed-->** | 방향이 하나로 모인 쌍 (`질환\|방향`) |
 | `our:crossSourceAgreement` | 1,509 | 합의 근거 (`질환\|소스\|소스수`) |
-| `our:abundanceConflict` | **165** | 어긋난 쌍 — **방향을 안 준다** (`질환\|증가2:감소1\|소스`) |
+| `our:abundanceConflict` | **165<!--chk:agree.conflict-->** | 어긋난 쌍 — **방향을 안 준다** (`질환\|증가2:감소1\|소스`) |
 
 **모순 쌍을 버리지 않는다.** "연관은 있고 방향은 모른다" 가 우리가 실제로 아는
 것이고, 버리면 그 사실이 KG 에서 사라진다. 산출물
-`out/microbe_disease_agreement.csv` (쌍 1,674).
+`out/microbe_disease_agreement.csv` (쌍 1,674<!--chk:agree.pairs-->).
 
 이 필터가 분석에서 무엇을 뜻하는지는 [`RESULTS.md`](RESULTS.md) §32 에 있다 —
 합의 쌍으로 좁히면 명목 p 가 좋아지지만 **두 소스가 둘 다 확인한 쌍만 남기면
@@ -766,9 +766,9 @@ compound-미생물 상관(위)에만 쓰기엔 아깝다 — 대사물 57 개(KE
 
 | | 수 |
 |---|---:|
-| 고유 triple (그래프 크기) | **3,443,485** |
-| Σ 출처 주장 (겹침 포함) | 3,461,533 |
-| 여러 출처가 같은 statement 를 주장한 몫 | 18,048 |
+| 고유 triple (그래프 크기) | **3,443,485**<!--chk:kg.triples--> |
+| Σ 출처 주장 (겹침 포함) | 3,461,533<!--chk:kg.claims--> |
+| 여러 출처가 같은 statement 를 주장한 몫 | 18,048<!--chk:kg.overlap--> |
 
 **출처별 표는 '주장 수' 로 센다.** 중복 제거 후에 세면 먼저 쓴 출처가 공유
 삼중항을 가져가 뒤에 쓰는 출처가 줄어든다 — 쓰는 **순서에 의존하는** 수치가 되고

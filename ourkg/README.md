@@ -58,7 +58,7 @@ Fu et al. (2023) *Food4healthKG* 의 **구축 방식과 평가 방식을 그대�
 | 우울증-대사물 | MENDA 5,675 관계 | **ProMENDA** (Pu et al. 2024) 22,519 레코드 / 995 연구 |
 | compound | KEGG 230 metabolite | KG 층 154 / **F 층 135** — 논문처럼 두 층을 나눈다 |
 | 미생물 | NCBI taxonomy 322,917 | efetch 로 **현재 값** 갱신 **791 종** (요청 798 taxid = 배포본 127 + Disbiome 333 + **gutMDisorder 309** + 보탠 29, 그중 7 쌍이 병합 전/후 id 로 중복) |
-| compound-미생물 | KEGG (2022) | KEGG REST 재계산 **고유 쌍 14,918**(종 6,439 · 속 8,626 주장) + **VMH/AGORA2 46,495**(예측) + **측정 상관 39,574**(관측) |
+| compound-미생물 | KEGG (2022) | KEGG REST 재계산 **고유 쌍 14,918<!--chk:links.unique-->**(종 6,439<!--chk:links.species--> · 속 8,626<!--chk:links.genus--> 주장) + **VMH/AGORA2 46,495<!--chk:links.vmh-->**(예측) + **측정 상관 39,574<!--chk:links.measured-->**(관측) |
 | 미생물-질환 | MiKG 1,234 | MiKG 406 + **Disbiome 1,193** + **gutMDisorder 1,239** — 외부 큐레이션 **둘**을 쌍 단위로 맞춰 본다 |
 | 질환 분류 | MeSH + SNOMED CT | MeSH SPARQL — tree number + 상위 계층 **242 종**. SNOMED 는 MiKG xref 63 |
 | 식품 온톨로지 | FoodOn + 중국 온톨로지 | **FoodOn 을 EBI OLS 에서 직접** — 음식 8,165 · 클래스 1,096. 중국 온톨로지는 배포 subset |
@@ -182,18 +182,18 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 
 ### KG 규모 (논문 Table 1 대응)
 
-**고유 triple 3,443,485 · 관계 39 · 엔티티 859,542** (논문 13,346,991 · 140 · 1,637,915)
+**고유 triple 3,443,485<!--chk:kg.triples--> · 관계 39<!--chk:kg.relations--> · 엔티티 859,542<!--chk:kg.entities-->** (논문 13,346,991 · 140 · 1,637,915)
 
 | source | relation | entity | triples |
 |---|---:|---:|---:|
 | FoodData Central | 9 | 794,404 | 3,206,541 |
 | Chinese Food Ontology | 3 | 49,865 | 82,542 |
-| VMH/AGORA2 | 1 | 1,192 | 46,495 |
+| VMH/AGORA2 | 1 | 1,192 | 46,495<!--chk:links.vmh--> |
 | FoodOn/OLS | 3 | 10,452 | 25,759 |
 | FoodOn | 4 | 6,592 | 21,723 |
 | 측정 상관 | 2 | 708 | 21,000 |
 | KEGG | 5 | 3,092 | 13,112 |
-| KEGG(속 수준) | 1 | 398 | 8,626 |
+| KEGG(속 수준) | 1 | 398 | 8,626<!--chk:links.genus--> |
 | MiKG | 9 | 1,306 | 7,196 |
 | MeSH | 2 | 245 | 5,400 |
 | ProMENDA | 6 | 1,289 | 5,150 |
@@ -204,12 +204,12 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 | Disbiome | 2 | 476 | 2,386 |
 | evidence | 15 | 278 | 1,560 |
 | SNOMED CT | 2 | 294 | 285 |
-| Σ 출처 주장(겹침 포함) | 39 | 859,542 | 3,461,533 |
-| **Total (고유 그래프)** | **39** | **859,542** | **3,443,485** |
+| Σ 출처 주장(겹침 포함) | 39 | 859,542 | 3,461,533<!--chk:kg.claims--> |
+| **Total (고유 그래프)** | **39** | **859,542** | **3,443,485**<!--chk:kg.triples--> |
 
 **두 줄을 따로 적는 이유** — RDF 그래프는 같은 statement 를 두 번 갖지 않으므로
 그래프 크기는 **고유** 기준이다. 출처 열은 '그 출처가 주장한 수' 라서 겹치는
-만큼 합이 그래프보다 크다(18,048). 겹침은 버릴 정보가 아니다 — VMH 와 KEGG 가
+만큼 합이 그래프보다 크다(18,048<!--chk:kg.overlap-->). 겹침은 버릴 정보가 아니다 — VMH 와 KEGG 가
 같은 `hasMetabolites` 1,435 건을 독립적으로 주장하는 것은 **서로 교차검증**이다.
 논문 Table 1 과 비교할 때는 고유 쪽을 쓴다.
 
@@ -224,12 +224,14 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
   단위로 합의를 본 뒤 올린다. 두 큐레이션 소스의 방향 일치가 **48.4%(우연 아래)**
   이라서다 → §32
 
-규모: 음식 **14,886 종**(음식당 측정 compound 중앙값 **48**, 논문 heatmap 원본 33) ·
-F 층 compound **135** · `E` 가 비영인 compound **1,287**(ProMENDA 1,412 중).
+규모: 음식 **14,886<!--chk:foods.count--> 종**(음식당 측정 compound 중앙값
+**48**<!--chk:foods.median_compounds-->, 논문 heatmap 원본 33) · F 층 compound
+**135**<!--chk:F.compounds--> · `E` 가 비영인 compound
+**1,287**<!--chk:E.nonzero-->(ProMENDA 1,412<!--chk:E.compounds--> 중).
 
 ### 추천 (depression, Top/Bottom 30)
 
-추천 코호트는 분석 측정 데이터 **12,420 음식**이다.
+추천 코호트는 분석 측정 데이터 **12,420<!--chk:rec.rows--> 음식**이다.
 
 | | ourkg | 논문 §4.2.3 |
 |---|---|---|
@@ -359,7 +361,7 @@ lean red meat 를 주 3~4 회 처방한다. 크기를 쟀다 — `separable lean
 
 - 162 → **791 종**. 넓히는 기준이 "우리가 아는 균" 이라 **스스로를 가두던 구조**를
   외부 큐레이션(Disbiome · gutMDisorder v3)으로 끊었다. 닿는 균이 적던 문제
-  (KEGG organism 167/485)는 **종 → 속 사다리**로 **569/798** 로 고쳤다.
+  (KEGG organism 167/485)는 **종 → 속 사다리**로 **569<!--chk:microbe.kegg_org-->/798<!--chk:microbe.ids-->** 로 고쳤다.
 - **속 수준을 종 수준과 섞어 읽으면 과대평가다** — KEGG 링크의 **58%**가 속 수준
   매칭이고 "이 속의 **어떤** 유전체가" 라는 더 약한 주장이다. compound 연결은
   **종 수준 257 종(32%) · 속 포함 565 종(71%)** 으로 갈라서 읽는다. 읽는 자리는

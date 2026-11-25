@@ -444,26 +444,126 @@ def check_provenance():
 
 # ---------------------------------------------------------------- 6. 문서
 #  문서 수치가 산출물과 갈리는 일이 반복됐다. 핵심 수치만 자동으로 맞춘다.
+# 산출물에서 계산할 수 있는 "사실" — 문서는 이 값을 적어야 한다.
+# 문서 안의 `<!--chk:이름-->` 앵커 바로 **앞**의 숫자와 비교한다.
+#
+# 왜 앵커인가 — 전에는 "값이 문서 어딘가에 있나" 만 봤고 수치 3 개뿐이었다.
+# 그러면 다른 자리에 묵은 값이 남아도 통과한다. 실제로 그 셋 밖의 수치
+# (`VMH 44,094` · `MiKG 7,193` · 겹침)는 검사가 아니라 **손으로** 찾아 고쳤다.
+# 앵커를 달면 **그 자리**를 검사하므로 어디가 틀렸는지도 바로 나온다.
+# 마크다운에서 HTML 주석은 렌더링되지 않아 읽는 사람에게는 안 보인다.
+def facts():
+    import pandas as pd
+    g = lambda n: os.path.join(OUT, n)
+    out = {}
+    if os.path.exists(g('kg_stats.csv')):
+        k = pd.read_csv(g('kg_stats.csv'))
+        tot = k[k.source.str.startswith('Total')]
+        cl = k[k.source.str.startswith('Σ')]
+        if len(tot):
+            out['kg.triples'] = f'{int(tot.triples.iloc[0]):,}'
+            out['kg.relations'] = str(int(tot.relation.iloc[0]))
+            out['kg.entities'] = f'{int(tot.entity.iloc[0]):,}'
+        if len(cl):
+            out['kg.claims'] = f'{int(cl.triples.iloc[0]):,}'
+            if len(tot):
+                out['kg.overlap'] = f'{int(cl.triples.iloc[0]) - int(tot.triples.iloc[0]):,}'
+    if os.path.exists(g('microbes.csv')):
+        m = pd.read_csv(g('microbes.csv'), dtype={'taxid': str, 'taxid_current': str})
+        out['microbe.ids'] = f'{len(m):,}'
+        if 'taxid_current' in m:
+            out['microbe.taxa'] = f'{m.taxid_current.nunique():,}'
+        out['microbe.kegg_org'] = f'{int(m.kegg_org.notna().sum()):,}'
+    if os.path.exists(g('compound_microbe.csv')):
+        cm = pd.read_csv(g('compound_microbe.csv'),
+                         dtype={'taxid': str, 'taxid_current': str})
+        out['links.rows'] = f'{len(cm):,}'
+        if 'taxid_current' in cm:
+            out['links.unique'] = f'{len(cm.drop_duplicates(["kegg", "taxid_current"])):,}'
+        out['links.species'] = f'{int((cm.match_rank == "species").sum()):,}'
+        out['links.genus'] = f'{int((cm.match_rank == "genus").sum()):,}'
+    if os.path.exists(g('compound_microbe_vmh.csv')):
+        v = pd.read_csv(g('compound_microbe_vmh.csv'))
+        out['links.vmh'] = f'{len(v):,}'
+        out['links.vmh_compounds'] = f'{v.kegg.nunique():,}'
+    if os.path.exists(g('compound_microbe_measured.csv')):
+        out['links.measured'] = f'{len(pd.read_csv(g("compound_microbe_measured.csv"))):,}'
+    if os.path.exists(g('foods.csv')):
+        f = pd.read_csv(g('foods.csv'))
+        out['foods.count'] = f'{len(f):,}'
+        out['foods.median_compounds'] = str(int(f.n_compound.median()))
+    if os.path.exists(g('compound_depression.csv')):
+        E = pd.read_csv(g('compound_depression.csv'))
+        out['E.compounds'] = f'{len(E):,}'
+        out['E.nonzero'] = f'{int((E.e_shrunk != 0).sum()):,}'
+    nmp = os.path.join(BASE, 'setup', 'nutrient_kegg_map.csv')
+    if os.path.exists(nmp):
+        out['F.compounds'] = str(pd.read_csv(nmp).nutrient_kegg.nunique())
+    if os.path.exists(g('recommendation.csv')):
+        out['rec.rows'] = f'{len(pd.read_csv(g("recommendation.csv"))):,}'
+    if os.path.exists(g('microbe_disease_agreement.csv')):
+        a = pd.read_csv(g('microbe_disease_agreement.csv'))
+        out['agree.pairs'] = f'{len(a):,}'
+        out['agree.agreed'] = f'{int((a.status == "agreed").sum()):,}'
+        out['agree.conflict'] = f'{int((a.status == "conflict").sum()):,}'
+    return out
+
+
+DOCS = ('README.md', 'DATA.md', 'METHODS.md', 'PROCESS.md')
+# 앵커 **바로 앞**의 숫자만 집는다. 사이에 허용하는 것은 `**` 와 공백뿐이다 —
+# 넉넉하게 두면 표에서 앞 칸 숫자를 집는다(`| 1 | 1,192 | 46,495<!--...-->` 에서
+# 1,192 를 집었다). 좁게 두고 못 집으면 앵커를 옮기는 쪽이 맞다.
+_ANCHOR = re.compile(r'([0-9][0-9,]*)\**<!--\s*chk:([A-Za-z_.]+)\s*-->')
+# **형식이 안 맞는 앵커를 조용히 넘기지 않는다.** 처음 판은 이름을 `[a-z_.]+` 로
+# 받아 `chk:F.compounds` · `chk:E.nonzero` 같은 대문자 앵커를 **아예 못 봤다**.
+# 그런데도 "앵커 15 개 통과" 라고 보고했다 — 검사가 있는 척만 한 것이다.
+# 그래서 `<!--chk:` 가 있는데 위 패턴에 안 걸리는 자리를 따로 세어 FAIL 한다.
+_ANCHOR_ANY = re.compile(r'<!--\s*chk:[^>]*-->')
+
+
 def check_docs():
-    paths, miss = _need('kg_stats.csv', 'microbes.csv')
-    if miss:
-        return _say('SKIP', '문서 수치', f'{miss} 없다')
-    k = pd.read_csv(paths[0])
-    tot = k[k.source.str.startswith('Total')]
-    m = pd.read_csv(paths[1], dtype={'taxid': str, 'taxid_current': str})
-    want = {
-        'KG 고유 triple': f'{int(tot.triples.iloc[0]):,}',
-        'KG 관계 수': str(int(tot.relation.iloc[0])),
-        '미생물 고유 균': f'{m.taxid_current.nunique():,}',
-    }
-    rd = os.path.join(HERE, 'README.md')
-    if not os.path.exists(rd):
-        return _say('SKIP', '문서 수치', 'README.md 없다')
-    txt = open(rd, encoding='utf-8').read()
-    lack = [f'{k2}={v}' for k2, v in want.items() if v not in txt]
-    _say('FAIL' if lack else 'PASS', 'README 수치',
-         f'README 에 없는 값 {lack}' if lack else
-         f'핵심 수치 {len(want)} 개가 산출물과 맞는다')
+    """문서의 `<!--chk:이름-->` 앵커 수치가 산출물과 맞는지.
+
+    앵커가 하나도 없으면 아직 안 달았다는 뜻이므로 SKIP 이 아니라 **FAIL** 이다
+    — 조용히 통과하면 검사가 있는 척만 한다.
+    """
+    fx = facts()
+    if not fx:
+        return _say('SKIP', '문서 수치', '산출물이 없다')
+    seen, bad, unknown, malformed = 0, [], [], []
+    for fn in DOCS:
+        p = os.path.join(HERE, fn)
+        if not os.path.exists(p):
+            continue
+        txt = open(p, encoding='utf-8').read()
+        # **코드 표기 안의 앵커는 설명용이다.** 이 장치를 설명하는 문서가
+        # `<!--chk:이름-->` 을 예시로 쓰는데, 그걸 실제 앵커로 세면 "형식이 안
+        # 맞는다" 고 스스로를 잡는다. 펜스 블록과 인라인 코드를 먼저 지운다.
+        txt = re.sub(r'```.*?```', '', txt, flags=re.S)
+        txt = re.sub(r'`[^`\n]*`', '', txt)
+        n_any = len(_ANCHOR_ANY.findall(txt))
+        n_ok = len(_ANCHOR.findall(txt))
+        if n_any != n_ok:
+            malformed.append(f'{fn}: {n_any - n_ok} 개가 형식에 안 맞는다 '
+                             f'(숫자가 앵커 바로 앞에 있어야 한다)')
+        for num, name in _ANCHOR.findall(txt):
+            seen += 1
+            if name not in fx:
+                unknown.append(f'{fn}:{name}')
+            elif num != fx[name]:
+                bad.append(f'{fn}:{name} 문서 {num} vs 산출물 {fx[name]}')
+    msg = []
+    if bad:
+        msg.append('; '.join(bad[:4]) + (f' 외 {len(bad)-4}' if len(bad) > 4 else ''))
+    if unknown:
+        msg.append(f'모르는 앵커 {unknown[:3]}')
+    if malformed:
+        msg.append('; '.join(malformed))
+    if not seen:
+        msg.append('앵커가 하나도 없다 — 문서에 <!--chk:이름--> 를 달아야 한다')
+    _say('FAIL' if msg else 'PASS', '문서 수치 앵커',
+         '; '.join(msg) if msg else
+         f'앵커 {seen} 개가 산출물과 맞는다 (계산 가능한 사실 {len(fx)} 개)')
 
 
 CHECKS = {'schema': check_schema, 'microbe': check_microbe, 'links': check_links,
