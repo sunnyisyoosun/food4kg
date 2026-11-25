@@ -240,12 +240,41 @@ def check_outputs():
     # 남아 있으면 git 이력을 뒤질 자리를 바로 가리킨다.
     who = {f: rec[f].get('argv', '?') for f in orphan if f in rec}
     unrec = [f for f in have if f not in rec]
+    # --- 둘째: 문서가 그 산출물을 **언급하는지** -------------------------
+    # 처음엔 basename 을 literal 로 grep 해서 "미언급 20 개" 라고 셌다.
+    # **그 검사가 틀렸다** — `out/consensus_*.csv` 처럼 패턴 행으로 적힌 것을
+    # 못 봤다. 문서 쪽 토큰도 `*` 를 와일드카드로 받아야 한다.
+    doc_pats = set()
+    for fn in DOCS + DOCS_EXCLUDED:          # §43 산출물 표는 RESULTS.md 에 있다
+        dp = os.path.join(HERE, fn)
+        if os.path.exists(dp):
+            doc_pats |= set(re.findall(r'[^\s`|/]*\.csv',
+                                       open(dp, encoding='utf-8').read()))
+    # **선두가 와일드카드인 토큰은 버린다.** 문서에 `out/*.csv` 라는 말이
+    # 한 번 나오는데, 그걸 패턴으로 받으면 `^.*$` 가 되어 **88 개 전부가
+    # 언급된 것으로 통과한다.** 처음 판이 그래서 조용히 PASS 했다.
+    # 리터럴 머리가 4 자 이상인 것만 패턴으로 인정한다.
+    drx = []
+    for d in doc_pats:
+        # `{소스}` 같은 자리표시자는 **중괄호 안쪽까지 통째로** 지워야 한다.
+        # 괄호만 `.*` 로 바꾸면 `..*소스.csv` 가 되어 아무것도 안 맞는다.
+        b = re.sub(r'\{[^}]*\}', '*', os.path.basename(d))
+        head = b.split('*')[0]
+        if len(head) < 4:
+            continue
+        drx.append(re.compile('^' + re.escape(b).replace('\\*', '.*') + '$'))
+    undoc = [f for f in have if not any(r.match(f) for r in drx)]
+
     msg = (f'만드는 코드가 없는 산출물 {len(orphan)}: '
            + ', '.join(f'{f}({who.get(f, "출처기록도 없다")})' for f in orphan[:6])
            + (f' 외 {len(orphan) - 6}' if len(orphan) > 6 else '')) if orphan else (
            f'csv {len(have)} 전부 코드에 생산자가 있다 '
            f'(이름 패턴 {len(pats)} · 출처기록 없는 것 {len(unrec)} — 실패 아님)')
     _say('FAIL' if orphan else 'PASS', '산출물 생산자', msg)
+    _say('FAIL' if undoc else 'PASS', '산출물 문서 언급',
+         f'어느 문서에도 안 나오는 산출물 {len(undoc)}: ' + ', '.join(undoc[:8])
+         + (f' 외 {len(undoc) - 8}' if len(undoc) > 8 else '') if undoc else
+         f'csv {len(have)} 전부 문서에 나온다 (문서 쪽 이름·패턴 {len(drx)})')
 
 
 def check_deadcode():

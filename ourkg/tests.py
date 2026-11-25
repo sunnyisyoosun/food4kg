@@ -843,6 +843,7 @@ class MetaOutputsTest(_CheckFixture):
         for f in os.listdir(_chk.OUT):          # fixture 산출물은 치운다
             if f.endswith('.csv') and f != 'alpha.csv':
                 os.remove(os.path.join(_chk.OUT, f))
+        self._doc('`out/alpha.csv`')
         self.assertPasses(_chk.check_outputs)
 
     def test_fails_on_orphan_output(self):
@@ -858,12 +859,48 @@ class MetaOutputsTest(_CheckFixture):
             if f.endswith('.csv'):
                 os.remove(os.path.join(_chk.OUT, f))
         self.w('learned_form.csv', pd.DataFrame([{'a': 1}]))
+        self._doc('`out/learned_form.csv`')
         self.assertPasses(_chk.check_outputs)
 
     def test_declared_outputs_reads_fstrings(self):
         self._code("x = f'a_{k}.csv'\ny = 'b.csv'\n")
         got = _chk.declared_outputs(_chk.HERE)
         self.assertEqual(set(got), {'a_*.csv', 'b.csv'})
+
+    def _doc(self, text):
+        """`check.HERE` 에 README.md 하나를 깐다 (DOCS 의 첫 항목)."""
+        with open(os.path.join(_chk.HERE, 'README.md'), 'w', encoding='utf-8') as f:
+            f.write(text)
+
+    def _only(self, *names):
+        for f in os.listdir(_chk.OUT):
+            if f.endswith('.csv') and f not in names:
+                os.remove(os.path.join(_chk.OUT, f))
+
+    def test_fails_on_undocumented_output(self):
+        self._code("x = 'alpha.csv'\ny = 'beta.csv'\n")
+        self._only()
+        self.w('alpha.csv', pd.DataFrame([{'a': 1}]))
+        self.w('beta.csv', pd.DataFrame([{'a': 1}]))
+        self._doc('`out/alpha.csv` 만 적었다')
+        self.assertFails(_chk.check_outputs)
+
+    def test_bare_wildcard_token_does_not_cover_everything(self):
+        # **조용히 PASS 했던 자리.** 문서에 `out/*.csv` 라는 말이 한 번
+        # 나오는데 그걸 패턴으로 받으면 ^.*$ 가 되어 전부 통과한다.
+        self._code("x = 'beta.csv'\n")
+        self._only()
+        self.w('beta.csv', pd.DataFrame([{'a': 1}]))
+        self._doc('산출물은 `out/*.csv` 에 있다')
+        self.assertFails(_chk.check_outputs)
+
+    def test_doc_placeholder_covers_variants(self):
+        # `complication_hypergeom_{소스}.csv` 가 _curated 를 덮어야 한다.
+        self._code("s = 'curated'\nx = f'comp_{s}.csv'\n")
+        self._only()
+        self.w('comp_curated.csv', pd.DataFrame([{'a': 1}]))
+        self._doc('| `out/comp_{소스}.csv` | 소스별 |')
+        self.assertPasses(_chk.check_outputs)
 
     def test_missing_provenance_is_not_a_failure(self):
         # **일부러 통과시키는 자리.** 기본값 아닌 환경에서만 나오는 산출물은
@@ -876,6 +913,7 @@ class MetaOutputsTest(_CheckFixture):
         pv = os.path.join(_chk.OUT, 'provenance.json')
         if os.path.exists(pv):
             os.remove(pv)
+        self._doc('`out/alpha.csv`')
         self.assertPasses(_chk.check_outputs)
 
 

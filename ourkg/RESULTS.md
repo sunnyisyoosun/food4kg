@@ -5448,7 +5448,28 @@ HR ≈ 1 (CI 가 1 포함)로 보고하는 쌍. 지금 `curated` 에 신체질�
 `.csv` 라는 아무것도 안 가리키는 패턴을 만들고 있었다. 메타 시험
 (`test_declared_outputs_reads_fstrings`)이 잡았다.
 
-이제 검사 31 개 · 시험 100 개다.
+### 같은 검사에 "문서가 언급하는지" 를 붙였다 — 내 첫 측정이 틀렸다
+
+산출물 92 개 중 **어느 문서에도 안 나오는 것이 20 개**라고 셌다. **그 측정이
+틀렸다.** basename 을 literal 로 grep 해서 `out/consensus_*.csv` ·
+`out/metabolome_check_*.csv` 처럼 **패턴 행으로 이미 적힌 것을 못 봤다.**
+문서 쪽 토큰도 `*` 와 `{소스}` 를 와일드카드로 받아야 한다. 다시 재니 **11 개**다.
+
+그걸 검사로 옮기면서 같은 함정을 **또** 밟았다 — 문서에 `out/*.csv` 라는 말이
+한 번 나오는데 그걸 패턴으로 받으면 `^.*$` 가 되어 **88 개 전부가 통과한다.**
+넣자마자 PASS 가 떠서 알았다(고아 검사가 FAIL 인데 이쪽만 PASS 하는 게 이상했다).
+선두가 와일드카드이거나 리터럴 머리가 4 자 미만인 토큰은 버린다
+(`MetaOutputsTest.test_bare_wildcard_token_does_not_cover_everything`).
+
+그리고 `{소스}` 는 **중괄호 안쪽까지 통째로** 지워야 한다. 괄호만 `.*` 로
+바꾸면 `..*소스.csv` 가 되어 아무것도 안 맞는다 — §43 표에 자리표시자로 적고
+나서 검사가 그대로 FAIL 을 유지해서 알았다.
+
+누락 11 개는 §43 표에 넣었다: 합병증 소스별 산출물 7, `kegg_class.csv`,
+`promenda_records.csv`, `microbe_neurotransmitter.csv`,
+`neurotransmitter_disease.csv`.
+
+이제 검사 32 개 · 시험 103 개다.
 
 ---
 
@@ -5532,7 +5553,13 @@ HR ≈ 1 (CI 가 1 포함)로 보고하는 쌍. 지금 `curated` 에 신체질�
 | `out/nosim_comparison.csv` | **유사도 제거** ablation (§17c) |
 | `out/simspace_comparison.csv` | **유사도 공간** 성분 vs 효과 (§17d) |
 | `out/simsign_comparison.csv` | **나쁜 음식 기여 묶기** x 공간 x E (§17e) |
-| `out/complication_hypergeom_curated.csv` | **합병증 추론**의 초기하 검정 (§18·§41). 구본은 `out/legacy/` (§44) |
+| `out/complication_hypergeom_{소스}.csv` | **합병증 추론**의 초기하 검정, 소스별 (§18·§41). `curated`·`disbiome`·`gutmdisorder`. 구본은 `out/legacy/` (§44) |
+| `out/complication_specificity_{소스}.csv` | 질환 쌍의 **포개짐·Jaccard** — 추론이 구조적으로 자동 통과하는지 보는 게이트 (§41). 소스 4 종 |
+| `out/complication_summary.csv` | 위 둘을 소스별 1 행으로 요약 (§41 표) |
+| `out/kegg_class.csv` | KEGG BRITE compound 분류 2,767 행 — compound 축의 상위 범주 |
+| `out/promenda_records.csv` | ProMENDA 원시 레코드 17,653 행 (`E` 의 문헌 근거. 연구·조직·종까지) |
+| `out/microbe_neurotransmitter.csv` | 균 → 신경전달물질 조절 82 행 (§15b `gutbrain` 가중의 입력) |
+| `out/neurotransmitter_disease.csv` | 신경전달물질 → 질환 41 행 (같은 축의 나머지 절반) |
 | `out/dedup_comparison.csv` | **중복 변종 병합** 두 기준 (§19) |
 | `out/learned_comparison.csv` | **지도학습 점수** 직접 사용 (§21) |
 | `out/learned_dedup_comparison.csv` | learned x 중복 병합 (§21b) |
