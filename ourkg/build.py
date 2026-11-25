@@ -31,7 +31,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (BASE, OUT, FDC_RAW, UNIT_TO_G, FDC_CATEGORY, cached_get, kegg_rest,
                     normalize_label, normalize_category, kegg_map, normkey,
                     mesh_lookup, cached_covering, gutmdisorder,
-                    microbe_disease_direction, taxid_alias, depression_e)
+                    microbe_disease_direction, taxid_alias, depression_e, enable_provenance)
+
+enable_provenance()   # 산출물 출처 기록 (common.PROV)
 
 
 def food():
@@ -820,19 +822,35 @@ def microbe():
     #   hasRegulation     Promote 13 / Inhibit 1  방향
     #   hasMapID          KEGG pathway id (map00380 등) 56
     # statement 단위로 모아 microbe_neurotransmitter 에 붙인다.
+    # **비결정성을 두 군데에서 만들고 있었다.**
+    #   ① `_ev[0]` — rdflib `objects()` 는 순서가 없는 생성기다. 한 statement 에
+    #      값이 여럿이면 실행마다 다른 것이 뽑힌다.
+    #   ② `set(g.subjects(...))` 순회 + `drop_duplicates(keep='first')` — 같은
+    #      (균, 신경전달물질) 쌍에 statement 가 여럿일 때 **어느 것이 살아남는지**
+    #      가 순회 순서에 달린다. 이쪽이 더 크다.
+    # 실제로 같은 입력·같은 코드로 다섯 번 돌려 방향 집계가 세 가지로 갈렸다
+    # (`'' 59/Promote 12/Inhibit 1` · `'' 60/Promote 12` · `'' 61/Promote 11`)
+    # 그리고 근거등급이 B <-> C 로 흔들렸다.
+    # 고치는 방법: **정렬해서 돌고, 버리지 말고 모은다.** 소스에 값이 여럿인 것은
+    # 사실이므로 `B;C` 처럼 합쳐 적는 것이 고르는 것보다 정직하다.
     _st = []
-    for _s in set(g.subjects(_p('hasGutMicrobiota'), None)):
-        _mic = [_local(o) for o in g.objects(_s, _p('hasGutMicrobiota'))]
-        _nt = [_local(o) for o in g.objects(_s, _p('hasNeurotransmitter'))]
-        _ev = [str(o) for o in g.objects(_s, _p('hasEvidenceLevel'))]
-        _rg = [str(o) for o in g.objects(_s, _p('hasRegulation'))]
+    for _s in sorted(set(g.subjects(_p('hasGutMicrobiota'), None)), key=str):
+        _mic = sorted({_local(o) for o in g.objects(_s, _p('hasGutMicrobiota'))})
+        _nt = sorted({_local(o) for o in g.objects(_s, _p('hasNeurotransmitter'))})
+        _ev = sorted({str(o) for o in g.objects(_s, _p('hasEvidenceLevel'))})
+        _rg = sorted({str(o) for o in g.objects(_s, _p('hasRegulation'))})
         for _m in _mic:
             for _n in _nt:
                 _st.append({'microbe': _m, 'neurotransmitter': _n,
-                            'evidence_level': _ev[0] if _ev else '',
-                            'regulation': _rg[0] if _rg else ''})
+                            'evidence_level': ';'.join(_ev),
+                            'regulation': ';'.join(_rg)})
     if _st:
-        _stdf = pd.DataFrame(_st).drop_duplicates(['microbe', 'neurotransmitter'])
+        _stdf = (pd.DataFrame(_st)
+                 .groupby(['microbe', 'neurotransmitter'], as_index=False)
+                 .agg({'evidence_level': lambda v: ';'.join(
+                           sorted({x for s2 in v for x in str(s2).split(';') if x})),
+                       'regulation': lambda v: ';'.join(
+                           sorted({x for s2 in v for x in str(s2).split(';') if x}))}))
         mn = mn.merge(_stdf, on=['microbe', 'neurotransmitter'], how='left')
         print(f'  MiKG statement 속성: 근거등급 '
               f'{dict(_stdf.evidence_level.value_counts())} · 방향 '

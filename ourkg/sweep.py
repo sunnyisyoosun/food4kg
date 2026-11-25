@@ -26,7 +26,9 @@ warnings.filterwarnings('ignore')
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import pandas as pd  # noqa: E402
-from common import OUT, recommend_under  # noqa: E402
+from common import OUT, recommend_under, enable_provenance  # noqa: E402
+
+enable_provenance()   # 산출물 출처 기록 (common.PROV)
 
 REC = {'Finfish and Shellfish Products', 'Fruits and Fruit Juices',
        'Vegetables and Vegetable Products'}

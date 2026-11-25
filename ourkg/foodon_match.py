@@ -13,7 +13,9 @@
 """
 import json, os, re
 import pandas as pd
-from common import OUT, BASE, normkey as base
+from common import OUT, BASE, enable_provenance, normkey as base
+
+enable_provenance()   # 산출물 출처 기록 (common.PROV)
 SING=lambda b: ' '.join(re.sub(r'(?<=[a-z]{2})s$','',w) for w in b.split())
 SAFE=lambda b: not re.search(r'\b[a-z0-9]\b', b)
 EFSA=re.compile(r'^\d{4,6}\s*-\s')

@@ -28,10 +28,12 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import CACHE, OUT, compound_microbe
+from common import CACHE, OUT, compound_microbe, enable_provenance
 
 BASE_URL = ('https://raw.githubusercontent.com/borenstein-lab/'
             'microbiome-metabolome-curated-data/main/data/processed_data')
+
+enable_provenance()   # 산출물 출처 기록 (common.PROV)
 COHORTS = ('KANG_AUTISM_2017', 'MARS_IBS_2020')
 # 모음의 14 코호트 전부. 링크를 **만들 때**는 전부 쓴다 — 한 코호트의 상관은
 # 다중검정으로 쉽게 나오므로 **여러 코호트에서 반복되는 쌍만** 받아야 한다.

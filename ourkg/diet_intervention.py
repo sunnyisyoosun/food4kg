@@ -47,7 +47,9 @@ import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (OUT, BASE, gutmdisorder_intervention, compound_microbe,
-                    depression_e)
+                    depression_e, enable_provenance)
+
+enable_provenance()   # 산출물 출처 기록 (common.PROV)
 
 # 미리 고정한 대조. 키는 intervention 표기에 대한 정규식이다.
 PRESPECIFIED = (

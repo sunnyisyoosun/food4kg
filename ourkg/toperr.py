@@ -31,7 +31,10 @@ warnings.filterwarnings('ignore')
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import pandas as pd  # noqa: E402
-from common import BASE, CACHE, OUT, recommend_under  # noqa: E402
+from common import (BASE, CACHE, OUT, recommend_under,  # noqa: E402
+                    enable_provenance)
+
+enable_provenance()   # 산출물 출처 기록 (common.PROV)
 
 POWDER = r'powder|\bmix\b|isolate|shake|supplement|instant breakfast|formula'
 SYRUP = r'heavy syrup|light syrup|in syrup|syrup pack'

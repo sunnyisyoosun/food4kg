@@ -64,7 +64,9 @@ def _ols(X, y, j):
     """다중회귀의 계수 j 와 그 양측 p. statsmodels 를 새로 깔지 않으려고 둔다
     (README 의 설치 목록을 늘리면 재현이 그만큼 번거로워진다).
 
-    b = (X'X)^-1 X'y,  var(b) = s^2 (X'X)^-1,  t = b/se ~ t(n-k)
+    b = (X'X)^-1 X'y,  var(b) = s^2 (X'X)^-1,  t = b/se ~ t(n-k, enable_provenance)
+
+enable_provenance()   # 산출물 출처 기록 (common.PROV)
     """
     from scipy.stats import t as tdist
     XtX_inv = np.linalg.pinv(X.T @ X)

@@ -18,13 +18,16 @@ import collections, json, os, re, sys, time, urllib.parse, urllib.request
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 import pandas as pd
-from common import BASE, OUT, cached_get, compound_microbe, depression_e
+from common import (BASE, OUT, cached_get, compound_microbe, depression_e,
+                    enable_provenance)
 
 UA = {'User-Agent': 'ourkg/1.0 (food4health reproduction+extension)'}
 QUERY = ('(probiotic*[tiab] OR Lactobacillus[tiab] OR Bifidobacterium[tiab] OR '
          'Lactiplantibacillus[tiab] OR Limosilactobacillus[tiab]) AND '
          '(depression[tiab] OR depressive[tiab] OR anxiety[tiab]) AND '
          'randomized controlled trial[pt] AND humans[mh]')
+
+enable_provenance()   # 산출물 출처 기록 (common.PROV)
 GENUS = (r'(Lactobacillus|Lactiplantibacillus|Limosilactobacillus|Lacticaseibacillus|'
          r'Levilactobacillus|Ligilactobacillus|Bifidobacterium|Streptococcus|'
          r'Lactococcus|Saccharomyces|Clostridium|Akkermansia|Faecalibacterium|'

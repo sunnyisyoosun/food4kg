@@ -1,91 +1,91 @@
 neurotransmitter,kegg_pathway,pathway_label
+Acetylcholine,map04972,Pancreatic secretion
+GABA,map01120,Microbial metabolism in diverse environments
 Serotonin,map07211,Serotonin receptor agonists/antagonists
-Histamine,map05310,Asthma
+Norepinephrine,map04923,Regulation of lipolysis in adipocytes
+Norepinephrine,map04270,Vascular smooth muscle contraction
+Serotonin,map04726,Serotonergic synapse
+GABA,map00330,Arginine and proline metabolism
+Acetylcholine,map00564,Glycerophospholipid metabolism
 Serotonin,map04080,Neuroactive ligand-receptor interaction
 Dopamine,map04080,Neuroactive ligand-receptor interaction
 Norepinephrine,map04080,Neuroactive ligand-receptor interaction
 Histamine,map04080,Neuroactive ligand-receptor interaction
 GABA,map04080,Neuroactive ligand-receptor interaction
 Acetylcholine,map04080,Neuroactive ligand-receptor interaction
-Serotonin,map00380,Tryptophan metabolism
-Serotonin,map04726,Serotonergic synapse
-Norepinephrine,map02020,Two-component system
-Histamine,map07227,Histamine H2/H3 receptor agonists/antagonists
+Dopamine,map01110,Biosynthesis of secondary metabolites
+Histamine,map01110,Biosynthesis of secondary metabolites
+Histamine,map04974,Protein digestion and absorption
+Acetylcholine,map04810,Regulation of actin cytoskeleton
+GABA,map04915,Estrogen signaling pathway
 Serotonin,map04540,Gap junction
 Dopamine,map04540,Gap junction
 Norepinephrine,map04540,Gap junction
-Norepinephrine,map02024,Quorum sensing
-GABA,map02024,Quorum sensing
-Serotonin,map01063,Biosynthesis of alkaloids derived from shikimate pathway
-Dopamine,map01063,Biosynthesis of alkaloids derived from shikimate pathway
+Dopamine,map04917,Prolactin signaling pathwa
+Norepinephrine,map04261,Adrenergic signaling in cardiomyocytes
+Dopamine,map05030,Cocaine addiction
+Dopamine,map05031,Amphetamine addiction
+Dopamine,map00965,Betalain biosynthesis
+Histamine,map04971,Gastric acid secretion
+Acetylcholine,map04971,Gastric acid secretion
+Dopamine,map01060,Biosynthesis of plant secondary metabolites
+GABA,map00760,Nicotinate and nicotinamide metabolism
 Serotonin,map01100,Metabolic pathways
 Dopamine,map01100,Metabolic pathways
 Norepinephrine,map01100,Metabolic pathways
 Histamine,map01100,Metabolic pathways
 GABA,map01100,Metabolic pathways
-Norepinephrine,map04261,Adrenergic signaling in cardiomyocytes
-Norepinephrine,map04923,Regulation of lipolysis in adipocytes
-Acetylcholine,map04810,Regulation of actin cytoskeleton
-Dopamine,map00950,Isoquinoline alkaloid biosynthesis
-Dopamine,map05034,Alcoholism
-Dopamine,map04728,Dopaminergic synapse
-GABA,map05033,Nicotine addiction
-Acetylcholine,map05033,Nicotine addiction
-Acetylcholine,map04972,Pancreatic secretion
-GABA,map00250,"Alanine, aspartate and glutamate metabolism"
+Dopamine,map00350,Tyrosine metabolism
+Norepinephrine,map00350,Tyrosine metabolism
+Serotonin,map01063,Biosynthesis of alkaloids derived from shikimate pathway
+Dopamine,map01063,Biosynthesis of alkaloids derived from shikimate pathway
+Norepinephrine,map02024,Quorum sensing
+GABA,map02024,Quorum sensing
 Serotonin,map04750,Inflammatory mediator regulation of TRP channels
 Histamine,map04750,Inflammatory mediator regulation of TRP channels
-Histamine,map04974,Protein digestion and absorption
-Dopamine,map01060,Biosynthesis of plant secondary metabolites
-GABA,map00760,Nicotinate and nicotinamide metabolism
-GABA,map00410,beta-Alanine metabolism
-Serotonin,map04721,Synaptic vesicle cycle
-Dopamine,map04721,Synaptic vesicle cycle
-Norepinephrine,map04721,Synaptic vesicle cycle
-Histamine,map04721,Synaptic vesicle cycle
-GABA,map04721,Synaptic vesicle cycle
-Acetylcholine,map04721,Synaptic vesicle cycle
-Acetylcholine,map04911,Insulin secretion
-GABA,map04915,Estrogen signaling pathway
 Norepinephrine,map04924,Renin secretion
-Dopamine,map05031,Amphetamine addiction
+Dopamine,map04728,Dopaminergic synapse
 Histamine,map04664,Fc epsilon RI signaling pathway
+GABA,map00410,beta-Alanine metabolism
 GABA,map04727,GABAergic synaps
 Serotonin,map04742,Taste transduction
 Norepinephrine,map04742,Taste transduction
 GABA,map04742,Taste transduction
 Acetylcholine,map04742,Taste transduction
-Norepinephrine,map04714,Thermogenesis
-Histamine,map00340,Histidine metabolism
-Dopamine,map05030,Cocaine addiction
+GABA,map05033,Nicotine addiction
+Acetylcholine,map05033,Nicotine addiction
+Norepinephrine,map04970,Salivary secretion
+Acetylcholine,map04970,Salivary secretion
 Dopamine,map05012,Parkinson disease
 Serotonin,map04024,cAMP signaling pathway
 Dopamine,map04024,cAMP signaling pathway
 Norepinephrine,map04024,cAMP signaling pathway
 GABA,map04024,cAMP signaling pathway
 Acetylcholine,map04024,cAMP signaling pathway
-Dopamine,map05032,Morphine addiction
-GABA,map05032,Morphine addiction
-Acetylcholine,map04725,Cholinergic synapse
+Norepinephrine,map04714,Thermogenesis
 GABA,map00650,Butanoate metabolism
-Norepinephrine,map04970,Salivary secretion
-Acetylcholine,map04970,Salivary secretion
-Histamine,map01065,Biosynthesis of alkaloids derived from histidine and purine
-Histamine,map04971,Gastric acid secretion
-Acetylcholine,map04971,Gastric acid secretion
 GABA,map04723,Retrograde endocannabinoid signaling
-Acetylcholine,map00564,Glycerophospholipid metabolism
+Acetylcholine,map04911,Insulin secretion
+Dopamine,map00950,Isoquinoline alkaloid biosynthesis
 Serotonin,map04976,Bile secretion
 Dopamine,map04976,Bile secretion
 Acetylcholine,map04976,Bile secretion
-Dopamine,map00350,Tyrosine metabolism
-Norepinephrine,map00350,Tyrosine metabolism
-Serotonin,map04361,Axon regeneration
-GABA,map01120,Microbial metabolism in diverse environments
-Norepinephrine,map04270,Vascular smooth muscle contraction
-GABA,map00330,Arginine and proline metabolism
-Dopamine,map04917,Prolactin signaling pathwa
-Dopamine,map00965,Betalain biosynthesis
-Dopamine,map01110,Biosynthesis of secondary metabolites
-Histamine,map01110,Biosynthesis of secondary metabolites
+Acetylcholine,map04725,Cholinergic synapse
+GABA,map00250,"Alanine, aspartate and glutamate metabolism"
 GABA,map04929,GnRH secretion
+Norepinephrine,map02020,Two-component system
+Histamine,map01065,Biosynthesis of alkaloids derived from histidine and purine
+Dopamine,map05032,Morphine addiction
+GABA,map05032,Morphine addiction
+Histamine,map05310,Asthma
+Serotonin,map04361,Axon regeneration
+Histamine,map00340,Histidine metabolism
+Histamine,map07227,Histamine H2/H3 receptor agonists/antagonists
+Serotonin,map00380,Tryptophan metabolism
+Serotonin,map04721,Synaptic vesicle cycle
+Dopamine,map04721,Synaptic vesicle cycle
+Norepinephrine,map04721,Synaptic vesicle cycle
+Histamine,map04721,Synaptic vesicle cycle
+GABA,map04721,Synaptic vesicle cycle
+Acetylcholine,map04721,Synaptic vesicle cycle
+Dopamine,map05034,Alcoholism

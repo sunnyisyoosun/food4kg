@@ -30,7 +30,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
-from common import OUT, recommend_under  # noqa: E402
+from common import OUT, recommend_under, enable_provenance  # noqa: E402
+
+enable_provenance()   # 산출물 출처 기록 (common.PROV)
 from bootstrap import BASE, CANDIDATES, REC, NOT  # noqa: E402
 
 

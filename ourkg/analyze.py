@@ -30,7 +30,9 @@ sys.path.insert(0, os.path.join(
 from common import (OUT, BASE, CACHE, compound_microbe, depression_e,
                     microbe_disease_direction, mental_taxids, mental_mesh,
                     microbe_metabolites,
-                    measured_links as _measured_links)
+                    measured_links as _measured_links, enable_provenance)
+
+enable_provenance()   # 산출물 출처 기록 (common.PROV)
 
 
 def gutbrain_weight(compounds):

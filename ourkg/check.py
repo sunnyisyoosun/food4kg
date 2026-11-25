@@ -384,6 +384,64 @@ def check_pathcheck():
          f"CSV {d.get('n_csv')}종 = KG {d.get('n_kg')}종")
 
 
+# ------------------------------------------------- 5b. 산출물 출처 (provenance)
+#
+# **정본 산출물**은 기본값으로 만들어야 한다. 쓸기 산출물(`*_comparison.csv` 등)은
+# 환경을 바꿔 돌리는 것이 목적이므로 예외다 — 그 구분이 없으면 검사가 늘 실패한다.
+CANONICAL = (
+    'recommendation.csv', 'recommendation.png', 'foods.csv', 'microbes.csv',
+    'compound_microbe.csv', 'compound_depression.csv', 'kg_stats.csv',
+    'eval_method1.csv', 'eval_method2.csv', 'eval_method2_calibration.csv',
+    'eval_sparql.json', 'microbe_disease_agreement.csv', 'modimed_labels.csv',
+)
+# 산출물 -> 그것이 읽는 입력. 입력보다 오래되면 낡은 것이다.
+# (11-05 산출물 9 개가 입력 재구축 뒤 20 일 방치된 일이 있었다.)
+DEPENDS = {
+    'recommendation.csv': ('foods.csv', 'compound_depression.csv', 'food_form.csv'),
+    'modimed_labels.csv': ('foods.csv',),
+    'eval_method1.csv': ('compound_microbe.csv', 'microbes.csv'),
+    'microbe_disease_agreement.csv': ('microbe_disease_disbiome.csv',
+                                      'microbe_disease_gutmdisorder.csv'),
+    'compound_microbe.csv': ('microbes.csv',),
+    'kg_stats.csv': ('microbes.csv', 'compound_microbe.csv', 'foods.csv'),
+    'diet_intervention_score.csv': ('compound_microbe.csv', 'compound_depression.csv'),
+    'e_autism_microbe.csv': ('compound_microbe.csv', 'microbe_disease_agreement.csv'),
+}
+
+
+def check_provenance():
+    """정본 산출물이 기본값으로 만들어졌는지, 입력보다 낡지 않았는지."""
+    import json
+    stale = []
+    for out_f, deps in DEPENDS.items():
+        p = os.path.join(OUT, out_f)
+        if not os.path.exists(p):
+            continue
+        for d in deps:
+            dp = os.path.join(OUT, d)
+            if os.path.exists(dp) and os.path.getmtime(p) < os.path.getmtime(dp) - 1:
+                stale.append(f'{out_f} < {d}')
+    _say('FAIL' if stale else 'PASS', '산출물 신선도',
+         f'입력보다 오래된 것 {stale}' if stale else
+         f'의존 {len(DEPENDS)} 쌍 모두 산출물이 입력보다 새롭다')
+
+    pv = os.path.join(OUT, 'provenance.json')
+    if not os.path.exists(pv):
+        return _say('SKIP', '정본 산출물 출처', 'provenance.json 없다 — 한 단계 돌려라')
+    rec = json.load(open(pv))
+    bad = {f: r['env'] for f, r in rec.items()
+           if f in CANONICAL and r.get('env')}
+    unknown = [f for f in CANONICAL
+               if os.path.exists(os.path.join(OUT, f)) and f not in rec]
+    msg = []
+    if bad:
+        msg.append(f'기본값 아닌 환경으로 만들어진 정본 {bad}')
+    _say('FAIL' if bad else 'PASS', '정본 산출물 출처',
+         '; '.join(msg) if msg else
+         f'기록 {len(rec)} 건 · 정본 중 비기본값 0'
+         + (f' (기록 없는 정본 {len(unknown)} — 아직 안 돌린 단계)' if unknown else ''))
+
+
 # ---------------------------------------------------------------- 6. 문서
 #  문서 수치가 산출물과 갈리는 일이 반복됐다. 핵심 수치만 자동으로 맞춘다.
 def check_docs():
@@ -412,7 +470,8 @@ CHECKS = {'schema': check_schema, 'microbe': check_microbe, 'links': check_links
           'agreement': check_agreement, 'registry': check_registry,
           'deadcode': check_deadcode,
           'emode': check_emode, 'env': check_env, 'recommend': check_recommend,
-          'pathcheck': check_pathcheck, 'kg': check_kg, 'docs': check_docs}
+          'pathcheck': check_pathcheck, 'kg': check_kg,
+          'provenance': check_provenance, 'docs': check_docs}
 
 
 def main(argv):

@@ -82,7 +82,7 @@ python3 ourkg/run_all.py --env            # 환경변수 전수 (소스에서 �
 
 python3 ourkg/analyze.py recommend        # 분석 한 단계만
 python3 ourkg/sweep.py emode              # 설정 쓸기 하나만
-python3 ourkg/check.py                    # 산출물·문서 정합 검사 (27 항목, 네트워크 없음)
+python3 ourkg/check.py                    # 산출물·문서 정합 검사 (29 항목, 네트워크 없음)
 ```
 
 **무언가 고친 뒤에는 `check.py` 를 돌린다.** 산출물이 조용히 어긋나는 것을
@@ -152,7 +152,7 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 | `bootstrap.py` | Top-K 지표의 **표집 변동** (주지표 선정 근거) |
 | `consensus.py` | **합의 Top-K** — 부분표집에서 반복 선택되는 음식 |
 | `toperr.py` | Top-K **규칙 기반 오류 수** (외부 임상 · 섭취량 · 분말 · 시럽) |
-| `check.py` | **정합 검사** — 산출물·문서가 서로 맞는지 네트워크 없이 27 항목 |
+| `check.py` | **정합 검사** — 산출물·문서가 서로 맞는지 네트워크 없이 29 항목 |
 | `foodon_match.py` | FoodOn 매칭 (EBI OLS) |
 | `common.py` | 경로 · 단위 환산 · 라벨 정규화 · **읽는·돌리는 자리 통합**(`compound_microbe` · `measured_links` · `microbe_disease_direction` · `depression_e` · `taxid_alias` · `recommend_under`) |
 | `run_all.py` | 위를 순서대로. `--env` 로 환경변수 전수 |
@@ -163,7 +163,7 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 
 ### KG 규모 (논문 Table 1 대응)
 
-**고유 triple 3,443,484 · 관계 39 · 엔티티 859,542** (논문 13,346,991 · 140 · 1,637,915)
+**고유 triple 3,443,485 · 관계 39 · 엔티티 859,542** (논문 13,346,991 · 140 · 1,637,915)
 
 | source | relation | entity | triples |
 |---|---:|---:|---:|
@@ -175,7 +175,7 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 | 측정 상관 | 2 | 708 | 21,000 |
 | KEGG | 5 | 3,092 | 13,112 |
 | KEGG(속 수준) | 1 | 398 | 8,626 |
-| MiKG | 9 | 1,306 | 7,193 |
+| MiKG | 9 | 1,306 | 7,196 |
 | MeSH | 2 | 245 | 5,400 |
 | ProMENDA | 6 | 1,289 | 5,150 |
 | NCBI taxonomy | 6 | 1,207 | 3,740 |
@@ -185,12 +185,12 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 | Disbiome | 2 | 476 | 2,386 |
 | evidence | 15 | 278 | 1,560 |
 | SNOMED CT | 2 | 294 | 285 |
-| Σ 출처 주장(겹침 포함) | 39 | 859,542 | 3,461,530 |
-| **Total (고유 그래프)** | **39** | **859,542** | **3,443,484** |
+| Σ 출처 주장(겹침 포함) | 39 | 859,542 | 3,461,533 |
+| **Total (고유 그래프)** | **39** | **859,542** | **3,443,485** |
 
 **두 줄을 따로 적는 이유** — RDF 그래프는 같은 statement 를 두 번 갖지 않으므로
 그래프 크기는 **고유** 기준이다. 출처 열은 '그 출처가 주장한 수' 라서 겹치는
-만큼 합이 그래프보다 크다(18,046). 겹침은 버릴 정보가 아니다 — VMH 와 KEGG 가
+만큼 합이 그래프보다 크다(18,048). 겹침은 버릴 정보가 아니다 — VMH 와 KEGG 가
 같은 `hasMetabolites` 1,435 건을 독립적으로 주장하는 것은 **서로 교차검증**이다.
 논문 Table 1 과 비교할 때는 고유 쪽을 쓴다.
 

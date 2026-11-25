@@ -42,7 +42,9 @@ import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (OUT, CACHE, compound_microbe, microbe_disease_direction,
-                    measured_links, depression_e)
+                    measured_links, depression_e, enable_provenance)
+
+enable_provenance()   # 산출물 출처 기록 (common.PROV)
 
 AUTISM_MESH = 'D000067877'          # MeSH Autism Spectrum Disorder
 CASE_HINT = 'autis'                 # Study.Group 의 'Autistic ' (뒤 공백 주의)

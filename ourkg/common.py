@@ -2,6 +2,7 @@
 import io
 import os
 import re
+import sys
 import pandas as pd
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -61,6 +62,83 @@ def singularize(series):
 
 
 CACHE = os.path.join(OURKG, 'cache')
+
+
+# ----------------------------------------------------------------------
+# 산출물 출처 기록 (provenance)
+#
+# 같은 종류로 세 번 당했다 —
+#   · e_mode_comparison.csv 가 기본값 아닌 E_MODES 로 만들어진 채 커밋됐다
+#   · toperr_comparison.csv 가 1 행만 든 부분 실행 결과로 커밋됐다
+#   · 11-05 산출물 9 개가 입력 재구축 뒤 20 일간 방치됐다 (food_key 표기가
+#     달라져서 지금 산출물과 조인하면 Top/Bot30 60 개 중 19 개가 조용히 안 맞는다)
+# 세 번 다 **우연히** 발견했다. 환경변수 55 개 · 단계 24 개에서 기억에 맡길 수
+# 없다.
+#
+# 쓰는 자리가 50 곳이라 하나씩 계측하지 않는다. **프로세스가 끝날 때 이번
+# 실행이 건드린 out/ 파일을 모아** 그때의 argv 와 **기본값이 아닌 환경변수**를
+# 적는다. check.py 가 그걸 읽어 판정한다.
+PROV = os.path.join(OUT, 'provenance.json')
+_PROV_T0 = None
+
+
+def _env_nondefault():
+    """지금 환경 중 **소스가 적은 기본값과 다른** 것만 돌려준다."""
+    import re
+    found = {}
+    for fn in sorted(f for f in os.listdir(OURKG) if f.endswith('.py')):
+        src = open(os.path.join(OURKG, fn), encoding='utf-8').read()
+        for m in re.finditer(r"environ\.get\(\s*'([A-Z_]+)'(?:,\s*'([^']*)')?",
+                             src, re.S):
+            found.setdefault(m.group(1), m.group(2))
+    out = {}
+    for k, default in found.items():
+        cur = os.environ.get(k)
+        if cur is not None and cur != default:
+            out[k] = cur
+    return out
+
+
+def _record_provenance():
+    import json
+    import time
+    if _PROV_T0 is None or not os.path.isdir(OUT):
+        return
+    try:
+        touched = sorted(
+            f for f in os.listdir(OUT)
+            if f != os.path.basename(PROV)
+            and os.path.getmtime(os.path.join(OUT, f)) >= _PROV_T0 - 1)
+        if not touched:
+            return
+        rec = {}
+        if os.path.exists(PROV):
+            try:
+                rec = json.load(open(PROV))
+            except Exception:
+                rec = {}
+        stamp = {'at': time.strftime('%Y-%m-%d %H:%M:%S'),
+                 'argv': ' '.join(os.path.basename(a) for a in sys.argv),
+                 'env': _env_nondefault()}
+        for f in touched:
+            rec[f] = stamp
+        tmp = PROV + '.part'
+        json.dump(dict(sorted(rec.items())), open(tmp, 'w'),
+                  indent=1, ensure_ascii=False)
+        os.replace(tmp, PROV)
+    except Exception:
+        # 기록이 실패해도 파이프라인을 멈추지 않는다 — 기록은 보조다.
+        pass
+
+
+def enable_provenance():
+    """단계 스크립트가 import 시 한 번 켠다 (`build` · `analyze` 등)."""
+    global _PROV_T0
+    import atexit
+    import time
+    if _PROV_T0 is None:
+        _PROV_T0 = time.time()
+        atexit.register(_record_provenance)
 
 
 def cached_get(name, fetch, ttl_days=30):
