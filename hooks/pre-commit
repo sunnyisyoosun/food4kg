@@ -25,6 +25,21 @@ CHECK="$ROOT/ourkg/check.py"
 PY="python3"
 [ -x "$ROOT/.venv/bin/python" ] && PY="$ROOT/.venv/bin/python"
 
+# 먼저 함수 단위 시험 — check.py 는 산출물을 보므로 함수가 틀렸는데 산출물이
+# 그럴듯하면 통과한다. 0.4 초다.
+TESTS="$ROOT/ourkg/tests.py"
+if [ -f "$TESTS" ]; then
+    TOUT=$("$PY" "$TESTS" 2>&1)
+    if [ $? -ne 0 ]; then
+        echo "$TOUT" | grep -E "^FAIL:|^ERROR:|^Ran |^FAILED" || echo "$TOUT" | tail -15
+        echo
+        echo "pre-commit: 함수 단위 시험이 실패했다 — 커밋을 멈춘다."
+        echo "  전체 출력:   python3 ourkg/tests.py -v"
+        exit 1
+    fi
+    echo "$TOUT" | grep -E "^Ran " | sed 's/^/pre-commit: tests /'
+fi
+
 # 산출물이 아직 없는 체크아웃(갓 clone)에서는 검사가 전부 SKIP 이고 통과한다.
 OUT=$("$PY" "$CHECK" 2>&1)
 STATUS=$?

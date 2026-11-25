@@ -509,6 +509,24 @@ def gutmdisorder_intervention(session=None):
 _ENV_BASE = dict(os.environ)
 
 
+def apply_env(env, boot=None):
+    """**최초 환경으로 되돌린 뒤** `env` 를 건다 (`recommend_under` 가 쓴다).
+
+    `recommend_under` 안에 인라인으로 있던 것을 떼어냈다 — 이 되돌리기가
+    빠졌을 때 쓸기 사이로 설정이 새어 `run_all.py` 가 죽었는데(RESULTS §40),
+    그 동작을 **함수 단위로 시험할 수 있어야** 한다. `recommend` 를 돌리지
+    않고 이 함수만 불러 확인한다 (`tests.py`).
+    """
+    for k in [k for k in os.environ if k not in _ENV_BASE]:
+        del os.environ[k]
+    for k, v in _ENV_BASE.items():
+        if os.environ.get(k) != v:
+            os.environ[k] = v
+    os.environ.update(env or {})
+    if boot:
+        os.environ['BOOT_FRAC'], os.environ['BOOT_SEED'] = str(boot[0]), str(boot[1])
+
+
 def recommend_under(env, quiet=True, boot=None):
     """환경변수를 걸고 `analyze.recommend` 를 한 번 돌려 결과를 돌려준다.
 
@@ -538,14 +556,7 @@ def recommend_under(env, quiet=True, boot=None):
     import contextlib
     import importlib
     import io as _io
-    for k in [k for k in os.environ if k not in _ENV_BASE]:
-        del os.environ[k]
-    for k, v in _ENV_BASE.items():
-        if os.environ.get(k) != v:
-            os.environ[k] = v
-    os.environ.update(env or {})
-    if boot:
-        os.environ['BOOT_FRAC'], os.environ['BOOT_SEED'] = str(boot[0]), str(boot[1])
+    apply_env(env, boot)
     import analyze
     importlib.reload(analyze)
     if not quiet:

@@ -83,6 +83,7 @@ python3 ourkg/run_all.py --env            # 환경변수 전수 (소스에서 �
 
 python3 ourkg/analyze.py recommend        # 분석 한 단계만
 python3 ourkg/sweep.py emode              # 설정 쓸기 하나만
+python3 ourkg/tests.py                    # 함수 단위 시험 (33 개, 0.4 초)
 python3 ourkg/check.py                    # 산출물·문서 정합 검사 (29 항목, 네트워크 없음)
 ```
 
@@ -101,8 +102,8 @@ python3 ourkg/check.py                    # 산출물·문서 정합 검사 (29 
 git config core.hooksPath hooks     # hooks/pre-commit 을 켠다
 ```
 
-`hooks/pre-commit` 이 커밋 때마다 `check.py` 를 돌리고 **실패하면 커밋을 막는다**
-(2 초). 훅을 `.git/hooks/` 가 아니라 레포의 `hooks/` 에 두는 이유는 git 이
+`hooks/pre-commit` 이 커밋 때마다 `tests.py` → `check.py` 를 돌리고 **하나라도
+실패하면 커밋을 막는다**(합쳐 약 2.5 초). 훅을 `.git/hooks/` 가 아니라 레포의 `hooks/` 에 두는 이유는 git 이
 `.git/hooks/` 를 추적하지 않아 **받는 사람에게 안 따라가기** 때문이다.
 
 의도한 상태를 커밋해야 하면 `SKIP_OURKG_CHECK=1 git commit ...` 또는
@@ -171,6 +172,7 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 | `bootstrap.py` | Top-K 지표의 **표집 변동** (주지표 선정 근거) |
 | `consensus.py` | **합의 Top-K** — 부분표집에서 반복 선택되는 음식 |
 | `toperr.py` | Top-K **규칙 기반 오류 수** (외부 임상 · 섭취량 · 분말 · 시럽) |
+| `tests.py` | **함수 단위 시험** — 조용히 깨졌던 규칙을 고정 (33 개, 0.4 초) |
 | `check.py` | **정합 검사** — 산출물·문서가 서로 맞는지 네트워크 없이 29 항목 |
 | `foodon_match.py` | FoodOn 매칭 (EBI OLS) |
 | `common.py` | 경로 · 단위 환산 · 라벨 정규화 · **읽는·돌리는 자리 통합**(`compound_microbe` · `measured_links` · `microbe_disease_direction` · `depression_e` · `taxid_alias` · `recommend_under`) |

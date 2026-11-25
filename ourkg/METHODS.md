@@ -348,6 +348,44 @@ hooks` 한 번으로 켠다. 검사가 작동하는데 **부르는 것이 사람
 네트워크를 쓰지 않고 1.9 초다. 산출물이 없으면 SKIP 으로 남기고 실패로 세지
 않는다 — 단계별로 돌릴 수 있어야 하기 때문이다.
 
+### 함수 단위 시험 — `ourkg/tests.py`
+
+`check.py` 는 **산출물**을 본다. 그래서 **함수가 틀렸는데 산출물이 그럴듯하면
+통과한다** — 쓸기 사이로 설정이 새던 버그가 그랬고, `run_all.py` 를 50 분 돌려야
+드러났다. 그 자리를 함수 단위로 메운다.
+
+표준 라이브러리 `unittest` 만 쓴다(의존을 더하지 않는다). 네트워크를 쓰지 않고,
+파일이 필요한 것은 임시 디렉토리에 작은 fixture 를 만든다. **33 개 · 0.4 초.**
+
+겨냥한 것은 **조용히 깨졌던 규칙**이다.
+
+| 묶음 | 고정하는 규칙 |
+|---|---|
+| `PolarityTest` | 부호 규약 — 환자에서 **감소 = 양수(이로움)**. 뒤집히면 추천이 통째로 반대가 되는데 산출물은 그럴듯하다 |
+| `UnitTest` | 단위 환산 — 매핑표만 보면 mg 를 g 로 쓴다 |
+| `NormKeyTest` · `LabelTest` | 이름 키·라벨 정규화 (괄호를 지우면 `", , raw"` 가 남는다) |
+| `GmdControlTest` | gutMDisorder **무중재 대조** 판정 — 틀리면 "요구르트로 늘어나는 균" 이 "질환에서 늘어나는 균" 이 된다 |
+| `ApplyEnvTest` | 설정이 **쓸기 사이로 새지 않는지** |
+| `CachedCoveringTest` | 캐시가 **요청을 덮는지** |
+| `CanonTest` · `DirectionTest` | 병합 taxid 를 **정본으로 모으는지**, 모순이면 방향을 안 주는지 |
+| `AnchorRegexTest` | 문서 앵커 — 검사가 **스스로를 속였던** 자리의 회귀 |
+| `CompoundMicrobeRankTest` | 속 수준 링크를 거를 수 있는지 |
+
+**고친 버그를 되돌려 터지는지 확인했다** — 이게 없으면 시험이 있는 척만 한다.
+
+| 되돌린 것 | 터진 시험 |
+|---|---|
+| 환경 되돌리기 제거 | `test_previous_setting_is_cleared` |
+| 정본 정규화 제거 | `test_compound_microbe_dedupes_on_canonical` · `test_merged_taxid_is_compared_as_one` |
+| 앵커 이름을 `[a-z_.]+` 로 | `test_uppercase_name_matched` |
+
+그 과정에서 `recommend_under` 안에 인라인으로 있던 환경 되돌리기를
+`common.apply_env` 로 떼어냈다 — `recommend` 를 돌리지 않고 **그 동작만** 시험할
+수 있어야 하기 때문이다.
+
+`hooks/pre-commit` 이 시험(0.4 초) → 검사(2 초) 순으로 돌리고 둘 중 하나라도
+실패하면 커밋을 막는다. `run_all.py` 에도 `tests` 단계로 넣었다.
+
 ### 문서 수치는 앵커로 묶는다
 
 문서 수치가 반복해서 틀렸다(`F 층 130` · `798`/`791` 혼용 · `종 4,571` ·
