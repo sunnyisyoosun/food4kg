@@ -536,6 +536,48 @@ def facts():
         out['agree.pairs'] = f'{len(a):,}'
         out['agree.agreed'] = f'{int((a.status == "agreed").sum()):,}'
         out['agree.conflict'] = f'{int((a.status == "conflict").sum()):,}'
+    out.update(_facts_repro())
+    return out
+
+
+def _facts_repro():
+    """**역설계 트랙**(룬트 `analyse/`)에서 읽는 사실.
+
+    그족에는 자동 게이트가 0 개였다. `tools/scorecard.py` 가 상황을 보고하지만
+    불변식 검사가 없어서 `PROBLEMS.md` 의 수치를 사람이 손으로 대조해야
+    했다. 무거운 재계산 없이 **코미트된 산출물에서 읽을 수 있는 것**만
+    사실로 둔다. Spearman 처럼 `tools/paper.py` 를 돌려야 나오는 것은
+    여기 없다 — 그것까지 넣으면 검사가 몇 분짜리가 되어 코미트 훅에 못
+    들어간다.
+    """
+    import json
+    import pandas as pd
+    A = os.path.join(BASE, 'analyse')
+    out = {}
+    if not os.path.isdir(A):
+        return out
+    g = lambda n: os.path.join(A, n)
+    if os.path.exists(g('food.csv')):
+        out['repro.foods'] = str(len(pd.read_csv(g('food.csv'))))
+    if os.path.exists(g('foodname.csv')):
+        fn = pd.read_csv(g('foodname.csv'))
+        out['repro.foodname_rows'] = str(len(fn))
+        out['repro.foodname_cols'] = str(fn.shape[1])
+    if os.path.exists(g('paper85_compounds.csv')):
+        out['repro.compounds'] = str(len(pd.read_csv(g('paper85_compounds.csv'))))
+    if os.path.exists(g('paper_eval_table5.csv')):
+        t5 = pd.read_csv(g('paper_eval_table5.csv'))
+        out['repro.table5_n'] = str(len(t5))
+        out['repro.table5_reproduced'] = str(int(t5.reproduced.fillna(False).sum()))
+    sq = g('paper_sparql_summary.json')
+    if os.path.exists(sq):
+        d = json.load(open(sq))
+        for k, name in (('table2', 'repro.table2'), ('table3', 'repro.table3'),
+                        ('table4_raw', 'repro.table4'),
+                        ('t5_complication', 'repro.t5_complication'),
+                        ('t5_diet', 'repro.t5_diet')):
+            if k in d:
+                out[name] = str(d[k])
     return out
 
 
@@ -553,7 +595,11 @@ DOCS_EXCLUDED = ('RESULTS.md',)
 # 앵커 **바로 앞**의 숫자만 집는다. 사이에 허용하는 것은 `**` 와 공백뿐이다 —
 # 넉넉하게 두면 표에서 앞 칸 숫자를 집는다(`| 1 | 1,192 | 46,495<!--...-->` 에서
 # 1,192 를 집었다). 좁게 두고 못 집으면 앵커를 옮기는 쪽이 맞다.
-_ANCHOR = re.compile(r'([0-9][0-9,]*)\**<!--\s*chk:([A-Za-z_.]+)\s*-->')
+# 이름은 **느슨하게** 받는다(`[^\s>]+`). 못 보는 이름이 생기는 사고를
+# 세 번 당했다 — 처음 `[a-z_.]+` 는 대변자를(`chk:F.compounds`), 그 다은
+# `[A-Za-z_.]+` 는 숫자를(`chk:repro.t5_diet`) 못 봤다. 틀린 이름은
+# "모르는 앨커" 로 잡힐니 클래스를 정교하게 만드는 것이 아니다.
+_ANCHOR = re.compile(r'([0-9][0-9,]*)\**<!--\s*chk:([^\s>]+?)\s*-->')
 # **형식이 안 맞는 앵커를 조용히 넘기지 않는다.** 처음 판은 이름을 `[a-z_.]+` 로
 # 받아 `chk:F.compounds` · `chk:E.nonzero` 같은 대문자 앵커를 **아예 못 봤다**.
 # 그런데도 "앵커 15 개 통과" 라고 보고했다 — 검사가 있는 척만 한 것이다.

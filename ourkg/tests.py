@@ -450,6 +450,19 @@ class AnchorRegexTest(unittest.TestCase):
         self.assertEqual(len(check._ANCHOR_ANY.findall(txt)), 1)
         self.assertEqual(len(check._ANCHOR.findall(txt)), 0)
 
+    def test_digit_in_name_matched(self):
+        # 세 번째 재발. `[A-Za-z_.]+` 는 숫자가 들어간 이름을 못 봤다.
+        got = check._ANCHOR.findall('7<!--chk:repro.t5_complication-->')
+        self.assertEqual(got, [('7', 'repro.t5_complication')])
+        got2 = check._ANCHOR.findall('8<!--chk:repro.table3-->')
+        self.assertEqual(got2, [('8', 'repro.table3')])
+
+    def test_unknown_name_is_parsed_not_ignored(self):
+        # 틀린 이름은 **못 보고 지나가는 것**이 아니라 잡혀서
+        # "모르는 앨커" 로 FAIL 해야 한다.
+        got = check._ANCHOR.findall('1<!--chk:없는.사실-->')
+        self.assertEqual(len(got), 1)
+
     def test_comma_format(self):
         got = check._ANCHOR.findall('음식 **14,886<!--chk:foods.count--> 종**')
         self.assertEqual(got, [('14,886', 'foods.count')])

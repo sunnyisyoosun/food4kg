@@ -36,7 +36,7 @@ based on gut microbiota and mental health*, Artificial Intelligence In Medicine
 | 층위 | 결과 |
 |---|---|
 | 파이프라인 실행 | ✅ 5단계 end-to-end, 약 9분 |
-| 데이터 재구성 | ✅ 85 compound / 135 food / `foodname.csv` (135, 88) / 밀도 28 vs 33 |
+| 데이터 재구성 | ✅ 85<!--chk:repro.compounds--> compound / 135<!--chk:repro.foods--> food / `foodname.csv` (135<!--chk:repro.foodname_rows-->, 88<!--chk:repro.foodname_cols-->) / 밀도 28 vs 33 |
 | 핵심 입력 `E` 방향 확보 | ⚠️ 69/85 (81%) |
 | 논문 명시 부호 일치 (gold 9종) | ✅ 8/9 |
 | F (성분 행렬) vs 논문 heatmap | ✅ 행 코사인 0.981 (g 환산 후, §16.1) |
@@ -45,8 +45,8 @@ based on gut microbiota and mental health*, Artificial Intelligence In Medicine
 | 논문 주장 6개 (§16.2) | ⚠️ 3/6 (논문 순위 자신은 4/6) |
 | 개선판 V1~V3 (재현 아님, §16.4) | 모두 재현 기준 이하 |
 | `weight.csv` 네 소스 | ✅ 독립 집계, 극성 규약 통일 (§7) |
-| 논문 §5.1 방법2 (Table 5 추론) | ⚠️ 엄격 기준 Complication 7/8, Diet 2/7 (§16.10). 근거 존재만 보면 11/15 |
-| 논문 쿼리 → Table 3 / Table 4 | ✅ 8/8, 5/5 (§16.9, §16.10) |
+| 논문 §5.1 방법2 (Table 5 추론) | ⚠️ 엄격 기준 Complication 7<!--chk:repro.t5_complication-->/8, Diet 2<!--chk:repro.t5_diet-->/7 (§16.10). 근거 존재만 보면 11<!--chk:repro.table5_reproduced-->/15<!--chk:repro.table5_n--> |
+| 논문 쿼리 → Table 3 / Table 4 | ✅ 8<!--chk:repro.table3-->/8, 5<!--chk:repro.table4-->/5 (§16.9, §16.10) |
 | 논문 §5.1 방법1 (전문가 20문항) | ⚠️ 공개 KG 로 답 재현 18/20, 재현되고 타당 13/20 (§16.8, §16.10). 전문가 대조 자체는 재현 불가 |
 
 집계: `python3 tools/scorecard.py`
