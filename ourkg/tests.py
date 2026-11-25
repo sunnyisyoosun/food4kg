@@ -290,6 +290,147 @@ class DirectionTest(_OutFixture):
         self.assertEqual(list(t.status), ['agreed'])   # Present 는 방향이 아니다
 
 
+class AdjustedCosineTest(unittest.TestCase):
+    """식 (1) 의 **네 선택**을 손계산으로 고정한다.
+
+    음식 3 × compound 3. 0 을 섞어 공통 성분 마스크가 작동하게 했다.
+
+        X = [[1, 2, 0],
+             [2, 4, 0],
+             [0, 1, 3]]
+
+    행 중심화하면 `Xc0 = [0, 1, -1]` · `Xc1 = [0, 2, -2]` 이고, 0·1 은 비례하므로
+    `S[0,1] = 1.0` 이 될 것 같지만 **아니다** — 분자에는 마스크가 걸리고 분모에는
+    걸리지 않으므로 `2 / (√2 · 2√2) = 0.5` 다. 그 비대칭이 공식 구현의 선택이고,
+    여기서 그 값을 고정한다.
+    """
+
+    def setUp(self):
+        import numpy as np
+        self.np = np
+        self.X = np.array([[1.0, 2.0, 0.0],
+                           [2.0, 4.0, 0.0],
+                           [0.0, 1.0, 3.0]])
+        self.S = common.adjusted_cosine(self.X)
+
+    def test_hand_computed_values(self):
+        self.assertAlmostEqual(self.S[0, 1], 0.5, places=9)
+        self.assertAlmostEqual(self.S[0, 2], -0.109108945, places=7)
+
+    def test_diagonal_is_zero(self):
+        # 대각이 남으면 P = D x S 가 자기 점수를 되먹인다.
+        for i in range(3):
+            self.assertEqual(self.S[i, i], 0.0)
+
+    def test_symmetric(self):
+        self.assertTrue(self.np.allclose(self.S, self.S.T))
+
+    def test_row_not_column_centering(self):
+        # 열 중심화를 쓰면 값이 달라진다 — 그 오류가 실제로 있었다(파스타 1 위).
+        Xc_col = self.X - self.X.mean(axis=0, keepdims=True)
+        M = (self.X != 0).astype(float)
+        num = (Xc_col * M) @ (Xc_col * M).T
+        nrm = self.np.sqrt((Xc_col ** 2).sum(axis=1))
+        den = self.np.outer(nrm, nrm)
+        S_col = self.np.divide(num, den, out=self.np.zeros_like(num), where=den > 0)
+        self.np.fill_diagonal(S_col, 0.0)
+        self.assertFalse(self.np.allclose(self.S, S_col))
+
+    def test_mask_applies_to_numerator_only(self):
+        # 분모에도 마스크를 걸면 S[0,1] 이 1.0 이 된다. 그러면 안 된다.
+        Xc = self.X - self.X.mean(axis=1, keepdims=True)
+        M = (self.X != 0).astype(float)
+        both = (Xc * M)
+        nrm_masked = self.np.sqrt((both ** 2).sum(axis=1))
+        s01_masked = float((both[0] * both[1]).sum()
+                           / (nrm_masked[0] * nrm_masked[1]))
+        self.assertAlmostEqual(s01_masked, 1.0, places=9)
+        self.assertNotAlmostEqual(self.S[0, 1], s01_masked, places=6)
+
+    def test_zero_row_gives_zero_not_nan(self):
+        import numpy as np
+        X = np.array([[1.0, 1.0], [0.0, 0.0]])
+        S = common.adjusted_cosine(X)
+        self.assertFalse(np.isnan(S).any())
+
+
+class ResolveETest(unittest.TestCase):
+    """`E_MODE` 해석 — 모르는 모드는 **조용히 기본값으로 떨어지면 안 된다**."""
+
+    def setUp(self):
+        import analyze
+        self.analyze = analyze
+        self.E = pd.DataFrame({
+            'kegg': ['C1', 'C2'], 'e_shrunk': [0.5, -0.5],
+            'e_binary': [1.0, -1.0], 'q': [0.01, 0.5],
+        }).set_index('kegg')
+
+    def test_shrunk_and_binary_differ(self):
+        a = self.analyze.resolve_e('shrunk', self.E)
+        b = self.analyze.resolve_e('binary', self.E)
+        self.assertEqual(list(a), [0.5, -0.5])
+        self.assertEqual(list(b), [1.0, -1.0])
+
+    def test_sig_zeroes_nonsignificant(self):
+        got = self.analyze.resolve_e('sig', self.E)
+        self.assertEqual(list(got), [1.0, 0.0])      # q=0.5 는 0 이 된다
+
+    def test_unknown_mode_exits(self):
+        with self.assertRaises(SystemExit):
+            self.analyze.resolve_e('이런모드는없다', self.E)
+
+
+class ModimedTest(unittest.TestCase):
+    """외부 기준 라벨 — **CSV 가 아니라 코드가 계산한다.**
+
+    규칙이 드리프트하면 모든 쓸기 수치가 조용히 바뀐다(§4.5 에서 확인).
+    """
+
+    def setUp(self):
+        import analyze
+        self.analyze = analyze
+
+    def _foods(self, rows):
+        return pd.DataFrame(rows, columns=['food_name', 'food_group'])
+
+    def test_prescribed_and_extras(self):
+        f = self._foods([
+            ['Broccoli, raw', 'Vegetables and Vegetable Products'],
+            ['Candy, milk chocolate', 'Sweets'],
+        ])
+        lab, why = self.analyze.modimed_labels(f)
+        self.assertEqual(lab.iloc[0], 1)
+        self.assertEqual(lab.iloc[1], -1)
+
+    def test_baby_food_excluded(self):
+        # SMILES 는 성인 대상이다 — 이유식은 처방 대상이 아니다.
+        f = self._foods([['Baby food, vegetable, carrots', 'Baby Foods']])
+        lab, _ = self.analyze.modimed_labels(f)
+        self.assertEqual(lab.iloc[0], 0)
+
+    def test_score_counts_top_and_bottom(self):
+        f = pd.DataFrame({
+            'food_name': ['Broccoli, raw', 'Spinach, raw',
+                          'Candy, milk chocolate', 'Cookies, sugar'],
+            'food_group': ['Vegetables and Vegetable Products',
+                           'Vegetables and Vegetable Products', 'Sweets', 'Sweets'],
+            'score': [1.0, 0.9, -0.9, -1.0],
+        })
+        sc = self.analyze.modimed_score(f, 2)
+        # 키 이름이 `top{K}_처방군` 꼴이다 — 추측하지 않고 실제 키로 고정한다.
+        self.assertEqual(sc['top2_처방군'], 2)        # Top 2 가 채소 둘
+        self.assertEqual(sc['top2_extras'], 0)
+        self.assertEqual(sc['bot2_extras'], 2)        # Bottom 2 가 과자 둘
+        self.assertAlmostEqual(sc['modimed_AUC(참고)'], 1.0)   # 완전 분리
+
+    def test_score_empty_when_one_side_missing(self):
+        # 한쪽이 없으면 AUC 가 정의되지 않는다 — 빈 dict 를 돌려준다.
+        f = pd.DataFrame({'food_name': ['Broccoli, raw'],
+                          'food_group': ['Vegetables and Vegetable Products'],
+                          'score': [1.0]})
+        self.assertEqual(self.analyze.modimed_score(f, 1), {})
+
+
 class AnchorRegexTest(unittest.TestCase):
     """문서 수치 앵커 — 검사가 **스스로를 속였던** 자리의 회귀 시험."""
 

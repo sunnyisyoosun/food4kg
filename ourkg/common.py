@@ -509,6 +509,35 @@ def gutmdisorder_intervention(session=None):
 _ENV_BASE = dict(os.environ)
 
 
+def adjusted_cosine(X):
+    """논문 식 (1) adjusted cosine similarity — **음식 × 음식** 유사도.
+
+    `_recommend_one` 안에 8 줄로 있던 것을 떼어냈다. 이 8 줄에 **틀리기 쉬운
+    선택이 네 개** 들어 있고, 그중 하나는 실제로 틀렸던 적이 있다 — 점수를
+    재현하려고 임시로 쓴 코드가 **열 중심화**를 써서 파스타가 1 위로 나왔다.
+    손계산과 맞출 수 있어야 그런 것이 바로 드러난다 (`tests.py`).
+
+    네 선택
+      ① **행 중심화** — 음식마다 자기 성분 평균을 뺀다(열이 아니다).
+         adjusted cosine 의 정의이고, 논문 Fig.4(c) 의 "normalize the compounds
+         in the two groups separately" 와는 **다른 축**이다.
+      ② **공통 성분 마스크** `M = (X != 0)` — 분자는 두 음식이 **둘 다 측정된**
+         성분만 더한다(공식 구현의 common 조건).
+      ③ **분모는 전체 성분** — 식 (1) 그대로. 마스크를 분모에도 걸면 값이 달라진다.
+      ④ **대각 0** — 자기 자신과의 유사도를 빼야 `P = D x S` 가 자기 점수를
+         되먹이지 않는다.
+    """
+    import numpy as np
+    Xc = X - X.mean(axis=1, keepdims=True)        # ① 행 중심화
+    M = (X != 0).astype(float)                    # ② 공통 성분 마스크
+    num = (Xc * M) @ (Xc * M).T
+    nrm = np.sqrt((Xc ** 2).sum(axis=1))          # ③ 분모는 전체 성분
+    den = np.outer(nrm, nrm)
+    S = np.divide(num, den, out=np.zeros_like(num), where=den > 0)
+    np.fill_diagonal(S, 0.0)                      # ④ 대각 0
+    return S
+
+
 def apply_env(env, boot=None):
     """**최초 환경으로 되돌린 뒤** `env` 를 건다 (`recommend_under` 가 쓴다).
 

@@ -355,7 +355,7 @@ hooks` 한 번으로 켠다. 검사가 작동하는데 **부르는 것이 사람
 드러났다. 그 자리를 함수 단위로 메운다.
 
 표준 라이브러리 `unittest` 만 쓴다(의존을 더하지 않는다). 네트워크를 쓰지 않고,
-파일이 필요한 것은 임시 디렉토리에 작은 fixture 를 만든다. **33 개 · 0.4 초.**
+파일이 필요한 것은 임시 디렉토리에 작은 fixture 를 만든다. **46 개 · 0.7 초.**
 
 겨냥한 것은 **조용히 깨졌던 규칙**이다.
 
@@ -370,6 +370,9 @@ hooks` 한 번으로 켠다. 검사가 작동하는데 **부르는 것이 사람
 | `CanonTest` · `DirectionTest` | 병합 taxid 를 **정본으로 모으는지**, 모순이면 방향을 안 주는지 |
 | `AnchorRegexTest` | 문서 앵커 — 검사가 **스스로를 속였던** 자리의 회귀 |
 | `CompoundMicrobeRankTest` | 속 수준 링크를 거를 수 있는지 |
+| `AdjustedCosineTest` | **식 (1) 의 네 선택** — 행 중심화 · 공통 성분 마스크 · 전체 성분 분모 · 대각 0 |
+| `ResolveETest` | `E_MODE` 해석 — 모르는 모드가 **조용히 기본값으로 떨어지지 않는지** |
+| `ModimedTest` | **외부 기준 라벨** — CSV 가 아니라 코드가 계산한다 |
 
 **고친 버그를 되돌려 터지는지 확인했다** — 이게 없으면 시험이 있는 척만 한다.
 
@@ -378,10 +381,25 @@ hooks` 한 번으로 켠다. 검사가 작동하는데 **부르는 것이 사람
 | 환경 되돌리기 제거 | `test_previous_setting_is_cleared` |
 | 정본 정규화 제거 | `test_compound_microbe_dedupes_on_canonical` · `test_merged_taxid_is_compared_as_one` |
 | 앵커 이름을 `[a-z_.]+` 로 | `test_uppercase_name_matched` |
+| 유사도를 **열 중심화**로 | `test_hand_computed_values` · `test_row_not_column_centering` |
+| 유사도 **대각을 남김** | `test_diagonal_is_zero` |
 
-그 과정에서 `recommend_under` 안에 인라인으로 있던 환경 되돌리기를
-`common.apply_env` 로 떼어냈다 — `recommend` 를 돌리지 않고 **그 동작만** 시험할
-수 있어야 하기 때문이다.
+그 과정에서 두 번 **작은 추출**을 했다. 둘 다 "그 동작만 시험할 수 있어야
+한다" 가 이유다.
+
+| 떼어낸 것 | 어디서 | 왜 |
+|---|---|---|
+| `common.apply_env` | `recommend_under` 인라인 | `recommend` 를 돌리지 않고 환경 되돌리기만 보려고 |
+| `common.adjusted_cosine` | `_recommend_one` 의 8 줄 | `_recommend_one` 은 t-SNE 까지 돌려 단위 시험에 무겁다. **식 (1) 의 네 선택**만 손계산과 맞춘다 |
+
+추출 뒤 `recommendation.csv` 가 **완전히 동일**함을 확인했다 — 동작을 바꾸지
+않았다.
+
+> **`AdjustedCosineTest` 가 고정하는 것.** 음식 3 × compound 3 에서
+> `Xc0 = [0, 1, -1]` · `Xc1 = [0, 2, -2]` 는 비례하므로 `S[0,1] = 1.0` 이 될 것
+> 같지만 **0.5 다** — 분자에는 공통 성분 마스크가 걸리고 **분모에는 걸리지
+> 않는다**. 그 비대칭이 공식 구현의 선택이고, 시험이 그 값을 박아 둔다.
+> 분모에도 마스크를 걸면 1.0 이 되는 것까지 같이 확인한다.
 
 `hooks/pre-commit` 이 시험(0.4 초) → 검사(2 초) 순으로 돌리고 둘 중 하나라도
 실패하면 커밋을 막는다. `run_all.py` 에도 `tests` 단계로 넣었다.

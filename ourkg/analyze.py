@@ -27,7 +27,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'eval'))
-from common import (OUT, BASE, CACHE, compound_microbe, depression_e,
+from common import (OUT, BASE, CACHE, adjusted_cosine, compound_microbe, depression_e,
                     microbe_disease_direction, mental_taxids, mental_mesh,
                     microbe_metabolites,
                     measured_links as _measured_links, enable_provenance)
@@ -532,13 +532,9 @@ def _recommend_one(e_mode=None, path=None, save=True):
         Xsim = Xs
     else:
         sys.exit(f'SIM_SPACE 는 composition 또는 effect. 받은 값: {SIM_SPACE}')
-    Xc = Xsim - Xsim.mean(axis=1, keepdims=True)
-    M = (Xsim != 0).astype(float)              # 공식 구현의 common 조건
-    num = (Xc * M) @ (Xc * M).T                # 공통 성분만 더한 분자
-    nrm = np.sqrt((Xc ** 2).sum(axis=1))       # 분모는 전체 성분 (식 1 그대로)
-    den = np.outer(nrm, nrm)
-    S = np.divide(num, den, out=np.zeros_like(num), where=den > 0)
-    np.fill_diagonal(S, 0.0)
+    # 식 (1) 의 네 선택(행 중심화 · 공통 성분 마스크 · 전체 성분 분모 · 대각 0)은
+    # common.adjusted_cosine 한 곳에 있다 — 손계산과 맞추는 시험이 거기 걸린다.
+    S = adjusted_cosine(Xsim)
 
     # 논문 §4.2.2 Algorithm 1 line 8 — "P = D x S : **Threshold** and Top K"
     #
