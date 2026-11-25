@@ -699,11 +699,14 @@ Fig. 5 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" �
 - FDC 2026-09 전체(2,101,279 항목) + ProMENDA(Pu et al. 2024) + KEGG/NCBI 재조회
 - 외부 소스 추가: Disbiome · **gutMDisorder v3** · VMH/AGORA2 · 분변 대사체 13 코호트
   · NHANES · 프로바이오틱스 RCT
-- RDF **고유 3,443,484 triple** / 관계 39 / 음식 14,886 / F 층 compound 135 /
-  음식당 측정 compound 중앙값 48 / 미생물 791 종
+- RDF **고유 3,443,485<!--chk:kg.triples--> triple** / 관계 39<!--chk:kg.relations-->
+  / 음식 14,886<!--chk:foods.count--> / F 층 compound 135<!--chk:F.compounds--> /
+  음식당 측정 compound 중앙값 48<!--chk:foods.median_compounds--> /
+  미생물 791<!--chk:microbe.taxa--> 종
 - 추천 Top 30 은 채소 10 · 과일 10, Bottom 30 은 소고기 16 · 소시지 6 —
   **양쪽이 논문 §4.2.3 서술과 맞는다**
-- 정합 검사 `python3 ourkg/check.py` 27 항목
+- 함수 단위 + 메타 시험 `python3 ourkg/tests.py` · 정합 검사
+  `python3 ourkg/check.py`
 
 **"개선" 이라고 부르지 않는다.** 측정한 변경의 대부분이 기각됐고(미생물 매개
 가중 세 번 · 서빙 기준 `F` · 앙상블 · 희소화 · NHANES) 추천 순위는 미생물 축을

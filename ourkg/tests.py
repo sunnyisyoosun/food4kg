@@ -779,6 +779,32 @@ class MetaDocsTest(_CheckFixture):
         self.assertFails(_chk.check_docs)
 
 
+class MetaDocsScopeTest(unittest.TestCase):
+    """검사 **범위**가 좁아지지 않았는지.
+
+    앵커를 39 자리에 달아 두고도 `DOCS` 에 루트 문서를 빼먹어 `3,443,484` 가
+    남아 있었다. 범위를 좁히는 것은 조용한 후퇴라 여기서 막는다.
+    """
+
+    def test_root_docs_included(self):
+        for f in ('../README.md', '../PROBLEMS.md'):
+            self.assertIn(f, _chk.DOCS, f'{f} 가 검사 범위에서 빠졌다')
+
+    def test_ourkg_docs_included(self):
+        for f in ('README.md', 'DATA.md', 'METHODS.md', 'PROCESS.md'):
+            self.assertIn(f, _chk.DOCS)
+
+    def test_results_excluded_on_purpose(self):
+        # 시간순 기록이라 옛 수치가 맞다 — 빼는 것이 의도다.
+        self.assertNotIn('RESULTS.md', _chk.DOCS)
+        self.assertIn('RESULTS.md', _chk.DOCS_EXCLUDED)
+
+    def test_every_doc_path_exists(self):
+        for f in _chk.DOCS:
+            p = os.path.join(_chk.HERE, f)
+            self.assertTrue(os.path.exists(p), f'{f} 가 없다 — 경로가 틀렸거나 지워졌다')
+
+
 class MetaRobustnessTest(_CheckFixture):
     """검사가 **예외로 죽지 않는지** — 죽으면 뒤 검사가 안 돈다."""
 

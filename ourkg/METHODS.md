@@ -363,7 +363,7 @@ gutMDisorder 의 식이 중재 행은 음식을 주고 균이 변하는 것을 �
 드러났다. 그 자리를 함수 단위로 메운다.
 
 표준 라이브러리 `unittest` 만 쓴다(의존을 더하지 않는다). 네트워크를 쓰지 않고,
-파일이 필요한 것은 임시 디렉토리에 작은 fixture 를 만든다. **72 개 · 0.9 초.**
+파일이 필요한 것은 임시 디렉토리에 작은 fixture 를 만든다. **81 개 · 0.9 초.**
 
 겨냥한 것은 **조용히 깨졌던 규칙**이다.
 
@@ -437,6 +437,8 @@ gutMDisorder 의 식이 중재 행은 음식을 주고 균이 변하는 것을 �
 | `MetaPathcheckTest` | 판정이 `agree: false` |
 | `MetaProvenanceTest` | 정본이 비기본값 환경 · 산출물이 입력보다 오래됨 |
 | `MetaDocsTest` | 앵커 드리프트 · 형식 불량 · 앵커 부재 · 모르는 이름 |
+| `MetaDocsScopeTest` | **검사 범위가 좁아짐** — 루트 문서 누락 · 경로가 없는 문서 |
+| `MetaHooksTest` | 설정 없음(새 클론) · 실행 비트 없음 · 옵트아웃 · 훅 파일 부재 |
 | `MetaRobustnessTest` | 검사 안에서 예외 → `main()` 이 **죽지 않고 FAIL** 로 보고하는지 |
 
 **검사기를 망가뜨려 메타 시험이 터지는지도 확인했다.**
@@ -445,6 +447,8 @@ gutMDisorder 의 식이 중재 행은 음식을 주고 균이 변하는 것을 �
 |---|---|
 | `check_links` 의 중복 탐지 제거 | `MetaLinksTest.test_fails_on_duplicate_pair` |
 | `main()` 의 예외 감싸기 제거 | `MetaRobustnessTest.test_main_reports_fail_instead_of_crashing` |
+| `check_hooks` 의 설정 확인 제거 | `MetaHooksTest.test_fails_on_fresh_clone` |
+| `DOCS` 에서 루트 문서 제거 | `MetaDocsScopeTest.test_root_docs_included` |
 
 ### 문서 수치는 앵커로 묶는다
 
@@ -455,6 +459,7 @@ gutMDisorder 의 식이 중재 행은 음식을 주고 균이 변하는 것을 �
 
 그래서 **앵커**로 바꿨다. 산출물에서 계산할 수 있는 사실 **24 개**를
 `check.facts()` 가 내고, 문서에서는 수치 바로 뒤에 `<!--chk:이름-->` 을 단다.
+현재 **45 자리**이고 `ourkg/` 문서 4 개 + **루트 문서 3 개**를 본다.
 
 ```markdown
 규모: 음식 **14,886<!--chk:foods.count--> 종** · F 층 compound **135**<!--chk:F.compounds-->
@@ -467,6 +472,15 @@ gutMDisorder 의 식이 중재 행은 음식을 주고 균이 변하는 것을 �
 세 가지를 FAIL 로 둔다 — ① 앵커 값이 산출물과 다름 ② `<!--chk:` 가 있는데
 **형식이 안 맞음**(숫자가 바로 앞에 없음) ③ 앵커가 **하나도 없음**(검사가 있는
 척만 하는 상태).
+
+> **범위를 좁히는 것이 조용한 후퇴다.** 앵커를 39 자리에 달아 두고도 `DOCS` 에
+> **루트 문서를 빼먹어** 루트 `README.md` 의 `3,443,484`(현재 3,443,485)가 남아
+> 있었다. 범위를 정할 때 ourkg 만 생각한 것이다. 루트 셋을 넣고
+> `MetaDocsScopeTest` 가 범위가 다시 좁아지는 것을 막는다.
+>
+> `RESULTS.md` 는 **일부러 뺀다** — 시간순 기록이라 옛 절의 수치는 그때 값이
+> 맞다. 앵커를 달면 현재 값으로 맞추라고 요구하게 되어 기록을 망친다. 잊어서
+> 빠진 것과 구분되게 `DOCS_EXCLUDED` 에 적어 둔다.
 
 > **②를 넣은 이유.** 처음 판은 이름을 `[a-z_.]+` 로 받아 `chk:F.compounds` ·
 > `chk:E.nonzero` 같은 **대문자 앵커를 아예 못 봤다.** 그런데도 "앵커 15 개
