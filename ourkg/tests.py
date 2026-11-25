@@ -917,6 +917,66 @@ class MetaOutputsTest(_CheckFixture):
         self.assertPasses(_chk.check_outputs)
 
 
+class IoGraphTest(unittest.TestCase):
+    """의존 그래프를 **코드에서 뽑는** 부분 (`check.io_graph`).
+
+    손으로 쓴 `DEPENDS` 가 9 쌍뿐이라 아무도 적어 주지 않은 산출물은 신선도
+    검사를 한 번도 안 받았다. 뽑는 쪽의 위험은 **없는 의존을 만드는 것**이라
+    거기에 시험을 몰아 둔다.
+    """
+
+    def setUp(self):
+        self._dir = tempfile.TemporaryDirectory()
+
+    def tearDown(self):
+        self._dir.cleanup()
+
+    def _mods(self, **srcs):
+        for name, body in srcs.items():
+            with open(os.path.join(self._dir.name, name + '.py'), 'w',
+                      encoding='utf-8') as f:
+                f.write(body)
+        return _chk.io_graph(self._dir.name)
+
+    def test_cross_module_edge(self):
+        g = self._mods(
+            a="import pandas as pd\npd.DataFrame().to_csv('x.csv')\n",
+            b="import pandas as pd\npd.read_csv('x.csv').to_csv('y.csv')\n")
+        self.assertEqual(g, {'y.csv': {'x.csv'}})
+
+    def test_intra_module_edge_is_dropped(self):
+        # **없는 의존 84 개를 만들었던 자리.** 한 모듈이 한 번 돌며 읽고 쓰는
+        # 것끼리는 기록 순서가 내부 사정이라 mtime 선후에 뜻이 없다.
+        g = self._mods(
+            a="import pandas as pd\npd.DataFrame().to_csv('x.csv')\n"
+              "pd.read_csv('x.csv').to_csv('y.csv')\n")
+        self.assertEqual(g, {})
+
+    def test_unproduced_input_is_dropped(self):
+        # 아무 모듈도 만들지 않는 입력(원시 다운로드)은 변을 만들지 않는다.
+        g = self._mods(a="import pandas as pd\n"
+                         "pd.read_csv('raw.csv').to_csv('y.csv')\n")
+        self.assertEqual(g, {})
+
+    def test_no_self_edge(self):
+        g = self._mods(
+            a="import pandas as pd\npd.DataFrame().to_csv('x.csv')\n",
+            b="import pandas as pd\npd.read_csv('x.csv').to_csv('x.csv')\n")
+        self.assertNotIn('x.csv', g.get('x.csv', set()))
+
+    def test_checker_is_not_a_consumer(self):
+        # check.py·tests.py 는 전부 읽지만 소비자가 아니다.
+        g = self._mods(check="import pandas as pd\n"
+                             "pd.read_csv('x.csv').to_csv('z.csv')\n")
+        self.assertEqual(g, {})
+
+    def test_real_repo_graph_is_nonempty(self):
+        g = _chk.io_graph()
+        self.assertGreater(sum(len(v) for v in g.values()), 20)
+        for o, deps in g.items():
+            self.assertNotIn(o, deps)
+
+
 class MetaHooksTest(_CheckFixture):
     """커밋 훅 검사 — **새 클론**(설정 없음)을 잡는지.
 

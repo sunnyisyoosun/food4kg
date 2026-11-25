@@ -545,21 +545,101 @@ DEPENDS = {
 }
 
 
+def io_graph(here=None):
+    """모듈마다 **읽는 CSV 와 쓰는 CSV** 를 코드에서 뽑는다.
+
+    `DEPENDS` 는 손으로 쓴 9 쌍이었다. 그래서 `compound_microbe_measured.csv`
+    처럼 아무도 적어 주지 않은 산출물은 **신선도 검사를 한 번도 받지 않았다.**
+    손 목록은 낡는다 — `scan_env` 를 소스에서 긁게 만든 것과 같은 이유다.
+
+    `read_csv(...)` · `to_csv(...)` 호출의 인수에 든 `.csv` 문자열만 본다.
+    경로를 변수에 담아 넘기는 자리는 **놓친다**(그건 손 목록이 메운다).
+    놓치는 것은 괜찮지만 **없는 의존을 만들면 안 된다** — 한 모듈이 읽고 쓰는
+    것끼리만 잇고, 자기 자신으로 가는 변은 버린다.
+    """
+    import ast
+    here = here or HERE
+
+    def _csvs(node):
+        # **중첩 호출의 안쪽은 빼야 한다.** `pd.read_csv(p).to_csv(q)` 에서
+        # to_csv 노드를 통째로 훑으면 p 까지 "쓰는 것" 으로 센다 — 그러면
+        # 생산자가 자기 자신이 되어 변이 조용히 사라진다.
+        inner = {id(c) for n in ast.walk(node)
+                 if isinstance(n, ast.Call) and n is not node
+                 and getattr(n.func, 'attr', getattr(n.func, 'id', ''))
+                 in ('read_csv', 'to_csv')
+                 for c in ast.walk(n)}
+        out = set()
+        for n in ast.walk(node):
+            if id(n) in inner:
+                continue
+            if (isinstance(n, ast.Constant) and isinstance(n.value, str)
+                    and n.value.endswith('.csv')):
+                out.add(os.path.basename(n.value))
+            elif isinstance(n, ast.JoinedStr):
+                t = ''.join(v.value if isinstance(v, ast.Constant) else '*'
+                            for v in n.values)
+                if t.endswith('.csv'):
+                    out.add(os.path.basename(t))
+        return out
+
+    io = {}
+    for fn in sorted(f for f in os.listdir(here) if f.endswith('.py')):
+        if fn in ('check.py', 'tests.py'):       # 검사 자신은 소비자가 아니다
+            continue
+        tree = ast.parse(open(os.path.join(here, fn), encoding='utf-8').read())
+        r, w = set(), set()
+        for n in ast.walk(tree):
+            if isinstance(n, ast.Call):
+                name = getattr(n.func, 'attr', getattr(n.func, 'id', ''))
+                if name == 'read_csv':
+                    r |= _csvs(n)
+                elif name == 'to_csv':
+                    w |= _csvs(n)
+        io[fn] = (r, w)
+
+    # **모듈 안에서 읽고 쓰는 것끼리는 잇지 않는다.** 처음엔 전부 이었더니
+    # 없는 의존 84 개가 생겼다 — `analyze.py` 는 한 번 돌며 11 개를 읽고 12 개를
+    # 쓰는데, 그 안의 기록 순서는 내부 사정이라 mtime 선후에 뜻이 없다.
+    # 뜻이 있는 것은 **모듈을 넘는 변**이다: 다른 모듈이 만든 입력보다 내 산출물이
+    # 오래됐으면 그 모듈을 다시 돌려야 한다.
+    producer = {f: fn for fn, (_, w) in io.items() for f in w}
+    g = {}
+    for fn, (r, w) in io.items():
+        for out_f in w:
+            for dep in r:
+                if (dep != out_f and '*' not in out_f and '*' not in dep
+                        and producer.get(dep) not in (None, fn)):
+                    g.setdefault(out_f, set()).add(dep)
+    return g
+
+
 def check_provenance():
     """정본 산출물이 기본값으로 만들어졌는지, 입력보다 낡지 않았는지."""
     import json
+    # 손 목록(DEPENDS)과 **코드에서 뽑은 그래프**를 합친다. 어느 쪽에서 온
+    # 변인지 메시지에 남긴다 — 뽑은 쪽이 없는 의존을 만들면 그 자리를 봐야 한다.
+    derived = io_graph()
+    edges = {k: set(v) for k, v in DEPENDS.items()}
+    for k, v in derived.items():
+        edges.setdefault(k, set()).update(v)
     stale = []
-    for out_f, deps in DEPENDS.items():
+    for out_f, deps in edges.items():
         p = os.path.join(OUT, out_f)
         if not os.path.exists(p):
             continue
-        for d in deps:
+        for d in sorted(deps):
             dp = os.path.join(OUT, d)
             if os.path.exists(dp) and os.path.getmtime(p) < os.path.getmtime(dp) - 1:
-                stale.append(f'{out_f} < {d}')
+                src = '손' if d in DEPENDS.get(out_f, ()) else '코드'
+                stale.append(f'{out_f} < {d}({src})')
+    n_edge = sum(len(v) for v in edges.values())
     _say('FAIL' if stale else 'PASS', '산출물 신선도',
-         f'입력보다 오래된 것 {stale}' if stale else
-         f'의존 {len(DEPENDS)} 쌍 모두 산출물이 입력보다 새롭다')
+         f'입력보다 오래된 것 {stale[:6]}'
+         + (f' 외 {len(stale) - 6}' if len(stale) > 6 else '') if stale else
+         f'의존 {n_edge} 변(산출물 {len(edges)}) 모두 산출물이 입력보다 새롭다 '
+         f'— 손 목록 {sum(len(v) for v in DEPENDS.values())} · 코드에서 뽑은 것 '
+         f'{sum(len(v) for v in derived.values())}')
 
     pv = os.path.join(OUT, 'provenance.json')
     if not os.path.exists(pv):

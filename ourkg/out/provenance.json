@@ -64,8 +64,8 @@
   "env": {}
  },
  "compound_autism.csv": {
-  "at": "2026-11-25 17:06:13",
-  "argv": "complication.py literature",
+  "at": "2026-11-25 17:43:38",
+  "argv": "e_autism.py",
   "env": {}
  },
  "compound_class.csv": {
@@ -89,8 +89,8 @@
   "env": {}
  },
  "compound_depression_stype.csv": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "compound_evidence.csv": {
@@ -99,13 +99,18 @@
   "env": {}
  },
  "compound_learned.csv": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "compound_microbe.csv": {
   "at": "2026-11-25 14:35:42",
   "argv": "build.py food form promenda evidence microbe kg",
+  "env": {}
+ },
+ "compound_microbe_measured.csv": {
+  "at": "2026-11-25 17:39:06",
+  "argv": "metabolome_check.py build",
   "env": {}
  },
  "compound_microbe_vmh.csv": {
@@ -141,13 +146,23 @@
   }
  },
  "diet_intervention.csv": {
-  "at": "2026-11-25 14:43:22",
+  "at": "2026-11-25 17:44:14",
   "argv": "diet_intervention.py",
   "env": {}
  },
+ "diet_intervention_map.csv": {
+  "at": "2026-11-25 17:44:36",
+  "argv": "diet_intervention.py map",
+  "env": {}
+ },
  "diet_intervention_score.csv": {
-  "at": "2026-11-25 14:43:24",
-  "argv": "e_autism.py",
+  "at": "2026-11-25 17:44:14",
+  "argv": "diet_intervention.py",
+  "env": {}
+ },
+ "disagreement_by_group.csv": {
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "disease_tree.csv": {
@@ -156,23 +171,23 @@
   "env": {}
  },
  "e_autism_microbe.csv": {
-  "at": "2026-11-25 17:06:13",
-  "argv": "complication.py literature",
+  "at": "2026-11-25 17:44:14",
+  "argv": "diet_intervention.py",
   "env": {}
  },
  "e_microbe.csv": {
-  "at": "2026-11-25 13:19:16",
-  "argv": "analyze.py emicrobe",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "e_microbe_compare.csv": {
-  "at": "2026-11-25 13:22:00",
-  "argv": "analyze.py evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "e_mode_comparison.csv": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "emode_comparison.csv": {
@@ -188,23 +203,23 @@
   "env": {}
  },
  "eval_method1.csv": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "eval_method2.csv": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "eval_method2_calibration.csv": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "eval_sparql.json": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "ezero_comparison.csv": {
@@ -259,18 +274,18 @@
   }
  },
  "group_comparison.csv": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "group_comparison.png": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "group_composition.csv": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "gutbrain_comparison.csv": {
@@ -281,13 +296,13 @@
   }
  },
  "gutbrain_compounds.json": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "invert_comparison.csv": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "kegg_class.csv": {
@@ -325,12 +340,12 @@
   "env": {}
  },
  "metabolome_check_KANG_AUTISM_2017.csv": {
-  "at": "2026-11-25 14:42:45",
+  "at": "2026-11-25 17:28:07",
   "argv": "metabolome_check.py",
   "env": {}
  },
  "metabolome_check_MARS_IBS_2020.csv": {
-  "at": "2026-11-25 14:42:45",
+  "at": "2026-11-25 17:28:07",
   "argv": "metabolome_check.py",
   "env": {}
  },
@@ -375,8 +390,8 @@
   "env": {}
  },
  "modimed_labels.csv": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "modimed_rho_comparison.csv": {
@@ -416,8 +431,8 @@
   "env": {}
  },
  "power_bound.csv": {
-  "at": "2026-11-25 17:06:28",
-  "argv": "-c",
+  "at": "2026-11-25 17:44:14",
+  "argv": "diet_intervention.py",
   "env": {}
  },
  "promenda_records.csv": {
@@ -426,13 +441,13 @@
   "env": {}
  },
  "recommendation.csv": {
-  "at": "2026-11-25 15:58:03",
-  "argv": "analyze.py recommend",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "recommendation.png": {
-  "at": "2026-11-25 15:58:03",
-  "argv": "analyze.py recommend",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "simsign_comparison.csv": {
@@ -457,8 +472,8 @@
   }
  },
  "stype_comparison.csv": {
-  "at": "2026-11-25 14:40:49",
-  "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
+  "at": "2026-11-25 17:42:35",
+  "argv": "analyze.py",
   "env": {}
  },
  "toperr_comparison.csv": {
