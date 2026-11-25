@@ -479,5 +479,264 @@ class CompoundMicrobeRankTest(_OutFixture):
                          {'C1', 'C2'})
 
 
+# ======================================================================
+# 검사기를 검사한다 (메타 시험)
+#
+# `check.py` 가 틀리면 **조용히 통과한다.** 이미 두 번 그랬다 — 예외로 죽어
+# 뒤 검사가 안 돌았고, 대문자 앵커를 못 보면서 "15 개 통과" 라고 보고했다.
+# 그때마다 손으로 고장을 넣어 확인했는데 그 확인이 자동화돼 있지 않았다
+# ([`PROCESS.md`](PROCESS.md)). 여기서 자동화한다.
+#
+# 각 검사마다 **두 번** 본다 — 정상 fixture 에서 PASS 하고, 고장을 넣으면 FAIL.
+# 둘 다 봐야 의미가 있다. 늘 FAIL 하는 검사는 쓸모없고, 늘 PASS 하는 검사는
+# 있는 척만 한다.
+import check as _chk                                   # noqa: E402
+
+
+class _CheckFixture(unittest.TestCase):
+    """`check.OUT` · `common.OUT` 을 임시 디렉토리로 돌리고 정상 fixture 를 깐다."""
+
+    def setUp(self):
+        self._dir = tempfile.TemporaryDirectory()
+        self._saved = (_chk.OUT, common.OUT, _chk.HERE, list(_chk.RESULT))
+        _chk.OUT = common.OUT = self._dir.name
+        _chk.RESULT.clear()
+        self.good()
+
+    def tearDown(self):
+        _chk.OUT, common.OUT, _chk.HERE, res = self._saved
+        _chk.RESULT.clear()
+        _chk.RESULT.extend(res)
+        self._dir.cleanup()
+
+    def w(self, name, df):
+        df.to_csv(os.path.join(_chk.OUT, name), index=False)
+
+    def good(self):
+        """모든 검사가 통과하는 최소 fixture."""
+        self.w('microbes.csv', pd.DataFrame([
+            {'taxid': '1', 'name': 'A b', 'rank': 'species', 'lineage': 'x',
+             'kegg_org': 'ab', 'match_rank': 'species', 'taxid_current': '1'}]))
+        self.w('compound_microbe.csv', pd.DataFrame([
+            {'kegg': 'C1', 'taxid': '1', 'taxid_current': '1', 'kegg_org': 'ab',
+             'n_ko': 2, 'match_rank': 'species'}]))
+        md = pd.DataFrame([{'taxid': '1', 'mesh_id': 'D1', 'disease': 'Dep',
+                            'outcome': 'Elevated', 'is_mental': True,
+                            'is_neuro': False}])
+        self.w('microbe_disease_disbiome.csv', md)
+        self.w('microbe_disease_gutmdisorder.csv', md)
+        self.w('microbe_disease_agreement.csv', pd.DataFrame([
+            {'taxid': '1', 'mesh_id': 'D1', 'disease': 'Dep', 'status': 'agreed',
+             'direction': 'Elevated', 'n_sources': 2, 'sources': 'a+b',
+             'n_elevated': 2, 'n_reduced': 0}]))
+        self.w('recommendation.csv', pd.DataFrame([
+            {'rank': 1, 'food_key': 'a', 'score': 1.0, 'food_group': 'G',
+             'food_name': 'A'},
+            {'rank': 2, 'food_key': 'b', 'score': 0.5, 'food_group': 'G',
+             'food_name': 'B'}]))
+        self.w('foods.csv', pd.DataFrame([
+            {'food_key': 'a', 'food_name': 'A', 'data_type': 't',
+             'n_compound': 20}]))
+        self.w('compound_depression.csv', pd.DataFrame([
+            {'kegg': 'C1', 'e_shrunk': 0.5, 'e_binary': 1.0, 'q': 0.01}]))
+        self.w('kg_stats.csv', pd.DataFrame([
+            {'source': 'S1', 'relation': 1, 'entity': 2, 'triples': 10},
+            {'source': 'Σ 출처 주장(겹침 포함)', 'relation': 1, 'entity': 2,
+             'triples': 10},
+            {'source': 'Total (고유 그래프)', 'relation': 1, 'entity': 2,
+             'triples': 10}]))
+
+    def run_check(self, fn):
+        _chk.RESULT.clear()
+        import contextlib
+        import io as _io
+        with contextlib.redirect_stdout(_io.StringIO()):
+            fn()
+        return [st for st, *_ in _chk.RESULT]
+
+    def assertPasses(self, fn):
+        sts = self.run_check(fn)
+        self.assertNotIn('FAIL', sts, f'정상 fixture 인데 FAIL: {_chk.RESULT}')
+
+    def assertFails(self, fn):
+        sts = self.run_check(fn)
+        self.assertIn('FAIL', sts, f'고장을 넣었는데 FAIL 이 없다: {_chk.RESULT}')
+
+
+class MetaSchemaTest(_CheckFixture):
+    def test_passes_when_good(self):
+        self.assertPasses(_chk.check_schema)
+
+    def test_fails_on_missing_column(self):
+        m = pd.read_csv(os.path.join(_chk.OUT, 'microbes.csv'))
+        self.w('microbes.csv', m.drop(columns=['taxid_current']))
+        self.assertFails(_chk.check_schema)
+
+
+class MetaMicrobeTest(_CheckFixture):
+    def test_passes_when_good(self):
+        self.assertPasses(_chk.check_microbe)
+
+    def test_fails_when_disease_taxid_absent_from_axis(self):
+        # 질환 관계가 축에 없는 균을 가리킨다 — 병합 taxid 버그의 모양.
+        md = pd.read_csv(os.path.join(_chk.OUT, 'microbe_disease_disbiome.csv'),
+                         dtype={'taxid': str})
+        md.loc[0, 'taxid'] = '999'
+        self.w('microbe_disease_disbiome.csv', md)
+        self.assertFails(_chk.check_microbe)
+
+
+class MetaLinksTest(_CheckFixture):
+    def test_passes_when_good(self):
+        self.assertPasses(_chk.check_links)
+
+    def test_fails_on_duplicate_pair(self):
+        cm = pd.read_csv(os.path.join(_chk.OUT, 'compound_microbe.csv'),
+                         dtype={'taxid': str, 'taxid_current': str})
+        self.w('compound_microbe.csv', pd.concat([cm, cm]))
+        self.assertFails(_chk.check_links)
+
+
+class MetaAgreementTest(_CheckFixture):
+    def test_passes_when_good(self):
+        self.assertPasses(_chk.check_agreement)
+
+    def test_fails_when_conflict_has_direction(self):
+        a = pd.read_csv(os.path.join(_chk.OUT, 'microbe_disease_agreement.csv'),
+                        dtype={'taxid': str})
+        a.loc[0, 'status'] = 'conflict'          # 방향은 그대로 남겨 둔다
+        self.w('microbe_disease_agreement.csv', a)
+        self.assertFails(_chk.check_agreement)
+
+    def test_fails_on_unknown_status(self):
+        a = pd.read_csv(os.path.join(_chk.OUT, 'microbe_disease_agreement.csv'),
+                        dtype={'taxid': str})
+        a.loc[0, 'status'] = 'maybe'
+        self.w('microbe_disease_agreement.csv', a)
+        self.assertFails(_chk.check_agreement)
+
+
+class MetaRecommendTest(_CheckFixture):
+    def test_passes_when_good(self):
+        self.assertPasses(_chk.check_recommend)
+
+    def test_fails_on_broken_rank(self):
+        r = pd.read_csv(os.path.join(_chk.OUT, 'recommendation.csv'))
+        r.loc[1, 'rank'] = 5
+        self.w('recommendation.csv', r)
+        self.assertFails(_chk.check_recommend)
+
+    def test_fails_on_non_monotone_score(self):
+        r = pd.read_csv(os.path.join(_chk.OUT, 'recommendation.csv'))
+        r.loc[1, 'score'] = 9.0                  # rank 2 가 rank 1 보다 높다
+        self.w('recommendation.csv', r)
+        self.assertFails(_chk.check_recommend)
+
+
+class MetaKgStatsTest(_CheckFixture):
+    def test_passes_when_good(self):
+        self.assertPasses(_chk.check_kg)
+
+    def test_fails_when_source_sum_mismatches(self):
+        k = pd.read_csv(os.path.join(_chk.OUT, 'kg_stats.csv'))
+        k.loc[0, 'triples'] = 999
+        self.w('kg_stats.csv', k)
+        self.assertFails(_chk.check_kg)
+
+    def test_fails_when_unique_exceeds_claims(self):
+        k = pd.read_csv(os.path.join(_chk.OUT, 'kg_stats.csv'))
+        k.loc[2, 'triples'] = 99                 # 고유 > Σ 주장 은 불가능하다
+        self.w('kg_stats.csv', k)
+        self.assertFails(_chk.check_kg)
+
+
+class MetaPathcheckTest(_CheckFixture):
+    def _write(self, d):
+        import json
+        json.dump(d, open(os.path.join(_chk.OUT, 'gutbrain_compounds.json'), 'w'))
+
+    def test_passes_when_agree(self):
+        self._write({'kegg': ['C1'], 'agree': True, 'n_csv': 1, 'n_kg': 1,
+                     'only_csv': [], 'only_kg': []})
+        self.assertPasses(_chk.check_pathcheck)
+
+    def test_fails_when_disagree(self):
+        self._write({'kegg': ['C1'], 'agree': False, 'n_csv': 1, 'n_kg': 2,
+                     'only_csv': [], 'only_kg': ['C2']})
+        self.assertFails(_chk.check_pathcheck)
+
+
+class MetaProvenanceTest(_CheckFixture):
+    def test_passes_when_good(self):
+        import json
+        json.dump({'recommendation.csv': {'at': 'x', 'argv': 'y', 'env': {}}},
+                  open(os.path.join(_chk.OUT, 'provenance.json'), 'w'))
+        self.assertPasses(_chk.check_provenance)
+
+    def test_fails_on_nondefault_env_for_canonical(self):
+        import json
+        json.dump({'recommendation.csv':
+                   {'at': 'x', 'argv': 'y', 'env': {'E_MODE': 'binary'}}},
+                  open(os.path.join(_chk.OUT, 'provenance.json'), 'w'))
+        self.assertFails(_chk.check_provenance)
+
+    def test_fails_when_output_older_than_input(self):
+        import json
+        import time
+        json.dump({}, open(os.path.join(_chk.OUT, 'provenance.json'), 'w'))
+        rec = os.path.join(_chk.OUT, 'recommendation.csv')
+        old = time.time() - 600
+        os.utime(rec, (old, old))                # 입력보다 오래된 산출물
+        self.assertFails(_chk.check_provenance)
+
+
+class MetaDocsTest(_CheckFixture):
+    """`docs` 검사 — 앵커 값·형식·부재를 모두 잡는지."""
+
+    def _doc(self, text):
+        _chk.HERE = self._dir.name
+        open(os.path.join(self._dir.name, 'README.md'), 'w',
+             encoding='utf-8').write(text)
+
+    def test_passes_when_anchor_matches(self):
+        fx = _chk.facts()
+        self._doc(f"triple {fx['kg.triples']}<!--chk:kg.triples-->\n")
+        self.assertPasses(_chk.check_docs)
+
+    def test_fails_when_anchor_drifts(self):
+        self._doc("triple 1,234,567<!--chk:kg.triples-->\n")
+        self.assertFails(_chk.check_docs)
+
+    def test_fails_when_no_anchor(self):
+        self._doc("수치가 적혀 있지만 앵커가 없다 3,443,485\n")
+        self.assertFails(_chk.check_docs)
+
+    def test_fails_on_malformed_anchor(self):
+        fx = _chk.facts()
+        self._doc(f"triple {fx['kg.triples']}<!--chk:kg.triples-->\n"
+                  "설명만 있는 자리 <!--chk:kg.relations-->\n")
+        self.assertFails(_chk.check_docs)
+
+    def test_unknown_anchor_name_fails(self):
+        self._doc("값 1<!--chk:없는.사실-->\n")
+        self.assertFails(_chk.check_docs)
+
+
+class MetaRobustnessTest(_CheckFixture):
+    """검사가 **예외로 죽지 않는지** — 죽으면 뒤 검사가 안 돈다."""
+
+    def test_main_reports_fail_instead_of_crashing(self):
+        # 열을 지워 검사 안에서 AttributeError 가 나게 한다.
+        m = pd.read_csv(os.path.join(_chk.OUT, 'microbes.csv'))
+        self.w('microbes.csv', m.drop(columns=['taxid_current']))
+        import contextlib
+        import io as _io
+        _chk.RESULT.clear()
+        with contextlib.redirect_stdout(_io.StringIO()):
+            rc = _chk.main(['microbe'])          # 예외가 새면 여기서 터진다
+        self.assertEqual(rc, 1)
+        self.assertIn('FAIL', [st for st, *_ in _chk.RESULT])
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2 if '-v' in sys.argv else 1)

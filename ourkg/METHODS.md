@@ -355,7 +355,7 @@ hooks` 한 번으로 켠다. 검사가 작동하는데 **부르는 것이 사람
 드러났다. 그 자리를 함수 단위로 메운다.
 
 표준 라이브러리 `unittest` 만 쓴다(의존을 더하지 않는다). 네트워크를 쓰지 않고,
-파일이 필요한 것은 임시 디렉토리에 작은 fixture 를 만든다. **46 개 · 0.7 초.**
+파일이 필요한 것은 임시 디렉토리에 작은 fixture 를 만든다. **72 개 · 0.9 초.**
 
 겨냥한 것은 **조용히 깨졌던 규칙**이다.
 
@@ -373,6 +373,7 @@ hooks` 한 번으로 켠다. 검사가 작동하는데 **부르는 것이 사람
 | `AdjustedCosineTest` | **식 (1) 의 네 선택** — 행 중심화 · 공통 성분 마스크 · 전체 성분 분모 · 대각 0 |
 | `ResolveETest` | `E_MODE` 해석 — 모르는 모드가 **조용히 기본값으로 떨어지지 않는지** |
 | `ModimedTest` | **외부 기준 라벨** — CSV 가 아니라 코드가 계산한다 |
+| `Meta*Test` (9 묶음) | **검사기를 검사한다** — 아래 |
 
 **고친 버그를 되돌려 터지는지 확인했다** — 이게 없으면 시험이 있는 척만 한다.
 
@@ -403,6 +404,39 @@ hooks` 한 번으로 켠다. 검사가 작동하는데 **부르는 것이 사람
 
 `hooks/pre-commit` 이 시험(0.4 초) → 검사(2 초) 순으로 돌리고 둘 중 하나라도
 실패하면 커밋을 막는다. `run_all.py` 에도 `tests` 단계로 넣었다.
+
+### 검사기를 검사한다 (메타 시험)
+
+`check.py` 가 틀리면 **조용히 통과한다.** 이미 두 번 그랬다 — 예외로 죽어 뒤
+검사가 안 돌았고, 대문자 앵커를 못 보면서 "앵커 15 개 통과" 라고 보고했다.
+그때마다 손으로 고장을 넣어 확인했는데 **그 확인이 자동화돼 있지 않았다.**
+
+`tests.py` 의 `Meta*Test` 가 검사마다 **두 번** 본다 — 정상 fixture 에서 PASS
+하고, 고장을 넣으면 FAIL. **둘 다 봐야 의미가 있다**: 늘 FAIL 하는 검사는
+쓸모없고, 늘 PASS 하는 검사는 있는 척만 한다.
+
+`check.OUT` · `common.OUT` 을 임시 디렉토리로 돌리고 최소 fixture(파일 8 개)를
+깐 뒤, `check.RESULT` 에 쌓인 상태를 읽어 판정한다.
+
+| 메타 묶음 | 넣는 고장 |
+|---|---|
+| `MetaSchemaTest` | 열 하나 제거 |
+| `MetaMicrobeTest` | 질환 관계가 축에 없는 균을 가리킴 (병합 taxid 버그의 모양) |
+| `MetaLinksTest` | `(kegg, taxid)` 중복 |
+| `MetaAgreementTest` | `conflict` 인데 방향이 남음 · 모르는 `status` |
+| `MetaRecommendTest` | rank 가 1..N 이 아님 · score 가 역전 |
+| `MetaKgStatsTest` | 출처 합 불일치 · 고유 > Σ 주장 |
+| `MetaPathcheckTest` | 판정이 `agree: false` |
+| `MetaProvenanceTest` | 정본이 비기본값 환경 · 산출물이 입력보다 오래됨 |
+| `MetaDocsTest` | 앵커 드리프트 · 형식 불량 · 앵커 부재 · 모르는 이름 |
+| `MetaRobustnessTest` | 검사 안에서 예외 → `main()` 이 **죽지 않고 FAIL** 로 보고하는지 |
+
+**검사기를 망가뜨려 메타 시험이 터지는지도 확인했다.**
+
+| 망가뜨린 것 | 터진 메타 시험 |
+|---|---|
+| `check_links` 의 중복 탐지 제거 | `MetaLinksTest.test_fails_on_duplicate_pair` |
+| `main()` 의 예외 감싸기 제거 | `MetaRobustnessTest.test_main_reports_fail_instead_of_crashing` |
 
 ### 문서 수치는 앵커로 묶는다
 
