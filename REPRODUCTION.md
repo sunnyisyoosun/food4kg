@@ -1,13 +1,20 @@
-# Food4healthKG 재현 기록
+# Food4healthKG 역설계 기록
 
 대상 논문: Fu et al., *Food4healthKG: Knowledge graphs for food recommendations
 based on gut microbiota and mental health*, Artificial Intelligence In Medicine
 145 (2023) 102677.
 공식 repo: https://github.com/ccszbd/Food4healthKG (로컬 `Food4healthKG/`)
 
-이 문서는 **무엇을 어디까지 재현했고, 무엇이 검증되지 않았는지**를 기록한다.
+이 문서는 **무엇을 어디까지 되짚었고, 무엇이 검증되지 않았는지**를 기록한다.
 조사 과정 전체를 시간순으로 담고 있어 길다.
 **현재 막힌 지점만 보려면 [PROBLEMS.md](PROBLEMS.md).**
+
+> **"재현" 이 아니라 "역설계" 라고 적는 이유.** 논문 repo 가 읽는 입력 4 개가
+> 배포본에 없어 우리가 되짚어 만들었고, 논문이 적지 않은 변환 규약은 **결과를
+> 보고 골랐다**(Spearman +0.108 → +0.786, [PROBLEMS.md](PROBLEMS.md) §8).
+> 그렇게 얻은 일치는 재현이 아니라 적합이다. 게다가 그 지표는 "식물성=추천,
+> 동물성=비추천" 1 비트가 +0.695 를 내는 약한 자다(§3). 이 문서가 긴 이유는
+> **무엇이 논문에서 왔고 무엇을 우리가 골랐는지 구분하기 위해서**다.
 
 ---
 

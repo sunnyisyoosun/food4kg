@@ -1,6 +1,12 @@
-# Food4healthKG 재현 및 확장 프로젝트
+# Food4healthKG 역설계 · 재구축 프로젝트
 
-> 추천시스템 수업 프로젝트 — Food4healthKG (Fu et al., AIM 2023) 재현 + 확장
+> 추천시스템 수업 프로젝트 — Food4healthKG (Fu et al., AIM 2023)
+>
+> 두 트랙이다. **역설계 + 부분 재현**(이 디렉토리) — 논문이 공개하지 않은
+> 입력을 되짚어 수치를 맞춰 본다. **재구축 + 확장**([`ourkg/`](ourkg/)) —
+> 현재 공개 데이터로 다시 만들고 축을 넓힌다. 왜 그냥 "재현"·"개선" 이라
+> 부르지 않는지는 [PROBLEMS.md](PROBLEMS.md) 한눈에 절과
+> [`ourkg/METHODS.md`](ourkg/METHODS.md) §0 에 적었다.
 
 - **[PROBLEMS.md](PROBLEMS.md)** — 지금 무엇이 막혀 있고 왜 막혔는지
 - [REPRODUCTION.md](REPRODUCTION.md) — 조사 과정 전체 기록 (절 번호로 인용)
@@ -682,18 +688,28 @@ Fig. 5 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" �
 
 ---
 
-### 최신 데이터로 다시 만든 우리 KG (`ourkg/`)
+### 재구축 + 확장 (`ourkg/`)
 
-논문의 구축 방식·평가 방식을 그대로 쓰고 데이터만 최신 공개본으로 바꾼 별도
-파이프라인이다. **재현 결과와 섞지 않는다** — 재현은 `reconstruct.py` →
-`run_recommendation.py` 경로이고, 이쪽은 `ourkg/run_all.py` 다.
+논문의 구축 방식·평가 방식을 그대로 쓰고 데이터를 최신 공개본으로 바꿔 **다시
+만들고 축을 넓힌** 별도 파이프라인이다. 이 디렉토리의 결과와 **섞지 않는다** —
+이쪽은 `reconstruct.py` → `run_recommendation.py`, 저쪽은 `ourkg/run_all.py` 다.
 
 - FDC 2026-09 전체(2,101,279 항목) + ProMENDA(Pu et al. 2024) + KEGG/NCBI 재조회
-- RDF 3,166,603 triple / 음식 14,719 / compound 130 / 음식당 측정 compound 중앙값 47
-- 추천 Bottom 30 은 논문 §4.2.3(소시지·소고기류)과 일치, Top 30 은 부분 일치
-- §5.1 방법 2 자동 문헌검증 4/15 (논문 11/15)
+- 외부 소스 추가: Disbiome · **gutMDisorder v3** · VMH/AGORA2 · 분변 대사체 13 코호트
+  · NHANES · 프로바이오틱스 RCT
+- RDF **고유 3,443,484 triple** / 관계 39 / 음식 14,886 / F 층 compound 135 /
+  음식당 측정 compound 중앙값 48 / 미생물 791 종
+- 추천 Top 30 은 채소 10 · 과일 10, Bottom 30 은 소고기 16 · 소시지 6 —
+  **양쪽이 논문 §4.2.3 서술과 맞는다**
+- 정합 검사 `python3 ourkg/check.py` 27 항목
 
-상세·설계 결정·한계는 `ourkg/README.md`.
+**"개선" 이라고 부르지 않는다.** 측정한 변경의 대부분이 기각됐고(미생물 매개
+가중 세 번 · 서빙 기준 `F` · 앙상블 · 희소화 · NHANES) 추천 순위는 미생물 축을
+162 → 791 종으로 늘려도 바뀌지 않았다. 개선이 입증된 곳은 **데이터 구축 축**
+(커버리지 · 출처 추적 · 정합성)이다.
+
+상세·설계 결정·한계는 [`ourkg/README.md`](ourkg/README.md),
+방법론은 [`ourkg/METHODS.md`](ourkg/METHODS.md).
 
 ---
 
