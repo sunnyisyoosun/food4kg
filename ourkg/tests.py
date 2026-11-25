@@ -822,6 +822,63 @@ class MetaProvenanceTest(_CheckFixture):
         self.assertFails(_chk.check_provenance)
 
 
+class MetaOutputsTest(_CheckFixture):
+    """`outputs` 검사 — 산출물의 **생산자가 코드에 있는지**를 실제로 잡는지.
+
+    코드를 줄이는 커밋이 문서가 가리키는 산출물의 생산자를 지워도 아무것도
+    FAIL 하지 않던 자리다. 그래서 이 검사 자신을 오류 주입으로 본다.
+    """
+
+    def _code(self, body):
+        """임시 디렉토리를 `check.HERE` 로 돌리고 .py 하나를 깐다."""
+        src = os.path.join(self._dir.name, 'src')
+        os.makedirs(src, exist_ok=True)
+        with open(os.path.join(src, 'mod.py'), 'w', encoding='utf-8') as f:
+            f.write(body)
+        _chk.HERE = src
+
+    def test_passes_when_producer_exists(self):
+        self._code("import os\nx = os.path.join(OUT, 'alpha.csv')\n")
+        self.w('alpha.csv', pd.DataFrame([{'a': 1}]))
+        for f in os.listdir(_chk.OUT):          # fixture 산출물은 치운다
+            if f.endswith('.csv') and f != 'alpha.csv':
+                os.remove(os.path.join(_chk.OUT, f))
+        self.assertPasses(_chk.check_outputs)
+
+    def test_fails_on_orphan_output(self):
+        self._code("x = 'alpha.csv'\n")
+        self.w('alpha.csv', pd.DataFrame([{'a': 1}]))
+        self.w('beta.csv', pd.DataFrame([{'a': 1}]))   # 생산자 없음
+        self.assertFails(_chk.check_outputs)
+
+    def test_fstring_pattern_covers_variants(self):
+        # `learned_{FEATURES}.csv` 가 learned_form.csv 를 덮어야 한다.
+        self._code("n = 'form'\nx = f'learned_{n}.csv'\n")
+        for f in os.listdir(_chk.OUT):
+            if f.endswith('.csv'):
+                os.remove(os.path.join(_chk.OUT, f))
+        self.w('learned_form.csv', pd.DataFrame([{'a': 1}]))
+        self.assertPasses(_chk.check_outputs)
+
+    def test_declared_outputs_reads_fstrings(self):
+        self._code("x = f'a_{k}.csv'\ny = 'b.csv'\n")
+        got = _chk.declared_outputs(_chk.HERE)
+        self.assertEqual(set(got), {'a_*.csv', 'b.csv'})
+
+    def test_missing_provenance_is_not_a_failure(self):
+        # **일부러 통과시키는 자리.** 기본값 아닌 환경에서만 나오는 산출물은
+        # 기본 실행에 기록이 안 남는다. 그걸 FAIL 로 하면 검사가 거짓말을 한다.
+        self._code("x = 'alpha.csv'\n")
+        for f in os.listdir(_chk.OUT):
+            if f.endswith('.csv'):
+                os.remove(os.path.join(_chk.OUT, f))
+        self.w('alpha.csv', pd.DataFrame([{'a': 1}]))
+        pv = os.path.join(_chk.OUT, 'provenance.json')
+        if os.path.exists(pv):
+            os.remove(pv)
+        self.assertPasses(_chk.check_outputs)
+
+
 class MetaHooksTest(_CheckFixture):
     """커밋 훅 검사 — **새 클론**(설정 없음)을 잡는지.
 

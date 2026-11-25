@@ -146,6 +146,16 @@ SWEEPS = {
     'gutbrain': ('gutbrain_comparison.csv', None),
     # §15c 검정 ⑧ — 에탄올·설탕의 E 를 0 으로 두면 무엇이 바뀌나.
     'ezero': ('ezero_comparison.csv', None),
+    # §25·§27 — 순위 앙상블 vs 벡터 합치기. **기각된 경로지만 재현은 된다**
+    # (§27 에서 Top-K 오류 6/30 으로 가장 나빠 기본값에서 뺐다). 등록 없이
+    # CSV 만 남아 있어 `outputs` 검사가 고아로 잡았다 — 측정은 §25 에 인용돼
+    # 있으니 지우는 대신 생산자를 되돌려 놓는다.
+    'ensemble': ('ensemble_comparison.csv',
+                 [('shrunk', {'E_MODE': 'shrunk', 'ENSEMBLE': 'none'}),
+                  ('nhanes_all', {'E_MODE': 'nhanes_all', 'ENSEMBLE': 'none'}),
+                  ('union_all (벡터 합치기)', {'E_MODE': 'union_all',
+                                           'ENSEMBLE': 'none'}),
+                  ('앙상블 (순위 합치기)', {'ENSEMBLE': 'shrunk,nhanes_all'})]),
     # §15e — F 를 1 회 섭취량 기준으로. E 소스와 교차해서 본다.
     'fscale': ('fscale_comparison.csv',
                [(f'{sc}/{em}', {'F_SCALE': sc, 'E_MODE': em,

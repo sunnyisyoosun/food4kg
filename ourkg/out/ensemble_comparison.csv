@@ -1,5 +1,5 @@
-설정,n,추천군,비추천군,위반,두 순위의 rho,1위
-shrunk,12420,21,26,0,,"Vegetable juice, BOLTHOUSE FARMS, DAILY GREE"
-nhanes_all,12507,19,2,3,,"Nutritional powder mix, high protein (Slim F"
-union_all (벡터 합치기),12507,23,28,1,,"Soup, vegetable, canned, reduced sodium"
-앙상블 (순위 합치기),12420,27,26,1,0.188,"Okra, fresh, cooked, no added fat"
+설정,bot30_비추천군,bot30_충돌(살코기),bot30_extras(외부),top30_위반,top30_추천군(참고),MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
+shrunk,26,0,8,0,21,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+nhanes_all,2,0,2,3,19,21,5,0.673,0.165,"Nutritional powder mix, high protein ("
+union_all (벡터 합치기),28,25,0,1,23,27,1,0.516,0.36,"Soup, vegetable, canned, reduced sodiu"
+앙상블 (순위 합치기),26,1,2,1,27,24,6,0.594,0.307,"Okra, fresh, cooked, no added fat"

@@ -182,6 +182,11 @@
    "E_MODE": "learned"
   }
  },
+ "ensemble_comparison.csv": {
+  "at": "2026-11-25 17:19:18",
+  "argv": "sweep.py ensemble",
+  "env": {}
+ },
  "eval_method1.csv": {
   "at": "2026-11-25 14:40:49",
   "argv": "analyze.py recommend compare external invert stype pathcheck groups evaluate",
@@ -308,6 +313,11 @@
   "env": {
    "E_MODE": "learned"
   }
+ },
+ "legacy": {
+  "at": "2026-11-25 17:19:18",
+  "argv": "sweep.py ensemble",
+  "env": {}
  },
  "linking_stats.csv": {
   "at": "2026-11-25 14:35:42",

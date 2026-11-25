@@ -2328,7 +2328,7 @@ ModiMedDiet 은 빈도 반영(`MODIMED_POSITIVES=high_freq`, §11 D) 기준이�
 논문은 같은 문장에서 숫자(5)와 규칙(분산 80%)을 함께 적는다. 논문 데이터에서는
 둘이 같지만 우리 `F` 에서는 5 성분이 74.1% 라 어긋난다. **기본값은 논문이 명시한
 숫자를 따르고**, 규칙 적용판(10 성분)은 `PCA_COMPONENTS=auto` 로 함께 낸다.
-전체 대조는 `ourkg/out/pca_comparison.csv` 에 있다.
+전체 대조는 `ourkg/out/legacy/pca_comparison.csv` 에 있다 — **생산 코드가 커밋된 적이 없는 파일**이라 `legacy/` 로 옮겼다(§44). 같은 축을 다시 재는 것은 `out/fcolumns_comparison.csv` 다.
 
 | PCA | ModiMedDiet AUC | §4.2.3 Top30 추천군 | Bottom30 비추천군 | Top30 위반 |
 |---|---:|---:|---:|---:|
@@ -2505,7 +2505,7 @@ SMILES 는 빈도 처방이므로 그 기울기를 그대로 쓰는 것이 맞�
 
 ### 결과 — 어떤 방식으로 잘라도 상위가 무너진다
 
-`ourkg/out/threshold_comparison.csv`
+`ourkg/out/legacy/threshold_comparison.csv` (생산 코드 없음 → §44; 같은 축의 후속은 `out/simthr_comparison.csv`)
 
 | Threshold | §4.2.3 추천군 | 비추천군 | **MMD Top30 처방** | **extras** | Top 1 |
 |---|---:|---:|---:|---:|---|
@@ -3564,7 +3564,7 @@ MiKG 경로로 이어 붙인 미생물-질환 573 쌍이 **6 개 노드를 거�
 
 ### ③ 논문의 대표 예가 **p = 1.0** 이다
 
-초기하 검정(`out/complication_hypergeom.csv`)으로 "공유가 우연보다 많은가" 를
+초기하 검정(`out/legacy/complication_hypergeom.csv` — 질환을 이름으로 묶던 때의 구본, §44)으로 "공유가 우연보다 많은가" 를
 물었다.
 
 | 쌍 | 공유 | A | B | 기대 | p | q |
@@ -5396,6 +5396,62 @@ HR ≈ 1 (CI 가 1 포함)로 보고하는 쌍. 지금 `curated` 에 신체질�
 
 ---
 
+## 44. 산출물 5 개는 만드는 코드가 없었다 — 검사가 없던 자리 (2026-11-25)
+
+§41 에서 `complication_hypergeom.csv` 의 **산출 코드가 없다**는 것을 보고
+`complication.py` 를 썼다. 그때 **같은 종류가 더 있는지 찾지 않았다.** 찾아봤다.
+
+### 전수 조사 — AST 로 코드가 선언한 이름과 `out/` 을 맞춘다
+
+모든 `.py` 를 AST 로 읽어 `.csv` 가 든 문자열 상수와 f-string 을 모으고
+(f-string 치환부는 `*` 로 두어 `learned_{FEATURES}.csv` 가 `learned_form.csv`
+를 덮게 한다) `out/` 의 92 개와 맞췄다. **5 개가 안 맞았다.**
+
+| 파일 | 어쩌다 고아가 됐나 |
+|---|---|
+| `ensemble_comparison.csv` | `3508e48` "코드를 정리한다" 가 `ensemble.py` 를 지웠다 |
+| `ensemble_recommendation.csv` | 같음 |
+| `pca_comparison.csv` | **커밋된 적이 없다** — `git log -S` 가 0 건. 일회성 스크립트 산물 |
+| `threshold_comparison.csv` | 같음, 0 건 |
+| `complication_hypergeom.csv` | 소스별 접미사판으로 갈라진 뒤 남은 구본 |
+
+> 앞의 넷은 **§43 "산출물" 표에 재현 가능한 산출물로 올라가 있었다.** 그리고
+> 본문이 그 수치를 인용한다(§14 · §18 · §25). 코드를 줄이는 커밋이 문서가
+> 가리키는 산출물의 **생산자를 지우고 문서는 안 고쳤다.**
+
+### 고친 것 — 지우지 않고 갈라 둔다
+
+- `ensemble_comparison.csv` 는 **재현이 된다.** `ENSEMBLE` 환경변수가 아직
+  `analyze.py` 에 살아 있어 `sweep.SWEEPS['ensemble']` 로 등록만 하면 됐다
+  (경로 자체는 §27 에서 기각됐지만 측정은 §25 에 인용돼 있다).
+- 나머지 넷은 `out/legacy/` 로 옮기고 `out/legacy/README.md` 에 **왜 고아인지와
+  지금 봐야 할 후속 파일**을 적었다. 지우면 §14·§18 의 인용이 끊기고, `out/` 에
+  두면 재현 가능한 산출물과 섞인다.
+- 후속이 이미 있는 것이 셋이다: `pca_comparison` → `fcolumns_comparison`,
+  `threshold_comparison` → `simthr_comparison`, `complication_hypergeom` →
+  `complication_hypergeom_curated`. **없어서 고아가 된 게 아니라 갈라진 뒤
+  구본을 안 치운 것이었다.**
+
+### 검사로 고정한다 — `check.py outputs`
+
+`out/*.csv` 마다 생산자가 코드에 있는지 본다. 고아의 **마지막 생산자**는
+`provenance.json` 의 `argv` 에서 찾아 메시지에 같이 띄운다 — 지워진 모듈
+이름이 남아 있으면 git 이력을 뒤질 자리를 바로 가리킨다.
+
+**기록의 부재는 실패로 삼지 않는다.** 기본값 아닌 환경에서만 만들어지는
+산출물(`consensus_*`)은 기본 실행에 출처 기록이 안 남는 것이 정상이고, 기록은
+장치를 넣은 뒤의 실행만 담는다. 그래서 FAIL 은 **코드 부재** 하나이고 기록
+부재는 세어서 보여 주기만 한다(지금 10 개). 안 재는 것을 재는 척하지 않으려고
+`MetaOutputsTest.test_missing_provenance_is_not_a_failure` 로 **통과를 고정**했다.
+
+검사를 만들다 검사 자신의 결함도 하나 나왔다 — f-string 안쪽 상수까지 따로 세어
+`.csv` 라는 아무것도 안 가리키는 패턴을 만들고 있었다. 메타 시험
+(`test_declared_outputs_reads_fstrings`)이 잡았다.
+
+이제 검사 31 개 · 시험 100 개다.
+
+---
+
 ## 42. 한계
 
 - **식품 온톨로지를 넣어도 분류 질문이 풀리지 않는다** (2026-11-09 통합 완료).
@@ -5451,9 +5507,9 @@ HR ≈ 1 (CI 가 1 포함)로 보고하는 쌍. 지금 `curated` 에 신체질�
 | `out/food_form.csv` | 구조·가공 축 19 (FDC 측정값) |
 | `out/learned_form.csv`, `out/learned_both.csv` | 그 축으로 역추정한 가중치 |
 | `out/disagreement_by_group.csv` | 두 기준이 갈리는 지점의 음식군별 분해 |
-| `out/pca_comparison.csv` | PCA 성분 수별 두 기준 채점 |
+| `out/legacy/pca_comparison.csv` | PCA 성분 수별 두 기준 채점 — **생산 코드 없음** (§44). 후속 `out/fcolumns_comparison.csv` |
 | `out/fcolumns_comparison.csv` | `F` 열 제한 × PCA 조합 채점 (§13) |
-| `out/threshold_comparison.csv` | Algorithm 1 Threshold 변형 채점 (§14) |
+| `out/legacy/threshold_comparison.csv` | Algorithm 1 Threshold 변형 채점 (§14) — **생산 코드 없음** (§44). 후속 `out/simthr_comparison.csv` |
 | `out/compound_microbe.csv` | KEGG 재계산 compound-미생물 2,124 |
 | `out/microbes.csv` | NCBI 갱신 미생물 127 |
 | `out/microbe_disease.csv`, `out/microbe_disease_mikg.csv` | 미생물-질환 |
@@ -5476,13 +5532,14 @@ HR ≈ 1 (CI 가 1 포함)로 보고하는 쌍. 지금 `curated` 에 신체질�
 | `out/nosim_comparison.csv` | **유사도 제거** ablation (§17c) |
 | `out/simspace_comparison.csv` | **유사도 공간** 성분 vs 효과 (§17d) |
 | `out/simsign_comparison.csv` | **나쁜 음식 기여 묶기** x 공간 x E (§17e) |
-| `out/complication_hypergeom.csv` | **합병증 추론**의 초기하 검정 (§18) |
+| `out/complication_hypergeom_curated.csv` | **합병증 추론**의 초기하 검정 (§18·§41). 구본은 `out/legacy/` (§44) |
 | `out/dedup_comparison.csv` | **중복 변종 병합** 두 기준 (§19) |
 | `out/learned_comparison.csv` | **지도학습 점수** 직접 사용 (§21) |
 | `out/learned_dedup_comparison.csv` | learned x 중복 병합 (§21b) |
 | `out/union_comparison.csv` | **두 E 소스 합치기** (§22) |
 | `out/consensus_summary.csv`, `out/consensus_*.csv` | **합의 Top-K** (§23) |
-| `out/ensemble_comparison.csv` | **순위 앙상블** vs 벡터 합치기 (§25) |
+| `out/ensemble_comparison.csv` | **순위 앙상블** vs 벡터 합치기 (§25). `sweep.py ensemble` 로 등록해 생산자를 되돌렸다 (§44) |
+| `out/legacy/ensemble_recommendation.csv` | 그 경로의 식품별 순위 — **생산 코드 없음** (§44) |
 | `out/toperr_comparison.csv` | **Top-K 명백한 오류** 규칙 채점 (§27) |
 | `out/eval_method1.csv`, `out/eval_method2.csv`, `out/eval_sparql.json` | §5.1·§4.1 평가 |
 

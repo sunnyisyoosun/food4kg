@@ -177,6 +177,77 @@ def check_registry():
          f'단계 {len(run_all.STEPS)} 전부 정의됨')
 
 
+def declared_outputs(here=None):
+    """코드가 **쓸 수 있다고 말한** 산출물 이름의 패턴 목록.
+
+    모든 `.py` 를 AST 로 읽어 `.csv` 가 든 문자열 상수와 f-string 을 모은다.
+    f-string 의 치환부는 `*` 로 두어 `learned_{FEATURES}.csv` 가
+    `learned_form.csv` 를 덮게 한다. **문자열을 조립해서 쓰는 경로는 놓친다**
+    — 그래서 이 검사는 "코드에 흔적이 없다" 까지만 말하고, 그게 곧 고아라고
+    단정하지 않는다(아래 메시지가 생산자 후보를 같이 보여 준다).
+    """
+    import ast
+    here = here or HERE
+    pats = {}
+    for fn in sorted(f for f in os.listdir(here) if f.endswith('.py')):
+        tree = ast.parse(open(os.path.join(here, fn), encoding='utf-8').read())
+        # **f-string 안쪽 상수는 따로 세면 안 된다.** `f'a_{k}.csv'` 의
+        # 자식 Constant `.csv` 까지 집어 아무것도 안 가리키는 패턴을 만들었다.
+        inner = {id(c) for n in ast.walk(tree) if isinstance(n, ast.JoinedStr)
+                 for c in ast.walk(n) if c is not n}
+        for n in ast.walk(tree):
+            if id(n) in inner:
+                continue
+            lit = None
+            if isinstance(n, ast.Constant) and isinstance(n.value, str):
+                lit = n.value
+            elif isinstance(n, ast.JoinedStr):
+                lit = ''.join(v.value if isinstance(v, ast.Constant) else '*'
+                              for v in n.values)
+            if lit and '.csv' in lit:
+                pats.setdefault(os.path.basename(lit), set()).add(fn)
+    return pats
+
+
+def check_outputs():
+    """`out/` 의 산출물마다 **만드는 코드가 레포에 있는지.**
+
+    문서가 가리키는 산출물의 생산자를 지우고 문서는 안 고친 적이 있다
+    (`3508e48` 가 `ensemble.py` 를 지워 `ensemble_comparison.csv` 가 고아가
+    됐다). 더 나쁜 것은 **커밋된 적조차 없는** 일회성 스크립트의 산물이다
+    (`pca_comparison.csv`·`threshold_comparison.csv` 는 `git log -S` 가 0 건).
+    둘 다 "재현 가능한 산출물" 이라고 표에 올라가 있었다.
+
+    `provenance.json` 기록의 **부재는 실패로 삼지 않는다.** 기본값 아닌 환경에서만
+    만들어지는 산출물(`consensus_*`)은 기본 실행에 기록이 안 남는 것이 정상이고,
+    기록은 장치를 넣은 뒤의 실행만 담는다. 그래서 여기서 FAIL 은 **코드 부재**
+    하나이고, 기록 부재는 세어서 보여 주기만 한다 — 안 재는 것을 재는 척하지
+    않으려고 적어 둔다.
+    """
+    import json
+    if not os.path.isdir(OUT):
+        return _say('SKIP', '산출물 생산자', 'out/ 이 없다')
+    pats = declared_outputs()
+    rx = [(re.compile('^' + re.escape(k).replace('\\*', '.*') + '$'), k)
+          for k in pats]
+    have = sorted(f for f in os.listdir(OUT) if f.endswith('.csv'))
+    if not have:
+        return _say('SKIP', '산출물 생산자', 'out/ 에 csv 가 없다')
+    orphan = [f for f in have if not any(r.match(f) for r, _ in rx)]
+    pv = os.path.join(OUT, 'provenance.json')
+    rec = json.load(open(pv)) if os.path.exists(pv) else {}
+    # 고아의 **마지막 생산자**를 출처 기록에서 찾아 준다. 지워진 모듈 이름이
+    # 남아 있으면 git 이력을 뒤질 자리를 바로 가리킨다.
+    who = {f: rec[f].get('argv', '?') for f in orphan if f in rec}
+    unrec = [f for f in have if f not in rec]
+    msg = (f'만드는 코드가 없는 산출물 {len(orphan)}: '
+           + ', '.join(f'{f}({who.get(f, "출처기록도 없다")})' for f in orphan[:6])
+           + (f' 외 {len(orphan) - 6}' if len(orphan) > 6 else '')) if orphan else (
+           f'csv {len(have)} 전부 코드에 생산자가 있다 '
+           f'(이름 패턴 {len(pats)} · 출처기록 없는 것 {len(unrec)} — 실패 아님)')
+    _say('FAIL' if orphan else 'PASS', '산출물 생산자', msg)
+
+
 def check_deadcode():
     """`if __name__` **뒤에** 정의된 함수와 아무도 쓰지 않는 모듈을 찾는다.
 
@@ -668,7 +739,7 @@ def check_docs():
 
 CHECKS = {'schema': check_schema, 'microbe': check_microbe, 'links': check_links,
           'agreement': check_agreement, 'registry': check_registry,
-          'deadcode': check_deadcode,
+          'deadcode': check_deadcode, 'outputs': check_outputs,
           'emode': check_emode, 'env': check_env, 'recommend': check_recommend,
           'pathcheck': check_pathcheck, 'kg': check_kg,
           'provenance': check_provenance, 'hooks': check_hooks,
