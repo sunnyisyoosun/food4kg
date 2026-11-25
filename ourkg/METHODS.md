@@ -300,6 +300,7 @@ gutMDisorder 의 식이 중재 행은 음식을 주고 균이 변하는 것을 �
 | `emode` | 모드가 **같은 E** 를 돌려주는 것(중첩 분기) · 모르는 모드의 조용한 통과 |
 | `env` | 소스가 읽는 환경변수가 `--env` 에 안 나오는 것 |
 | `recommend` | rank/score 정합 · NaN |
+| `pathcheck` | CSV 경로와 KG 경로가 다른 집합을 내는 것 · 판정이 KG 보다 낡은 것 |
 | `kg` | 출처 합 ≠ Σ 주장 · 파일에 중복 statement · **IRI 에 공백·파이프** |
 | `deadcode` | `if __name__` **뒤**에 정의된 함수 · 아무도 안 쓰는 모듈 |
 | `docs` | README 핵심 수치가 산출물과 다른 것 |
@@ -312,6 +313,18 @@ gutMDisorder 의 식이 중재 행은 음식을 주고 균이 변하는 것을 �
 
 네트워크를 쓰지 않고 1.9 초다. 산출물이 없으면 SKIP 으로 남기고 실패로 세지
 않는다 — 단계별로 돌릴 수 있어야 하기 때문이다.
+
+### 화면에만 찍히는 경고는 아무도 받지 않는다
+
+`analyze.py pathcheck` 는 CSV 경로(중간 산출물)와 KG 경로(SPARQL)가 같은
+gut-brain compound 집합을 내는지 본다. 그게 **52 vs 71 로 어긋난 채 20 일간
+방치**돼 있었다 — 경고를 화면에만 찍었기 때문이다 (§38).
+
+정의를 맞춰 78/78 로 고치고(`common.mental_mesh` · `mental_taxids` ·
+`microbe_metabolites`), 판정을 `gutbrain_compounds.json` 에 적게 했다.
+`check.py` 의 `pathcheck` 검사가 **결론과 신선도**를 본다 — 어긋나면 FAIL,
+판정이 `ourkg.nt` 보다 오래되면 FAIL. `pathcheck` 자체는 KG 적재에 76 초라
+매번 돌릴 수 없으므로 이렇게 나눈다.
 
 ### 검사가 못 보던 것을 하나 더 넣었다 — IRI 유효성
 

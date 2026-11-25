@@ -74,7 +74,7 @@ python3 ourkg/run_all.py --env            # 환경변수 전수 (소스에서 �
 
 python3 ourkg/analyze.py recommend        # 분석 한 단계만
 python3 ourkg/sweep.py emode              # 설정 쓸기 하나만
-python3 ourkg/check.py                    # 산출물·문서 정합 검사 (1.9 초, 네트워크 없음)
+python3 ourkg/check.py                    # 산출물·문서 정합 검사 (27 항목, 네트워크 없음)
 ```
 
 **무언가 고친 뒤에는 `check.py` 를 돌린다.** 산출물이 조용히 어긋나는 것을
@@ -123,7 +123,7 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 | `emicrobe` | 미생물 방향에서 **독립된 `E`** 를 유도해 대조 (BH 보정) | `e_microbe_compare.csv` |
 | `groups` | 논문 Fig 4(c) 성분군 조성 | `group_composition.csv` |
 | `disagree` | 두 평가 기준이 갈리는 지점을 음식군별로 분해 | `disagreement_by_group.csv` |
-| `pathcheck` | gut-brain compound 를 CSV 와 KG(SPARQL)에서 각각 뽑아 대조 | `gutbrain_compounds.json` |
+| `pathcheck` | gut-brain compound 를 CSV 와 KG(SPARQL)에서 각각 뽑아 대조 — 현재 **78/78 일치**. 판정을 json 에 적고 `check.py` 가 본다 (§38) | `gutbrain_compounds.json` |
 | `evaluate` | §4.1 SPARQL Q1~Q3 · §5.1 방법 1·2 | `eval_*.csv/json` |
 
 ### 외부 검정 — 우리 결과를 **우리 밖의 자**로 잰다
@@ -144,7 +144,7 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 | `bootstrap.py` | Top-K 지표의 **표집 변동** (주지표 선정 근거) |
 | `consensus.py` | **합의 Top-K** — 부분표집에서 반복 선택되는 음식 |
 | `toperr.py` | Top-K **규칙 기반 오류 수** (외부 임상 · 섭취량 · 분말 · 시럽) |
-| `check.py` | **정합 검사** — 산출물·문서가 서로 맞는지 네트워크 없이 1.9 초에 25 항목 |
+| `check.py` | **정합 검사** — 산출물·문서가 서로 맞는지 네트워크 없이 27 항목 |
 | `foodon_match.py` | FoodOn 매칭 (EBI OLS) |
 | `common.py` | 경로 · 단위 환산 · 라벨 정규화 · **읽는·돌리는 자리 통합**(`compound_microbe` · `measured_links` · `microbe_disease_direction` · `depression_e` · `taxid_alias` · `recommend_under`) |
 | `run_all.py` | 위를 순서대로. `--env` 로 환경변수 전수 |

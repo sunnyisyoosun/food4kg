@@ -358,6 +358,32 @@ def check_kg():
          'IRI 에 공백·파이프 등이 없다')
 
 
+def check_pathcheck():
+    """CSV 경로와 KG 경로가 같은 gut-brain compound 집합을 내는가.
+
+    `analyze.py pathcheck` 가 KG 적재에 80 초라 매번 돌릴 수 없다. 대신 그
+    판정이 `out/gutbrain_compounds.json` 에 적히므로 **결론과 신선도**를 본다.
+    전에는 경고를 화면에만 찍어서 어긋난 상태가 20 일간 안 보였다 (§38).
+    """
+    import json
+    p = os.path.join(OUT, 'gutbrain_compounds.json')
+    nt = os.path.join(OUT, 'ourkg.nt')
+    if not os.path.exists(p):
+        return _say('SKIP', 'gut-brain 경로 일관', 'json 없다 (analyze.py pathcheck)')
+    d = json.load(open(p))
+    if 'agree' not in d:
+        return _say('SKIP', 'gut-brain 경로 일관',
+                    '판정이 안 적혀 있다 — analyze.py pathcheck 를 다시 돌려라')
+    bad = []
+    if not d['agree']:
+        bad.append(f"어긋난다: CSV 에만 {d.get('only_csv')} · KG 에만 {d.get('only_kg')}")
+    if os.path.exists(nt) and os.path.getmtime(p) < os.path.getmtime(nt):
+        bad.append('판정이 ourkg.nt 보다 오래됐다 — pathcheck 를 다시 돌려라')
+    _say('FAIL' if bad else 'PASS', 'gut-brain 경로 일관',
+         '; '.join(bad) if bad else
+         f"CSV {d.get('n_csv')}종 = KG {d.get('n_kg')}종")
+
+
 # ---------------------------------------------------------------- 6. 문서
 #  문서 수치가 산출물과 갈리는 일이 반복됐다. 핵심 수치만 자동으로 맞춘다.
 def check_docs():
@@ -386,7 +412,7 @@ CHECKS = {'schema': check_schema, 'microbe': check_microbe, 'links': check_links
           'agreement': check_agreement, 'registry': check_registry,
           'deadcode': check_deadcode,
           'emode': check_emode, 'env': check_env, 'recommend': check_recommend,
-          'kg': check_kg, 'docs': check_docs}
+          'pathcheck': check_pathcheck, 'kg': check_kg, 'docs': check_docs}
 
 
 def main(argv):

@@ -28,29 +28,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'eval'))
 from common import (OUT, BASE, CACHE, compound_microbe, depression_e,
-                    microbe_disease_direction,
+                    microbe_disease_direction, mental_taxids, mental_mesh,
+                    microbe_metabolites,
                     measured_links as _measured_links)
-
-
-def mental_taxids():
-    """정신질환·신경퇴행에 연관된 미생물 taxid 집합.
-
-    두 출처를 합친다 — 배포 `Disease_Bacteria`(MeSH F03 판정)와 Disbiome.
-    Disbiome 쪽이 질환 23 종·균 457 종으로 훨씬 두껍다.
-    """
-    out = set()
-    for fn, cols in (('microbe_disease.csv', ('is_mental',)),
-                     ('microbe_disease_disbiome.csv', ('is_mental', 'is_neuro'))):
-        path = os.path.join(OUT, fn)
-        if not os.path.exists(path):
-            continue
-        df = pd.read_csv(path, dtype={'taxid': str})
-        m = False
-        for c in cols:
-            if c in df:
-                m = m | df[c].fillna(False).astype(bool)
-        out |= set(df[m]['taxid'])
-    return out
 
 
 def gutbrain_weight(compounds):
@@ -1484,11 +1464,15 @@ def compare():
 
 
 def gutbrain_from_csv():
-    """중간 CSV 로 gut-brain 경로 compound 집합을 만든다 (빠른 경로)."""
-    cm = compound_microbe(sources=('kegg',))
-    md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
-    mental_tax = set(md[md['is_mental']]['taxid'])
-    return set(cm[cm['taxid'].isin(mental_tax)]['kegg'])
+    """중간 CSV 로 gut-brain 경로 compound 집합을 만든다 (빠른 경로).
+
+    **KG 질의와 같은 정의여야 한다.** 전에는 (a) 링크를 KEGG 만 보고 (b) 균을
+    `microbe_disease.csv` 에서만 모아서 KG 와 52 vs 71 로 어긋났다 (§38).
+    KG 쪽은 `hasMetabolites`(KEGG·VMH·측정 상관 전부) × `hasAssociation` 이
+    `subClassOf MentalDisorder` 인 질환(= MeSH F03 판정)에 닿는 균이다.
+    """
+    cm = microbe_metabolites()
+    return set(cm[cm['taxid'].isin(mental_taxids())]['kegg'])
 
 
 def gutbrain_from_kg():
@@ -1543,7 +1527,7 @@ def pathcheck():
     csv_set = gutbrain_from_csv() & fdc
     kg_set = gutbrain_from_kg() & fdc
 
-    print(f'\n  CSV  (compound_microbe + microbe_disease.is_mental)  {len(csv_set)}종')
+    print(f'\n  CSV  (hasMetabolites 전 소스 x MeSH F03 연관 균)      {len(csv_set)}종')
     print(f'  KG   (ourkg.nt SPARQL, Query 3 패턴)                  {len(kg_set)}종')
     only_csv = sorted(csv_set - kg_set)
     only_kg = sorted(kg_set - csv_set)
@@ -1556,6 +1540,15 @@ def pathcheck():
         print('  두 경로가 같은 집합을 낸다 — KG 와 중간 CSV 가 일관된다.')
     else:
         print('  ⚠ 어긋난다. build.py kg 가 쓰는 관계와 CSV 필터의 정의를 맞춰야 한다.')
+    # **판정을 파일에 적는다.** 전에는 경고를 화면에만 찍었고, 어긋난 상태가
+    # 20 일간 아무에게도 안 보였다 (§38). check.py 가 이 줄을 읽어 실패로
+    # 잡는다 — pathcheck 자체는 KG 적재에 80 초가 걸려 매번 돌릴 수 없다.
+    _p = os.path.join(OUT, 'gutbrain_compounds.json')
+    _d = json.load(open(_p)) if os.path.exists(_p) else {}
+    _d.update({'n_csv': len(csv_set), 'n_kg': len(kg_set),
+               'only_csv': only_csv, 'only_kg': only_kg,
+               'agree': not only_csv and not only_kg})
+    json.dump(_d, open(_p, 'w'), indent=1, ensure_ascii=False)
 
 
 # ======================================================================

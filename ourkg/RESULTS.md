@@ -4961,6 +4961,81 @@ escape 가 필요하다). `<...>` 를 긁는 대신 **줄 구조대로**
 
 ---
 
+## 38. CSV 경로와 KG 경로가 어긋나 있었다 — 경고를 아무도 안 받았다 (2026-11-25)
+
+§37 을 고치다 `analyze.py pathcheck` 를 돌렸는데 이렇게 나왔다.
+
+```
+CSV  52종 / KG 71종 / 일치 52 / KG 에만 19
+⚠ 어긋난다.
+```
+
+`out/gutbrain_compounds.json` 은 **11-05 산출물**이었다 — 그 뒤 미생물 축이
+162 → 791 종이 됐고 소스가 둘 늘었는데, **경고가 화면에만 찍혀서 20 일간
+아무에게도 안 보였다.**
+
+예전 README 에는 "현재 52종으로 정확히 일치한다" 고 적혀 있었다. 그 문장은
+README 를 다시 쓸 때(§README 갱신) 경로 절을 접으면서 **이미 빠져 있었다** —
+그러니 지금 문서가 틀린 것은 아니다. 다만 **맞는지 틀린지 아무도 모르는
+상태**였다는 점은 같다.
+
+### 원인이 둘이었다 — 하나로 짚었다가 틀렸다
+
+처음에 "KG 가 외부 큐레이션으로 넓어졌는데 CSV 필터가 안 따라갔다" 로 짚었다.
+확인해 보니 **그것만이 아니었다.**
+
+| CSV 쪽 정의 | 집합 | KG 에만 | CSV 에만 |
+|---|---:|---:|---:|
+| `compound_microbe(kegg)` × `microbe_disease.is_mental` (현행) | 52 | 19 | 0 |
+| 링크를 `kegg+vmh` 로 | 66 | 12 | 7 |
+| 링크를 `kegg+vmh+measured` 로 | 75 | 3 | 7 |
+
+어느 쪽도 맞지 않는다. **양쪽이 서로 어긋나고 있었다.**
+
+### KG 질의를 글자대로 따라가니 맞았다
+
+KG 쪽 질의는 이것이다.
+
+```sparql
+?m mpq:hasMetabolites ?c ; mpq:hasAssociation ?d .
+?d rdfs:subClassOf ent:MentalDisorder .
+```
+
+여기서 **두 가지를 분리해야 한다.**
+
+- `hasMetabolites` 는 KEGG 추론(종·속) · VMH/AGORA2 · 측정 상관을 **전부** 올린
+  술어다. CSV 는 KEGG 만 보고 있었다.
+- `subClassOf MentalDisorder` 는 `microbe_disease.csv` 의 `is_mental`(MeSH F03
+  판정) **에만** 붙는다 — Disbiome·gutMDisorder 블록은 중립 `hasAssociation` 만
+  올린다. 즉 **"정신질환" 의 정의는 MeSH 쪽**이고, 어느 소스가 그 질환에 균을
+  붙였는지는 **별개**다. CSV 는 그 둘을 한 테이블에서 같이 읽어 섞고 있었다.
+
+정의를 맞추니 **78 / 78 · 양쪽 0** 으로 정확히 일치한다. 남아 있던 7 종
+(`C00768` · `C00806` · `C01536` · `C16434/5/6` · `C16439`)은 §37 에서 드러난
+VMH compound 였고, 캐시된 json 이 새 KG 보다 오래된 것이었다.
+
+### 고친 자리 — 정의를 `common` 한 곳으로
+
+| 함수 | 뜻 |
+|---|---|
+| `mental_mesh()` | KG 가 `MentalDisorder` 하위로 올리는 MeSH (= `is_mental`) |
+| `mental_taxids(mesh)` | 그 MeSH 에 붙은 균, **세 소스 전부** · 정본 taxid |
+| `microbe_metabolites()` | `hasMetabolites` 와 같은 범위의 (taxid, kegg) |
+
+`analyze.mental_taxids` 에는 **gutMDisorder 가 빠져 있었다**(나중에 들어온
+소스다) 그리고 정본 정규화도 없었다 — `gutbrain_weight` 가 그걸 쓰고 있었다.
+`common` 으로 옮기면서 둘 다 고쳤다.
+
+### 그리고 경고를 사람이 안 봐도 되게 했다
+
+이게 이 절의 요점이다. `pathcheck` 가 판정을 `gutbrain_compounds.json` 에
+적고(`agree` · `only_csv` · `only_kg`), `check.py` 의 `pathcheck` 검사가
+**결론과 신선도** 둘을 본다 — 어긋나면 FAIL, 판정이 `ourkg.nt` 보다 오래되면
+FAIL. `pathcheck` 자체는 KG 적재에 76 초라 매번 돌릴 수 없으므로 이렇게 나눈다.
+두 고장 모드를 일부러 만들어 FAIL 이 나는 것을 확인했다. 검사 27 항목.
+
+---
+
 ## 16. 한계
 
 - **식품 온톨로지를 넣어도 분류 질문이 풀리지 않는다** (2026-11-09 통합 완료).

@@ -528,6 +528,62 @@ def measured_links():
     return out.drop_duplicates()
 
 
+def mental_mesh():
+    """KG 가 `ent:MentalDisorder` 하위로 올리는 MeSH descriptor 집합.
+
+    `build.kg()` 는 `microbe_disease.csv` 의 `is_mental`(MeSH F03 판정) 에만
+    `subClassOf MentalDisorder` 를 붙인다. Disbiome·gutMDisorder 블록은 중립
+    `hasAssociation` 만 올린다. 그래서 "정신질환" 의 **정의는 MeSH 쪽**이고,
+    어느 소스가 그 질환에 균을 붙였는지는 별개다. 이 둘을 섞으면 CSV 경로와
+    KG 경로가 어긋난다 (§38).
+    """
+    import pandas as pd
+    p = os.path.join(OUT, 'microbe_disease.csv')
+    if not os.path.exists(p):
+        return set()
+    md = pd.read_csv(p, dtype={'taxid': str})
+    return set(md[md.is_mental.fillna(False).astype(bool)].mesh_id)
+
+
+def mental_taxids(mesh=None):
+    """정신질환 MeSH 에 연관된 미생물 taxid (**정본 기준**).
+
+    `analyze.mental_taxids` 가 `microbe_disease.csv` + Disbiome 만 보고 있었다 —
+    **gutMDisorder 가 빠져 있었다**(나중에 들어온 소스다). 그리고 정본 정규화를
+    안 해서 같은 균을 두 id 로 셌다. 여기로 합친다.
+
+    KG 질의(`?m hasMetabolites ?c ; hasAssociation ?d . ?d subClassOf
+    MentalDisorder`)와 같은 뜻이 되도록 **세 소스 전부**에서 그 MeSH 에 붙은
+    균을 모은다.
+    """
+    import pandas as pd
+    mesh = mental_mesh() if mesh is None else mesh
+    out = set()
+    for fn in ('microbe_disease.csv', 'microbe_disease_disbiome.csv',
+               'microbe_disease_gutmdisorder.csv'):
+        p = os.path.join(OUT, fn)
+        if not os.path.exists(p):
+            continue
+        d = pd.read_csv(p, dtype={'taxid': str})
+        out |= set(d[d.mesh_id.isin(mesh)].taxid)
+    alias = taxid_alias()
+    return {alias.get(t, t) for t in out}
+
+
+def microbe_metabolites():
+    """KG 의 `mpq:hasMetabolites` 와 **같은 범위**의 (taxid, kegg) 링크.
+
+    `build.kg()` 는 KEGG 추론(종·속) · VMH/AGORA2 · 측정 상관을 모두 같은
+    술어로 올린다. CSV 경로가 KEGG 만 보고 있어서 두 경로가 52 vs 71 로
+    어긋났다 (§38).
+    """
+    import pandas as pd
+    parts = [compound_microbe(), measured_links()]
+    df = pd.concat([p[['taxid', 'kegg']] for p in parts if len(p)])
+    df['taxid'] = canon(df['taxid'])
+    return df.drop_duplicates()
+
+
 def microbe_disease_direction():
     """(균, 질환) 쌍마다 **방향을 믿을 수 있는지** 판정해서 돌려준다.
 
