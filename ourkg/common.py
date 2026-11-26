@@ -725,6 +725,26 @@ def canon(series, alias=None):
     return series.astype(str).map(lambda t: a.get(t, t))
 
 
+def disease_key(name):
+    """질환 이름을 **묶음 키**로 정규화한다 — 같은 질환이 둘로 세어지던 자리.
+
+    §41 에서 `Parkinson Disease`(gutMDisorder)와 `Parkinson's Disease`
+    (Disbiome)가 따로 들어와 **서로의 쌍**으로 검정에 올라온 것을 고쳤다.
+    그때는 `mesh_id` 로 묶어서 해결했는데, MiKG 경로에는 `mesh_id` 가 없고
+    (MiKG 자체 어휘다) 거기에 `Learning disorder` 와 `Learning disorders` 가
+    **둘 다** 들어 있었다 — 질환 11 개 중 하나가 중복이라 쌍이 55 가 아니라
+    45 여야 한다(§49).
+
+    소유격·대소문자·기호를 지우고 단어 끝의 복수 `s` 를 접는다. 11 개 이름에
+    적용했을 때 **의도한 하나만 합쳐지는지** 확인했다.
+    """
+    if not isinstance(name, str):
+        return ''
+    t = name.lower().replace("'s", '')
+    t = re.sub(r'[^a-z0-9 ]', ' ', t)
+    return ''.join(re.sub(r'(?<=[a-z]{3})s$', '', w) for w in t.split())
+
+
 _GTDB_SUFFIX = re.compile(r'_[A-Z]+$')
 
 

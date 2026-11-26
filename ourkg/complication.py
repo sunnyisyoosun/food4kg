@@ -40,7 +40,8 @@ import sys
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import OUT, canon, enable_provenance, taxid_alias   # noqa: E402
+from common import (OUT, canon, disease_key, enable_provenance,   # noqa: E402
+                    taxid_alias)
 
 enable_provenance()   # 산출물 출처 기록 (common.PROV)
 
@@ -59,14 +60,21 @@ def disease_sets(source=None):
         sys.exit(f'COMP_SOURCE 는 {SOURCES} 중 하나. 받은 값: {source}')
     sets = {}
     if source == 'mikg':
-        mn = os.path.join(OUT, 'microbe_neurotransmitter.csv')
-        nd = os.path.join(OUT, 'neurotransmitter_disease.csv')
-        for p in (mn, nd):
-            if not os.path.exists(p):
-                sys.exit(f'{os.path.basename(p)} 가 없다. python3 ourkg/build.py microbe')
-        j = pd.read_csv(mn).merge(pd.read_csv(nd), on='neurotransmitter')
-        for d, g in j.groupby('disease'):
-            sets[str(d)] = set(g.microbe.astype(str))
+        # **조인을 다시 하지 않는다.** `build.py` 가 같은 조인을 해서
+        # `microbe_disease_mikg.csv` 로 이미 저장한다 — 여기서 또 하면 갈라진다.
+        p = os.path.join(OUT, 'microbe_disease_mikg.csv')
+        if not os.path.exists(p):
+            sys.exit('microbe_disease_mikg.csv 가 없다. python3 ourkg/build.py microbe')
+        j = pd.read_csv(p)
+        # **이름 그대로 묶으면 안 된다.** `Learning disorder` 와
+        # `Learning disorders` 가 둘 다 있어 같은 질환이 둘로 세어졌다
+        # (쌍 55 vs 45). mesh_id 가 없는 경로라 이름을 정규화해서 묶는다 — §41
+        # 에서 mesh_id 로 고친 것과 같은 문제, 같은 해법의 다른 형태다.
+        j['_dk'] = j['disease'].map(disease_key)
+        for dk, g in j[j._dk != ''].groupby('_dk'):
+            # 라벨은 가장 긴 표기를 쓴다(mesh_id 쪽과 같은 규약).
+            lab = max(g['disease'].astype(str).unique(), key=len)
+            sets[lab] = set(g.microbe.astype(str))
     else:
         files = {'disbiome': ['microbe_disease_disbiome.csv'],
                  'gutmdisorder': ['microbe_disease_gutmdisorder.csv'],

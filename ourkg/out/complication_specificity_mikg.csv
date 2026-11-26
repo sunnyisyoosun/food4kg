@@ -4,8 +4,7 @@ Anxiety disorders,Bipolar disorder,43,48,43,43,True,0.896
 Anxiety disorders,Cognition disorders,43,29,29,29,True,0.674
 Anxiety disorders,Depressive disorder,43,48,43,43,True,0.896
 Anxiety disorders,Eating disorders,43,29,29,29,True,0.674
-Anxiety disorders,Learning disorder,43,32,32,32,True,0.744
-Anxiety disorders,Learning disorders,43,9,5,9,False,0.106
+Anxiety disorders,Learning disorders,43,36,32,36,False,0.681
 Anxiety disorders,Personality disorder,43,43,43,43,True,1.0
 Anxiety disorders,Sex behavior disorder,43,30,30,30,True,0.698
 Anxiety disorders,Sleep disorders,43,47,43,43,True,0.915
@@ -13,44 +12,35 @@ Autistic disorder,Bipolar disorder,48,48,48,48,True,1.0
 Autistic disorder,Cognition disorders,48,29,29,29,True,0.604
 Autistic disorder,Depressive disorder,48,48,48,48,True,1.0
 Autistic disorder,Eating disorders,48,29,29,29,True,0.604
-Autistic disorder,Learning disorder,48,32,32,32,True,0.667
-Autistic disorder,Learning disorders,48,9,9,9,True,0.188
+Autistic disorder,Learning disorders,48,36,36,36,True,0.75
 Autistic disorder,Personality disorder,48,43,43,43,True,0.896
 Autistic disorder,Sex behavior disorder,48,30,30,30,True,0.625
 Autistic disorder,Sleep disorders,48,47,47,47,True,0.979
 Bipolar disorder,Cognition disorders,48,29,29,29,True,0.604
 Bipolar disorder,Depressive disorder,48,48,48,48,True,1.0
 Bipolar disorder,Eating disorders,48,29,29,29,True,0.604
-Bipolar disorder,Learning disorder,48,32,32,32,True,0.667
-Bipolar disorder,Learning disorders,48,9,9,9,True,0.188
+Bipolar disorder,Learning disorders,48,36,36,36,True,0.75
 Bipolar disorder,Personality disorder,48,43,43,43,True,0.896
 Bipolar disorder,Sex behavior disorder,48,30,30,30,True,0.625
 Bipolar disorder,Sleep disorders,48,47,47,47,True,0.979
 Cognition disorders,Depressive disorder,29,48,29,29,True,0.604
 Cognition disorders,Eating disorders,29,29,29,29,True,1.0
-Cognition disorders,Learning disorder,29,32,19,29,False,0.452
-Cognition disorders,Learning disorders,29,9,5,9,False,0.152
+Cognition disorders,Learning disorders,29,36,19,29,False,0.413
 Cognition disorders,Personality disorder,29,43,29,29,True,0.674
 Cognition disorders,Sex behavior disorder,29,30,29,29,True,0.967
 Cognition disorders,Sleep disorders,29,47,29,29,True,0.617
 Depressive disorder,Eating disorders,48,29,29,29,True,0.604
-Depressive disorder,Learning disorder,48,32,32,32,True,0.667
-Depressive disorder,Learning disorders,48,9,9,9,True,0.188
+Depressive disorder,Learning disorders,48,36,36,36,True,0.75
 Depressive disorder,Personality disorder,48,43,43,43,True,0.896
 Depressive disorder,Sex behavior disorder,48,30,30,30,True,0.625
 Depressive disorder,Sleep disorders,48,47,47,47,True,0.979
-Eating disorders,Learning disorder,29,32,19,29,False,0.452
-Eating disorders,Learning disorders,29,9,5,9,False,0.152
+Eating disorders,Learning disorders,29,36,19,29,False,0.413
 Eating disorders,Personality disorder,29,43,29,29,True,0.674
 Eating disorders,Sex behavior disorder,29,30,29,29,True,0.967
 Eating disorders,Sleep disorders,29,47,29,29,True,0.617
-Learning disorder,Learning disorders,32,9,5,9,False,0.139
-Learning disorder,Personality disorder,32,43,32,32,True,0.744
-Learning disorder,Sex behavior disorder,32,30,19,30,False,0.442
-Learning disorder,Sleep disorders,32,47,32,32,True,0.681
-Learning disorders,Personality disorder,9,43,5,9,False,0.106
-Learning disorders,Sex behavior disorder,9,30,5,9,False,0.147
-Learning disorders,Sleep disorders,9,47,9,9,True,0.191
+Learning disorders,Personality disorder,36,43,32,36,False,0.681
+Learning disorders,Sex behavior disorder,36,30,19,30,False,0.404
+Learning disorders,Sleep disorders,36,47,36,36,True,0.766
 Personality disorder,Sex behavior disorder,43,30,30,30,True,0.698
 Personality disorder,Sleep disorders,43,47,43,43,True,0.915
 Sex behavior disorder,Sleep disorders,30,47,30,30,True,0.638

@@ -553,6 +553,42 @@ class SignAgreeTest(unittest.TestCase):
                            common.mdes(209, 0.05, p0=0.5))
 
 
+class DiseaseKeyTest(unittest.TestCase):
+    """질환 묶음 키 (`common.disease_key`) — 같은 질환이 둘로 세어지던 자리."""
+
+    def test_plural_and_possessive_fold(self):
+        k = common.disease_key
+        self.assertEqual(k('Learning disorder'), k('Learning disorders'))
+        self.assertEqual(k("Parkinson's Disease"), k('Parkinson Disease'))
+
+    def test_distinct_diseases_do_not_collide(self):
+        # **과하게 접으면 다른 질환이 합쳐진다.** MiKG 의 11 개 이름에서
+        # 의도한 하나(Learning disorder/disorders)만 합쳐져야 한다.
+        names = ['Anxiety disorders', 'Autistic disorder', 'Bipolar disorder',
+                 'Cognition disorders', 'Depressive disorder', 'Eating disorders',
+                 'Learning disorder', 'Learning disorders', 'Personality disorder',
+                 'Sex behavior disorder', 'Sleep disorders']
+        keys = [common.disease_key(n) for n in names]
+        self.assertEqual(len(set(keys)), 10)
+
+    def test_empty_and_odd_input(self):
+        for n in ('', None, 123, float('nan')):
+            self.assertEqual(common.disease_key(n), '')
+
+    def test_mikg_sets_group_by_key(self):
+        # mikg 경로가 이름 그대로 묶으면 질환이 11 개가 된다.
+        import os
+        import complication
+        if not os.path.exists(os.path.join(common.OUT,
+                                           'microbe_disease_mikg.csv')):
+            self.skipTest('microbe_disease_mikg.csv 없음')
+        sets, src = complication.disease_sets('mikg')
+        self.assertEqual(src, 'mikg')
+        self.assertEqual(len(sets), 10)
+        self.assertNotIn('Learning disorder', sets)      # 긴 표기를 쓴다
+        self.assertIn('Learning disorders', sets)
+
+
 class GenusKeyTest(unittest.TestCase):
     """속 조인 키 (`common.genus_key`) — **두 분류체계를 맞추는 자리.**
 
