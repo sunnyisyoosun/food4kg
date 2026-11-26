@@ -431,8 +431,8 @@
   "env": {}
  },
  "power_bound.csv": {
-  "at": "2026-11-25 17:44:14",
-  "argv": "diet_intervention.py",
+  "at": "2026-11-26 10:46:00",
+  "argv": "-c",
   "env": {}
  },
  "promenda_records.csv": {

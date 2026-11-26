@@ -594,6 +594,58 @@ def recommend_under(env, quiet=True, boot=None):
         return analyze.recommend(save=False), analyze
 
 
+def mdes(n, alpha, power=0.80):
+    """부호검정의 **최소검출효과** — n 과 유의수준에서 `power` 로 잡히는 부호일치.
+
+    RESULTS §34 를 처음 쓸 때 "검정력 반론을 닫지 못했다" 로 끝냈다. **닫는
+    방법을 데이터에서만 찾은 것이 잘못이었다** — 검정력은 계산할 수 있다.
+
+    "효과가 없다" 를 증명할 수는 없지만 **"이 크기 이상은 없다"** 는 말할 수
+    있다. 그게 열린 반론보다 훨씬 강한 진술이다.
+
+    정규근사로 단측 검정력을 쓴다. `alpha` 에 BH 보정값을 넣으면 다중검정
+    상황의 경계가 나온다.
+
+    (`e_autism.py` 에 있었는데 §46 에서 주장 셋이 같이 쓰게 되어 올렸다.
+    같은 식을 두 군데 두면 갈라진다 — `measured_links` 와 같은 이유다.)
+    """
+    from math import sqrt
+    import numpy as np
+    from scipy.stats import norm
+    z = norm.isf(alpha)
+    crit = 0.5 + z * sqrt(0.25 / n)
+    for p in np.arange(0.50, 0.999, 0.001):
+        if norm.sf((crit - p) / sqrt(p * (1 - p) / n)) >= power:
+            return round(float(p), 3)
+    return None
+
+
+def mdes_auc(n1, n2, alpha, power=0.80):
+    """Mann-Whitney **AUC** 의 최소검출효과 — 두 군 크기에서 잡히는 가장 작은 AUC.
+
+    부호일치와 AUC 는 **둘 다 0.5 가 우연**이라 같은 자리에 놓고 읽을 수 있다.
+    다만 분산이 다르다 — 귀무가설 아래 AUC 의 표준오차는 순위합 검정에서
+    `sqrt((n1+n2+1)/(12·n1·n2))` 이고, 대립가설 아래에서는 Hanley-McNeil 의
+    식을 써야 한다(AUC 가 0.5 에서 멀어지면 분산이 줄어든다).
+
+    귀무 분산으로 임계값을 잡고 대립 분산으로 검정력을 재는 것은 `mdes` 와
+    같은 구성이다.
+    """
+    from math import sqrt
+    import numpy as np
+    from scipy.stats import norm
+    se0 = sqrt((n1 + n2 + 1) / (12 * n1 * n2))
+    crit = 0.5 + norm.isf(alpha) * se0
+    for a in np.arange(0.50, 0.999, 0.001):
+        q1 = a / (2 - a)
+        q2 = 2 * a * a / (1 + a)
+        se = sqrt((a * (1 - a) + (n1 - 1) * (q1 - a * a)
+                   + (n2 - 1) * (q2 - a * a)) / (n1 * n2))
+        if se > 0 and norm.sf((crit - a) / se) >= power:
+            return round(float(a), 3)
+    return None
+
+
 def depression_e(col=None):
     """ProMENDA 기반 `E` 표를 읽는다 (`out/compound_depression.csv`).
 

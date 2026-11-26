@@ -42,7 +42,8 @@ import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (OUT, CACHE, compound_microbe, microbe_disease_direction,
-                    measured_links, depression_e, enable_provenance)
+                    measured_links, depression_e, enable_provenance,
+                    mdes, mdes_auc)
 
 enable_provenance()   # 산출물 출처 기록 (common.PROV)
 
@@ -203,36 +204,22 @@ def test_microbe(ea, n_perm=None):
     return t
 
 
-def mdes(n, alpha, power=0.80):
-    """부호검정의 **최소검출효과** — n 과 유의수준에서 `power` 로 잡히는 부호일치.
-
-    §34 를 처음 쓸 때 "검정력 반론을 닫지 못했다" 로 끝냈다. **닫는 방법을
-    데이터에서만 찾은 것이 잘못이었다** — 검정력은 계산할 수 있다.
-
-    "효과가 없다" 를 증명할 수는 없지만 **"이 크기 이상은 없다"** 는 말할 수
-    있다. 그게 열린 반론보다 훨씬 강한 진술이다.
-
-    정규근사로 단측 검정력을 쓴다. `alpha` 에 BH 보정값을 넣으면 다중검정
-    상황의 경계가 나온다 — 우리는 28 칸을 재므로 가장 작은 p 가 살아남으려면
-    대략 `0.05/28` 이 필요하다.
-    """
-    from math import sqrt
-    import numpy as np
-    from scipy.stats import norm
-    z = norm.isf(alpha)
-    crit = 0.5 + z * sqrt(0.25 / n)
-    for p in np.arange(0.50, 0.999, 0.001):
-        if norm.sf((crit - p) / sqrt(p * (1 - p) / n)) >= power:
-            return round(float(p), 3)
-    return None
-
-
 def power_report(n_tests=28, alpha=0.05, power=0.80):
-    """관측값이 **검출 가능한 구간 안**이었는지 표로 낸다.
+    """관측값이 **검출 가능한 구간 안**이었는지 표로 낸다 — 주장 셋 전부.
 
-    출력 `out/power_bound.csv` — n · 관측 부호일치 · 그 n 에서의 최소검출효과 ·
-    배제 여부.
+    §34 에서 미생물 축에만 했다. **같은 논법이 필요한 자리가 더 있었다** —
+    "약하다"·"우연 수준이다" 로만 적고 *얼마나 작은 효과까지 배제되는지*는
+    안 쟀다. 세 주장을 한 표에 둔다 (`out/power_bound.csv`).
+
+    부호일치와 AUC 는 **둘 다 0.5 가 우연**이라 같은 열에서 읽을 수 있다.
+    분산이 달라 경계 식은 각각 `mdes` · `mdes_auc` 를 쓴다.
+
+    **다중검정 보정은 주장마다 다르다.** 처음엔 세 주장 전부에 `alpha/28` 을
+    걸었는데, 28 은 미생물 축에서 잰 칸 수다 — 방향 일치와 문헌 lift 는 각각
+    **단일 검정**이라 보정할 것이 없다. 일괄 적용하면 경계를 실제보다 느슨하게
+    적어 "더 많이 배제된다" 고 말하게 된다.
     """
+    from scipy.stats import binomtest, mannwhitneyu
     rows = []
     for fn, col_q in (('e_microbe_compare.csv', 'q'),
                       ('e_autism_microbe.csv', 'q(BH)')):
@@ -242,36 +229,78 @@ def power_report(n_tests=28, alpha=0.05, power=0.80):
         d = pd.read_csv(p)
         for r in d.itertuples(index=False):
             n = int(r.compound)
-            m = {'출처': fn, 'n': n, '부호일치': float(r.부호일치),
-                 'p': float(r.p),
-                 f'최소검출효과(a={alpha})': mdes(n, alpha, power),
-                 f'최소검출효과(BH,{n_tests}검정)': mdes(n, alpha / n_tests, power)}
-            m['≥경계라면 잡혔다'] = m['부호일치'] >= m[f'최소검출효과(BH,{n_tests}검정)']
-            rows.append(m)
+            rows.append({'주장': '미생물 축 부호일치', '출처': fn, 'n': n,
+                         '관측(0.5=우연)': float(r.부호일치), 'p': float(r.p),
+                         '보정검정수': n_tests,
+                         f'경계(a={alpha})': mdes(n, alpha, power),
+                         '경계(보정후)': mdes(n, alpha / n_tests, power)})
+
+    # ② 두 큐레이션 소스의 방향 일치 (§32). "우연 수준" 으로만 적어 뒀다.
+    ap = os.path.join(OUT, 'microbe_disease_agreement.csv')
+    if os.path.exists(ap):
+        a = pd.read_csv(ap)
+        sh = a[a.n_sources == 2]
+        if len(sh):
+            n = len(sh)
+            rows.append({'주장': '소스 간 방향 일치', '출처': os.path.basename(ap),
+                         'n': n,
+                         '관측(0.5=우연)': float((sh.status == 'agreed').mean()),
+                         'p': float(binomtest(int((sh.status == 'agreed').sum()),
+                                              n, 0.5, 'greater').pvalue),
+                         '보정검정수': 1,
+                         f'경계(a={alpha})': mdes(n, alpha, power),
+                         '경계(보정후)': mdes(n, alpha, power)})
+
+    # ③ 합병증 비통과 쌍의 문헌 lift (§41). "AUC 0.574 는 약하다" 로만 적었다.
+    lp = os.path.join(OUT, 'complication_literature_curated.csv')
+    if os.path.exists(lp):
+        d = pd.read_csv(lp).dropna(subset=['lift'])
+        g1 = d[d['통과'] == True]['lift']
+        g2 = d[d['통과'] != True]['lift']
+        if len(g1) and len(g2):
+            u = mannwhitneyu(g1, g2, alternative='greater')
+            rows.append({'주장': '합병증 문헌 lift (AUC)', '출처': os.path.basename(lp),
+                         'n': len(g1) + len(g2),
+                         '관측(0.5=우연)': float(u.statistic) / (len(g1) * len(g2)),
+                         'p': float(u.pvalue),
+                         '보정검정수': 1,
+                         f'경계(a={alpha})': mdes_auc(len(g1), len(g2), alpha,
+                                                    power),
+                         '경계(보정후)': mdes_auc(len(g1), len(g2), alpha, power)})
+
     t = pd.DataFrame(rows)
     if not len(t):
         print('  관측 표가 없다. analyze.py emicrobe · e_autism.py 를 먼저 돌려라.')
         return t
-    bh = f'최소검출효과(BH,{n_tests}검정)'
-    t = t.sort_values('n', ascending=False)
+    bh = '경계(보정후)'
+    t['≥경계라면 잡혔다'] = t['관측(0.5=우연)'] >= t[bh]
+    t = t.sort_values(['주장', 'n'], ascending=[True, False])
     t.to_csv(os.path.join(OUT, 'power_bound.csv'), index=False)
-    # **경계는 n 이 가장 큰 검정에서 가장 조여진다.** 부호일치가 가장 큰 행을
-    # 고르면 안 된다 — 그 행은 n 이 작아 경계가 느슨하다(처음에 그렇게 적어
-    # 0.77 이라는 과한 수를 냈다).
-    tight = t.loc[t[bh].idxmin()]
-    obs_max = t.loc[t['부호일치'].idxmax()]
-    print(f'  가장 조인 경계: n={int(tight.n)} 에서 '
-          f'alpha={alpha} -> {tight[f"최소검출효과(a={alpha})"]} · '
-          f'BH({n_tests}검정) -> {tight[bh]}')
-    print(f'  그 검정의 관측 부호일치 {tight["부호일치"]:.3f} '
-          f'(전체 최대 {obs_max["부호일치"]:.3f}, n={int(obs_max.n)})')
-    print(f'  경계를 넘은 관측 {int(t["≥경계라면 잡혔다"].sum())}/{len(t)}')
-    print(f'  => **부호일치 {tight[bh]} 이상인 효과는 배제된다** (있었으면 잡혔다).')
-    print(f'     0.50 ~ {tight[bh]} 구간은 열려 있다 — 그건 "모른다" 가 아니라')
-    print('     **경계가 있는 모름**이다.')
-    print('     그리고 그 구간의 크기는 쓰면 손해다 — gutbrain 쓸기에서 alpha 를')
-    print('     키울수록 비추천군이 26 -> 20 으로 단조 감소한다.')
-    print('  -> out/power_bound.csv')
+
+    for claim, g in t.groupby('주장', sort=False):
+        # **경계는 n 이 가장 큰 검정에서 가장 조여진다.** 관측이 가장 큰 행을
+        # 고르면 안 된다 — 그 행은 n 이 작아 경계가 느슨하다(처음에 그렇게 적어
+        # 0.77 이라는 과한 수를 냈다).
+        tight = g.loc[g[bh].idxmin()]
+        print(f'  [{claim}] 검정 {len(g)} · 가장 조인 경계 n={int(tight.n)} '
+              f'-> a={alpha} {tight[f"경계(a={alpha})"]} · '
+              f'보정({int(tight.보정검정수)}검정) {tight[bh]}')
+        print(f'      그 검정의 관측 {tight["관측(0.5=우연)"]:.3f} '
+              f'(p={tight.p:.4f}) · 경계를 넘은 관측 '
+              f'{int(g["≥경계라면 잡혔다"].sum())}/{len(g)}')
+        # **유의한 관측에 "배제된다" 를 붙이면 안 된다.** 배제 논법은 귀무
+        # 결과에만 쓴다 — 검출된 효과에는 경계가 "얼마나 간신히 잡았나" 를
+        # 말한다. 처음엔 세 주장에 같은 문장을 찍어 lift(p=0.0068)에도
+        # "배제된다" 고 적고 있었다.
+        alpha_c = alpha / float(tight.보정검정수)
+        if float(tight.p) < alpha_c:
+            print(f'      => 효과가 **검출됐다** (p<{alpha_c:g}). 관측 '
+                  f'{tight["관측(0.5=우연)"]:.3f} 이 경계 {tight[bh]} 와 거의 같다 '
+                  f'— 이보다 작은 효과는 놓쳤을 수 있다')
+        else:
+            print(f'      => {tight[bh]} 이상인 효과는 배제된다 (있었으면 잡혔다)')
+    print('  0.50 ~ 경계 구간은 열려 있다 — 그건 "모른다" 가 아니라')
+    print('  **경계가 있는 모름**이다.  -> out/power_bound.csv')
     return t
 
 

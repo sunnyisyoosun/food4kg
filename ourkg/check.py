@@ -706,12 +706,20 @@ def facts():
         out['links.measured'] = f'{len(pd.read_csv(g("compound_microbe_measured.csv"))):,}'
     if os.path.exists(g('power_bound.csv')):
         pw = pd.read_csv(g('power_bound.csv'))
-        bh = [c for c in pw.columns if c.startswith('최소검출효과(BH')][0]
-        tight = pw.loc[pw[bh].idxmin()]
-        out['power.rows'] = str(len(pw))
-        out['power.n'] = f'{int(tight.n):,}'
-        out['power.mdes'] = f'{tight[bh]:.3f}'
-        out['power.over'] = str(int(pw['≥경계라면 잡혔다'].sum()))
+        bh = '경계(보정후)'
+        # **주장마다 따로 낸다.** 처음엔 표 전체에서 가장 조인 행을 뽑았는데,
+        # 주장 셋이 한 표에 들어오면서 그 값이 어느 주장의 경계인지 모르게 됐다.
+        for key, claim in (('', '미생물 축 부호일치'), ('agree.', '소스 간 방향 일치'),
+                           ('auc.', '합병증 문헌 lift (AUC)')):
+            c = pw[pw['주장'] == claim]
+            if not len(c):
+                continue
+            tight = c.loc[c[bh].idxmin()]
+            out[f'power.{key}rows'] = str(len(c))
+            out[f'power.{key}n'] = f'{int(tight.n):,}'
+            out[f'power.{key}mdes'] = f'{tight[bh]:.3f}'
+            out[f'power.{key}obs'] = f'{tight["관측(0.5=우연)"]:.3f}'
+            out[f'power.{key}over'] = str(int(c['≥경계라면 잡혔다'].sum()))
     if os.path.exists(g('foods.csv')):
         f = pd.read_csv(g('foods.csv'))
         out['foods.count'] = f'{len(f):,}'

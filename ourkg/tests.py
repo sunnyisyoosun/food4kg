@@ -536,6 +536,46 @@ class MdesTest(unittest.TestCase):
         # BH 보정은 alpha 를 낮춘다 -> 경계는 올라간다(더 큰 효과만 잡힌다).
         self.assertGreater(self.e.mdes(384, 0.05 / 28), self.e.mdes(384, 0.05))
 
+    def test_auc_bound_is_tighter_with_balanced_groups(self):
+        # 같은 전체 n 이면 두 군이 고를수록 AUC 경계가 조여진다.
+        import common
+        bal = common.mdes_auc(232, 233, 0.05)
+        skew = common.mdes_auc(129, 336, 0.05)
+        self.assertLess(bal, skew)
+        self.assertTrue(all(0.5 < x < 1 for x in (bal, skew)))
+
+    def test_auc_bound_monotone_in_n(self):
+        import common
+        v = [common.mdes_auc(int(n / 2), n - int(n / 2), 0.05)
+             for n in (60, 200, 465, 2000)]
+        self.assertEqual(v, sorted(v, reverse=True))
+
+    def test_each_claim_has_its_own_multiplicity(self):
+        # **처음에 틀린 자리.** 세 주장 전부에 alpha/28 을 걸었다. 28 은
+        # 미생물 축에서 잰 칸 수고, 나머지 둘은 단일 검정이다.
+        import pandas as pd, os
+        f = os.path.join(self.e.OUT, 'power_bound.csv')
+        if not os.path.exists(f):
+            self.skipTest('power_bound.csv 없음')
+        t = pd.read_csv(f)
+        for claim, g in t.groupby('주장'):
+            if claim == '미생물 축 부호일치':
+                self.assertTrue((g['보정검정수'] > 1).all(), claim)
+                self.assertTrue((g['경계(보정후)'] > g['경계(a=0.05)']).all())
+            else:
+                self.assertTrue((g['보정검정수'] == 1).all(), claim)
+                self.assertTrue((g['경계(보정후)'] == g['경계(a=0.05)']).all())
+
+    def test_detected_effect_is_not_called_excluded(self):
+        # 유의한 관측에 "배제된다" 를 붙이면 거짓말이 된다. lift 는 p=0.0068 이다.
+        import pandas as pd, os
+        f = os.path.join(self.e.OUT, 'power_bound.csv')
+        if not os.path.exists(f):
+            self.skipTest('power_bound.csv 없음')
+        t = pd.read_csv(f)
+        sig = t[t.p < 0.05 / t['보정검정수']]
+        self.assertTrue(len(sig) >= 1, '유의한 행이 하나는 있어야 이 시험이 산다')
+
     def test_report_picks_tightest_not_largest_effect(self):
         # **처음에 틀린 자리.** 부호일치가 가장 큰 행을 골라 0.77 이라는 느슨한
         # 경계를 냈다. 경계는 MDES 가 가장 작은 행에서 읽어야 한다.
@@ -544,8 +584,9 @@ class MdesTest(unittest.TestCase):
         if not os.path.exists(f):
             self.skipTest('power_bound.csv 없음')
         t = pd.read_csv(f)
-        bh = [c for c in t.columns if c.startswith('최소검출효과(BH')][0]
-        self.assertEqual(int(t.loc[t[bh].idxmin()].n), int(t.n.max()))
+        bh = '경계(보정후)'
+        m = t[t['주장'] == '미생물 축 부호일치']
+        self.assertEqual(int(m.loc[m[bh].idxmin()].n), int(m.n.max()))
         # 경계를 넘은 관측이 있으면 "배제된다" 고 쓸 수 없다.
         self.assertEqual(int(t['≥경계라면 잡혔다'].sum()), 0)
 
