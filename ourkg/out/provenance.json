@@ -64,7 +64,7 @@
   "env": {}
  },
  "compound_autism.csv": {
-  "at": "2026-11-26 10:58:25",
+  "at": "2026-11-26 11:11:45",
   "argv": "e_autism.py",
   "env": {}
  },
@@ -171,17 +171,17 @@
   "env": {}
  },
  "e_autism_microbe.csv": {
-  "at": "2026-11-26 10:58:25",
+  "at": "2026-11-26 11:11:45",
   "argv": "e_autism.py",
   "env": {}
  },
  "e_microbe.csv": {
-  "at": "2026-11-26 10:55:50",
+  "at": "2026-11-26 11:11:38",
   "argv": "analyze.py emicrobe",
   "env": {}
  },
  "e_microbe_compare.csv": {
-  "at": "2026-11-26 10:55:53",
+  "at": "2026-11-26 11:11:45",
   "argv": "e_autism.py",
   "env": {}
  },
@@ -330,8 +330,8 @@
   }
  },
  "legacy": {
-  "at": "2026-11-25 17:19:18",
-  "argv": "sweep.py ensemble",
+  "at": "2026-11-26 11:14:49",
+  "argv": "check.py",
   "env": {}
  },
  "linking_stats.csv": {
@@ -431,8 +431,8 @@
   "env": {}
  },
  "power_bound.csv": {
-  "at": "2026-11-26 10:58:33",
-  "argv": "check.py",
+  "at": "2026-11-26 11:12:26",
+  "argv": "-c",
   "env": {}
  },
  "promenda_records.csv": {

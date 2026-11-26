@@ -714,11 +714,14 @@ def facts():
             c = pw[pw['주장'] == claim]
             if not len(c):
                 continue
-            tight = c.loc[c[bh].idxmin()]
+            # 귀무가 행마다 다르면 경계끼리 바로 비교할 수 없다 — **귀무 위
+            # 초과분**이 가장 작은 행을 고른다 (§48).
+            tight = c.loc[(c[bh] - c['귀무']).idxmin()]
             out[f'power.{key}rows'] = str(len(c))
             out[f'power.{key}n'] = f'{int(tight.n):,}'
             out[f'power.{key}mdes'] = f'{tight[bh]:.3f}'
-            out[f'power.{key}obs'] = f'{tight["관측(0.5=우연)"]:.3f}'
+            out[f'power.{key}obs'] = f'{tight["관측"]:.3f}'
+            out[f'power.{key}null'] = f'{tight["귀무"]:.3f}'
             out[f'power.{key}over'] = str(int(c['≥경계라면 잡혔다'].sum()))
     if os.path.exists(g('foods.csv')):
         f = pd.read_csv(g('foods.csv'))

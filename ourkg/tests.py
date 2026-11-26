@@ -518,6 +518,41 @@ class ComplicationGateTest(unittest.TestCase):
                 os.environ['COMP_SOURCE'] = old
 
 
+class SignAgreeTest(unittest.TestCase):
+    """부호일치 검정의 **귀무** (`common.sign_agree`) — §48 의 회귀 시험."""
+
+    def test_skewed_marginals_give_null_above_half(self):
+        # 양쪽이 치우쳐 있으면 무작위로 짝지어도 많이 맞는다. 0.5 를 귀무로
+        # 쓰면 p 가 터진다 — 이 저장소가 p=4.9e-5 를 신호로 읽을 뻔한 자리.
+        a = [1] * 77 + [-1] * 132
+        b = [1] * 37 + [-1] * 172
+        obs, null, p, n = common.sign_agree(a, b, n_perm=3000)
+        self.assertEqual(n, 209)
+        self.assertGreater(null, 0.55)          # 0.5 가 아니다
+        self.assertTrue(0 <= p <= 1)
+
+    def test_balanced_marginals_give_null_near_half(self):
+        a = [1] * 100 + [-1] * 100
+        b = [1] * 100 + [-1] * 100
+        _, null, _, _ = common.sign_agree(a, b, n_perm=3000)
+        self.assertAlmostEqual(null, 0.5, delta=0.03)
+
+    def test_perfect_agreement_is_significant(self):
+        a = [1] * 60 + [-1] * 60
+        obs, null, p, _ = common.sign_agree(a, a, n_perm=2000)
+        self.assertEqual(obs, 1.0)
+        self.assertLess(p, 0.001)
+
+    def test_empty_is_safe(self):
+        obs, null, p, n = common.sign_agree([], [], n_perm=10)
+        self.assertEqual(n, 0)
+
+    def test_mdes_centre_moves_with_p0(self):
+        # 귀무가 올라가면 경계도 올라간다. 0.5 를 박아 두면 경계가 낙관적이다.
+        self.assertGreater(common.mdes(209, 0.05, p0=0.585),
+                           common.mdes(209, 0.05, p0=0.5))
+
+
 class GenusKeyTest(unittest.TestCase):
     """속 조인 키 (`common.genus_key`) — **두 분류체계를 맞추는 자리.**
 
@@ -642,7 +677,28 @@ class MdesTest(unittest.TestCase):
         t = pd.read_csv(f)
         bh = '경계(보정후)'
         m = t[t['주장'] == '미생물 축 부호일치']
-        self.assertEqual(int(m.loc[m[bh].idxmin()].n), int(m.n.max()))
+        # **귀무가 행마다 달라 경계끼리 바로 비교할 수 없다**(§48). 같은 귀무
+        # 안에서는 n 이 클수록 경계가 낮다 — 그 불변식만 본다.
+        for _, g in m.groupby(m['귀무'].round(3)):
+            if len(g) > 1:
+                self.assertLessEqual(
+                    float(g.loc[g.n.idxmax()][bh]),
+                    float(g.loc[g.n.idxmin()][bh]) + 1e-9)
+        # 보고가 고르는 행은 **귀무 위 초과분**이 가장 작은 행이어야 한다 —
+        # 관측이 가장 큰 행(n 이 작아 경계가 느슨하다)이 아니다.
+        pick = m.loc[(m[bh] - m['귀무']).idxmin()]
+        self.assertNotEqual(int(pick.n), int(m.loc[m['관측'].idxmax()].n))
+
+    def test_null_is_not_hardcoded_half(self):
+        # 0.5 를 박아 두고 p=4.9e-5 를 신호로 읽을 뻔했다 (§48).
+        import pandas as pd, os
+        f = os.path.join(self.e.OUT, 'power_bound.csv')
+        if not os.path.exists(f):
+            self.skipTest('power_bound.csv 없음')
+        t = pd.read_csv(f)
+        m = t[t['주장'] == '미생물 축 부호일치']
+        self.assertGreater(m['귀무'].nunique(), 1, '귀무가 전부 같다 — 또 박혔다')
+        self.assertTrue((m['경계(보정후)'] > m['귀무']).all())
         # 경계를 넘은 관측이 있으면 "배제된다" 고 쓸 수 없다.
         self.assertEqual(int(t['≥경계라면 잡혔다'].sum()), 0)
 

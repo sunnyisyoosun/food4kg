@@ -12,5 +12,8 @@
 | `complication_hypergeom.csv` | 소스별 접미사판(`_curated` 등)으로 갈라진 뒤 남은 구본. 질환을 **이름**으로 묶던 때의 값이다 (§41 에서 `mesh_id` 로 고쳤다) | `out/complication_hypergeom_curated.csv` |
 | `ensemble_recommendation.csv` | §25 앙상블 경로의 식품별 순위. 그 경로는 §27 에서 기각됐고(Top-K 오류 6/30) 비교표만 쓸기로 되살렸다 (`sweep.py ensemble`) | `out/consensus_현행.csv` · `out/ensemble_comparison.csv` |
 
+| `emicrobe_vote_sensitivity.csv` | 투표 규약 3 × §47 전후 × 28 칸 민감도 (§48). 일회성 스크립트 산물이고, **올바른 귀무로는 세 규약 어디서도 통과하지 않아** 본문에 쓸 말이 없다 — 기록으로만 둔다 | `out/e_microbe_compare.csv` (정본, `귀무(순열)` 열 포함) |
+
 앞의 두 개는 **"재현 가능한 산출물" 이라고 §43 표에 올라가 있었다.** 그게
-이 검사를 만든 이유다.
+이 검사를 만든 이유다. 마지막 것은 **그 검사가 바로 잡아낸 첫 사례**다 —
+§48 작업 중에 만들자마자 FAIL 이 떴다.

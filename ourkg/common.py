@@ -594,7 +594,31 @@ def recommend_under(env, quiet=True, boot=None):
         return analyze.recommend(save=False), analyze
 
 
-def mdes(n, alpha, power=0.80):
+def sign_agree(a, b, n_perm=20000, seed=0):
+    """부호일치 검정 — **귀무는 0.5 가 아니다.**
+
+    두 부호 벡터의 일치율을 이항검정으로 0.5 에 대고 재고 있었다. **틀렸다.**
+    양쪽이 치우쳐 있으면 무작위로 짝지어도 많이 맞는다 — `E_shrunk` 양수
+    0.368 · `E_microbe` 양수 0.177 이면 독립 가정 기대 일치율이
+    0.368·0.177 + 0.632·0.823 = **0.585** 다. 0.5 에 대고 재니 p=4.9e-5 가
+    나왔는데 올바른 중심에서는 p=0.075 다(§48).
+
+    한쪽을 섞어 귀무분포를 직접 만든다 — 주변분포 공식은 근사이고 순열이
+    정확하다. 돌려주는 것: (일치율, 귀무평균, 순열 p, n).
+    """
+    import numpy as np
+    a, b = np.sign(np.asarray(a)), np.sign(np.asarray(b))
+    n = len(a)
+    if n == 0:
+        return float('nan'), float('nan'), float('nan'), 0
+    obs = float((a == b).mean())
+    rng = np.random.default_rng(seed)
+    null = np.fromiter(((rng.permutation(a) == b).mean()
+                        for _ in range(n_perm)), float, n_perm)
+    return obs, float(null.mean()), float((null >= obs).mean()), n
+
+
+def mdes(n, alpha, power=0.80, p0=0.5):
     """부호검정의 **최소검출효과** — n 과 유의수준에서 `power` 로 잡히는 부호일치.
 
     RESULTS §34 를 처음 쓸 때 "검정력 반론을 닫지 못했다" 로 끝냈다. **닫는
@@ -606,6 +630,10 @@ def mdes(n, alpha, power=0.80):
     정규근사로 단측 검정력을 쓴다. `alpha` 에 BH 보정값을 넣으면 다중검정
     상황의 경계가 나온다.
 
+    `p0` 는 **귀무 중심**이다. 0.5 를 박아 두고 있었는데 부호일치 검정의
+    귀무는 주변분포에 따라 0.5 가 아니다(§48) — `sign_agree` 가 돌려주는
+    귀무평균을 넣어야 경계가 올바른 중심에서 나온다.
+
     (`e_autism.py` 에 있었는데 §46 에서 주장 셋이 같이 쓰게 되어 올렸다.
     같은 식을 두 군데 두면 갈라진다 — `measured_links` 와 같은 이유다.)
     """
@@ -613,8 +641,8 @@ def mdes(n, alpha, power=0.80):
     import numpy as np
     from scipy.stats import norm
     z = norm.isf(alpha)
-    crit = 0.5 + z * sqrt(0.25 / n)
-    for p in np.arange(0.50, 0.999, 0.001):
+    crit = p0 + z * sqrt(p0 * (1 - p0) / n)
+    for p in np.arange(p0, 0.999, 0.001):
         if norm.sf((crit - p) / sqrt(p * (1 - p) / n)) >= power:
             return round(float(p), 3)
     return None
@@ -741,6 +769,45 @@ def genus_key(name):
             return ''
         g = toks[1]
     return _GTDB_SUFFIX.sub('', g)
+
+
+VOTE_CONVENTIONS = ('pair', 'repeat', 'majority')
+
+
+def direction_votes(dsel, convention=None):
+    """`E_microbe` 투표의 **한 표 단위**를 정한다 — METHODS 의 사전 선언 참조.
+
+    `dsel` 은 `taxid` · `outcome` 열을 가진 (균, 질환) 방향 표다. 돌려주는
+    것은 투표에 쓸 행 집합이다.
+
+    · `pair` (**주 규약**) — `(taxid, outcome)` 중복을 접는다. 한 균이 질환
+      A 에서 Elevated, B 에서 Reduced 면 **양쪽에 한 표씩 들어가 상쇄된다.**
+      근거는 통계가 아니라 이 KG 가 이미 선언한 정책이다 —
+      `our:abundanceConflict` 는 "연관은 있고 방향은 모른다" 다(§32).
+    · `repeat` (민감도) — 질환별 반복을 그대로 둔다. 이것은 **문헌 가중**
+      양이다. 많이 연구된 균이 투표를 지배한다(한 균이 최대 12 표).
+    · `majority` (민감도) — 균별 다수 방향 한 표. 동수면 버린다.
+      `abundanceConflict` 정책과 충돌하므로 참고만 한다.
+
+    `EMICROBE_VOTE` 로 바꾼다. 기본은 주 규약이다 — 두 모듈이 서로 다르게
+    세고 있었고 그 차이로 결론이 갈렸다(§48).
+    """
+    import pandas as pd
+    c = convention or os.environ.get('EMICROBE_VOTE', 'pair')
+    if c not in VOTE_CONVENTIONS:
+        raise ValueError(f'모르는 투표 규약 {c!r}. 가능: {VOTE_CONVENTIONS}')
+    d = dsel[['taxid', 'outcome']]
+    if c == 'repeat':
+        return d.copy()
+    if c == 'pair':
+        return d.drop_duplicates()
+    cnt = d.groupby(['taxid', 'outcome']).size().unstack(fill_value=0)
+    out = []
+    for tx, r in cnt.iterrows():
+        top = r[r == r.max()]
+        if len(top) == 1:                    # 동수는 버린다 (방향을 모른다)
+            out.append((tx, top.index[0]))
+    return pd.DataFrame(out, columns=['taxid', 'outcome'])
 
 
 def measured_links():

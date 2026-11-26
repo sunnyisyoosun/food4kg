@@ -43,7 +43,7 @@ import pandas as pd
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import (OUT, CACHE, compound_microbe, microbe_disease_direction,
                     measured_links, depression_e, enable_provenance,
-                    mdes, mdes_auc)
+                    mdes, mdes_auc, direction_votes, sign_agree)
 
 enable_provenance()   # 산출물 출처 기록 (common.PROV)
 
@@ -125,11 +125,9 @@ def compare_depression(ea):
         print('      너무 적어 검정하지 않는다.')
         return
     rho = spearmanr(x[nz], y[nz])
-    agree = float((np.sign(x[nz]) == np.sign(y[nz])).mean())
-    bt = binomtest(int(round(agree * nz.sum())), int(nz.sum()), 0.5,
-                   alternative='two-sided')
+    agree, null, pp, _ = sign_agree(x[nz], y[nz])
     print(f'      Spearman rho = {rho.statistic:+.3f} (p={rho.pvalue:.3f}) '
-          f'/ 부호일치 {agree:.3f} (p={bt.pvalue:.3f})')
+          f'/ 부호일치 {agree:.3f} (귀무 {null:.3f} · 순열 p={pp:.3f})')
     print('      0 에 가까우면 ProMENDA 의 E 는 질환 특이적이다 — 자폐의')
     print('      측정 방향과 따로 움직인다는 뜻이다.')
 
@@ -171,7 +169,7 @@ def test_microbe(ea, n_perm=None):
                   else compound_microbe(rank=None if lname == 'both' else 'species'))
             if cm.empty:
                 continue
-            j = cm.merge(dsel.drop_duplicates(), on='taxid')
+            j = cm.merge(direction_votes(dsel), on='taxid')
             if j.empty:
                 continue
             n = j.pivot_table(index='kegg', columns='outcome', aggfunc='size',
@@ -185,14 +183,14 @@ def test_microbe(ea, n_perm=None):
                 nzm = (base != 0) & (e2 != 0)
                 if nzm.sum() < 8:
                     continue
-                agree = float((np.sign(base[nzm]) == np.sign(e2[nzm])).mean())
-                bt = binomtest(int(round(agree * nzm.sum())), int(nzm.sum()), 0.5,
-                               alternative='greater')
+                # 귀무는 0.5 가 아니다 — §48. 순열로 만든다.
+                agree, null, pp, _ = sign_agree(base[nzm], e2[nzm])
                 rho = spearmanr(base[nzm], e2[nzm]).statistic
                 rows.append({'미생물 소스': sname, '링크': lname, '방향가정': assume,
                              '균': dsel.taxid.nunique(), 'compound': int(nzm.sum()),
                              '부호일치': round(agree, 3),
-                             'p': round(float(bt.pvalue), 4),
+                             '귀무(순열)': round(null, 3),
+                             'p': round(float(pp), 4),
                              'rho': round(float(rho), 3)})
     t = pd.DataFrame(rows)
     if len(t):
@@ -226,14 +224,17 @@ def power_report(n_tests=28, alpha=0.05, power=0.80):
         p = os.path.join(OUT, fn)
         if not os.path.exists(p):
             continue
-        d = pd.read_csv(p)
-        for r in d.itertuples(index=False):
-            n = int(r.compound)
+        # **귀무 중심을 행마다 가져온다.** 0.5 를 박아 두고 경계를 내서
+        # 0.596·0.629 같은 수를 적고 있었다 — 올바른 중심(≈0.585)에서는
+        # 경계가 훨씬 높다(§48). 한글 열이라 itertuples 속성으로는 못 집는다.
+        for r in pd.read_csv(p).to_dict('records'):
+            n = int(r['compound'])
+            p0 = float(r.get('귀무(순열)', 0.5))
             rows.append({'주장': '미생물 축 부호일치', '출처': fn, 'n': n,
-                         '관측(0.5=우연)': float(r.부호일치), 'p': float(r.p),
-                         '보정검정수': n_tests,
-                         f'경계(a={alpha})': mdes(n, alpha, power),
-                         '경계(보정후)': mdes(n, alpha / n_tests, power)})
+                         '관측': float(r['부호일치']), '귀무': p0,
+                         'p': float(r['p']), '보정검정수': n_tests,
+                         f'경계(a={alpha})': mdes(n, alpha, power, p0),
+                         '경계(보정후)': mdes(n, alpha / n_tests, power, p0)})
 
     # ② 두 큐레이션 소스의 방향 일치 (§32). "우연 수준" 으로만 적어 뒀다.
     ap = os.path.join(OUT, 'microbe_disease_agreement.csv')
@@ -244,7 +245,8 @@ def power_report(n_tests=28, alpha=0.05, power=0.80):
             n = len(sh)
             rows.append({'주장': '소스 간 방향 일치', '출처': os.path.basename(ap),
                          'n': n,
-                         '관측(0.5=우연)': float((sh.status == 'agreed').mean()),
+                         '관측': float((sh.status == 'agreed').mean()),
+                         '귀무': 0.5,
                          'p': float(binomtest(int((sh.status == 'agreed').sum()),
                                               n, 0.5, 'greater').pvalue),
                          '보정검정수': 1,
@@ -261,7 +263,8 @@ def power_report(n_tests=28, alpha=0.05, power=0.80):
             u = mannwhitneyu(g1, g2, alternative='greater')
             rows.append({'주장': '합병증 문헌 lift (AUC)', '출처': os.path.basename(lp),
                          'n': len(g1) + len(g2),
-                         '관측(0.5=우연)': float(u.statistic) / (len(g1) * len(g2)),
+                         '관측': float(u.statistic) / (len(g1) * len(g2)),
+                         '귀무': 0.5,
                          'p': float(u.pvalue),
                          '보정검정수': 1,
                          f'경계(a={alpha})': mdes_auc(len(g1), len(g2), alpha,
@@ -273,7 +276,11 @@ def power_report(n_tests=28, alpha=0.05, power=0.80):
         print('  관측 표가 없다. analyze.py emicrobe · e_autism.py 를 먼저 돌려라.')
         return t
     bh = '경계(보정후)'
-    t['≥경계라면 잡혔다'] = t['관측(0.5=우연)'] >= t[bh]
+    t['≥경계라면 잡혔다'] = t['관측'] >= t[bh]
+    # **경계끼리 바로 비교할 수 없다.** 행마다 귀무 중심이 다르다 — 귀무
+    # 0.415 짜리 행의 경계 0.544 를 "가장 조인 경계" 로 집어 0.585 중심의
+    # 행과 나란히 적고 있었다. 비교 가능한 양은 **귀무 위 초과분**이다.
+    t['경계-귀무'] = (t[bh] - t['귀무']).round(3)
     t = t.sort_values(['주장', 'n'], ascending=[True, False])
     t.to_csv(os.path.join(OUT, 'power_bound.csv'), index=False)
 
@@ -281,11 +288,13 @@ def power_report(n_tests=28, alpha=0.05, power=0.80):
         # **경계는 n 이 가장 큰 검정에서 가장 조여진다.** 관측이 가장 큰 행을
         # 고르면 안 된다 — 그 행은 n 이 작아 경계가 느슨하다(처음에 그렇게 적어
         # 0.77 이라는 과한 수를 냈다).
-        tight = g.loc[g[bh].idxmin()]
-        print(f'  [{claim}] 검정 {len(g)} · 가장 조인 경계 n={int(tight.n)} '
+        tight = g.loc[g['경계-귀무'].idxmin()]
+        print(f'  [{claim}] 검정 {len(g)} · 귀무 위 초과분이 가장 작은 경계: '
+              f'n={int(tight.n)} · 귀무 {tight["귀무"]:.3f} '
               f'-> a={alpha} {tight[f"경계(a={alpha})"]} · '
-              f'보정({int(tight.보정검정수)}검정) {tight[bh]}')
-        print(f'      그 검정의 관측 {tight["관측(0.5=우연)"]:.3f} '
+              f'보정({int(tight.보정검정수)}검정) {tight[bh]} '
+              f'(초과 +{tight["경계-귀무"]:.3f})')
+        print(f'      그 검정의 관측 {tight["관측"]:.3f} '
               f'(p={tight.p:.4f}) · 경계를 넘은 관측 '
               f'{int(g["≥경계라면 잡혔다"].sum())}/{len(g)}')
         # **유의한 관측에 "배제된다" 를 붙이면 안 된다.** 배제 논법은 귀무
@@ -295,11 +304,12 @@ def power_report(n_tests=28, alpha=0.05, power=0.80):
         alpha_c = alpha / float(tight.보정검정수)
         if float(tight.p) < alpha_c:
             print(f'      => 효과가 **검출됐다** (p<{alpha_c:g}). 관측 '
-                  f'{tight["관측(0.5=우연)"]:.3f} 이 경계 {tight[bh]} 와 거의 같다 '
+                  f'{tight["관측"]:.3f} 이 경계 {tight[bh]} 와 거의 같다 '
                   f'— 이보다 작은 효과는 놓쳤을 수 있다')
         else:
-            print(f'      => {tight[bh]} 이상인 효과는 배제된다 (있었으면 잡혔다)')
-    print('  0.50 ~ 경계 구간은 열려 있다 — 그건 "모른다" 가 아니라')
+            print(f'      => {tight[bh]} 이상인 효과는 배제된다 (귀무 '
+                  f'{tight["귀무"]:.3f} 기준, 있었으면 잡혔다)')
+    print('  귀무 ~ 경계 구간은 열려 있다 — 그건 "모른다" 가 아니라')
     print('  **경계가 있는 모름**이다.  -> out/power_bound.csv')
     return t
 

@@ -30,7 +30,8 @@ sys.path.insert(0, os.path.join(
 from common import (OUT, BASE, CACHE, adjusted_cosine, compound_microbe, depression_e,
                     microbe_disease_direction, mental_taxids, mental_mesh,
                     microbe_metabolites,
-                    measured_links as _measured_links, enable_provenance)
+                    measured_links as _measured_links, enable_provenance,
+                    direction_votes, sign_agree)
 
 enable_provenance()   # 산출물 출처 기록 (common.PROV)
 
@@ -2447,7 +2448,7 @@ def emicrobe():
                   else _measured_links())
             if cm.empty:
                 continue
-            j = cm.merge(dsel[['taxid', 'outcome']], on='taxid')
+            j = cm.merge(direction_votes(dsel), on='taxid')
             if j.empty:
                 continue
             n = j.pivot_table(index='kegg', columns='outcome', aggfunc='size',
@@ -2462,14 +2463,14 @@ def emicrobe():
                 if nz.sum() < 10:
                     continue
                 rho = spearmanr(both[nz], e2[nz]).statistic
-                agree = float((np.sign(both[nz]) == np.sign(e2[nz])).mean())
-                # 부호일치가 우연(0.5)보다 큰가 — 눈대중 말고 이항검정으로
-                from scipy.stats import binomtest
-                bt = binomtest(int(round(agree * nz.sum())), int(nz.sum()), 0.5,
-                               alternative='greater')
+                # **귀무는 0.5 가 아니다.** 양쪽 부호가 치우쳐 있으면 무작위로
+                # 짝지어도 많이 맞는다 — 0.5 에 대고 재서 p=4.9e-5 를 신호로
+                # 읽을 뻔했다(올바른 중심에서는 0.075). 순열로 귀무를 만든다.
+                agree, null, pp, _ = sign_agree(both[nz], e2[nz])
                 rows.append({'질환범위': scope, '링크': src, '방향가정': assume,
                              'compound': int(nz.sum()),
-                             '부호일치': round(agree, 3), 'p': round(bt.pvalue, 4),
+                             '부호일치': round(agree, 3),
+                             '귀무(순열)': round(null, 3), 'p': round(pp, 4),
                              'rho': round(float(rho), 3)})
                 if (scope == 'Disbiome/정신질환 전체' and src == 'both'
                         and assume == '감소=이로움'):
@@ -2484,8 +2485,10 @@ def emicrobe():
         t['q'] = false_discovery_control(t['p'].values).round(3)
     t.to_csv(os.path.join(OUT, 'e_microbe_compare.csv'), index=False)
     print(t.to_string(index=False))
-    print('\n  부호일치 0.5 · rho 0 이 우연 수준이다. 두 방향 가정이 대칭이므로')
-    print('  한쪽이 0.5 보다 높으면 다른 쪽은 그만큼 낮다 — **크기**를 봐야 한다.')
+    print('\n  **우연 수준은 0.5 가 아니다** — 열 `귀무(순열)` 을 봐라. 양쪽 부호가')
+    print('  치우쳐 있으면 무작위로 짝지어도 많이 맞는다(여기선 0.42~0.59).')
+    print('  0.5 에 대고 재서 p=4.9e-5 를 신호로 읽을 뻔했다 (§48).')
+    print('  두 방향 가정은 대칭이라 한쪽이 높으면 다른 쪽은 그만큼 낮다.')
     print(f'  BH 보정 후 q<0.05 {int((t.get("q", pd.Series(dtype=float)) < 0.05).sum())}'
           f'/{len(t)} — 보정 없이 집은 p 는 근거가 아니다.')
     return t
