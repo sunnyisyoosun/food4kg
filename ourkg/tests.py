@@ -553,6 +553,53 @@ class SignAgreeTest(unittest.TestCase):
                            common.mdes(209, 0.05, p0=0.5))
 
 
+class UnitGuardTest(unittest.TestCase):
+    """단위 환산의 **조용한 기본값**을 막았는지 (§53).
+
+    `build.py` 가 모르는 단위를 `.fillna(1.0)` 으로 그램 취급했다. FDC 에는
+    `KCAL`·`kJ`·`PH`·`SP_GR` 등 8 종의 비질량 단위가 있다.
+    """
+
+    def test_no_silent_gram_fallback_in_build(self):
+        src = open(os.path.join(_chk.HERE, 'build.py'), encoding='utf-8').read()
+        # 환산 계수에 .fillna(1.0) 을 다시 붙이면 이 시험이 깨진다.
+        self.assertNotIn("UNIT_TO_G).fillna(1.0)", src)
+        self.assertIn('_f.isna().any()', src)
+
+    def test_unit_table_is_mass_only(self):
+        # IU 는 질량이 아니지만 **비타민 D 1 IU = 0.025 µg** 같은 환산이 있어
+        # 표에 둔다. 그 외에 질량 아닌 단위가 들어오면 안 된다.
+        self.assertEqual(set(common.UNIT_TO_G), {'G', 'MG', 'UG', 'IU'})
+        self.assertEqual(common.UNIT_TO_G['G'], 1.0)
+        self.assertEqual(common.UNIT_TO_G['MG'], 1e-3)
+
+    def test_check_catches_non_mass_unit(self):
+        # 오류 주입 — 매핑표에 KCAL 영양소를 넣으면 FAIL 이어야 한다.
+        import tempfile, shutil
+        base = common.BASE
+        d = tempfile.TemporaryDirectory()
+        try:
+            shutil.copytree(os.path.join(base, 'setup'),
+                            os.path.join(d.name, 'setup'))
+            cand = os.path.join(d.name, 'setup', 'nutrient_kegg_candidates.csv')
+            c = pd.read_csv(cand)
+            c.loc[len(c)] = {'nutrient_id': 1008, 'nutrient_name': 'Energy',
+                             'kegg': 'C00001', 'foods_measured': 0,
+                             'coverage_pct': 0}
+            c.to_csv(cand, index=False)
+            common.BASE = d.name
+            _chk.RESULT.clear()
+            _chk.check_units()
+            sts = [r[0] for r in _chk.RESULT]
+            if sts == ['SKIP']:
+                self.skipTest('FDC nutrient.csv 가 없다')
+            self.assertEqual(sts, ['FAIL'])
+        finally:
+            common.BASE = base
+            _chk.RESULT.clear()
+            d.cleanup()
+
+
 class SimMaskTest(unittest.TestCase):
     """공통 성분 마스크 (`adjusted_cosine(X, reported)`) — §52.
 

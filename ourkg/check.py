@@ -159,6 +159,44 @@ def check_agreement():
          f'모순 {int((a.status == "conflict").sum()):,})')
 
 
+def check_units():
+    """KEGG 매핑된 영양소의 단위가 **전부 질량 환산 가능한지.**
+
+    `build.py` 는 모르는 단위를 조용히 그램으로 뒀다(`.fillna(1.0)`). 그래서
+    매핑표만 보던 때 citric acid 가 1,740 g/100g 으로 나왔다. 지금은 build 가
+    멈추게 고쳤지만 **build 는 몇 분 걸린다** — 매핑표에 비질량 단위를 넣는
+    순간 커밋에서 걸려야 한다. 그게 이 검사다 (§53).
+
+    FDC 에는 `KCAL`·`kJ`·`PH`·`SP_GR`·`UMOL_TE`·`MCG_RE`·`MG_ATE`·`MG_GAE` 가
+    있고 전부 질량이 아니다. 지금 걸린 것은 0 개다(`Energy`·`Specific Gravity`
+    는 `nutrient_kegg_map.csv` 에서 `kegg=0` 이고 `kegg_map()` 이 걸러낸다).
+    """
+    import common
+    nut = os.path.join(common.FDC_RAW, 'nutrient.csv')
+    if not os.path.exists(nut):
+        return _say('SKIP', '영양소 단위 매핑', 'FDC nutrient.csv 가 없다')
+    u = dict(zip(*pd.read_csv(nut, usecols=['id', 'unit_name']).values.T))
+    nm = dict(pd.read_csv(nut, usecols=['id', 'name']).values)
+    ids = set()
+    for fn in ('nutrient_kegg_map.csv', 'nutrient_kegg_candidates.csv'):
+        p = os.path.join(common.BASE, 'setup', fn)
+        if not os.path.exists(p):
+            continue
+        d = pd.read_csv(p)
+        col = 'nutrient_kegg' if 'nutrient_kegg' in d else 'kegg'
+        # `kegg_map()` 과 **같은 규칙**으로 좁힌다 — kegg 가 'C…' 가 아닌 행은
+        # 매핑이 아니다(Energy 는 0 으로 적혀 있다).
+        d = d[d[col].astype(str).str.startswith('C')]
+        ids |= set(d['nutrient_id'].dropna().astype(int))
+    bad = {i: u.get(i) for i in ids if u.get(i) not in common.UNIT_TO_G}
+    _say('FAIL' if bad else 'PASS', '영양소 단위 매핑',
+         '질량이 아닌 단위: ' + ', '.join(
+             f'{i} {nm.get(i)!r} {v!r}' for i, v in sorted(bad.items())[:6])
+         if bad else
+         f'KEGG 매핑된 영양소 {len(ids)} 전부 UNIT_TO_G 로 환산된다 '
+         f'({sorted(common.UNIT_TO_G)})')
+
+
 # ----------------------------------------------------------- 3. 분기 등록
 #  `SWEEPS['ezero']` 를 `if __name__` 뒤에 등록해 한 번도 안 돌았던 적이 있다.
 def check_registry():
@@ -894,6 +932,7 @@ def check_docs():
 CHECKS = {'schema': check_schema, 'microbe': check_microbe, 'links': check_links,
           'agreement': check_agreement, 'registry': check_registry,
           'deadcode': check_deadcode, 'outputs': check_outputs,
+          'units': check_units,
           'emode': check_emode, 'env': check_env, 'recommend': check_recommend,
           'pathcheck': check_pathcheck, 'kg': check_kg,
           'provenance': check_provenance, 'hooks': check_hooks,

@@ -150,7 +150,20 @@ def food():
     del parts
     fn['kegg'] = fn['nutrient_id'].map(kg_nid2kegg)
     fn['unit'] = fn['nutrient_id'].map(kg_nid2unit)
-    fn['amount_g'] = pd.to_numeric(fn['amount'], errors='coerce') * fn['unit'].map(UNIT_TO_G).fillna(1.0)
+    # **모르는 단위를 조용히 그램으로 두면 안 된다.** `.fillna(1.0)` 이 있었고,
+    # 그래서 매핑표만 보던 때 citric acid 가 1,740 g/100g 으로 나왔다(단위 출처를
+    # FDC nutrient.csv 로 고쳐 막았다). 지금은 KEGG 매핑된 영양소에 비질량 단위가
+    # 0 개지만, 후보를 넓히는 날 같은 사고가 **조용히** 난다. 멈춘다 (§53).
+    _f = fn['unit'].map(UNIT_TO_G)
+    if _f.isna().any():
+        _bad = (fn.loc[_f.isna(), ['nutrient_id', 'unit']]
+                .drop_duplicates().head(12))
+        _bad['nutrient_name'] = _bad['nutrient_id'].map(kg_nid2name)
+        sys.exit('UNIT_TO_G 에 없는 단위가 KEGG 매핑된 영양소에 있다 — '
+                 f'그램으로 취급하면 값이 1,000 배 틀린다:\n{_bad.to_string(index=False)}\n'
+                 f'  고치려면 common.UNIT_TO_G 에 환산을 넣거나 그 영양소의 '
+                 f'KEGG 매핑을 빼라 (common.UNIT_TO_G = {UNIT_TO_G}).')
+    fn['amount_g'] = pd.to_numeric(fn['amount'], errors='coerce') * _f
     fn = fn.dropna(subset=['amount_g'])
     print(f'  KEGG 측정값 {len(fn):,} 행, compound {fn["kegg"].nunique()}')
 
