@@ -70,16 +70,13 @@ def gutbrain_weight(compounds):
     if src == 'measured':
         # 측정 상관으로 만든 링크 (metabolome_check.py build). 속 수준이라
         # 우리 taxid 로 펼친다 — 같은 속의 종이 여럿이면 전부 받는다.
-        mp = os.path.join(OUT, 'compound_microbe_measured.csv')
-        if not os.path.exists(mp):
+        # **복사본이었다.** 같은 속 조인을 여기서 다시 하고 있었고, 그
+        # 바람에 `canon()` 이 빠져 정본화한 축과 taxid 가 어긋났다(94 행).
+        # 분류체계 정규화(`genus_key`)도 여기엔 없었다 — 한 자리로 모은다.
+        if not os.path.exists(os.path.join(OUT, 'compound_microbe_measured.csv')):
             sys.exit('compound_microbe_measured.csv 가 없다. '
                      'python3 ourkg/metabolome_check.py build')
-        meas = pd.read_csv(mp)
-        mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'),
-                          dtype={'taxid': str}).fillna('')
-        mic['genus'] = mic['name'].astype(str).str.split().str[0]
-        cm = meas.merge(mic[['taxid', 'genus']], on='genus')[['taxid', 'kegg']]
-        cm = cm.drop_duplicates()
+        cm = _measured_links()
     else:
         sources = ('kegg', 'vmh') if src == 'both' else (src,)
         cm = compound_microbe(sources=sources, rank=None if rank == 'all' else rank)

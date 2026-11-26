@@ -1226,10 +1226,15 @@ def kg():
     _mp = os.path.join(OUT, 'compound_microbe_measured.csv')
     n_meas = 0
     if os.path.exists(_mp):
+        # 속 조인 키는 `common.genus_key` 하나만 쓴다 — 여기서 split()[0] 을
+        # 다시 쓰고 있었고, 그래서 GTDB 접미사(`Alistipes_A`)가 안 붙었다.
+        from common import genus_key as _gk
         _ms = pd.read_csv(_mp)
+        _ms['_gk'] = _ms['genus'].map(_gk)
         _g = mic.copy()
-        _g['genus'] = _g['name'].astype(str).str.split().str[0]
-        _ms = _ms.merge(_g[['taxid', 'genus']], on='genus')
+        _g['_gk'] = _g['name'].map(_gk)
+        _ms = _ms[_ms._gk != ''].merge(
+            _g[_g._gk != ''][['taxid', '_gk']], on='_gk')
         for _, r in _ms.drop_duplicates(['taxid', 'kegg', 'sign']).iterrows():
             u = NS['mic'] + _alias.get(str(r['taxid']), str(r['taxid']))
             W.t(u, NS['mpq'] + 'hasMetabolites', NS['kegg'] + r['kegg'], '측정 상관')

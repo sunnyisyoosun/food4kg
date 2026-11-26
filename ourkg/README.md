@@ -189,7 +189,7 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 
 ### KG 규모 (논문 Table 1 대응)
 
-**고유 triple 3,443,485<!--chk:kg.triples--> · 관계 39<!--chk:kg.relations--> · 엔티티 859,542<!--chk:kg.entities-->** (논문 13,346,991 · 140 · 1,637,915)
+**고유 triple 3,452,637<!--chk:kg.triples--> · 관계 39<!--chk:kg.relations--> · 엔티티 859,544<!--chk:kg.entities-->** (논문 13,346,991 · 140 · 1,637,915)
 
 | source | relation | entity | triples |
 |---|---:|---:|---:|
@@ -198,7 +198,7 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 | VMH/AGORA2 | 1 | 1,192 | 46,495<!--chk:links.vmh--> |
 | FoodOn/OLS | 3 | 10,452 | 25,759 |
 | FoodOn | 4 | 6,592 | 21,723 |
-| 측정 상관 | 2 | 708 | 21,000 |
+| 측정 상관 | 2 | 733 | 31,824 |
 | KEGG | 5 | 3,092 | 13,112 |
 | KEGG(속 수준) | 1 | 398 | 8,626<!--chk:links.genus--> |
 | MiKG | 9 | 1,306 | 7,196 |
@@ -211,12 +211,12 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 | Disbiome | 2 | 476 | 2,386 |
 | evidence | 15 | 278 | 1,560 |
 | SNOMED CT | 2 | 294 | 285 |
-| Σ 출처 주장(겹침 포함) | 39 | 859,542 | 3,461,533<!--chk:kg.claims--> |
-| **Total (고유 그래프)** | **39** | **859,542** | **3,443,485**<!--chk:kg.triples--> |
+| Σ 출처 주장(겹침 포함) | 39 | 859,544 | 3,472,357<!--chk:kg.claims--> |
+| **Total (고유 그래프)** | **39** | **859,544** | **3,452,637**<!--chk:kg.triples--> |
 
 **두 줄을 따로 적는 이유** — RDF 그래프는 같은 statement 를 두 번 갖지 않으므로
 그래프 크기는 **고유** 기준이다. 출처 열은 '그 출처가 주장한 수' 라서 겹치는
-만큼 합이 그래프보다 크다(18,048<!--chk:kg.overlap-->). 겹침은 버릴 정보가 아니다 — VMH 와 KEGG 가
+만큼 합이 그래프보다 크다(19,720<!--chk:kg.overlap-->). 겹침은 버릴 정보가 아니다 — VMH 와 KEGG 가
 같은 `hasMetabolites` 1,435 건을 독립적으로 주장하는 것은 **서로 교차검증**이다.
 논문 Table 1 과 비교할 때는 고유 쪽을 쓴다.
 

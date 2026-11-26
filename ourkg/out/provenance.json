@@ -9,8 +9,8 @@
   }
  },
  "category_ontology.csv": {
-  "at": "2026-11-25 14:35:42",
-  "argv": "build.py food form promenda evidence microbe kg",
+  "at": "2026-11-26 10:56:09",
+  "argv": "build.py kg",
   "env": {}
  },
  "complication_hypergeom_curated.csv": {
@@ -64,13 +64,13 @@
   "env": {}
  },
  "compound_autism.csv": {
-  "at": "2026-11-25 17:43:38",
+  "at": "2026-11-26 10:58:25",
   "argv": "e_autism.py",
   "env": {}
  },
  "compound_class.csv": {
-  "at": "2026-11-25 14:35:42",
-  "argv": "build.py food form promenda evidence microbe kg",
+  "at": "2026-11-26 10:56:09",
+  "argv": "build.py kg",
   "env": {}
  },
  "compound_depression.csv": {
@@ -114,8 +114,8 @@
   "env": {}
  },
  "compound_microbe_vmh.csv": {
-  "at": "2026-11-25 14:35:42",
-  "argv": "build.py food form promenda evidence microbe kg",
+  "at": "2026-11-26 10:56:09",
+  "argv": "build.py kg",
   "env": {}
  },
  "consensus_summary.csv": {
@@ -166,23 +166,23 @@
   "env": {}
  },
  "disease_tree.csv": {
-  "at": "2026-11-25 14:35:42",
-  "argv": "build.py food form promenda evidence microbe kg",
+  "at": "2026-11-26 10:56:09",
+  "argv": "build.py kg",
   "env": {}
  },
  "e_autism_microbe.csv": {
-  "at": "2026-11-25 17:44:14",
-  "argv": "diet_intervention.py",
+  "at": "2026-11-26 10:58:25",
+  "argv": "e_autism.py",
   "env": {}
  },
  "e_microbe.csv": {
-  "at": "2026-11-25 17:42:35",
-  "argv": "analyze.py",
+  "at": "2026-11-26 10:55:50",
+  "argv": "analyze.py emicrobe",
   "env": {}
  },
  "e_microbe_compare.csv": {
-  "at": "2026-11-25 17:42:35",
-  "argv": "analyze.py",
+  "at": "2026-11-26 10:55:53",
+  "argv": "e_autism.py",
   "env": {}
  },
  "e_mode_comparison.csv": {
@@ -296,8 +296,8 @@
   }
  },
  "gutbrain_compounds.json": {
-  "at": "2026-11-25 17:42:35",
-  "argv": "analyze.py",
+  "at": "2026-11-26 10:58:12",
+  "argv": "analyze.py pathcheck",
   "env": {}
  },
  "invert_comparison.csv": {
@@ -306,12 +306,12 @@
   "env": {}
  },
  "kegg_class.csv": {
-  "at": "2026-11-25 14:35:42",
-  "argv": "build.py food form promenda evidence microbe kg",
+  "at": "2026-11-26 10:56:09",
+  "argv": "build.py kg",
   "env": {}
  },
  "kg_stats.csv": {
-  "at": "2026-11-25 15:41:34",
+  "at": "2026-11-26 10:56:16",
   "argv": "check.py",
   "env": {}
  },
@@ -335,8 +335,8 @@
   "env": {}
  },
  "linking_stats.csv": {
-  "at": "2026-11-25 14:35:42",
-  "argv": "build.py food form promenda evidence microbe kg",
+  "at": "2026-11-26 10:56:16",
+  "argv": "check.py",
   "env": {}
  },
  "metabolome_check_KANG_AUTISM_2017.csv": {
@@ -355,8 +355,8 @@
   "env": {}
  },
  "microbe_disease_agreement.csv": {
-  "at": "2026-11-25 14:35:42",
-  "argv": "build.py food form promenda evidence microbe kg",
+  "at": "2026-11-26 10:56:09",
+  "argv": "build.py kg",
   "env": {}
  },
  "microbe_disease_disbiome.csv": {
@@ -426,13 +426,13 @@
   }
  },
  "ourkg.nt": {
-  "at": "2026-11-25 14:35:42",
-  "argv": "build.py food form promenda evidence microbe kg",
+  "at": "2026-11-26 10:56:16",
+  "argv": "check.py",
   "env": {}
  },
  "power_bound.csv": {
-  "at": "2026-11-26 10:46:00",
-  "argv": "-c",
+  "at": "2026-11-26 10:58:33",
+  "argv": "check.py",
   "env": {}
  },
  "promenda_records.csv": {

@@ -518,6 +518,62 @@ class ComplicationGateTest(unittest.TestCase):
                 os.environ['COMP_SOURCE'] = old
 
 
+class GenusKeyTest(unittest.TestCase):
+    """속 조인 키 (`common.genus_key`) — **두 분류체계를 맞추는 자리.**
+
+    그냥 이름으로 조인해서 측정 쌍 39,574 중 35,450(89.6%)을 버리고 있었다.
+    맞추는 것과 **일부러 안 맞추는 것**을 둘 다 고정한다 — 뒤에서 "커버리지를
+    더 올리자" 며 대괄호를 떼면 틀린 쪽으로 늘어난다.
+    """
+
+    def test_gtdb_suffix_stripped(self):
+        for a, b in (('Alistipes_A', 'Alistipes'), ('Eubacterium_R', 'Eubacterium'),
+                     ('Ruminococcus_B', 'Ruminococcus')):
+            self.assertEqual(common.genus_key(a), b)
+
+    def test_plain_names_untouched(self):
+        for n in ('Bacteroides', 'Bacteroides fragilis', 'Prevotella copri'):
+            self.assertEqual(common.genus_key(n), n.split()[0])
+
+    def test_candidatus_uses_second_token(self):
+        # `Candidatus Soleaferrea` 의 속은 Soleaferrea 이고 측정 쪽에 있다.
+        self.assertEqual(common.genus_key('Candidatus Soleaferrea'), 'Soleaferrea')
+        self.assertEqual(common.genus_key('Candidatus'), '')
+
+    def test_uncultured_has_no_genus(self):
+        for n in ('uncultured bacterium', 'uncultured organism', 'uncultured'):
+            self.assertEqual(common.genus_key(n), '')
+
+    def test_brackets_are_kept(self):
+        # **일부러 안 맞춘다.** NCBI 의 [Clostridium] innocuum 은 실제로
+        # Clostridium 이 아니다 — 떼면 틀린 균에 측정 상관이 붙는다.
+        self.assertEqual(common.genus_key('[Clostridium] innocuum'), '[Clostridium]')
+        self.assertNotEqual(common.genus_key('[Clostridium] innocuum'),
+                            common.genus_key('Clostridium innocuum'))
+
+    def test_empty_and_odd_input(self):
+        # NaN 이 'nan' 이라는 가짜 속이 되면 안 된다.
+        for n in ('', '   ', None, float('nan'), 123):
+            self.assertEqual(common.genus_key(n), '')
+
+    def test_links_are_additive_not_lossy(self):
+        # 정규화는 **순증**이어야 한다. 사라진 쌍이 있으면 키가 뭉갠 것이다.
+        import pandas as pd, os
+        if not os.path.exists(os.path.join(common.OUT,
+                                           'compound_microbe_measured.csv')):
+            self.skipTest('측정 표 없음')
+        m = pd.read_csv(os.path.join(common.OUT, 'compound_microbe_measured.csv'))
+        mic = pd.read_csv(os.path.join(common.OUT, 'microbes.csv'),
+                          dtype={'taxid': str}).fillna('')
+        mic['genus'] = mic['name'].astype(str).str.split().str[0]
+        old = m.merge(mic[['taxid', 'genus']], on='genus')[['taxid', 'kegg']]
+        old['taxid'] = common.canon(old['taxid'])
+        o = set(map(tuple, old.drop_duplicates().values))
+        n = set(map(tuple, common.measured_links().values))
+        self.assertEqual(o - n, set(), '정규화가 기존 쌍을 잃었다')
+        self.assertGreater(len(n), len(o))
+
+
 class MdesTest(unittest.TestCase):
     """최소검출효과 — 검정력 경계를 계산으로 고정한다 (§34)."""
 

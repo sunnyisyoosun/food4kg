@@ -697,22 +697,74 @@ def canon(series, alias=None):
     return series.astype(str).map(lambda t: a.get(t, t))
 
 
+_GTDB_SUFFIX = re.compile(r'_[A-Z]+$')
+
+
+def genus_key(name):
+    """속 이름을 **조인 키**로 정규화한다 — 두 분류체계를 맞추는 자리.
+
+    측정 상관 표(`compound_microbe_measured.csv`)의 속 이름은 분변 대사체
+    모음(GMM)에서 오는데 그쪽은 **GTDB** 명명이고 우리 축은 **NCBI** 다.
+    그냥 이름으로 조인하면 측정 쌍 39,574 중 **35,450(89.6%)이 버려졌다.**
+
+    맞추는 것 둘:
+
+    · **GTDB 접미사** `_A`·`_R`·`_B` 를 뗀다. GTDB 는 NCBI 속을 쪼개면서
+      `Alistipes` -> `Alistipes_A`·`Alistipes_B` 로 쓴다. 떼면 측정 쌍이
+      4,124 -> 6,255 로 **+53%** 붙는다. 다만 이것은 **근사**다 — 쪼개진
+      조각을 더 넓은 NCBI 속에 되붙이는 셈이다. 우리 링크가 이미
+      `match_rank=genus` 근사라 같은 수준이지만, 올려 읽으면 안 된다.
+      (NCBI 속명에는 밑줄이 없어서 이 치환이 축 쪽을 건드릴 일은 없다 —
+      확인했다: 축 791 행 중 밑줄 0.)
+
+    · `Candidatus X`·`uncultured …` 는 **첫 토큰이 속이 아니다.**
+      `Candidatus Soleaferrea` 의 속은 `Soleaferrea` 이고 측정 쪽에 그 이름이
+      실제로 있다. `uncultured bacterium` 은 속이 없으므로 빈 키로 버린다.
+
+    **대괄호는 떼지 않는다.** NCBI 의 `[Clostridium] innocuum` 은 "속 배치가
+    의심스럽다" 는 표시이고 실제로 Clostridium 이 아니다(Erysipelotrichaceae).
+    떼면 Clostridium 의 측정 상관이 그 균에 붙는다 — 커버리지는 늘지만
+    **틀린 쪽으로** 늘어서 안 한다.
+    """
+    # NaN·None 은 빈 키다. `pd.Series.map` 으로 들어오면 float('nan') 이 와서
+    # str() 을 거치면 'nan' 이라는 가짜 속이 생긴다.
+    if name is None or not isinstance(name, str):
+        return ''
+    toks = name.split()
+    if not toks:
+        return ''
+    g = toks[0]
+    if g == 'uncultured':
+        return ''
+    if g == 'Candidatus':
+        if len(toks) < 2:
+            return ''
+        g = toks[1]
+    return _GTDB_SUFFIX.sub('', g)
+
+
 def measured_links():
     """측정 상관 링크(`metabolome_check.py build`)를 taxid 로 펼친다.
 
     원 표는 **속 수준**이다(분변 대사체 코호트가 속까지만 분해한다). 우리
     taxid 의 속명과 맞춰 펼친다. analyze.py 에만 있던 것을 두 모듈이 쓰게
     되면서 여기로 옮겼다 — compound_microbe 와 같은 자리에 둔다.
+
+    조인 키는 `genus_key` 다 — 그냥 이름으로 붙이면 분류체계가 달라 90% 가
+    떨어진다. 그 함수의 docstring 에 무엇을 맞추고 무엇을 **일부러 안
+    맞추는지** 적어 뒀다.
     """
     import pandas as pd
     p = os.path.join(OUT, 'compound_microbe_measured.csv')
     if not os.path.exists(p):
         return pd.DataFrame(columns=['taxid', 'kegg'])
     m = pd.read_csv(p)
+    m['_gk'] = m['genus'].map(genus_key)
     mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'),
                       dtype={'taxid': str}).fillna('')
-    mic['genus'] = mic['name'].astype(str).str.split().str[0]
-    out = m.merge(mic[['taxid', 'genus']], on='genus')[['taxid', 'kegg']].copy()
+    mic['_gk'] = mic['name'].map(genus_key)
+    m, mic = m[m._gk != ''], mic[mic._gk != '']
+    out = m.merge(mic[['taxid', '_gk']], on='_gk')[['taxid', 'kegg']].copy()
     out['taxid'] = canon(out['taxid'])
     return out.drop_duplicates()
 
