@@ -189,7 +189,7 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 
 ### KG 규모 (논문 Table 1 대응)
 
-**고유 triple 3,452,637<!--chk:kg.triples--> · 관계 39<!--chk:kg.relations--> · 엔티티 859,544<!--chk:kg.entities-->** (논문 13,346,991 · 140 · 1,637,915)
+**고유 triple 3,497,295<!--chk:kg.triples--> · 관계 42<!--chk:kg.relations--> · 엔티티 859,544<!--chk:kg.entities-->** (논문 13,346,991 · 140 · 1,637,915)
 
 | source | relation | entity | triples |
 |---|---:|---:|---:|
@@ -211,8 +211,8 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 | Disbiome | 2 | 476 | 2,386 |
 | evidence | 15 | 278 | 1,560 |
 | SNOMED CT | 2 | 294 | 285 |
-| Σ 출처 주장(겹침 포함) | 39 | 859,544 | 3,472,357<!--chk:kg.claims--> |
-| **Total (고유 그래프)** | **39** | **859,544** | **3,452,637**<!--chk:kg.triples--> |
+| Σ 출처 주장(겹침 포함) | 39 | 859,544 | 3,517,015<!--chk:kg.claims--> |
+| **Total (고유 그래프)** | **39** | **859,544** | **3,497,295**<!--chk:kg.triples--> |
 
 **두 줄을 따로 적는 이유** — RDF 그래프는 같은 statement 를 두 번 갖지 않으므로
 그래프 크기는 **고유** 기준이다. 출처 열은 '그 출처가 주장한 수' 라서 겹치는
@@ -387,6 +387,13 @@ lean red meat 를 주 3~4 회 처방한다. 크기를 쟀다 — `separable lean
   균으로 보여 방향 교차검사에서 7 균이 빠진다 → §35
 
 **측정이 남긴 열린 문제**
+
+- **음식 하나가 FDC 레코드 여러 건의 평균이고, 라벨은 그 값을 설명하지 않는다** —
+  2 건 이상을 평균한 음식이 **2,731**<!--chk:food.multi_source--> 개(최대
+  **2,456**<!--chk:food.source_max--> 건)이고, 그중 **570**<!--chk:food.label_minority--> 개는
+  `data_type` 라벨이 출처의 **소수**다(`Ice cream, NFS` 는 0.04%). 라벨은 큐레이션
+  등급이 높은 쪽을 고르므로 값의 출처를 **과대평가**한다. 대표 선택 규칙은 두고
+  `n_source`·`source_types`·`label_share` 를 산출물과 KG 에 남겼다 → §50
 
 - **`E` 의 95% 가 추천에 닿지 않는다** — 실제 점수 축은 `F ∩ E` = **73 compound**
   이고 ProMENDA 의 1,412 중 나머지는 FDC 가 그 대사물을 측정하지 않아 영향을 줄 수

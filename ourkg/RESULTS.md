@@ -5780,6 +5780,104 @@ MiKG 질환 11 개 중 `Learning disorder` 와 `Learning disorders` 가 **둘 �
 
 ---
 
+## 50. ★★ 음식 하나가 FDC 레코드 2,456 건의 평균인데 그 기록이 없었다 (2026-11-26)
+
+`build.py` 는 같은 라벨의 FDC 레코드를 `groupby(['food_key','kegg']).mean()` 으로
+평균한다(논문 §3.2 exact matching). **몇 건을 평균했는지 아무 산출물에도 없었다.**
+
+| | |
+|---|---:|
+| FDC 항목 → 병합 음식 | 1,954,092 → 475,769 (우리가 남긴 것 14,886) |
+| 1 건만으로 만든 음식 | 12,155 (81.7%) |
+| 2 건 이상 평균 | **2,731** |
+| 10 건 / 100 건 / 1,000 건 이상 | 753 / 197 / 7 |
+| 최대 | **2,456 건** |
+
+### 더 나쁜 것 — 대표 선택 규칙이 그림을 **뒤집는다**
+
+`_PRIORITY` 는 큐레이션 등급이 높은 `data_type` 을 라벨로 고른다. 그게 출처의
+**소수**일 수 있다.
+
+| 음식 | 라벨 | 출처 구성 | 라벨 지분 |
+|---|---|---|---:|
+| Ice cream, NFS | `survey_fndds_food` | `branded_food:2455` + `survey_fndds_food:1` | **0.04%** |
+| Potato chips, NFS | `survey_fndds_food` | `branded_food:1631` + 1 | 0.06% |
+| Soy milk, unsweetened | `foundation_food` | `sub_sample_food:1852` + 2 | 0.11% |
+
+전수로 **2,731 개 중 570 개에서 라벨이 소수(<50%)** 이고, 385 개는 10% 미만,
+143 개는 1% 미만이다. 즉 `foods.csv` 의 `data_type` 과 KG 의 `our:dataType` 이
+**값의 출처를 과대평가**한다 — 값은 branded 평균인데 라벨은 foundation·survey 로
+읽힌다.
+
+### 고친 방향 — 규칙은 두고 **지분을 적는다**
+
+대표 선택 자체는 라벨·`fdc_id` 용으로 의도된 설계이므로 바꾸지 않았다. 대신
+읽는 쪽이 오독할 수 없게 숫자를 남긴다.
+
+| 어디 | 무엇 |
+|---|---|
+| `foods.csv` | `n_source` · `source_types`(`branded_food:2455;…`) · `label_share` |
+| `food_link.json` | `food_multi_source` 2,731 · `food_mixed_types` 805 · `food_label_minority` 570 · `food_source_max` 2,456 |
+| KG | `our:nSource` · `our:sourceTypes` · `our:labelShare` (관계 39 → **42**) |
+| `check.py` | `foods.csv` 스키마에 세 열 등록 — 사라지면 FAIL. `facts()` 에 집계 4 개 |
+| `tests.py` | `FoodSourceTest` — 건수↔구성 일치, `label_share`↔구성 일치, 1 건이면 1.0, **소수 라벨이 실재하고 기록된다** |
+
+`n_source` 는 **기여 건수**다. 처음에 "2,797 개 / 1,018 개" 로 보고했는데 그것은
+FDC 전체에서 이름이 같은 행을 센 **상한**이었다 — KEGG 영양소가 있어 실제로
+평균에 들어간 건수로는 **2,731 / 805** 다. 상한과 실측을 구분하지 않은 것이 또
+하나의 즉석 측정 오류였다.
+
+KG 는 고유 triple 3,452,637 → **3,497,295**(+44,658)로 늘었다.
+
+---
+
+## 51. 같은 스위치에 기본값이 둘이었다 — 한쪽만 되돌아갔다 (2026-11-26)
+
+사용자가 *"E 는 shrunk 로 하기로 한 거 아녔어?"* 라고 물어 확인하다 나왔다.
+점수 경로는 `shrunk` 가 맞았다(`analyze.py` 의 `E_MODE` 기본값). 그런데:
+
+| 자리 | `ENSEMBLE` 기본값 | 결과 |
+|---|---|---|
+| `recommend()` (점수) | `'none'` | 앙상블 끔 ✓ §27 |
+| `ensemble_modes()` | `'shrunk,nhanes_all'` | 앙상블 **켬** |
+
+`evaluate()` 의 `_basis_e()` 가 `ensemble_modes()` 를 쓰므로 **점수는 `shrunk` 로
+내고 근거 compound 는 앙상블 평균으로 설명**하고 있었다. 그 함수의 주석이
+*"점수는 앙상블로 내고 근거는 ProMENDA 로 설명하는 불일치였다"* 를 고쳤다고
+적어 둔 바로 그 불일치가, §27 에서 기본값을 되돌릴 때 **한쪽만 바뀌어 반대
+방향으로 되살아났다.**
+
+영향은 작았다 — `shrunk` 단독과 당시 근거 기준의 Spearman ρ = **0.993**,
+부호가 다른 compound **5/1,412**, 상위 compound 순위 동일. `nhanes_all` 의
+커버리지가 좁아 대부분의 compound 에서 평균이 `shrunk` 와 같아진다. 점수 자체는
+`recommend()` 가 `shrunk` 로 내므로 영향이 없다. **작지만 결함이다.**
+
+### 고친 것 — 기본값을 한 자리로
+
+`ENSEMBLE_DEFAULT = 'none'` 하나를 두고 두 함수가 그것을 읽는다. 대체값도
+`E_MODE', 'union_all'` → `'shrunk'` 로 고쳤다 — **212 줄만 고치면** 빈 목록이
+돌아와 1073 줄의 대체값 `union_all` 로 떨어져 근거가 또 다른 E 가 된다.
+
+### 구조로 막는다 — `env` 검사의 "기본값 단일성"
+
+같은 환경변수에 리터럴 기본값이 둘 이상 적혀 있으면 FAIL 한다. 오류 주입으로
+잡히는 것을 확인했다(`EnvDefaultTest.test_checker_catches_a_split_default`).
+
+**넣자마자 하나 더 잡았다** — `COMP_SOURCE` 가 `disease_sets()` 에서는 `mikg`,
+`literature` 하위명령에서는 `curated` 였다. 문헌 점검은 `curated` 에서만 의미가
+있으니 의도는 맞지만 **같은 변수에 두 뜻**이다. 이미 있던 `COMP_PAPER_SOURCE`
+선례대로 `COMP_LIT_SOURCE` 로 뗐다. 지금은 리터럴 기본값을 가진 **52 개 변수
+모두 단일값**이다.
+
+그리고 검사가 **자기 시험 파일을 잡았다** — `tests.py` 의 회귀 시험 문자열
+(`E_MODE', 'union_all'`)과 오류 주입용 `X_SW` 를 결함으로 봤다. 시험 파일은
+일부러 반례를 담으므로 스캔에서 뺀다(`io_graph` 가 `check.py`·`tests.py` 를
+빼는 것과 같은 이유다).
+
+검사 34 개 · 시험 137 개다.
+
+---
+
 ## 42. 한계
 
 - **식품 온톨로지를 넣어도 분류 질문이 풀리지 않는다** (2026-11-09 통합 완료).

@@ -9,7 +9,7 @@
   }
  },
  "category_ontology.csv": {
-  "at": "2026-11-26 10:56:09",
+  "at": "2026-11-26 11:54:27",
   "argv": "build.py kg",
   "env": {}
  },
@@ -77,12 +77,12 @@
   }
  },
  "compound_autism.csv": {
-  "at": "2026-11-26 11:11:45",
+  "at": "2026-11-26 11:54:33",
   "argv": "e_autism.py",
   "env": {}
  },
  "compound_class.csv": {
-  "at": "2026-11-26 10:56:09",
+  "at": "2026-11-26 11:54:27",
   "argv": "build.py kg",
   "env": {}
  },
@@ -102,7 +102,7 @@
   "env": {}
  },
  "compound_depression_stype.csv": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
@@ -112,7 +112,7 @@
   "env": {}
  },
  "compound_learned.csv": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
@@ -127,7 +127,7 @@
   "env": {}
  },
  "compound_microbe_vmh.csv": {
-  "at": "2026-11-26 10:56:09",
+  "at": "2026-11-26 11:54:27",
   "argv": "build.py kg",
   "env": {}
  },
@@ -159,47 +159,52 @@
   }
  },
  "diet_intervention.csv": {
-  "at": "2026-11-25 17:44:14",
+  "at": "2026-11-26 13:30:37",
   "argv": "diet_intervention.py",
   "env": {}
  },
  "diet_intervention_map.csv": {
-  "at": "2026-11-25 17:44:36",
-  "argv": "diet_intervention.py map",
+  "at": "2026-11-26 11:56:04",
+  "argv": "analyze.py pathcheck",
   "env": {}
  },
  "diet_intervention_score.csv": {
-  "at": "2026-11-25 17:44:14",
-  "argv": "diet_intervention.py",
-  "env": {}
+  "at": "2026-11-26 13:30:49",
+  "argv": "toperr.py",
+  "env": {
+   "ENSEMBLE": "none",
+   "E_MODE": "nhanes_all",
+   "SIM_SPACE": "effect",
+   "NO_SIM": "0"
+  }
  },
  "disagreement_by_group.csv": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
  "disease_tree.csv": {
-  "at": "2026-11-26 10:56:09",
+  "at": "2026-11-26 11:54:27",
   "argv": "build.py kg",
   "env": {}
  },
  "e_autism_microbe.csv": {
-  "at": "2026-11-26 11:11:45",
+  "at": "2026-11-26 11:54:33",
   "argv": "e_autism.py",
   "env": {}
  },
  "e_microbe.csv": {
-  "at": "2026-11-26 11:11:38",
-  "argv": "analyze.py emicrobe",
+  "at": "2026-11-26 13:29:06",
+  "argv": "analyze.py",
   "env": {}
  },
  "e_microbe_compare.csv": {
-  "at": "2026-11-26 11:11:45",
-  "argv": "e_autism.py",
+  "at": "2026-11-26 13:29:06",
+  "argv": "analyze.py",
   "env": {}
  },
  "e_mode_comparison.csv": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
@@ -216,22 +221,22 @@
   "env": {}
  },
  "eval_method1.csv": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
  "eval_method2.csv": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
  "eval_method2_calibration.csv": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
  "eval_sparql.json": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
@@ -250,18 +255,18 @@
   }
  },
  "food_compound_kg.csv": {
-  "at": "2026-11-25 14:35:42",
-  "argv": "build.py food form promenda evidence microbe kg",
+  "at": "2026-11-26 11:44:25",
+  "argv": "build.py food",
   "env": {}
  },
  "food_compound_long.csv": {
-  "at": "2026-11-25 14:35:42",
-  "argv": "build.py food form promenda evidence microbe kg",
+  "at": "2026-11-26 11:44:25",
+  "argv": "build.py food",
   "env": {}
  },
  "food_foodon.csv": {
-  "at": "2026-11-25 14:35:42",
-  "argv": "build.py food form promenda evidence microbe kg",
+  "at": "2026-11-26 11:44:25",
+  "argv": "build.py food",
   "env": {}
  },
  "food_form.csv": {
@@ -270,13 +275,13 @@
   "env": {}
  },
  "food_link.json": {
-  "at": "2026-11-25 14:35:42",
-  "argv": "build.py food form promenda evidence microbe kg",
+  "at": "2026-11-26 11:44:25",
+  "argv": "build.py food",
   "env": {}
  },
  "foods.csv": {
-  "at": "2026-11-25 14:35:42",
-  "argv": "build.py food form promenda evidence microbe kg",
+  "at": "2026-11-26 11:44:25",
+  "argv": "build.py food",
   "env": {}
  },
  "fscale_comparison.csv": {
@@ -287,17 +292,17 @@
   }
  },
  "group_comparison.csv": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
  "group_comparison.png": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
  "group_composition.csv": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
@@ -309,23 +314,23 @@
   }
  },
  "gutbrain_compounds.json": {
-  "at": "2026-11-26 10:58:12",
-  "argv": "analyze.py pathcheck",
+  "at": "2026-11-26 13:29:06",
+  "argv": "analyze.py",
   "env": {}
  },
  "invert_comparison.csv": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
  "kegg_class.csv": {
-  "at": "2026-11-26 10:56:09",
+  "at": "2026-11-26 11:54:27",
   "argv": "build.py kg",
   "env": {}
  },
  "kg_stats.csv": {
-  "at": "2026-11-26 10:56:16",
-  "argv": "check.py",
+  "at": "2026-11-26 11:54:33",
+  "argv": "e_autism.py",
   "env": {}
  },
  "learned_comparison.csv": {
@@ -348,8 +353,8 @@
   "env": {}
  },
  "linking_stats.csv": {
-  "at": "2026-11-26 10:56:16",
-  "argv": "check.py",
+  "at": "2026-11-26 11:54:27",
+  "argv": "build.py kg",
   "env": {}
  },
  "metabolome_check_KANG_AUTISM_2017.csv": {
@@ -368,7 +373,7 @@
   "env": {}
  },
  "microbe_disease_agreement.csv": {
-  "at": "2026-11-26 10:56:09",
+  "at": "2026-11-26 11:54:27",
   "argv": "build.py kg",
   "env": {}
  },
@@ -403,7 +408,7 @@
   "env": {}
  },
  "modimed_labels.csv": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
@@ -439,13 +444,13 @@
   }
  },
  "ourkg.nt": {
-  "at": "2026-11-26 10:56:16",
-  "argv": "check.py",
+  "at": "2026-11-26 11:54:27",
+  "argv": "build.py kg",
   "env": {}
  },
  "power_bound.csv": {
-  "at": "2026-11-26 11:12:26",
-  "argv": "-c",
+  "at": "2026-11-26 11:54:36",
+  "argv": "diet_intervention.py map",
   "env": {}
  },
  "promenda_records.csv": {
@@ -454,12 +459,12 @@
   "env": {}
  },
  "recommendation.csv": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
  "recommendation.png": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
@@ -485,13 +490,13 @@
   }
  },
  "stype_comparison.csv": {
-  "at": "2026-11-25 17:42:35",
+  "at": "2026-11-26 13:29:06",
   "argv": "analyze.py",
   "env": {}
  },
  "toperr_comparison.csv": {
-  "at": "2026-11-25 15:24:11",
-  "argv": "check.py",
+  "at": "2026-11-26 13:30:51",
+  "argv": "tests.py",
   "env": {}
  },
  "union_comparison.csv": {

@@ -1,5 +1,5 @@
 source,relation,entity,triples
-FoodData Central,9,794404,3206541
+FoodData Central,12,794404,3251199
 Chinese Food Ontology,3,49865,82542
 VMH/AGORA2,1,1192,46495
 측정 상관,2,733,31824
@@ -17,5 +17,5 @@ MeSH tree,2,628,3118
 Disbiome,2,476,2386
 evidence,15,278,1560
 SNOMED CT,2,294,285
-Σ 출처 주장(겹침 포함),39,859544,3472357
-Total (고유 그래프),39,859544,3452637
+Σ 출처 주장(겹침 포함),42,859544,3517015
+Total (고유 그래프),42,859544,3497295

@@ -699,7 +699,7 @@ Fig. 5 그림은 "Baked Products / Beef / Sausages and Luncheon Meats / Pork" �
 - FDC 2026-09 전체(2,101,279 항목) + ProMENDA(Pu et al. 2024) + KEGG/NCBI 재조회
 - 외부 소스 추가: Disbiome · **gutMDisorder v3** · VMH/AGORA2 · 분변 대사체 13 코호트
   · NHANES · 프로바이오틱스 RCT
-- RDF **고유 3,452,637<!--chk:kg.triples--> triple** / 관계 39<!--chk:kg.relations-->
+- RDF **고유 3,497,295<!--chk:kg.triples--> triple** / 관계 42<!--chk:kg.relations-->
   / 음식 14,886<!--chk:foods.count--> / F 층 compound 135<!--chk:F.compounds--> /
   음식당 측정 compound 중앙값 48<!--chk:foods.median_compounds--> /
   미생물 791<!--chk:microbe.taxa--> 종

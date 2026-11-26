@@ -44,7 +44,8 @@ def food():
 
     출력
       out/food_compound_long.csv  food_key, kegg, amount_g
-      out/foods.csv               food_key, fdc_id, food_name, data_type, category, n_compound
+      out/foods.csv               food_key, fdc_id, food_name, data_type, category,
+                                  n_compound, n_source, source_types, label_share
     """
     MIN_COV = int(os.environ.get('MIN_COV', '20'))   # 음식당 최소 측정 compound 수
     CHUNK = 2_000_000
@@ -220,6 +221,30 @@ def food():
             .agg(fdc_id=('fdc_id', 'first'), food_name=('food_name', 'first'),
                  data_type=('data_type', 'first'), category=('category', 'first')))
     meta['n_compound'] = cov.reindex(meta.index).astype(int)
+    # **평균한 건수와 소스 구성을 남긴다.** `fdc_id`·`data_type` 은 큐레이션
+    # 순위로 고른 **대표 1 건**인데 `amount_g` 는 같은 라벨 전체의 평균이라 둘이
+    # 어긋난다 — `Ice cream, NFS` 는 대표가 survey_fndds 인데 2,456 건에 두
+    # data_type 이 섞여 있다. 2 건 이상인 음식 2,797 개 중 1,018 개가 그렇다.
+    # 기록이 없으면 **1 건 측정과 2,456 건 평균을 구분할 수 없다**(§50).
+    _src = _sel.drop_duplicates(['food_key', 'fdc_id'])
+    meta['n_source'] = (_src.groupby('food_key').size()
+                        .reindex(meta.index).fillna(0).astype(int))
+    meta['source_types'] = (
+        _src.groupby('food_key')['data_type']
+        .apply(lambda s: ';'.join(f'{k}:{v}' for k, v in
+                                  s.value_counts().items()))
+        .reindex(meta.index).fillna(''))
+    # **대표 선택 규칙이 그림을 뒤집는다.** `_PRIORITY` 는 큐레이션 등급이 높은
+    # data_type 을 라벨로 고르는데, 그게 출처의 **소수**일 수 있다 —
+    # `Ice cream, NFS` 는 라벨이 survey_fndds 지만 출처가 branded 2,455 : 1 로
+    # 값의 99.96% 가 branded 다. 2 건 이상인 2,731 개 중 **570 개**에서 라벨이
+    # 소수(<50%)고 143 개는 1% 미만이다. 그래서 라벨 지분을 같이 남긴다(§50).
+    _lab = meta['data_type'].reindex(meta.index)
+    _own = (_src.assign(_is=lambda d: d['data_type'].eq(
+                d['food_key'].map(_lab)).astype(int))
+            .groupby('food_key')['_is'].mean()
+            .reindex(meta.index))
+    meta['label_share'] = _own.fillna(1.0).round(4)
     meta = meta.reset_index()
     # 세분 카테고리 -> 상위 식품군. WWEIA 4 자리 코드에는 **큐레이션된 SR 군 링크**가
     # 있다(`setup/wweia_srgroup.csv`, 배포 KG Food_Category.jsonld 에서 추출한 118 개).
@@ -254,6 +279,14 @@ def food():
               f'({_link["foodon_food"] / len(meta):.1%}) · 클래스 '
               f'{_link["foodon_class"]:,} · 조상 포함 링크 {len(_fo):,}')
 
+    _link['food_multi_source'] = int((meta['n_source'] > 1).sum())
+    _link['food_mixed_types'] = int(meta['source_types'].str.count(';').gt(0).sum())
+    _link['food_source_max'] = int(meta['n_source'].max())
+    _link['food_label_minority'] = int((meta['label_share'] < 0.5).sum())
+    print(f"  출처 기록: 2 건 이상 평균한 음식 {_link['food_multi_source']:,} "
+          f"(data_type 섞인 것 {_link['food_mixed_types']:,} · 최대 "
+          f"{_link['food_source_max']:,} 건) · 라벨 data_type 이 "
+          f"소수인 음식 {_link['food_label_minority']:,}")
     _link['food_after_mincov'] = int(long['food_key'].nunique())
     _link['compound_after_mincov'] = int(long['kegg'].nunique())
     with open(os.path.join(OUT, 'food_link.json'), 'w') as _fh:
@@ -1011,6 +1044,18 @@ def kg():
         W.t(u, LABEL, r['food_name'], 'FoodData Central', literal=True)
         W.t(u, NS['our'] + 'fdcId', str(r['fdc_id']), 'FoodData Central', literal=True)
         W.t(u, NS['our'] + 'dataType', r['data_type'], 'FoodData Central', literal=True)
+        # **`fdcId`·`dataType` 은 대표 1 건이다.** 성분값은 같은 라벨 전체의
+        # 평균이라, 몇 건을 평균했는지와 그 구성을 같이 올려야 질의가 1 건
+        # 측정과 2,456 건 평균을 구분할 수 있다 (§50).
+        if 'n_source' in r and pd.notna(r['n_source']):
+            W.t(u, NS['our'] + 'nSource', str(int(r['n_source'])),
+                'FoodData Central', literal=True)
+        if isinstance(r.get('source_types'), str) and r['source_types']:
+            W.t(u, NS['our'] + 'sourceTypes', r['source_types'],
+                'FoodData Central', literal=True)
+        if 'label_share' in r and pd.notna(r['label_share']):
+            W.t(u, NS['our'] + 'labelShare', f"{float(r['label_share']):.4f}",
+                'FoodData Central', literal=True)
         c = cat_uri.setdefault(r['food_group'], NS['our'] + 'category/' + slug(r['food_group']))
         W.t(u, SUBCLASS, c, 'FoodData Central')
         # 세분 카테고리(FDC category) 를 한 층 더 둔다 — §3.2 의 2단 매핑 구조이고,

@@ -553,6 +553,95 @@ class SignAgreeTest(unittest.TestCase):
                            common.mdes(209, 0.05, p0=0.5))
 
 
+class EnvDefaultTest(unittest.TestCase):
+    """환경변수 기본값의 **단일성** — 한쪽만 되돌아간 자리 (§51)."""
+
+    def test_ensemble_default_is_one_place(self):
+        import analyze
+        self.assertEqual(analyze.ENSEMBLE_DEFAULT, 'none')
+        self.assertEqual(analyze.ensemble_modes(), [])
+
+    def test_basis_falls_back_to_scoring_mode(self):
+        # 앙상블을 끄면 근거 E 는 점수 E(`shrunk`)와 같아야 한다. 대체값이
+        # `union_all` 로 남아 있어 끄는 순간 또 다른 E 로 떨어졌다.
+        src = open(os.path.join(_chk.HERE, 'analyze.py'), encoding='utf-8').read()
+        self.assertIn("os.environ.get('E_MODE', 'shrunk')", src)
+        # 반례 문자열을 그대로 쓰면 `env` 검사가 이 파일을 잡는다 — 쪼개서 쓴다.
+        self.assertNotIn("os.environ.get('E_MODE', " + "'union_all')", src)
+
+    def test_checker_catches_a_split_default(self):
+        # 오류 주입 — 같은 변수에 다른 기본값을 쓰는 파일을 만들어 FAIL 을 본다.
+        import tempfile
+        d = tempfile.TemporaryDirectory()
+        saved = _chk.HERE
+        try:
+            for name, body in (('a', "import os\nos.environ.get('X_SW', 'on')\n"),
+                               ('b', "import os\nos.environ.get('X_SW', 'off')\n")):
+                with open(os.path.join(d.name, name + '.py'), 'w') as f:
+                    f.write(body)
+            _chk.HERE = d.name
+            _chk.RESULT.clear()
+            try:
+                _chk.check_env()
+            except Exception:
+                pass
+            sts = [r[0] for r in _chk.RESULT if r[1] == '환경변수 기본값 단일성']
+            self.assertEqual(sts, ['FAIL'])
+        finally:
+            _chk.HERE = saved
+            _chk.RESULT.clear()
+            d.cleanup()
+
+
+class FoodSourceTest(unittest.TestCase):
+    """음식 출처 기록 (`foods.csv` 의 `n_source`·`source_types`·`label_share`).
+
+    `fdc_id`·`data_type` 은 큐레이션 순위로 고른 **대표 1 건**인데 성분값은 같은
+    라벨 전체의 평균이다. 기록이 없으면 **1 건 측정과 2,456 건 평균을 구분할 수
+    없다**(§50). 더 나쁜 것은 대표 선택이 그림을 뒤집는다는 것이다 — 라벨이
+    출처의 0.04% 인 경우가 있다.
+    """
+
+    def setUp(self):
+        import os
+        p = os.path.join(common.OUT, 'foods.csv')
+        if not os.path.exists(p):
+            self.skipTest('foods.csv 없음')
+        self.f = pd.read_csv(p)
+        if 'n_source' not in self.f:
+            self.skipTest('출처 열이 아직 없다 — build.py food 를 돌려라')
+
+    @staticmethod
+    def _parse(s):
+        if not isinstance(s, str) or not s:
+            return {}
+        return dict((k, int(v)) for k, v in (p.split(':') for p in s.split(';')))
+
+    def test_counts_match_source_types(self):
+        for r in self.f.itertuples(index=False):
+            d = self._parse(r.source_types)
+            if d:
+                self.assertEqual(sum(d.values()), int(r.n_source), r.food_name)
+
+    def test_label_share_matches_types(self):
+        for r in self.f.itertuples(index=False):
+            d = self._parse(r.source_types)
+            if d:
+                exp = d.get(r.data_type, 0) / sum(d.values())
+                self.assertAlmostEqual(float(r.label_share), exp, places=3,
+                                       msg=r.food_name)
+
+    def test_single_source_is_fully_its_own_label(self):
+        one = self.f[self.f.n_source == 1]
+        self.assertTrue((one.label_share == 1.0).all())
+
+    def test_minority_label_exists_and_is_recorded(self):
+        # 이 사실 자체가 §50 의 발견이다 — 사라지면 기록이 거짓이 된다.
+        multi = self.f[self.f.n_source > 1]
+        self.assertGreater(len(multi), 0)
+        self.assertGreater(int((multi.label_share < 0.5).sum()), 0)
+
+
 class DiseaseKeyTest(unittest.TestCase):
     """질환 묶음 키 (`common.disease_key`) — 같은 질환이 둘로 세어지던 자리."""
 
@@ -857,7 +946,8 @@ class _CheckFixture(unittest.TestCase):
              'food_name': 'B'}]))
         self.w('foods.csv', pd.DataFrame([
             {'food_key': 'a', 'food_name': 'A', 'data_type': 't',
-             'n_compound': 20}]))
+             'n_compound': 20, 'n_source': 1, 'source_types': 't:1',
+             'label_share': 1.0}]))
         self.w('compound_depression.csv', pd.DataFrame([
             {'kegg': 'C1', 'e_shrunk': 0.5, 'e_binary': 1.0, 'q': 0.01}]))
         self.w('kg_stats.csv', pd.DataFrame([

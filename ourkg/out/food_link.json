@@ -9,6 +9,10 @@
  "min_cov": 20,
  "foodon_food": 8165,
  "foodon_class": 1096,
+ "food_multi_source": 2731,
+ "food_mixed_types": 805,
+ "food_source_max": 2456,
+ "food_label_minority": 570,
  "food_after_mincov": 14886,
  "compound_after_mincov": 130
 }

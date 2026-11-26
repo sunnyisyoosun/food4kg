@@ -50,8 +50,8 @@ http://nlp_microbe.ccnu.edu.cn/entity#br08001Class141,Estrogens,http://nlp_micro
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class142,Progestagens,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class146
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class143,Glucocorticoids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class146
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class144,Mineralocorticoids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class146
-http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class146
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class188
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class146
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class146,Steroid hormones,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class157
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class147,Melatonin,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class152
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class148,Thyroid hormones,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class152
@@ -96,8 +96,8 @@ http://nlp_microbe.ccnu.edu.cn/entity#br08001Class186,Cyclic lactones,http://nlp
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class188,Antibiotics,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class189
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class19,Glycosphingolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class20
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class2,Dicarboxylic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class8
-http://nlp_microbe.ccnu.edu.cn/entity#br08001Class20,Glycolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class20,Glycolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class25
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class20,Glycolipids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class21,Prostaglandins,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class24
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class22,Leukotrienes,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class24
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class23,Thromboxanes,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class24
@@ -138,8 +138,8 @@ http://nlp_microbe.ccnu.edu.cn/entity#br08001Class54,Peptides,http://nlp_microbe
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class54,Peptides,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class189
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class55,Common amino acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class57
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class56,Other amino acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class57
-http://nlp_microbe.ccnu.edu.cn/entity#br08001Class57,Amino acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class156
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class57,Amino acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class54
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class57,Amino acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class156
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class58,Biogenic amines,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class156
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class58,Biogenic amines,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class59
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class59,Amines,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class54
@@ -176,8 +176,8 @@ http://nlp_microbe.ccnu.edu.cn/entity#br08001Class87,29-Carbon atoms,http://nlp_
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class88,Gorgostane derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class89
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class89,30-Carbon atoms,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class9,Organic acids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class189
-http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90,Steroids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90,Steroids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class189
+http://nlp_microbe.ccnu.edu.cn/entity#br08001Class90,Steroids,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class145
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class91,Prolactin-releasing peptide,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class92,Thyrotropin-releasing hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
 http://nlp_microbe.ccnu.edu.cn/entity#br08001Class93,Gonadotropin-releasing hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08001Class139
@@ -655,22 +655,22 @@ http://nlp_microbe.ccnu.edu.cn/entity#br08003Class25,Terpenoid alkaloids,http://
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class26,Steroid alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class27
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class27,Alkaloids derived by amination reactions,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class31
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class28,Purine alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class31
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class173
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class131
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class181
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class163
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class195
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class84
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class91
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class168
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class150
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class91
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class120
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class131
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class102
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class163
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class168
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class173
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class84
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class64
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class181
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class195
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class29,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class144
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class3,Tropane alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class4
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class31,Alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class32,Aurones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
@@ -686,8 +686,8 @@ http://nlp_microbe.ccnu.edu.cn/entity#br08003Class40,Flavan 3-ols,http://nlp_mic
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class41,Flavan 4-ols,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class42,"Flavan 3,4-diols",http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class43,Anthocyanidins and anthocyanins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44,Flavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44,Flavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class44,Flavonoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class45,Isoflavanes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class53
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class46,Isoflavanones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class53
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class47,Isoflavones,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class53
@@ -708,14 +708,14 @@ http://nlp_microbe.ccnu.edu.cn/entity#br08003Class60,Coniferyl alcohol derivativ
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class61,Paracoumaryl alcohol derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class64
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class62,Sinapate derivatives,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class64
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class64,Monolignols,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class73
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65,Lignans,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65,Lignans,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class73
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65,Lignans,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class66,Lignan glycosides,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class67,Neolignans,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class68,Norlignans,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class65
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class7,Piperidine alkaloids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class8
-http://nlp_microbe.ccnu.edu.cn/entity#br08003Class70,Coumarins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class70
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class70,Coumarins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class73
+http://nlp_microbe.ccnu.edu.cn/entity#br08003Class70,Coumarins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class70
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class71,Furanocoumarins,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class70
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class73,Phenylpropanoids,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class207
 http://nlp_microbe.ccnu.edu.cn/entity#br08003Class74,Stilbenes,http://nlp_microbe.ccnu.edu.cn/entity#br08003Class80
@@ -753,8 +753,8 @@ http://nlp_microbe.ccnu.edu.cn/entity#br08005Class14,Adrenomedullin,http://nlp_m
 http://nlp_microbe.ccnu.edu.cn/entity#br08005Class15,Cardiovascular peptides,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class45
 http://nlp_microbe.ccnu.edu.cn/entity#br08005Class16,Thyroid peptide hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class19
 http://nlp_microbe.ccnu.edu.cn/entity#br08005Class17,parathyroid peptide hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class19
-http://nlp_microbe.ccnu.edu.cn/entity#br08005Class18,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class45
 http://nlp_microbe.ccnu.edu.cn/entity#br08005Class18,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class19
+http://nlp_microbe.ccnu.edu.cn/entity#br08005Class18,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class45
 http://nlp_microbe.ccnu.edu.cn/entity#br08005Class19,Calcium-regulating peptides,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class45
 http://nlp_microbe.ccnu.edu.cn/entity#br08005Class2,Neurotensin,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class6
 http://nlp_microbe.ccnu.edu.cn/entity#br08005Class20,Anterior pituitary hormone,http://nlp_microbe.ccnu.edu.cn/entity#br08005Class23
@@ -822,13 +822,13 @@ http://nlp_microbe.ccnu.edu.cn/entity#br08007Class15,Pyrimidine fungicides,http:
 http://nlp_microbe.ccnu.edu.cn/entity#br08007Class16,Quinone fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
 http://nlp_microbe.ccnu.edu.cn/entity#br08007Class17,Strobilurin fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
 http://nlp_microbe.ccnu.edu.cn/entity#br08007Class18,Thiazole fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
-http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class71
-http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class76
-http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class130
 http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class46
-http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
-http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
 http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class83
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class59
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class130
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class76
+http://nlp_microbe.ccnu.edu.cn/entity#br08007Class19,Others,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class71
 http://nlp_microbe.ccnu.edu.cn/entity#br08007Class2,Amide fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20
 http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20,Fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class83
 http://nlp_microbe.ccnu.edu.cn/entity#br08007Class20,Fungicides,http://nlp_microbe.ccnu.edu.cn/entity#br08007Class130

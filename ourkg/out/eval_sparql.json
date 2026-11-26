@@ -1129,7 +1129,7 @@
    "Autism"
   ],
   [
-   "Asymmetric dimethylarginine",
+   "Azelaic acid",
    "Ruminococcus flavefaciens",
    "Autism"
   ],
@@ -1140,6 +1140,11 @@
   ],
   [
    "Capronate; Hexanoate",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "Cholic acid",
    "Ruminococcus flavefaciens",
    "Autism"
   ],
@@ -1189,11 +1194,6 @@
    "Autism"
   ],
   [
-   "Dodecanedioic acid",
-   "Ruminococcus flavefaciens",
-   "Autism"
-  ],
-  [
    "Eicosapentaenoic acid",
    "Hominimerdicola alba",
    "Autism"
@@ -1201,11 +1201,6 @@
   [
    "Eicosapentaenoic acid (20:5;5,8,11,14.17)",
    "Hominimerdicola alba",
-   "Autism"
-  ],
-  [
-   "Enanthate; Heptanoate",
-   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
@@ -1275,11 +1270,6 @@
   ],
   [
    "Glycine",
-   "Ruminococcus flavefaciens",
-   "Autism"
-  ],
-  [
-   "Heptanoic acid",
    "Ruminococcus flavefaciens",
    "Autism"
   ],
@@ -1374,7 +1364,7 @@
    "Autism"
   ],
   [
-   "N6,N6,N6-Trimethyl-L-lysine",
+   "N-Acetylputrescine",
    "Ruminococcus flavefaciens",
    "Autism"
   ],
@@ -1395,6 +1385,11 @@
   ],
   [
    "Nicotinic acid (Vitamin B3)",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "Nonanedioic acid",
    "Ruminococcus flavefaciens",
    "Autism"
   ],
@@ -1449,13 +1444,13 @@
    "Autism"
   ],
   [
-   "Phosphorylcholine",
-   "Hominimerdicola alba",
+   "Phenylethylamine",
+   "Ruminococcus flavefaciens",
    "Autism"
   ],
   [
-   "Putrescine",
-   "Ruminococcus flavefaciens",
+   "Phosphorylcholine",
+   "Hominimerdicola alba",
    "Autism"
   ],
   [
@@ -1505,6 +1500,11 @@
   ],
   [
    "Sucrose; Cane sugar",
+   "Ruminococcus flavefaciens",
+   "Autism"
+  ],
+  [
+   "Taurine",
    "Ruminococcus flavefaciens",
    "Autism"
   ],

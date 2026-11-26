@@ -207,9 +207,23 @@ def resolve_e(mode, E_df=None):
     sys.exit(f'알 수 없는 E_MODE: {mode}')
 
 
+# `ENSEMBLE` 의 기본값은 **여기 하나**다. §27 에서 앙상블을 기본값에서 뺐는데
+# 두 함수가 각자 기본값을 들고 있어 한쪽만 되돌아갔다 (§51).
+ENSEMBLE_DEFAULT = 'none'
+
+
 def ensemble_modes():
-    """기본 경로에서 쓰이는 E 모드 목록. 빈 목록이면 앙상블을 끈 것이다."""
-    v = os.environ.get('ENSEMBLE', 'shrunk,nhanes_all')
+    """기본 경로에서 쓰이는 E 모드 목록. 빈 목록이면 앙상블을 끈 것이다.
+
+    **기본값이 `recommend()` 와 달랐다.** §25 에서 앙상블을 기본으로 켰다가
+    §27 에서 되돌릴 때 `recommend()` 의 `ENSEMBLE` 기본값만 `none` 으로
+    바꾸고 여기를 안 바꿨다. 그래서 *점수는 `shrunk` 로 내고 근거 compound 는
+    앙상블 평균으로 설명하는* 불일치가 반대 방향으로 되살아났다 — 이 함수
+    바로 아래 `_basis_e()` 의 주석이 고쳤다고 적어 둔 그 불일치다 (§51).
+
+    같은 스위치의 기본값은 한 자리에만 있어야 한다.
+    """
+    v = os.environ.get('ENSEMBLE', ENSEMBLE_DEFAULT)
     if not v or v == 'none':
         return []
     return [m.strip() for m in v.split(',') if m.strip()]
@@ -227,7 +241,7 @@ def recommend(e_mode=None, path=None, save=True):
     # **기본값은 꺼져 있다** (2026-11-24, RESULTS §27). §25 에서 켰다가
     # Top-K 오류 지표(§27)로 재니 6/30 으로 가장 나빴다 — 캐러멜 딥은 사라졌지만
     # 시럽 통조림 4 개와 과일펀치가 들어왔다. `shrunk,nhanes_all` 로 켠다.
-    _ens = os.environ.get('ENSEMBLE', 'none')
+    _ens = os.environ.get('ENSEMBLE', ENSEMBLE_DEFAULT)
     if _ens and _ens != 'none' and not os.environ.get('_ENS_CHILD') and not e_mode:
         modes = [m.strip() for m in _ens.split(',') if m.strip()]
         print(f'[앙상블] {" + ".join(modes)} — 각각 끝까지 돌려 백분위 순위를 평균한다')
@@ -1070,7 +1084,7 @@ def evaluate():
         # ProMENDA 로 설명하는 불일치였다(그린빈의 근거가 Palmitic acid 로
         # 나왔다). 쓰인 모드들의 E 를 평균해서 쓴다.
         def _basis_e():
-            modes = ensemble_modes() or [os.environ.get('E_MODE', 'union_all')]
+            modes = ensemble_modes() or [os.environ.get('E_MODE', 'shrunk')]
             # 서로 다른 스케일을 평균하지 않도록 **각자 최대절대값으로 정규화**
             cols = [resolve_e(m, E) for m in modes]
             cols = [c / c.abs().max() if c.abs().max() else c for c in cols]

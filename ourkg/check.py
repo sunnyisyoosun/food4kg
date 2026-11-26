@@ -58,7 +58,8 @@ def _need(*names):
 # 단계를 따로 돌리다가 열 이름을 바꾸면 **읽는 쪽이 조용히 빈 값을 본다.**
 # 아래 열은 다른 모듈이 이름으로 집어 쓰는 것들이다.
 SCHEMA = {
-    'foods.csv': ['food_key', 'food_name', 'data_type', 'n_compound'],
+    'foods.csv': ['food_key', 'food_name', 'data_type', 'n_compound',
+                  'n_source', 'source_types', 'label_share'],
     'compound_depression.csv': ['kegg', 'e_shrunk', 'e_binary', 'q'],
     'microbes.csv': ['taxid', 'name', 'rank', 'kegg_org', 'match_rank',
                      'taxid_current'],
@@ -368,6 +369,29 @@ def check_env():
     lack = sorted(found - listed)
     _say('FAIL' if lack else 'PASS', '환경변수 문서화',
          f'--env 에 안 나오는 것 {lack}' if lack else f'{len(found)} 개 전부 나온다')
+
+    # **같은 스위치의 기본값이 두 군데서 갈라지면 한쪽만 되돌아간다.** §27 에서
+    # 앙상블을 기본값에서 뺐는데 `recommend()` 만 'none' 으로 바꾸고
+    # `ensemble_modes()` 는 'shrunk,nhanes_all' 로 남아, 점수는 shrunk 로 내고
+    # 근거는 앙상블로 설명하는 불일치가 되살아났다 (§51). 리터럴 기본값이
+    # 서로 다르게 적힌 변수를 잡는다 — 상수로 모으면 통과한다.
+    defaults = {}
+    for fn in sorted(f for f in os.listdir(HERE) if f.endswith('.py')):
+        # **시험 파일은 일부러 반례를 담는다.** 넣자마자 `tests.py` 안의
+        # `E_MODE', 'union_all'`(회귀 시험의 assertNotIn 문자열)과 오류 주입용
+        # `X_SW` 를 잡아 FAIL 이 떴다 — 검사가 자기 시험을 결함으로 본 것이다.
+        if fn == 'tests.py':
+            continue
+        src = open(os.path.join(HERE, fn), encoding='utf-8').read()
+        for name, dflt in re.findall(
+                r"os\.environ\.get\(\s*['\"]([A-Z][A-Z0-9_]*)['\"]\s*,"
+                r"\s*(['\"][^'\"]*['\"])\s*\)", src):
+            defaults.setdefault(name, {}).setdefault(dflt.strip('\'"'), []).append(fn)
+    split = {k: {d: sorted(set(v)) for d, v in m.items()}
+             for k, m in defaults.items() if len(m) > 1}
+    _say('FAIL' if split else 'PASS', '환경변수 기본값 단일성',
+         f'기본값이 갈린 변수 {split}' if split else
+         f'리터럴 기본값을 가진 {len(defaults)} 개 모두 한 값이다')
 
 
 # --------------------------------------------------------------- 4. 추천
@@ -704,6 +728,16 @@ def facts():
         out['links.vmh_compounds'] = f'{v.kegg.nunique():,}'
     if os.path.exists(g('compound_microbe_measured.csv')):
         out['links.measured'] = f'{len(pd.read_csv(g("compound_microbe_measured.csv"))):,}'
+    _fl = g('food_link.json')
+    if os.path.exists(_fl):
+        import json
+        fj = json.load(open(_fl))
+        for k, name in (('food_multi_source', 'food.multi_source'),
+                        ('food_mixed_types', 'food.mixed_types'),
+                        ('food_label_minority', 'food.label_minority'),
+                        ('food_source_max', 'food.source_max')):
+            if k in fj:
+                out[name] = f'{int(fj[k]):,}'
     if os.path.exists(g('power_bound.csv')):
         pw = pd.read_csv(g('power_bound.csv'))
         bh = '경계(보정후)'

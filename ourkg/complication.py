@@ -30,6 +30,7 @@ p 값을 내는 것보다 낫다.
     COMP_SOURCE=curated ...                    # Disbiome + gutMDisorder 합집합
 환경변수
     COMP_SOURCE    mikg | disbiome | gutmdisorder | curated (기본 mikg)
+    COMP_LIT_SOURCE  literature 하위명령이 쓸 소스 (기본 curated)
     COMP_MIN_SET   질환당 최소 균 수 (기본 5)
     COMP_NEST_MAX  허용하는 포개짐 비율 (기본 0.30). 넘으면 검정을 안 돌린다
 """
@@ -372,6 +373,9 @@ def main():
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'literature':
-        literature(os.environ.get('COMP_SOURCE', 'curated'))
+        # **`COMP_SOURCE` 를 재사용하면 안 된다.** 이 하위명령의 기본값은
+        # `curated` 이고 `disease_sets` 의 기본값은 `mikg` 라, 같은 변수에 기본값이
+        # 둘이 됐다(검사가 잡았다 — §51). `COMP_PAPER_SOURCE` 선례대로 떼어 둔다.
+        literature(os.environ.get('COMP_LIT_SOURCE', 'curated'))
         sys.exit(0)
     sys.exit(main())
