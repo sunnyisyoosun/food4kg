@@ -10,7 +10,7 @@
 
 - **[PROBLEMS.md](PROBLEMS.md)** — 지금 무엇이 막혀 있고 왜 막혔는지
 - 클론한 뒤 한 번: `git config core.hooksPath hooks` — 커밋 전에
-  `ourkg/check.py` 29 항목을 돌린다(2 초, 실패하면 커밋을 막는다)
+  `ourkg/check.py` **16**<!--chk:check.names--> 항목을 돌린다(2 초, 실패하면 커밋을 막는다)
 - [REPRODUCTION.md](REPRODUCTION.md) — 조사 과정 전체 기록 (절 번호로 인용)
 
 ---

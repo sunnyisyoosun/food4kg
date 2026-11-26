@@ -216,6 +216,44 @@ def check_registry():
          f'단계 {len(run_all.STEPS)} 전부 정의됨')
 
 
+def _csv_literals(node, nested_calls=()):
+    """노드 안의 `.csv` 문자열 리터럴과 f-string 을 모은다. **한 자리다.**
+
+    `declared_outputs` 와 `io_graph` 가 같은 스캔을 각자 들고 있었다 — 둘 다
+    f-string 치환부를 `*` 로 접고 중첩 호출의 안쪽을 빼야 하는데, 그 두 규칙을
+    두 군데 적으면 갈라진다(실제로 둘 다 한 번씩 그 자리에서 틀렸다).
+
+    `nested_calls` 에 함수 이름을 주면 그 이름의 **중첩 호출 안쪽을 뺀다** —
+    `pd.read_csv(p).to_csv(q)` 에서 `to_csv` 노드를 통째로 훑으면 `p` 까지
+    "쓰는 것" 으로 세기 때문이다.
+    """
+    import ast
+    # **f-string 자식은 **항상** 뺀다.** `f'a_{k}.csv'` 의 자식 Constant
+    # `.csv` 까지 세면 아무것도 안 가리키는 패턴이 생긴다. 두 함수를 합칠 때
+    # 이 규칙을 조건부로 만들었다가 시험이 회귀를 잡았다.
+    inner = {id(c) for n in ast.walk(node) if isinstance(n, ast.JoinedStr)
+             for c in ast.walk(n) if c is not n}
+    if nested_calls:
+        inner |= {id(c) for n in ast.walk(node)
+                  if isinstance(n, ast.Call) and n is not node
+                  and getattr(n.func, 'attr', getattr(n.func, 'id', ''))
+                  in nested_calls
+                  for c in ast.walk(n)}
+    out = set()
+    for n in ast.walk(node):
+        if id(n) in inner:
+            continue
+        lit = None
+        if isinstance(n, ast.Constant) and isinstance(n.value, str):
+            lit = n.value
+        elif isinstance(n, ast.JoinedStr):
+            lit = ''.join(v.value if isinstance(v, ast.Constant) else '*'
+                          for v in n.values)
+        if lit and '.csv' in lit:
+            out.add(os.path.basename(lit))
+    return out
+
+
 def declared_outputs(here=None):
     """코드가 **쓸 수 있다고 말한** 산출물 이름의 패턴 목록.
 
@@ -230,21 +268,8 @@ def declared_outputs(here=None):
     pats = {}
     for fn in sorted(f for f in os.listdir(here) if f.endswith('.py')):
         tree = ast.parse(open(os.path.join(here, fn), encoding='utf-8').read())
-        # **f-string 안쪽 상수는 따로 세면 안 된다.** `f'a_{k}.csv'` 의
-        # 자식 Constant `.csv` 까지 집어 아무것도 안 가리키는 패턴을 만들었다.
-        inner = {id(c) for n in ast.walk(tree) if isinstance(n, ast.JoinedStr)
-                 for c in ast.walk(n) if c is not n}
-        for n in ast.walk(tree):
-            if id(n) in inner:
-                continue
-            lit = None
-            if isinstance(n, ast.Constant) and isinstance(n.value, str):
-                lit = n.value
-            elif isinstance(n, ast.JoinedStr):
-                lit = ''.join(v.value if isinstance(v, ast.Constant) else '*'
-                              for v in n.values)
-            if lit and '.csv' in lit:
-                pats.setdefault(os.path.basename(lit), set()).add(fn)
+        for lit in _csv_literals(tree):
+            pats.setdefault(lit, set()).add(fn)
     return pats
 
 
@@ -621,30 +646,7 @@ def io_graph(here=None):
     """
     import ast
     here = here or HERE
-
-    def _csvs(node):
-        # **중첩 호출의 안쪽은 빼야 한다.** `pd.read_csv(p).to_csv(q)` 에서
-        # to_csv 노드를 통째로 훑으면 p 까지 "쓰는 것" 으로 센다 — 그러면
-        # 생산자가 자기 자신이 되어 변이 조용히 사라진다.
-        inner = {id(c) for n in ast.walk(node)
-                 if isinstance(n, ast.Call) and n is not node
-                 and getattr(n.func, 'attr', getattr(n.func, 'id', ''))
-                 in ('read_csv', 'to_csv')
-                 for c in ast.walk(n)}
-        out = set()
-        for n in ast.walk(node):
-            if id(n) in inner:
-                continue
-            if (isinstance(n, ast.Constant) and isinstance(n.value, str)
-                    and n.value.endswith('.csv')):
-                out.add(os.path.basename(n.value))
-            elif isinstance(n, ast.JoinedStr):
-                t = ''.join(v.value if isinstance(v, ast.Constant) else '*'
-                            for v in n.values)
-                if t.endswith('.csv'):
-                    out.add(os.path.basename(t))
-        return out
-
+    _csvs = lambda node: _csv_literals(node, ('read_csv', 'to_csv'))
     io = {}
     for fn in sorted(f for f in os.listdir(here) if f.endswith('.py')):
         if fn in ('check.py', 'tests.py'):       # 검사 자신은 소비자가 아니다
@@ -766,6 +768,9 @@ def facts():
         out['links.vmh_compounds'] = f'{v.kegg.nunique():,}'
     if os.path.exists(g('compound_microbe_measured.csv')):
         out['links.measured'] = f'{len(pd.read_csv(g("compound_microbe_measured.csv"))):,}'
+    # **검사 수를 문서가 손으로 적고 있었다** — "29 항목" 이 다섯 군데 남아
+    # 있었다(지금 16). 세는 것은 코드가 한다.
+    out['check.names'] = str(len(CHECKS))
     _fl = g('food_link.json')
     if os.path.exists(_fl):
         import json
@@ -927,6 +932,21 @@ def check_docs():
     _say('FAIL' if msg else 'PASS', '문서 수치 앵커',
          '; '.join(msg) if msg else
          f'앵커 {seen} 개가 산출물과 맞는다 (계산 가능한 사실 {len(fx)} 개)')
+
+    # **목차는 손으로 두면 낡는다.** `RESULTS.md` 가 63 개 절 6,100 줄인데
+    # 목차가 없어 넣었다 — 그 목차가 절과 어긋나면 없는 것보다 나쁘다.
+    rp = os.path.join(HERE, 'RESULTS.md')
+    if os.path.exists(rp):
+        txt = open(rp, encoding='utf-8').read()
+        heads = [h.strip() for h in re.findall(r'^## (.+)$', txt, re.M)]
+        toc = re.findall(r'^- \*\*§?([\w—]+)\*\*', txt, re.M)
+        want = [(re.match(r'^(\d+[a-z]?)\.', h).group(1)
+                 if re.match(r'^\d+[a-z]?\.', h) else '—') for h in heads]
+        bad = ([] if toc == want else
+               [f'목차 {len(toc)} vs 절 {len(want)}'] if len(toc) != len(want) else
+               [f'{a} != {b}' for a, b in zip(toc, want) if a != b][:4])
+        _say('FAIL' if bad else 'PASS', 'RESULTS 목차',
+             '; '.join(bad) if bad else f'목차가 절 {len(want)} 개와 일치한다')
 
 
 CHECKS = {'schema': check_schema, 'microbe': check_microbe, 'links': check_links,

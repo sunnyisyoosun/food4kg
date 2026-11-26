@@ -84,7 +84,7 @@ python3 ourkg/run_all.py --env            # 환경변수 전수 (소스에서 �
 python3 ourkg/analyze.py recommend        # 분석 한 단계만
 python3 ourkg/sweep.py emode              # 설정 쓸기 하나만
 python3 ourkg/tests.py                    # 함수 단위 시험 + 메타 시험 (83 개, 0.9 초)
-python3 ourkg/check.py                    # 산출물·문서 정합 검사 (30 항목, 네트워크 없음)
+python3 ourkg/check.py                    # 산출물·문서 정합 검사 (16 항목, 네트워크 없음)
 ```
 
 **무언가 고친 뒤에는 `check.py` 를 돌린다.** 산출물이 조용히 어긋나는 것을
@@ -178,7 +178,7 @@ FoodOn · Disbiome · gutMDisorder · NHANES …)는 **실행 중 재조회**하
 | `complication.py` | **논문 §3.3 합병증 추론** — 검정 전에 입력의 판별력(집합 포개짐)을 먼저 재고, 포개지면 **돌리지 않는다** (§41) |
 | `toperr.py` | Top-K **규칙 기반 오류 수** (외부 임상 · 섭취량 · 분말 · 시럽) |
 | `tests.py` | **함수 단위 시험 + 메타 시험** — 식 (1) 의 네 선택 · 조용히 깨졌던 규칙 · **검사기 자체** (83 개, 0.9 초) |
-| `check.py` | **정합 검사** — 산출물·문서가 서로 맞는지 네트워크 없이 30 항목 |
+| `check.py` | **정합 검사** — 산출물·문서가 서로 맞는지 네트워크 없이 **16**<!--chk:check.names--> 항목 |
 | `foodon_match.py` | FoodOn 매칭 (EBI OLS) |
 | `common.py` | 경로 · 단위 환산 · 라벨 정규화 · **읽는·돌리는 자리 통합**(`compound_microbe` · `measured_links` · `microbe_disease_direction` · `depression_e` · `taxid_alias` · `recommend_under`) |
 | `run_all.py` | 위를 순서대로. `--env` 로 환경변수 전수 |

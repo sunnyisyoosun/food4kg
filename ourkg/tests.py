@@ -14,6 +14,7 @@
     python3 ourkg/tests.py -v         # 자세히
     python3 ourkg/tests.py CanonTest  # 일부만
 """
+import contextlib
 import os
 import re
 import sys
@@ -575,29 +576,24 @@ class UnitGuardTest(unittest.TestCase):
 
     def test_check_catches_non_mass_unit(self):
         # 오류 주입 — 매핑표에 KCAL 영양소를 넣으면 FAIL 이어야 한다.
-        import tempfile, shutil
+        import shutil
         base = common.BASE
-        d = tempfile.TemporaryDirectory()
-        try:
+        with patched(**{'common.BASE': ...}) as d:
             shutil.copytree(os.path.join(base, 'setup'),
-                            os.path.join(d.name, 'setup'))
-            cand = os.path.join(d.name, 'setup', 'nutrient_kegg_candidates.csv')
+                            os.path.join(d, 'setup'))
+            cand = os.path.join(d, 'setup', 'nutrient_kegg_candidates.csv')
             c = pd.read_csv(cand)
             c.loc[len(c)] = {'nutrient_id': 1008, 'nutrient_name': 'Energy',
                              'kegg': 'C00001', 'foods_measured': 0,
                              'coverage_pct': 0}
             c.to_csv(cand, index=False)
-            common.BASE = d.name
             _chk.RESULT.clear()
             _chk.check_units()
             sts = [r[0] for r in _chk.RESULT]
-            if sts == ['SKIP']:
-                self.skipTest('FDC nutrient.csv 가 없다')
-            self.assertEqual(sts, ['FAIL'])
-        finally:
-            common.BASE = base
             _chk.RESULT.clear()
-            d.cleanup()
+        if sts == ['SKIP']:
+            self.skipTest('FDC nutrient.csv 가 없다')
+        self.assertEqual(sts, ['FAIL'])
 
 
 class SimMaskTest(unittest.TestCase):
@@ -658,26 +654,19 @@ class EnvDefaultTest(unittest.TestCase):
 
     def test_checker_catches_a_split_default(self):
         # 오류 주입 — 같은 변수에 다른 기본값을 쓰는 파일을 만들어 FAIL 을 본다.
-        import tempfile
-        d = tempfile.TemporaryDirectory()
-        saved = _chk.HERE
-        try:
+        with patched(**{'check.HERE': ...}) as d:
             for name, body in (('a', "import os\nos.environ.get('X_SW', 'on')\n"),
                                ('b', "import os\nos.environ.get('X_SW', 'off')\n")):
-                with open(os.path.join(d.name, name + '.py'), 'w') as f:
+                with open(os.path.join(d, name + '.py'), 'w') as f:
                     f.write(body)
-            _chk.HERE = d.name
             _chk.RESULT.clear()
             try:
                 _chk.check_env()
             except Exception:
                 pass
             sts = [r[0] for r in _chk.RESULT if r[1] == '환경변수 기본값 단일성']
-            self.assertEqual(sts, ['FAIL'])
-        finally:
-            _chk.HERE = saved
             _chk.RESULT.clear()
-            d.cleanup()
+        self.assertEqual(sts, ['FAIL'])
 
 
 class FoodSourceTest(unittest.TestCase):
@@ -988,6 +977,33 @@ class CompoundMicrobeRankTest(_OutFixture):
 # 둘 다 봐야 의미가 있다. 늘 FAIL 하는 검사는 쓸모없고, 늘 PASS 하는 검사는
 # 있는 척만 한다.
 import check as _chk                                   # noqa: E402
+
+
+@contextlib.contextmanager
+def patched(**globals_):
+    """임시 디렉토리를 만들고 **모듈 전역을 그 값으로 바꾼 뒤 되돌린다.**
+
+    오류 주입 시험 여섯 곳이 `TemporaryDirectory` + `try/finally` + 전역 복원을
+    각자 적고 있었다. 복원을 한 곳만 빠뜨리면 **뒤 시험이 임시 디렉토리를 보고
+    엉뚱하게 통과**한다 — 그래서 한 자리로 모은다.
+
+    값이 `...` 이면 임시 디렉토리 경로를 넣는다.
+        with patched(**{'check.HERE': ...}) as d:  # _chk.HERE = d
+    """
+    import tempfile
+    targets = {'check': _chk, 'common': common}
+    with tempfile.TemporaryDirectory() as d:
+        saved = {}
+        try:
+            for key, val in globals_.items():
+                mod, attr = key.split('.')
+                saved[key] = getattr(targets[mod], attr)
+                setattr(targets[mod], attr, d if val is ... else val)
+            yield d
+        finally:
+            for key, val in saved.items():
+                mod, attr = key.split('.')
+                setattr(targets[mod], attr, val)
 
 
 class _CheckFixture(unittest.TestCase):
