@@ -146,6 +146,19 @@ SWEEPS = {
     'gutbrain': ('gutbrain_comparison.csv', None),
     # §15c 검정 ⑧ — 에탄올·설탕의 E 를 0 으로 두면 무엇이 바뀌나.
     'ezero': ('ezero_comparison.csv', None),
+    # §52 — 공통 성분 마스크. FDC 가 보고한 0 을 공통으로 세느냐.
+    # 유사도 공간(composition/effect)과 교차해서 본다 — effect 에서는 0 의
+    # 의미가 또 달라진다(E=0 인 compound 가 전부 0 이 된다).
+    # `F_COLUMNS` 도 교차한다 — `linked`(66 열)에서는 FDC 가 거의 전부를 보고해
+    # 보고 마스크가 포화(S 비영 1.000)했다. `all`(130 열)로 넓히면 보고 마스크에도
+    # 희소성이 생기는지 보는 것이 이 축의 요점이다.
+    'simmask': ('simmask_comparison.csv',
+                [(f'{mk}/{sp}/{fc}', {'SIM_MASK': mk, 'SIM_SPACE': sp,
+                                      'F_COLUMNS': fc, 'SIM_THRESHOLD': 'none',
+                                      'GUTBRAIN_ALPHA': '0'})
+                 for mk in ('nonzero', 'reported')
+                 for sp in ('composition', 'effect')
+                 for fc in ('linked', 'all')]),
     # §25·§27 — 순위 앙상블 vs 벡터 합치기. **기각된 경로지만 재현은 된다**
     # (§27 에서 Top-K 오류 6/30 으로 가장 나빠 기본값에서 뺐다). 등록 없이
     # CSV 만 남아 있어 `outputs` 검사가 고아로 잡았다 — 측정은 §25 에 인용돼

@@ -395,6 +395,17 @@ def _recommend_one(e_mode=None, path=None, save=True):
     F = long.pivot_table(index='food_key', columns='kegg', values='amount_g', fill_value=0.0)
     F = F.reindex(foods.index).fillna(0.0)
     compounds = list(F.columns)
+    # **보고 여부 마스크.** `F` 의 0 은 두 가지다 — FDC 가 "측정했고 0" 으로 보고한
+    # 칸(long 에 행이 있다)과 아예 보고하지 않은 칸(pivot 이 채운 0). 유사도의
+    # 공통 성분 마스크가 둘을 같이 취급하고 있었다(§52).
+    #
+    # **`F` 와 같은 걸러짐을 거쳐야 한다.** 처음에 여기서 ndarray 로 만들어
+    # 뒀더니 뒤의 F_COLUMNS 선택·전부-0 행 제거를 안 따라가 모양이 어긋났다
+    # (12,420x66 vs 12,513x130). DataFrame 으로 들고 F 와 나란히 자른다.
+    _REP = (long.assign(_r=True)
+            .pivot_table(index='food_key', columns='kegg', values='_r',
+                         fill_value=False, aggfunc='first')
+            .reindex(index=F.index, columns=F.columns).fillna(False))
     # §4.2.1 E: +1 완화 / -1 악화. 방향이 확정되지 않은 compound 는 0.
     #   E_MODE=binary  논문 그대로의 +1/-1/0
     #   E_MODE=shrunk  근거량으로 축소한 연속값 (기본, 02 단계 참조)
@@ -436,6 +447,7 @@ def _recommend_one(e_mode=None, path=None, save=True):
         if len(sel) == 0:
             sys.exit(f'E_MODE={E_MODE} 에서 비영 compound 가 없다.')
         F = F.iloc[:, sel]
+        _REP = _REP.iloc[:, sel]
         compounds = [compounds[i] for i in sel]
         e = e[sel]
         print(f'  F_COLUMNS=linked — 우울증 연결 compound {len(sel)}열만 사용')
@@ -505,6 +517,7 @@ def _recommend_one(e_mode=None, path=None, save=True):
         keep = X.sum(axis=1) > 0
         X = X[keep]
     names = F.index[keep]
+    _REPORTED = _REP.to_numpy(dtype=bool)[keep]
     print(f'  유지된 음식 {X.shape[0]:,} (전부 0 인 행 제외 {int((~keep).sum())})')
 
     if PCA_N:
@@ -546,7 +559,21 @@ def _recommend_one(e_mode=None, path=None, save=True):
         sys.exit(f'SIM_SPACE 는 composition 또는 effect. 받은 값: {SIM_SPACE}')
     # 식 (1) 의 네 선택(행 중심화 · 공통 성분 마스크 · 전체 성분 분모 · 대각 0)은
     # common.adjusted_cosine 한 곳에 있다 — 손계산과 맞추는 시험이 거기 걸린다.
-    S = adjusted_cosine(Xsim)
+    # 공통 성분 마스크를 무엇으로 걸 것인가 — §52.
+    #   nonzero   값이 0 이 아닌 칸 (기본, 논문 식 1 그대로)
+    #   reported  FDC 가 **보고한** 칸 (측정된 0 도 공통으로 센다)
+    SIM_MASK = os.environ.get('SIM_MASK', 'nonzero')
+    if SIM_MASK == 'reported':
+        if PCA_N:
+            # PCA 를 거치면 열이 compound 가 아니다 — 보고 여부를 열에 걸 수 없다.
+            sys.exit('SIM_MASK=reported 는 PCA_COMPONENTS=0 에서만 쓴다.')
+        S = adjusted_cosine(Xsim, _REPORTED)
+        print(f'  SIM_MASK=reported — 보고된 0 도 공통 성분으로 센다 '
+              f'(보고 칸 {int(_REPORTED.sum()):,} / 0 아닌 칸 {int((Xsim != 0).sum()):,})')
+    elif SIM_MASK == 'nonzero':
+        S = adjusted_cosine(Xsim)
+    else:
+        sys.exit(f'SIM_MASK 는 nonzero 또는 reported. 받은 값: {SIM_MASK}')
 
     # 논문 §4.2.2 Algorithm 1 line 8 — "P = D x S : **Threshold** and Top K"
     #

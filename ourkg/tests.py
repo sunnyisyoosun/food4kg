@@ -553,6 +553,46 @@ class SignAgreeTest(unittest.TestCase):
                            common.mdes(209, 0.05, p0=0.5))
 
 
+class SimMaskTest(unittest.TestCase):
+    """공통 성분 마스크 (`adjusted_cosine(X, reported)`) — §52.
+
+    FDC 가 "측정했고 0" 으로 보고한 칸과 "보고하지 않은" 칸이 `0` 으로 같아져
+    있었다. 마스크를 주입할 수 있게 하고, **주면 값이 실제로 달라지는지**를
+    고정한다 — 안 달라지면 스위치가 있는 척만 하는 것이다.
+    """
+
+    def test_mask_changes_the_value(self):
+        import numpy as np
+        X = np.array([[1., 0., 2.], [1., 0., 3.]])
+        allrep = np.ones_like(X, dtype=bool)
+        a = common.adjusted_cosine(X)[0, 1]
+        b = common.adjusted_cosine(X, allrep)[0, 1]
+        self.assertNotAlmostEqual(a, b, places=3)
+
+    def test_default_is_nonzero_mask(self):
+        # 기본은 논문 식 (1) 그대로여야 한다 — 측정으로 기각된 쪽으로
+        # 기본값이 조용히 넘어가면 안 된다.
+        import numpy as np
+        X = np.array([[1., 0., 2.], [1., 0., 3.]])
+        self.assertTrue(np.allclose(common.adjusted_cosine(X),
+                                    common.adjusted_cosine(X, X != 0)))
+
+    def test_diagonal_zero_and_symmetry_hold_with_mask(self):
+        import numpy as np
+        rng = np.random.default_rng(0)
+        X = rng.random((6, 5)) * (rng.random((6, 5)) > 0.3)
+        R = rng.random((6, 5)) > 0.2
+        S = common.adjusted_cosine(X, R)
+        self.assertTrue(np.allclose(np.diag(S), 0))
+        self.assertTrue(np.allclose(S, S.T))
+
+    def test_sweep_registered(self):
+        import sweep
+        self.assertIn('simmask', sweep.SWEEPS)
+        _, cfgs = sweep.SWEEPS['simmask']
+        self.assertEqual(len(cfgs), 8)       # 마스크 2 x 공간 2 x 열 2
+
+
 class EnvDefaultTest(unittest.TestCase):
     """환경변수 기본값의 **단일성** — 한쪽만 되돌아간 자리 (§51)."""
 

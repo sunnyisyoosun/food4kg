@@ -1,0 +1,9 @@
+설정,bot30_비추천군,bot30_충돌(살코기),bot30_extras(외부),top30_위반,top30_추천군(참고),MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
+nonzero/composition/linked,26,0,8,0,21,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
+nonzero/composition/all,25,0,6,12,5,5,17,0.492,0.371,"Sugar substitute, sucralose, powder"
+nonzero/effect/linked,10,0,7,0,0,0,15,0.448,0.323,"Whale, beluga, flipper, raw (Alaska Na"
+nonzero/effect/all,9,0,8,0,0,0,17,0.445,0.32,Vodka and lemonade
+reported/composition/linked,21,0,10,0,0,3,15,0.463,0.31,"Alcoholic beverage, distilled, vodka, "
+reported/composition/all,26,0,20,0,0,3,19,0.498,0.371,"Alcoholic beverage, distilled, vodka, "
+reported/effect/linked,9,0,6,4,3,10,9,0.448,0.321,"Whale, beluga, flipper, raw (Alaska Na"
+reported/effect/all,8,0,7,4,0,2,14,0.445,0.319,"Whale, beluga, flipper, raw (Alaska Na"

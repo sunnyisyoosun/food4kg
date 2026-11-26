@@ -509,7 +509,7 @@ def gutmdisorder_intervention(session=None):
 _ENV_BASE = dict(os.environ)
 
 
-def adjusted_cosine(X):
+def adjusted_cosine(X, reported=None):
     """논문 식 (1) adjusted cosine similarity — **음식 × 음식** 유사도.
 
     `_recommend_one` 안에 8 줄로 있던 것을 떼어냈다. 이 8 줄에 **틀리기 쉬운
@@ -521,15 +521,25 @@ def adjusted_cosine(X):
       ① **행 중심화** — 음식마다 자기 성분 평균을 뺀다(열이 아니다).
          adjusted cosine 의 정의이고, 논문 Fig.4(c) 의 "normalize the compounds
          in the two groups separately" 와는 **다른 축**이다.
-      ② **공통 성분 마스크** `M = (X != 0)` — 분자는 두 음식이 **둘 다 측정된**
-         성분만 더한다(공식 구현의 common 조건).
+      ② **공통 성분 마스크** — 분자는 두 음식이 **둘 다 값을 가진** 성분만
+         더한다(공식 구현의 common 조건). 기본은 `M = (X != 0)` 이다.
+
+         **여기에 숨은 혼동이 있다.** FDC 가 "측정했고 0 이다" 로 보고한 칸과
+         "보고하지 않은" 칸이 `0` 으로 같아진다 — `food_compound_long` 779,094 행
+         중 **229,759(29.5%)가 보고된 0** 이고 결측은 없다(`dropna` 로 빠진다).
+         즉 기본 마스크는 **측정된 0 을 미측정으로 취급**한다. docstring 이 오래
+         "둘 다 측정된 성분만" 이라고 적고 있었는데 구현은 그렇지 않았다 (§52).
+
+         `reported` 에 **보고 여부 마스크**를 주면 그걸 쓴다. 바꿀 축이므로
+         기본값은 논문 식 (1) 그대로 둔다 — 어느 쪽이 맞다고 단정하지 않고
+         `SIM_MASK` 로 재 본다.
       ③ **분모는 전체 성분** — 식 (1) 그대로. 마스크를 분모에도 걸면 값이 달라진다.
       ④ **대각 0** — 자기 자신과의 유사도를 빼야 `P = D x S` 가 자기 점수를
          되먹이지 않는다.
     """
     import numpy as np
     Xc = X - X.mean(axis=1, keepdims=True)        # ① 행 중심화
-    M = (X != 0).astype(float)                    # ② 공통 성분 마스크
+    M = ((X != 0) if reported is None else reported).astype(float)   # ② 마스크
     num = (Xc * M) @ (Xc * M).T
     nrm = np.sqrt((Xc ** 2).sum(axis=1))          # ③ 분모는 전체 성분
     den = np.outer(nrm, nrm)

@@ -468,6 +468,15 @@
   "argv": "analyze.py",
   "env": {}
  },
+ "simmask_comparison.csv": {
+  "at": "2026-11-26 13:41:02",
+  "argv": "sweep.py simmask",
+  "env": {
+   "F_COLUMNS": "all",
+   "SIM_SPACE": "effect",
+   "SIM_MASK": "reported"
+  }
+ },
  "simsign_comparison.csv": {
   "at": "2026-11-25 15:28:50",
   "argv": "sweep.py",
