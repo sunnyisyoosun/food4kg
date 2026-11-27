@@ -1,4 +1,4 @@
-규약,질환범위,링크,방향가정,compound,부호일치,p,q(BH),경계(BH칸수),경계넘음,링크집합
+convention,disease_scope,links,direction_assumption,compound,sign_agree,p,q(BH),bound_bh,above_bound,link_set
 pair,Disbiome/정신질환 전체,both,감소=이로움,356,0.522,0.213327348554352,0.5993710565262975,0.6,False,§47 후
 pair,Disbiome/정신질환 전체,both,증가=이로움,356,0.478,0.8161945912524043,0.9999729062589822,0.6,False,§47 후
 pair,Disbiome/정신질환 전체,measured,감소=이로움,202,0.574,0.020520691369248837,0.14364483958474186,0.632,False,§47 후

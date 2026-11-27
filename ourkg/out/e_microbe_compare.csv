@@ -1,4 +1,4 @@
-질환범위,링크,방향가정,compound,부호일치,귀무(순열),p,rho,q
+disease_scope,links,direction_assumption,compound,sign_agree,null_perm,p,rho,q
 Disbiome/정신질환 전체,both,감소=이로움,356,0.522,0.521,0.5348,-0.095,0.957
 Disbiome/정신질환 전체,both,증가=이로움,356,0.478,0.479,0.6771,0.095,0.957
 Disbiome/정신질환 전체,measured,감소=이로움,202,0.574,0.558,0.358,0.129,0.957

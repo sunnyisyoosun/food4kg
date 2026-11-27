@@ -122,18 +122,18 @@ def specificity(sets):
         A, B = sets[a], sets[b]
         inter = len(A & B)
         rows.append({'a': a, 'b': b, '|A|': len(A), '|B|': len(B),
-                     '공유': inter, 'min(A,B)': min(len(A), len(B)),
-                     '포개짐': inter == min(len(A), len(B)),
+                     'shared': inter, 'min(A,B)': min(len(A), len(B)),
+                     'nested': inter == min(len(A), len(B)),
                      'Jaccard': round(inter / len(A | B), 3)})
         nested += inter == min(len(A), len(B))
     t = pd.DataFrame(rows)
     full = [d for d, s in sets.items() if uni and s == uni]
     return t, {
-        '질환': len(sets), 'universe': len(uni), '쌍': len(t),
+        'diseases': len(sets), 'universe': len(uni), 'pairs': len(t),
         '포개진 쌍': nested,
-        '포개짐 비율': round(nested / len(t), 3) if len(t) else 0.0,
+        'nested_rate': round(nested / len(t), 3) if len(t) else 0.0,
         'universe 를 다 가진 질환': len(full),
-        'Jaccard 중앙값': round(float(t.Jaccard.median()), 3) if len(t) else 0.0,
+        'jaccard_median': round(float(t.Jaccard.median()), 3) if len(t) else 0.0,
         'Jaccard 최소': round(float(t.Jaccard.min()), 3) if len(t) else 0.0,
     }
 
@@ -149,8 +149,8 @@ def hypergeom(sets):
         k = len(A & B)
         # P(겹침 >= k) — 모집단 uni, 성공 |A|, 추출 |B|
         p = hg.sf(k - 1, uni, len(A), len(B))
-        rows.append({'a': a, 'b': b, '공유': k, 'A': len(A), 'B': len(B),
-                     '기대': round(len(A) * len(B) / uni, 1), 'p': p})
+        rows.append({'a': a, 'b': b, 'shared': k, 'A': len(A), 'B': len(B),
+                     'expected': round(len(A) * len(B) / uni, 1), 'p': p})
     t = pd.DataFrame(rows)
     if len(t):
         t['q'] = false_discovery_control(t['p'].values)
@@ -166,24 +166,24 @@ def one(source):
     for k, v in s.items():
         print(f'  {k:24s} {v}')
     nest_max = float(os.environ.get('COMP_NEST_MAX', '0.30'))
-    row = {'소스': source, '질환': s['질환'], 'universe': s['universe'],
-           '쌍': s['쌍'], '포개짐 비율': s['포개짐 비율'],
-           'Jaccard 중앙값': s['Jaccard 중앙값'],
-           'universe 전체 보유': s['universe 를 다 가진 질환']}
-    if s['포개짐 비율'] > nest_max:
-        print(f'  판정: **검정을 돌리지 않는다** (포개짐 {s["포개짐 비율"]} > {nest_max})')
+    row = {'source': source, 'diseases': s['diseases'], 'universe': s['universe'],
+           'pairs': s['pairs'], 'nested_rate': s['nested_rate'],
+           'jaccard_median': s['jaccard_median'],
+           'holds_full_universe': s['universe 를 다 가진 질환']}
+    if s['nested_rate'] > nest_max:
+        print(f'  판정: **검정을 돌리지 않는다** (포개짐 {s["nested_rate"]} > {nest_max})')
         print('    겹침이 작은 쪽 크기와 같아 "기대보다 많다" 가 구조적으로')
         print('    보장된다 — p 값은 생물학이 아니라 집합 모양의 산물이다.')
         print('    외부 -1 정답셋을 구해도 이건 해결되지 않는다 (모듈 docstring).')
-        row.update({'검정': '거부', 'q<0.05': '', '통과율': ''})
+        row.update({'test': '거부', 'q<0.05': '', 'pass_rate': ''})
         return row
     h = hypergeom(sets)
     h.to_csv(outp(f'complication_hypergeom_{source}.csv'), index=False)
     n = int((h.q < 0.05).sum())
     print(f'  판정: 검정 통과 — q<0.05 {n}/{len(h)} ({n / len(h):.1%})')
-    print(h.head(5)[['a', 'b', '공유', '기대', 'q']].to_string(index=False))
-    row.update({'검정': '수행', 'q<0.05': f'{n}/{len(h)}',
-                '통과율': f'{n / len(h):.1%}'})
+    print(h.head(5)[['a', 'b', 'shared', 'expected', 'q']].to_string(index=False))
+    row.update({'test': '수행', 'q<0.05': f'{n}/{len(h)}',
+                'pass_rate': f'{n / len(h):.1%}'})
     return row
 
 
@@ -221,15 +221,15 @@ def paper_eval(source='curated'):
     for no, q, am, bm, paper in PAPER_PAIRS:
         ka, kb = mesh.get(am), mesh.get(bm)
         if not ka or not kb:
-            rows.append({'no': no, '문항': q, '논문': paper, '우리': '',
-                         '판정': '못 잼', '공유': '', '기대': '', 'q': '',
-                         '사유': f'{"a" if not ka else "b"} 질환이 {source} 에 없다'})
+            rows.append({'no': no, 'item': q, 'paper': paper, 'ours': '',
+                         'verdict': '못 잼', 'shared': '', 'expected': '', 'q': '',
+                         'reason': f'{"a" if not ka else "b"} 질환이 {source} 에 없다'})
             continue
         r = idx.get(frozenset((ka, kb)))
         ours = 1 if (r is not None and r.q < 0.05) else 0
-        rows.append({'no': no, '문항': q, '논문': paper, '우리': ours,
-                     '판정': '일치' if ours == paper else '불일치',
-                     '공유': r.공유, '기대': r.기대, 'q': f'{r.q:.2e}', '사유': ''})
+        rows.append({'no': no, 'item': q, 'paper': paper, 'ours': ours,
+                     'verdict': '일치' if ours == paper else '불일치',
+                     'shared': r.shared, 'expected': r.expected, 'q': f'{r.q:.2e}', 'reason': ''})
     return pd.DataFrame(rows), source
 
 
@@ -320,16 +320,16 @@ def literature(source='curated'):
         if both is None:
             continue
         exp = n1[am] * n1[bm] / PUBMED_N
-        rows.append({'a': r.a, 'b': r.b, 'q': r.q, '통과': bool(r.q < 0.05),
-                     'n_a': n1[am], 'n_b': n1[bm], '공출현': both,
-                     '기대': round(exp, 1),
+        rows.append({'a': r.a, 'b': r.b, 'q': r.q, 'passed': bool(r.q < 0.05),
+                     'n_a': n1[am], 'n_b': n1[bm], 'cooccur': both,
+                     'expected': round(exp, 1),
                      'lift': round(both / exp, 2) if exp > 0 else None})
         print(f'\r  쌍 {i}/{len(h)}', end='', flush=True)
     print()
     t = pd.DataFrame(rows)
     t.to_csv(outp(f'complication_literature_{source}.csv'), index=False)
-    ok = t[t['통과']].lift.dropna()
-    no = t[~t['통과']].lift.dropna()
+    ok = t[t['passed']].lift.dropna()
+    no = t[~t['passed']].lift.dropna()
     print(f'\n  쌍 {len(t)} (통과 {len(ok)} · 비통과 {len(no)})'
           f'  -> out/complication_literature_{source}.csv')
     if len(ok) < 5 or len(no) < 5:
@@ -360,8 +360,8 @@ def main():
     # 논문 Table 5 합병증 8 문항을 검정이 가능한 소스로 다시 잰다.
     pe, src = paper_eval(os.environ.get('COMP_PAPER_SOURCE', 'curated'))
     pe.to_csv(outp('complication_paper_eval.csv'), index=False)
-    ok = int((pe['판정'] == '일치').sum())
-    na = int((pe['판정'] == '못 잼').sum())
+    ok = int((pe['verdict'] == '일치').sum())
+    na = int((pe['verdict'] == '못 잼').sum())
     print(f'\n== 논문 Table 5 합병증 8 문항 ({src})'
           f'  -> out/complication_paper_eval.csv')
     print(pe.to_string(index=False))

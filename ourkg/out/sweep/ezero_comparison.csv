@@ -1,4 +1,4 @@
-설정,bot30_비추천군,bot30_충돌(살코기),bot30_extras(외부),top30_위반,top30_추천군(참고),MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
+config,bot30_notrec,bot30_conflict_leanmeat,bot30_extras,top30_violation,top30_rec_ref,mmd_prescribed,MMD_extras,auc_ref,rho_prescribed,top1
 none 원본,26,0,8,0,21,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
 none E_ZERO,26,0,7,0,17,21,2,0.464,0.313,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
 topn:100 원본,12,8,0,0,0,0,16,0.534,0.289,Glug

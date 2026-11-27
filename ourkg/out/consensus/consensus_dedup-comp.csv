@@ -1,4 +1,4 @@
-food_key,food_name,food_group,top_rate,bot_rate,n_seen,설정
+food_key,food_name,food_group,top_rate,bot_rate,n_seen,config
 "vegetable juice, bolthouse farm, daily green","Vegetable juice, BOLTHOUSE FARMS, DAILY GREENS",Vegetables and Vegetable Products,1.0,0.0,47,dedup-comp
 "lettuce, co or romaine, raw","Lettuce, cos or romaine, raw",Vegetables and Vegetable Products,1.0,0.0,49,dedup-comp
 "cranberry juice blend, 100% juice, bottled, with added vitamin c and calcium","Cranberry juice blend, 100% juice, bottled, with added vitamin C and calcium",Fruits and Fruit Juices,1.0,0.0,49,dedup-comp

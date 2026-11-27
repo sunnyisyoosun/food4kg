@@ -108,9 +108,9 @@ def test():
             null[i] = _score(h, me)[0]
         null = null[~np.isnan(null)]
         p = float((null >= s).mean()) if len(null) else np.nan
-        rows.append({'중재': name[:46], 'n증가': nu, 'n감소': nd,
+        rows.append({'intervention': name[:46], 'n_elevated': nu, 'n_reduced': nd,
                      'score': round(s, 4),
-                     '귀무': round(float(null.mean()), 4) if len(null) else np.nan,
+                     'null': round(float(null.mean()), 4) if len(null) else np.nan,
                      'p(>)': round(p, 3)})
     t = pd.DataFrame(rows).sort_values('score', ascending=False)
     # 29 개 중재를 다 재고 가장 작은 p 를 집으면 안 된다 — BH 로 보정한다.

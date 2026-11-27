@@ -59,15 +59,15 @@ def flag(res, K=30):
     lab, _ = analyze.modimed_labels(t)
     serv = _serving()
     t['extras'] = (lab.values == -1)
-    t['작은섭취량'] = [
+    t['small_serving'] = [
         (serv.get(str(f)) is not None and serv[str(f)] < SERVING_MIN)
         for f in (t['fdc_id'] if 'fdc_id' in t else [None] * len(t))]
     name = t['food_name'].astype(str)
-    t['분말'] = name.str.contains(POWDER, case=False, regex=True)
-    t['시럽'] = name.str.contains(SYRUP, case=False, regex=True)
-    cols = ['extras', '작은섭취량', '분말', '시럽']
+    t['powder'] = name.str.contains(POWDER, case=False, regex=True)
+    t['syrup'] = name.str.contains(SYRUP, case=False, regex=True)
+    cols = ['extras', 'small_serving', 'powder', 'syrup']
     t['오류'] = t[cols].any(axis=1)
-    return t, {c: int(t[c].sum()) for c in cols} | {'합계(중복 제외)': int(t['오류'].sum())}
+    return t, {c: int(t[c].sum()) for c in cols} | {'total_dedup': int(t['오류'].sum())}
 
 
 if __name__ == '__main__':
@@ -88,11 +88,11 @@ if __name__ == '__main__':
             foods = pd.read_csv(outp('foods.csv'))
             res = res.merge(foods[['food_key', 'fdc_id']], on='food_key', how='left')
         _, n = flag(res)
-        n['설정'] = name
+        n['config'] = name
         n['Top1'] = str(res.iloc[0].food_name)[:34]
         rows.append(n)
-        print(f"  {name:14s} 오류 {n['합계(중복 제외)']:2d}/30  "
-              f"(extras {n['extras']} · 섭취량 {n['작은섭취량']} · "
-              f"분말 {n['분말']} · 시럽 {n['시럽']})  {n['Top1']}", flush=True)
+        print(f"  {name:14s} 오류 {n['total_dedup']:2d}/30  "
+              f"(extras {n['extras']} · 섭취량 {n['small_serving']} · "
+              f"분말 {n['powder']} · 시럽 {n['syrup']})  {n['Top1']}", flush=True)
     pd.DataFrame(rows).to_csv(outp('toperr_comparison.csv'), index=False)
     print('\n  -> out/toperr_comparison.csv')

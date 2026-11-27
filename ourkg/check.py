@@ -314,6 +314,26 @@ def check_outputs():
          f'ASCII 가 아닌 파일명 {nonascii[:5]}' if nonascii else
          f'csv {len(have)} 전부 ASCII')
 
+    # **열 이름도 ASCII 만.** 한국어 열이 82 종 있었다 — 다른 도구로 읽을 때
+    # 인코딩에 걸리고, `df.열이름` 속성 접근이 되지 않아 코드가 두 표기를
+    # 오가게 된다(§55). 값은 한국어를 허용한다 — 그건 내용이다.
+    import csv as _csv
+    badcol = []
+    for root, dirs, files in os.walk(OUT):
+        dirs[:] = [d for d in dirs if d != 'legacy']
+        for f in sorted(files):
+            if not f.endswith('.csv'):
+                continue
+            try:
+                with open(os.path.join(root, f), encoding='utf-8') as fh:
+                    hdr = next(_csv.reader(fh))
+            except Exception:
+                continue
+            badcol += [f'{f}:{c}' for c in hdr if not c.isascii()]
+    _say('FAIL' if badcol else 'PASS', '산출물 열 이름 ASCII',
+         f'ASCII 가 아닌 열 {badcol[:5]}' if badcol else
+         f'csv {len(have)} 의 열 이름 전부 ASCII')
+
     # **파생물이 하위 폴더에 있는지.** `common.OUT_SUB` 가 규칙이고 쓰는 쪽은
     # `outp()` 를 쓴다. 누가 `os.path.join(OUT, …)` 로 되돌리면 평평한 자리에
     # 떨어지는데, 그걸 사람이 눈으로 볼 수는 없다.
@@ -808,23 +828,23 @@ def facts():
                 out[name] = f'{int(fj[k]):,}'
     if os.path.exists(g('power_bound.csv')):
         pw = pd.read_csv(g('power_bound.csv'))
-        bh = '경계(보정후)'
+        bh = 'bound_adj'
         # **주장마다 따로 낸다.** 처음엔 표 전체에서 가장 조인 행을 뽑았는데,
         # 주장 셋이 한 표에 들어오면서 그 값이 어느 주장의 경계인지 모르게 됐다.
         for key, claim in (('', '미생물 축 부호일치'), ('agree.', '소스 간 방향 일치'),
                            ('auc.', '합병증 문헌 lift (AUC)')):
-            c = pw[pw['주장'] == claim]
+            c = pw[pw['claim'] == claim]
             if not len(c):
                 continue
             # 귀무가 행마다 다르면 경계끼리 바로 비교할 수 없다 — **귀무 위
             # 초과분**이 가장 작은 행을 고른다 (§48).
-            tight = c.loc[(c[bh] - c['귀무']).idxmin()]
+            tight = c.loc[(c[bh] - c['null']).idxmin()]
             out[f'power.{key}rows'] = str(len(c))
             out[f'power.{key}n'] = f'{int(tight.n):,}'
             out[f'power.{key}mdes'] = f'{tight[bh]:.3f}'
-            out[f'power.{key}obs'] = f'{tight["관측"]:.3f}'
-            out[f'power.{key}null'] = f'{tight["귀무"]:.3f}'
-            out[f'power.{key}over'] = str(int(c['≥경계라면 잡혔다'].sum()))
+            out[f'power.{key}obs'] = f'{tight["observed"]:.3f}'
+            out[f'power.{key}null'] = f'{tight["null"]:.3f}'
+            out[f'power.{key}over'] = str(int(c['above_bound'].sum()))
     if os.path.exists(g('foods.csv')):
         f = pd.read_csv(g('foods.csv'))
         out['foods.count'] = f'{len(f):,}'

@@ -1,4 +1,4 @@
-food_group,n,paper_§4.2.3,modimed_처방,modimed_extras,modimed_미분류,conflict,pct_shrunk,pct_learned,pct_이동,drop_dAUC_shrunk,drop_dAUC_learned
+food_group,n,paper_sec_4_2_3,modimed_prescribed,modimed_extras,modimed_unclassified,conflict,pct_shrunk,pct_learned,pct_shift,drop_dAUC_shrunk,drop_dAUC_learned
 Vegetables and Vegetable Products,1425,추천군,1366,59,0,,56.9,57.4,0.5,-0.0211,-0.0145
 Baked Products,1245,비추천군,248,694,303,,53.4,32.6,-20.8,-0.0064,-0.0052
 Beef Products,1122,비추천군,460,23,639,O,17.7,76.9,59.2,0.0281,-0.0145

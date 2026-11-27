@@ -209,24 +209,24 @@ def run(name):
         sc = analyze.modimed_score(res, 30)
         top, bot = res.head(30), res.tail(30)
         rows.append({
-            '설정': lab,
+            'config': lab,
             # 주지표 — 표집에 안정적이다 (§17).
             # `비추천군` 은 **논문 §4.2.3 의 군 목록**으로만 센다(소시지·제과·
             # 과자·소고기·돼지). 유지류·양고기는 논문 목록에 없어 안 세어지는데,
             # 그것이 바닥에 오는 설정에서는 과소평가된다 — 그래서 외부 기준인
             # `bot30_extras`(ModiMedDiet 가 제한하는 군)를 **나란히** 둔다.
             # 어느 쪽을 셀지 우리가 정하지 않기 위해서다.
-            'bot30_비추천군': int(bot.food_group.isin(NOT).sum()),
-            'bot30_충돌(살코기)': int((bot.food_group.isin(NOT) & bot.food_name.astype(str)
+            'bot30_notrec': int(bot.food_group.isin(NOT).sum()),
+            'bot30_conflict_leanmeat': int((bot.food_group.isin(NOT) & bot.food_name.astype(str)
                                       .str.contains(LEAN, case=False, regex=True)).sum()),
-            'bot30_extras(외부)': sc.get('bot30_extras'),
-            'top30_위반': int(top.food_group.isin(NOT).sum()),
+            'bot30_extras': sc.get('bot30_extras'),
+            'top30_violation': int(top.food_group.isin(NOT).sum()),
             # 참고 — 폭 16 으로 흔들린다. 차이 5 이하는 읽지 않는다
-            'top30_추천군(참고)': int(top.food_group.isin(REC).sum()),
-            'MMD_처방군': sc.get('top30_처방군'),
+            'top30_rec_ref': int(top.food_group.isin(REC).sum()),
+            'mmd_prescribed': sc.get('top30_prescribed'),
             'MMD_extras': sc.get('top30_extras'),
-            'AUC(참고)': sc.get('modimed_AUC(참고)'),
-            'rho_처방군': sc.get('modimed_rho_처방군만'),
+            'auc_ref': sc.get('modimed_auc_ref'),
+            'rho_prescribed': sc.get('modimed_rho_prescribed'),
             'rho_상위': sc.get(f"modimed_rho_상위{os.environ.get('MODIMED_RHO_TOP', '0')}"),
             'top1': str(top.iloc[0].food_name)[:38]})
     t = pd.DataFrame(rows).dropna(axis=1, how='all')

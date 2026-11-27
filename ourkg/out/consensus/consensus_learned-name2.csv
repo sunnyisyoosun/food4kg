@@ -1,4 +1,4 @@
-food_key,food_name,food_group,top_rate,bot_rate,n_seen,설정
+food_key,food_name,food_group,top_rate,bot_rate,n_seen,config
 "kale, frozen, cooked, boiled, drained, with salt","Kale, frozen, cooked, boiled, drained, with salt",Vegetables and Vegetable Products,0.8723404255319149,0.0,47,learned-name2
 "kale, cooked, boiled, drained, without salt","Kale, cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.8372093023255814,0.0,43,learned-name2
 "turnip green, frozen, cooked, boiled, drained, without salt","Turnip greens, frozen, cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.8163265306122449,0.0,49,learned-name2

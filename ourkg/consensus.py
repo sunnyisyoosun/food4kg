@@ -59,20 +59,20 @@ def run(names, R=None, K=30):
     out = []
     for name in names:
         t = consensus({**BASE, **CANDIDATES[name]}, R=R, K=K)
-        t['설정'] = name
+        t['config'] = name
         # 합의 Top-K / Bottom-K — 선택도 순
         ctop = t.nlargest(K, 'top_rate')
         cbot = t.nlargest(K, 'bot_rate')
-        row = {'설정': name, 'R': R,
-               '합의_추천군': int(ctop.food_group.isin(REC).sum()),
-               '합의_비추천군': int(cbot.food_group.isin(NOT).sum()),
-               '합의_위반': int(ctop.food_group.isin(NOT).sum()),
-               'top_rate 중앙값': round(float(ctop.top_rate.median()), 3),
-               '1위': str(ctop.iloc[0].food_name)[:40]}
+        row = {'config': name, 'R': R,
+               'consensus_rec': int(ctop.food_group.isin(REC).sum()),
+               'consensus_notrec': int(cbot.food_group.isin(NOT).sum()),
+               'consensus_violation': int(ctop.food_group.isin(NOT).sum()),
+               'top_rate_median': round(float(ctop.top_rate.median()), 3),
+               'top1': str(ctop.iloc[0].food_name)[:40]}
         out.append(row)
-        print(f"  {name:14s} 추천군 {row['합의_추천군']:2d} · 비추천군 "
-              f"{row['합의_비추천군']:2d} · 위반 {row['합의_위반']:2d} · "
-              f"선택도중앙 {row['top_rate 중앙값']:.2f} · 1위 {row['1위']}", flush=True)
+        print(f"  {name:14s} 추천군 {row['consensus_rec']:2d} · 비추천군 "
+              f"{row['consensus_notrec']:2d} · 위반 {row['consensus_violation']:2d} · "
+              f"선택도중앙 {row['top_rate_median']:.2f} · 1위 {row['top1']}", flush=True)
         t.sort_values('top_rate', ascending=False).to_csv(
             outp(f'consensus_{name}.csv'), index=False)
     r = pd.DataFrame(out)

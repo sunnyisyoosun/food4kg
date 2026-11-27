@@ -1,4 +1,4 @@
-a,b,공유,A,B,기대,p,q
+a,b,shared,A,B,expected,p,q
 Alzheimer's Disease [D000544],Major Depressive Disorder [D003865],38,141,51,9.5,1.167320935726757e-19,5.4280423511294205e-17
 Alcoholism [D000437],Major Depressive Disorder [D003865],26,72,51,4.8,1.1360089770598482e-15,2.641220871664147e-13
 Autism Spectrum Disorder [D000067877],"Child Development Disorders, Pervasive [D002659]",32,273,38,13.7,4.828695923688852e-10,7.48447868171772e-08

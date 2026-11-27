@@ -1,2 +1,2 @@
-설정,R,합의_추천군,합의_비추천군,합의_위반,top_rate 중앙값,1위
+config,R,consensus_rec,consensus_notrec,consensus_violation,top_rate_median,top1
 현행,100,19,29,0,0.766,"Vegetable juice, BOLTHOUSE FARMS, DAILY "

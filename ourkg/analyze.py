@@ -1793,7 +1793,7 @@ def modimed_score(res, K):
         f'top{K}_처방군': int((ltop == 1).sum()),
         f'top{K}_extras': int((ltop == -1).sum()),
         f'bot{K}_extras': int((lbot == -1).sum()),
-        'modimed_AUC(참고)': round(float(auc), 3),
+        'modimed_auc_ref': round(float(auc), 3),
         **modimed_spearman(res),
     }
 
@@ -2001,7 +2001,7 @@ def invert():
     _cmp = outp('e_mode_comparison.csv')
     if os.path.exists(_cmp):
         _c = pd.read_csv(_cmp)
-        _col = next((c for c in ('modimed_AUC(참고)', 'modimed_AUC')
+        _col = next((c for c in ('modimed_auc_ref', 'modimed_AUC')
                      if c in _c.columns), None)
         if _col:
             _best = _c.loc[_c[_col].idxmax()]
@@ -2214,8 +2214,8 @@ def disagree():
         p = int((part['modimed'] == 1).sum())
         e = int((part['modimed'] == -1).sum())
         n = int((part['modimed'] == 0).sum())
-        paper = ('추천군' if g in REC_OK else
-                 ('비추천군' if g in NOT_OK else '-'))
+        paper = ('rec' if g in REC_OK else
+                 ('notrec' if g in NOT_OK else '-'))
         # B — 이 군을 빼고 다시 잰 AUC
         keep = sub['food_group'] != g
         d_s = d_l = float('nan')
@@ -2225,13 +2225,13 @@ def disagree():
             d_l = roc_auc_score(yk, sub.loc[keep, 'score_learned'].values) - auc_l
         rows.append({
             'food_group': g, 'n': len(part),
-            'paper_§4.2.3': paper,
-            'modimed_처방': p, 'modimed_extras': e, 'modimed_미분류': n,
-            'conflict': ('O' if (paper == '비추천군' and p > e)
-                         or (paper == '추천군' and e > p) else ''),
+            'paper_sec_4_2_3': paper,
+            'modimed_prescribed': p, 'modimed_extras': e, 'modimed_unclassified': n,
+            'conflict': ('O' if (paper == 'notrec' and p > e)
+                         or (paper == 'rec' and e > p) else ''),
             'pct_shrunk': round(part['pct_shrunk'].mean(), 1),
             'pct_learned': round(part['pct_learned'].mean(), 1),
-            'pct_이동': round(part['pct_learned'].mean() - part['pct_shrunk'].mean(), 1),
+            'pct_shift': round(part['pct_learned'].mean() - part['pct_shrunk'].mean(), 1),
             'drop_dAUC_shrunk': round(d_s, 4),
             'drop_dAUC_learned': round(d_l, 4),
         })
@@ -2240,8 +2240,8 @@ def disagree():
 
     print('\n  두 기준이 충돌하는 음식군 (논문은 비추천인데 ModiMedDiet 은 처방 우세)')
     conf = tab[tab['conflict'] == 'O']
-    cols = ['food_group', 'n', 'paper_§4.2.3', 'modimed_처방', 'modimed_extras',
-            'modimed_미분류']
+    cols = ['food_group', 'n', 'paper_sec_4_2_3', 'modimed_prescribed', 'modimed_extras',
+            'modimed_unclassified']
     print(conf[cols].to_string(index=False) if len(conf) else '  없음')
 
     print('\n[3/3] B — 음식군을 빼면 ModiMedDiet AUC 가 얼마나 움직이나')
@@ -2275,11 +2275,11 @@ def disagree():
           f'learned {a_l2:.3f} (전체 {auc_l:.3f})')
 
     print('\n  C — 순위 백분위가 가장 많이 움직인 음식군 (shrunk -> learned)')
-    mv = tab.reindex(tab['pct_이동'].abs().sort_values(ascending=False).index).head(8)
+    mv = tab.reindex(tab['pct_shift'].abs().sort_values(ascending=False).index).head(8)
     print(f'    {"food_group":36s} {"n":>5s} {"shrunk":>7s} {"learned":>8s} {"이동":>7s}')
     for _, r in mv.iterrows():
         print(f'    {r.food_group[:36]:36s} {r.n:5d} '
-              f'{r.pct_shrunk:7.1f} {r.pct_learned:8.1f} {r.pct_이동:+7.1f}')
+              f'{r.pct_shrunk:7.1f} {r.pct_learned:8.1f} {r.pct_shift:+7.1f}')
 
 
 
@@ -2376,7 +2376,7 @@ def groups():
 
     print('[2/3] 성분군별 조성 — 논문 Fig.4(c)')
     rows = []
-    print(f'  {"성분군":14s} {"n":>4s} {"추천군":>8s} {"비추천군":>9s} {"차":>8s} {"p":>8s}')
+    print(f'  {"성분군":14s} {"n":>4s} {"rec":>8s} {"notrec":>9s} {"차":>8s} {"p":>8s}')
     for g, sub in piv.groupby('group'):
         try:
             p = mannwhitneyu(sub['rec'], sub['not']).pvalue
@@ -2508,10 +2508,10 @@ def emicrobe():
                 # 짝지어도 많이 맞는다 — 0.5 에 대고 재서 p=4.9e-5 를 신호로
                 # 읽을 뻔했다(올바른 중심에서는 0.075). 순열로 귀무를 만든다.
                 agree, null, pp, _ = sign_agree(both[nz], e2[nz])
-                rows.append({'질환범위': scope, '링크': src, '방향가정': assume,
+                rows.append({'disease_scope': scope, 'links': src, 'direction_assumption': assume,
                              'compound': int(nz.sum()),
-                             '부호일치': round(agree, 3),
-                             '귀무(순열)': round(null, 3), 'p': round(pp, 4),
+                             'sign_agree': round(agree, 3),
+                             'null_perm': round(null, 3), 'p': round(pp, 4),
                              'rho': round(float(rho), 3)})
                 if (scope == 'Disbiome/정신질환 전체' and src == 'both'
                         and assume == '감소=이로움'):

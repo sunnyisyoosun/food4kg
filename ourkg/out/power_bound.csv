@@ -1,4 +1,4 @@
-주장,출처,n,관측,귀무,p,보정검정수,경계(a=0.05),경계(보정후),≥경계라면 잡혔다,경계-귀무
+claim,origin,n,observed,null,p,n_tests_adj,bound_a05,bound_adj,above_bound,bound_minus_null
 미생물 축 부호일치,e_microbe_compare.csv,377,0.52,0.524,0.6782,28,0.588,0.62,False,0.096
 미생물 축 부호일치,e_microbe_compare.csv,377,0.48,0.476,0.4701,28,0.54,0.573,False,0.097
 미생물 축 부호일치,e_microbe_compare.csv,357,0.521,0.519,0.5384,28,0.585,0.618,False,0.099

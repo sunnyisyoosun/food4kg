@@ -1,4 +1,4 @@
-a,b,|A|,|B|,공유,"min(A,B)",포개짐,Jaccard
+a,b,|A|,|B|,shared,"min(A,B)",nested,Jaccard
 Alzheimer's Disease [D000544],Amyotrophic lateral sclerosis [D000690],108,15,2,15,False,0.017
 Alzheimer's Disease [D000544],Anorexia Nervosa [D000856],108,34,15,34,False,0.118
 Alzheimer's Disease [D000544],Attention Deficit Disorder with Hyperactivity [D001289],108,6,4,6,False,0.036

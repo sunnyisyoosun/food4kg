@@ -1,4 +1,4 @@
-a,b,q,통과,n_a,n_b,공출현,기대,lift
+a,b,q,passed,n_a,n_b,cooccur,expected,lift
 Alzheimer's Disease [D000544],Major Depressive Disorder [D003865],5.428042351129421e-17,True,145875,46572,462,178.8,2.58
 Alcoholism [D000437],Major Depressive Disorder [D003865],2.641220871664147e-13,True,84085,46572,732,103.1,7.1
 Autism Spectrum Disorder [D000067877],"Child Development Disorders, Pervasive [D002659]",7.48447868171772e-08,True,54044,59467,54044,84.6,639.01

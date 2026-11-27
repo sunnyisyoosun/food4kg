@@ -1,4 +1,4 @@
-PCA,modimed_AUC,top30_추천군,bot30_비추천군,top30_위반,top_food
+PCA,modimed_AUC,top30_rec,bot30_notrec,top30_violation,top_food
 없음 (공식 final.py),0.633,7,29,4,"Sugar substitute, sucralose, powder"
 "5 (논문 숫자, 기본)",0.703,2,21,9,"Muffins, wheat bran, dry mix"
 10 (논문 규칙 80%),0.714,7,27,0,"Spices, chili powder"

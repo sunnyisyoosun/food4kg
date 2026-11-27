@@ -1,4 +1,4 @@
-설정,bot30_비추천군,bot30_충돌(살코기),bot30_extras(외부),top30_위반,top30_추천군(참고),MMD_처방군,MMD_extras,AUC(참고),rho_처방군,top1
+config,bot30_notrec,bot30_conflict_leanmeat,bot30_extras,top30_violation,top30_rec_ref,mmd_prescribed,MMD_extras,auc_ref,rho_prescribed,top1
 mental a=0,26,0,8,0,21,24,1,0.462,0.316,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
 mental a=0.5,24,0,6,0,19,23,2,0.458,0.319,"Vegetable juice, BOLTHOUSE FARMS, DAIL"
 mental a=1,23,1,6,0,18,22,2,0.456,0.322,"Vegetable juice, BOLTHOUSE FARMS, DAIL"

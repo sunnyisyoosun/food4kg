@@ -1,4 +1,4 @@
-a,b,공유,A,B,기대,p,q
+a,b,shared,A,B,expected,p,q
 Alcoholism [D000437],Major Depressive Disorder [D003865],22,72,32,5.1,2.565171419803142e-12,5.925545979745259e-10
 Alzheimer Disease [D000544],Major Depressive Disorder [D003865],16,44,32,3.1,8.203645150908234e-10,9.47521014929901e-08
 Alcoholism [D000437],Alzheimer Disease [D000544],21,72,44,7.0,1.325303341411165e-07,1.0204835728865971e-05

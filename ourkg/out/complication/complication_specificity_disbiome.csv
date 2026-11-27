@@ -1,4 +1,4 @@
-a,b,|A|,|B|,공유,"min(A,B)",포개짐,Jaccard
+a,b,|A|,|B|,shared,"min(A,B)",nested,Jaccard
 Alcoholism [D000437],Alzheimer Disease [D000544],72,44,21,44,False,0.221
 Alcoholism [D000437],Amyotrophic Lateral Sclerosis [D000690],72,24,10,24,False,0.116
 Alcoholism [D000437],Anorexia Nervosa [D000856],72,8,6,8,False,0.081

@@ -1,4 +1,4 @@
-a,b,|A|,|B|,공유,"min(A,B)",포개짐,Jaccard
+a,b,|A|,|B|,shared,"min(A,B)",nested,Jaccard
 Anxiety disorders,Autistic disorder,43,48,43,43,True,0.896
 Anxiety disorders,Bipolar disorder,43,48,43,43,True,0.896
 Anxiety disorders,Cognition disorders,43,29,29,29,True,0.674

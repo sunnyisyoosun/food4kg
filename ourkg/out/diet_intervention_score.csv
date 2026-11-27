@@ -1,4 +1,4 @@
-중재,n증가,n감소,score,귀무,p(>),q(BH)
+intervention,n_elevated,n_reduced,score,null,p(>),q(BH)
 "Diet, Mediterranean(non-energy restricted)",2,3,0.0477,-0.0006,0.181,0.875
 "Diet, High-Fat",3,2,0.0402,-0.0004,0.11,0.875
 Probiotic Saccharomyces boulardii;Immunologica,1,1,0.0361,0.0009,0.512,0.928

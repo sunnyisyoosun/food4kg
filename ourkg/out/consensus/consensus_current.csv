@@ -1,4 +1,4 @@
-food_key,food_name,food_group,top_rate,bot_rate,n_seen,설정
+food_key,food_name,food_group,top_rate,bot_rate,n_seen,config
 "vegetable juice, bolthouse farm, daily green","Vegetable juice, BOLTHOUSE FARMS, DAILY GREENS",Vegetables and Vegetable Products,1.0,0.0,84,현행
 "lettuce, co or romaine, raw","Lettuce, cos or romaine, raw",Vegetables and Vegetable Products,1.0,0.0,82,현행
 "caramel dip, light","Caramel dip, light","Soups, Sauces, and Gravies",0.9772727272727273,0.0,88,현행

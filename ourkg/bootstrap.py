@@ -37,9 +37,9 @@ NOT = {'Sausages and Luncheon Meats', 'Baked Products', 'Sweets',
 def one(env, seed, frac):
     res, _ = recommend_under(env, boot=(frac, seed))
     t, b = res.head(30), res.tail(30)
-    return {'추천군': int(t.food_group.isin(REC).sum()),
-            '비추천군': int(b.food_group.isin(NOT).sum()),
-            '위반': int(t.food_group.isin(NOT).sum())}
+    return {'rec': int(t.food_group.isin(REC).sum()),
+            'notrec': int(b.food_group.isin(NOT).sum()),
+            'violation': int(t.food_group.isin(NOT).sum())}
 
 
 def run(configs, R=None, frac=None):
@@ -50,14 +50,14 @@ def run(configs, R=None, frac=None):
         vals = [one(env, s, frac) for s in range(R)]
         d = pd.DataFrame(vals)
         full = one(env, 0, 0)          # 전체 코호트 (부분표집 없음)
-        r = {'설정': lab, 'R': R, 'frac': frac}
-        for k in ('추천군', '비추천군', '위반'):
+        r = {'config': lab, 'R': R, 'frac': frac}
+        for k in ('rec', 'notrec', 'violation'):
             lo, hi = np.percentile(d[k], [2.5, 97.5])
             r[k] = f'{full[k]} [{lo:.0f}, {hi:.0f}]'
             r[k + '_sd'] = round(float(d[k].std()), 2)
         rows.append(r)
         print(f'  {lab:18s} ' + '  '.join(f'{k} {r[k]}' for k in
-                                          ('추천군', '비추천군', '위반')), flush=True)
+                                          ('rec', 'notrec', 'violation')), flush=True)
     t = pd.DataFrame(rows)
     t.to_csv(outp('bootstrap_ci.csv'), index=False)
     print(f'\n  -> out/bootstrap_ci.csv  (값 = 전체 코호트 [95% 구간])')

@@ -19,9 +19,11 @@
   "env": {}
  },
  "complication_hypergeom_curated.csv": {
-  "at": "2026-11-25 16:56:36",
+  "at": "2026-11-27 11:30:57",
   "argv": "complication.py",
-  "env": {}
+  "env": {
+   "COMP_SOURCE": "curated"
+  }
  },
  "complication_hypergeom_disbiome.csv": {
   "at": "2026-11-25 16:56:36",
@@ -46,16 +48,18 @@
   "env": {}
  },
  "complication_paper_eval.csv": {
-  "at": "2026-11-26 11:18:56",
+  "at": "2026-11-27 11:30:57",
   "argv": "complication.py",
   "env": {
-   "COMP_NEST_MAX": "1.1"
+   "COMP_SOURCE": "curated"
   }
  },
  "complication_specificity_curated.csv": {
-  "at": "2026-11-25 16:56:36",
+  "at": "2026-11-27 11:30:57",
   "argv": "complication.py",
-  "env": {}
+  "env": {
+   "COMP_SOURCE": "curated"
+  }
  },
  "complication_specificity_disbiome.csv": {
   "at": "2026-11-25 16:56:36",
@@ -75,10 +79,10 @@
   }
  },
  "complication_summary.csv": {
-  "at": "2026-11-26 11:18:56",
+  "at": "2026-11-27 11:30:57",
   "argv": "complication.py",
   "env": {
-   "COMP_NEST_MAX": "1.1"
+   "COMP_SOURCE": "curated"
   }
  },
  "compound_autism.csv": {

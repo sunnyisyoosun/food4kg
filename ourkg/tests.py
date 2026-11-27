@@ -422,7 +422,7 @@ class ModimedTest(unittest.TestCase):
         self.assertEqual(sc['top2_처방군'], 2)        # Top 2 가 채소 둘
         self.assertEqual(sc['top2_extras'], 0)
         self.assertEqual(sc['bot2_extras'], 2)        # Bottom 2 가 과자 둘
-        self.assertAlmostEqual(sc['modimed_AUC(참고)'], 1.0)   # 완전 분리
+        self.assertAlmostEqual(sc['modimed_auc_ref'], 1.0)   # 완전 분리
 
     def test_score_empty_when_one_side_missing(self):
         # 한쪽이 없으면 AUC 가 정의되지 않는다 — 빈 dict 를 돌려준다.
@@ -451,18 +451,18 @@ class ComplicationGateTest(unittest.TestCase):
         self.assertEqual(s['universe 를 다 가진 질환'], 1)
         # A-B, A-C 는 포개짐, B-C 는 아니다
         self.assertEqual(s['포개진 쌍'], 2)
-        self.assertAlmostEqual(s['포개짐 비율'], 2 / 3, places=3)
+        self.assertAlmostEqual(s['nested_rate'], 2 / 3, places=3)
 
     def test_specific_sets_pass(self):
         sets = {'A': {1, 2, 3}, 'B': {4, 5, 6}, 'C': {7, 8, 9}}
         _, s = self.c.specificity(sets)
         self.assertEqual(s['포개진 쌍'], 0)
-        self.assertEqual(s['Jaccard 중앙값'], 0.0)
+        self.assertEqual(s['jaccard_median'], 0.0)
 
     def test_jaccard_range(self):
         t, _ = self.c.specificity({'A': {1, 2}, 'B': {1, 2}})
         self.assertEqual(t.Jaccard.iloc[0], 1.0)
-        self.assertTrue(bool(t['포개짐'].iloc[0]))
+        self.assertTrue(bool(t['nested'].iloc[0]))
 
     def test_hypergeom_flags_excess_overlap(self):
         # universe 는 **sets 의 합집합**이다(여기서 31). 10 개짜리 두 집합이
@@ -471,10 +471,10 @@ class ComplicationGateTest(unittest.TestCase):
                 'C': set(range(50, 60)), 'D': set(range(90, 100))}
         h = self.c.hypergeom(sets)
         ab = h[(h.a == 'A') & (h.b == 'B')].iloc[0]
-        self.assertEqual(ab['공유'], 9)
+        self.assertEqual(ab['shared'], 9)
         self.assertLess(ab['p'], 1e-4)
         cd = h[(h.a == 'C') & (h.b == 'D')].iloc[0]
-        self.assertEqual(cd['공유'], 0)
+        self.assertEqual(cd['shared'], 0)
         self.assertAlmostEqual(cd['p'], 1.0, places=6)
 
     def test_paper_pairs_table_shape(self):
@@ -490,20 +490,20 @@ class ComplicationGateTest(unittest.TestCase):
         pe, src = self.c.paper_eval('curated')
         self.assertEqual(src, 'curated')
         self.assertEqual(len(pe), 8)
-        na = pe[pe['판정'] == '못 잼']
+        na = pe[pe['verdict'] == '못 잼']
         self.assertEqual(len(na), 2)
-        self.assertTrue((na['사유'] != '').all())
-        got = pe[pe['판정'] != '못 잼']
+        self.assertTrue((na['reason'] != '').all())
+        got = pe[pe['verdict'] != '못 잼']
         self.assertEqual(len(got), 6)
-        self.assertTrue((got['판정'] == '일치').all(), got.to_string())
+        self.assertTrue((got['verdict'] == '일치').all(), got.to_string())
 
     def test_paper_negative_is_rejected(self):
         # #6 파킨슨-자폐는 논문이 0 으로 둔 문항이다. MiKG 경로로는 우리가 1 로
         # 통과시켰다(위양성). curated 에서는 0 이어야 한다.
         pe, _ = self.c.paper_eval('curated')
         r = pe[pe.no == 6].iloc[0]
-        self.assertEqual(r['논문'], 0)
-        self.assertEqual(r['우리'], 0)
+        self.assertEqual(r['paper'], 0)
+        self.assertEqual(r['ours'], 0)
 
     def test_source_must_be_known(self):
         import os
@@ -893,13 +893,13 @@ class MdesTest(unittest.TestCase):
         if not os.path.exists(f):
             self.skipTest('power_bound.csv 없음')
         t = pd.read_csv(f)
-        for claim, g in t.groupby('주장'):
+        for claim, g in t.groupby('claim'):
             if claim == '미생물 축 부호일치':
-                self.assertTrue((g['보정검정수'] > 1).all(), claim)
-                self.assertTrue((g['경계(보정후)'] > g['경계(a=0.05)']).all())
+                self.assertTrue((g['n_tests_adj'] > 1).all(), claim)
+                self.assertTrue((g['bound_adj'] > g['bound_a05']).all())
             else:
-                self.assertTrue((g['보정검정수'] == 1).all(), claim)
-                self.assertTrue((g['경계(보정후)'] == g['경계(a=0.05)']).all())
+                self.assertTrue((g['n_tests_adj'] == 1).all(), claim)
+                self.assertTrue((g['bound_adj'] == g['bound_a05']).all())
 
     def test_detected_effect_is_not_called_excluded(self):
         # 유의한 관측에 "배제된다" 를 붙이면 거짓말이 된다. lift 는 p=0.0068 이다.
@@ -908,7 +908,7 @@ class MdesTest(unittest.TestCase):
         if not os.path.exists(f):
             self.skipTest('power_bound.csv 없음')
         t = pd.read_csv(f)
-        sig = t[t.p < 0.05 / t['보정검정수']]
+        sig = t[t.p < 0.05 / t['n_tests_adj']]
         self.assertTrue(len(sig) >= 1, '유의한 행이 하나는 있어야 이 시험이 산다')
 
     def test_report_picks_tightest_not_largest_effect(self):
@@ -919,19 +919,19 @@ class MdesTest(unittest.TestCase):
         if not os.path.exists(f):
             self.skipTest('power_bound.csv 없음')
         t = pd.read_csv(f)
-        bh = '경계(보정후)'
-        m = t[t['주장'] == '미생물 축 부호일치']
+        bh = 'bound_adj'
+        m = t[t['claim'] == '미생물 축 부호일치']
         # **귀무가 행마다 달라 경계끼리 바로 비교할 수 없다**(§48). 같은 귀무
         # 안에서는 n 이 클수록 경계가 낮다 — 그 불변식만 본다.
-        for _, g in m.groupby(m['귀무'].round(3)):
+        for _, g in m.groupby(m['null'].round(3)):
             if len(g) > 1:
                 self.assertLessEqual(
                     float(g.loc[g.n.idxmax()][bh]),
                     float(g.loc[g.n.idxmin()][bh]) + 1e-9)
         # 보고가 고르는 행은 **귀무 위 초과분**이 가장 작은 행이어야 한다 —
         # 관측이 가장 큰 행(n 이 작아 경계가 느슨하다)이 아니다.
-        pick = m.loc[(m[bh] - m['귀무']).idxmin()]
-        self.assertNotEqual(int(pick.n), int(m.loc[m['관측'].idxmax()].n))
+        pick = m.loc[(m[bh] - m['null']).idxmin()]
+        self.assertNotEqual(int(pick.n), int(m.loc[m['observed'].idxmax()].n))
 
     def test_null_is_not_hardcoded_half(self):
         # 0.5 를 박아 두고 p=4.9e-5 를 신호로 읽을 뻔했다 (§48).
@@ -940,11 +940,11 @@ class MdesTest(unittest.TestCase):
         if not os.path.exists(f):
             self.skipTest('power_bound.csv 없음')
         t = pd.read_csv(f)
-        m = t[t['주장'] == '미생물 축 부호일치']
-        self.assertGreater(m['귀무'].nunique(), 1, '귀무가 전부 같다 — 또 박혔다')
-        self.assertTrue((m['경계(보정후)'] > m['귀무']).all())
+        m = t[t['claim'] == '미생물 축 부호일치']
+        self.assertGreater(m['null'].nunique(), 1, '귀무가 전부 같다 — 또 박혔다')
+        self.assertTrue((m['bound_adj'] > m['null']).all())
         # 경계를 넘은 관측이 있으면 "배제된다" 고 쓸 수 없다.
-        self.assertEqual(int(t['≥경계라면 잡혔다'].sum()), 0)
+        self.assertEqual(int(t['above_bound'].sum()), 0)
 
 
 class AnchorRegexTest(unittest.TestCase):

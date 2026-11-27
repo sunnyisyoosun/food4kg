@@ -1,2 +1,2 @@
-소스,질환,universe,쌍,포개짐 비율,Jaccard 중앙값,universe 전체 보유,검정,q<0.05,통과율
-mikg,10,48,45,0.889,0.698,3,수행,10/45,22.2%
+source,diseases,universe,pairs,nested_rate,jaccard_median,holds_full_universe,test,q<0.05,pass_rate
+curated,31,759,465,0.009,0.041,0,수행,129/465,27.7%

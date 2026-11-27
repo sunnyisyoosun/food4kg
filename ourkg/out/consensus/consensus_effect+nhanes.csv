@@ -1,4 +1,4 @@
-food_key,food_name,food_group,top_rate,bot_rate,n_seen,설정
+food_key,food_name,food_group,top_rate,bot_rate,n_seen,config
 "artichoke, raw","Artichokes, (globe or french), raw",Vegetables and Vegetable Products,0.9166666666666666,0.0,48,effect+nhanes
 "loganberry, frozen","Loganberries, frozen",Fruits and Fruit Juices,0.84,0.0,50,effect+nhanes
 "beverage, nutritional shake mix, high protein, powder","Beverages, nutritional shake mix, high protein, powder",Beverages,0.8,0.0,50,effect+nhanes

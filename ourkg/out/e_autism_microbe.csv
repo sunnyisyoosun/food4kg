@@ -1,4 +1,4 @@
-미생물 소스,링크,방향가정,균,compound,부호일치,귀무(순열),p,rho,q(BH)
+microbe_source,links,direction_assumption,microbes,compound,sign_agree,null_perm,p,rho,q(BH)
 Disbiome,both,감소=이로움,203,42,0.452,0.441,0.5866,-0.154,1.0
 Disbiome,both,증가=이로움,203,42,0.548,0.559,0.7167,0.154,1.0
 Disbiome,species,감소=이로움,203,43,0.372,0.426,1.0,-0.272,1.0
