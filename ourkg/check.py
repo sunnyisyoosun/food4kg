@@ -337,6 +337,27 @@ def check_outputs():
     # **파생물이 하위 폴더에 있는지.** `common.OUT_SUB` 가 규칙이고 쓰는 쪽은
     # `outp()` 를 쓴다. 누가 `os.path.join(OUT, …)` 로 되돌리면 평평한 자리에
     # 떨어지는데, 그걸 사람이 눈으로 볼 수는 없다.
+    # **git 이 추적하는 파일 크기.** `.gitignore` 가 경로를 못 박고 있어서
+    # §56 에서 파일을 옮기자 118 MB 가 추적으로 들어왔고 GitHub 가 푸시를
+    # 거부했다(100 MB 제한). 커밋 시점에 알아야 한다 — 푸시는 그 뒤다.
+    import subprocess
+    try:
+        env = {k: v for k, v in os.environ.items() if not k.startswith('GIT_')}
+        ls = subprocess.run(['git', 'ls-files', '-z'], cwd=BASE, env=env,
+                            capture_output=True, text=True, timeout=30)
+        big = []
+        for rel in ls.stdout.split('\0'):
+            if not rel:
+                continue
+            fp = os.path.join(BASE, rel)
+            if os.path.isfile(fp) and os.path.getsize(fp) > 90 * 1024 ** 2:
+                big.append(f'{rel} {os.path.getsize(fp) / 1024 ** 2:.0f}MB')
+        _say('FAIL' if big else 'PASS', 'git 추적 파일 크기',
+             f'GitHub 100MB 제한을 넘는다: {big[:3]}' if big else
+             'git 이 추적하는 파일 전부 90MB 이하')
+    except Exception as e:
+        _say('SKIP', 'git 추적 파일 크기', f'git 을 못 불렀다: {e}')
+
     import common as _c
     misplaced = [f for f in os.listdir(OUT)
                  if f.endswith('.csv') and _c.out_sub(f)]

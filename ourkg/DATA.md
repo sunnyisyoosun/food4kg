@@ -1,7 +1,7 @@
 # ourkg — 어떤 데이터를 어떻게 썼나
 
 각 축이 **어디서 왔고 · 어떻게 받았고 · 무엇을 뽑았고 · 무엇과 이었고 · 무엇을
-못 하는지**를 적는다. 수치는 `out/linking_stats.csv` · `out/kg_stats.csv` 가
+못 하는지**를 적는다. 수치는 `out/kg/linking_stats.csv` · `out/kg_stats.csv` 가
 정본이고, 여기 적은 값은 **2026-11-25 빌드 기준**이다
 (`python3 ourkg/check.py` 의 `docs` 검사가 핵심 수치를 산출물과 대조한다).
 
@@ -98,8 +98,8 @@ KG 에서도 사라진다.
 
 | | 산출물 | 내용 | 규모 |
 |---|---|---|---|
-| **KG 층** | `out/food_compound_kg.csv` | 성분별 측정치 **그대로** (`nutrient_id` 유지) | 음식 15,347 · nutrient 202 · compound 154 |
-| **F 층** | `out/food_compound_long.csv` | KEGG 당 **대표 측정치 하나** | 음식 14,886 · compound 130 |
+| **KG 층** | `out/food/food_compound_kg.csv` | 성분별 측정치 **그대로** (`nutrient_id` 유지) | 음식 15,347 · nutrient 202 · compound 154 |
+| **F 층** | `out/food/food_compound_long.csv` | KEGG 당 **대표 측정치 하나** | 음식 14,886 · compound 130 |
 
 - 스트리밍은 **확장 매핑**(기본 182 + 후보 94 + B-6)으로 넓게 받고 `F` 는 뒤에서
   `setup/nutrient_kegg_map.csv` 로 좁힌다.
@@ -137,7 +137,7 @@ KG 에서도 사라진다.
   - EFSA FoodEx2 코드 클래스(`40330 - …`) 제외 — 동의어 `snacks` 로 걸린다
   - `black or white pepper product` 제외 — 동의어 `pepper` 로 피망이 후추가 된다
 - **결과**: 음식 **8,165 / 14,886 (54.9%)** · 클래스 1,096 · 조상 포함 링크 117,554
-  (`out/food_foodon.csv`, KG 에 119,841 triple)
+  (`out/food/food_foodon.csv`, KG 에 119,841 triple)
 
 ---
 
@@ -312,7 +312,7 @@ id 를 `AkaTaxIds` 에 넣는다.
 - **경로**: `compound → EC → KO → organism`. KEGG organism 에 매칭된 균
   **569/798** (종 243 · 속 326 — §6 의 사다리).
 - **규모**: 행 15,065 = **고유 (균, compound) 쌍 14,918** · compound 76 ·
-  미생물 **569 id = 564 균** (`out/compound_microbe.csv`). 행과 고유 쌍이 다른
+  미생물 **569 id = 564 균** (`out/microbe/compound_microbe.csv`). 행과 고유 쌍이 다른
   이유는 병합 전/후 taxid 를 둘 다 유지하기 때문이다(§6) — 셀 때는 `taxid_current`
   로 모아야 한다.
   **57% 가 속 수준 매칭**이다 — `match_rank` 열로 거른다. 종 수준만 쓰면
@@ -410,7 +410,7 @@ microbe  compound-미생물 (VMH/AGORA2)   35,509   유전체 재구성 — 예�
 두 경로로 받은 것을 **합쳐** 쓴다. 커버리지가 서로 다르다 — 벌크 30,397 /
 API 34,992 / 합집합 35,509. 처음에 벌크만 넣었다가 문서 수치와 어긋나 고쳤다.
 
-산출물 `out/compound_microbe_vmh.csv` (캐시는 git 추적을 안 하므로 KG 에 들어간
+산출물 `out/microbe/compound_microbe_vmh.csv` (캐시는 git 추적을 안 하므로 KG 에 들어간
 내용을 추적 가능한 자리에 남긴다). 캐시가 없으면 이 단계는 **건너뛴다** —
 2.1 GB zip 없이도 빌드가 돈다.
 
@@ -437,7 +437,7 @@ API 34,992 / 합집합 35,509. 처음에 벌크만 넣었다가 문서 수치와
 | `owl:sameAs` | 114 | **SNOMED 63 · MeSH 51** |
 
 `hasMapID` 는 statement 가 아니라 **별도 `KEGG_pathway` 노드**에 달려 신경전달물질과
-이어진다. 산출물 `out/mikg_xref.csv`, `out/neurotransmitter_pathway.csv`.
+이어진다. 산출물 `out/kg/mikg_xref.csv`, `out/kg/neurotransmitter_pathway.csv`.
 
 ---
 
@@ -448,7 +448,7 @@ API 34,992 / 합집합 35,509. 처음에 벌크만 넣었다가 문서 수치와
   - 링크 244 건, 트리 번호 → 기술어 이름 **1,227** (`cache/mesh_tree.json`)
 - **계층**: 트리 번호는 **접두를 자르면 조상**이 된다.
   `F03.600.300.375 < F03.600 Mood Disorders < F03 Mental Disorders`.
-  질환 **242 종** · KG 에 4,702 triple (`out/disease_tree.csv`).
+  질환 **242 종** · KG 에 4,702 triple (`out/kg/disease_tree.csv`).
 - 논문은 이 축을 SNOMED CT 로 세웠다고 하지만 배포본에는 id 284 개뿐이고
   라벨·계층이 없다. **MeSH 로 대체된다** — 우리는 트리 번호를 이미 갖고 있었고
   이름으로 펼치지 않고 있었을 뿐이다.
@@ -477,7 +477,7 @@ API 34,992 / 합집합 35,509. 처음에 벌크만 넣었다가 문서 수치와
   ([§12b](#12b-미생물-질환--gutmdisorder-v3)). Disbiome 자체는 뺄 이유가 없어
   둘 다 올리고 출처 태그로 분리한다.
 - **규모**: 정신·신경질환으로 걸러 **관계 1,193 · 균 457 · 질환 23**
-  (`out/microbe_disease_disbiome.csv`)
+  (`out/microbe/microbe_disease_disbiome.csv`)
 
 ### 질환명이 자유 표기다 — MeSH 로 해소해야 F03 판정이 된다
 
@@ -579,7 +579,7 @@ Disbiome 의 `disease_name` 은 MedDRA 계열 자유 표기라 그대로는 MeSH
 ### 규모
 
 - 정제 후 **연관 9,374 · 균 1,253 · 질환 150**
-  (`out/microbe_disease_gutmdisorder.csv`)
+  (`out/microbe/microbe_disease_gutmdisorder.csv`)
 - 계급: 속 3,989 · 종 1,999 · 과 1,556 · 목 861 · 강 495 · 문 448
 - **기존 485 균 대비 신규 936** (그중 종 계급 419). 미생물 축이 3 배가 된다.
 - 같은 (균, 질환, 방향) 이 여러 논문·프로젝트에서 나오면 `n_evidence` 에 근거
@@ -611,7 +611,7 @@ Disbiome 의 `disease_name` 은 MedDRA 계열 자유 표기라 그대로는 MeSH
 
 **모순 쌍을 버리지 않는다.** "연관은 있고 방향은 모른다" 가 우리가 실제로 아는
 것이고, 버리면 그 사실이 KG 에서 사라진다. 산출물
-`out/microbe_disease_agreement.csv` (쌍 1,674<!--chk:agree.pairs-->).
+`out/microbe/microbe_disease_agreement.csv` (쌍 1,674<!--chk:agree.pairs-->).
 
 이 필터가 분석에서 무엇을 뜻하는지는 [`RESULTS.md`](RESULTS.md) §32 에 있다 —
 합의 쌍으로 좁히면 명목 p 가 좋아지지만 **두 소스가 둘 다 확인한 쌍만 남기면
@@ -711,7 +711,7 @@ compound-미생물 상관(위)에만 쓰기엔 아깝다 — 대사물 57 개(KE
 - **부호 규약**: `common.polarity` 와 같게 — 환자에서 감소 = 양수.
 - **한계를 먼저 적는다**: BH 후 **q<0.05 가 0/57** 이다. 확립된 기준이 아니라
   **검정력을 재 보려고 만든 보조 축**이다. `E_MODE` 선택지로 넣지 않았다.
-- 산출물 `out/compound_autism.csv`
+- 산출물 `out/compound/compound_autism.csv`
 - **파킨슨은 못 만들었다.** 미생물이 가장 두터운 질환인데(관계 672) 코호트도
   큐레이션 대사물 DB 도 없다. 개별 연구 표로 지어내면 995 연구 합의인
   ProMENDA 와 비교가 불공정해져서 **하지 않았다**.

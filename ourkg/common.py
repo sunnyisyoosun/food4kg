@@ -13,19 +13,41 @@ OUT = os.path.join(OURKG, 'out')
 # 갔다. **파생물만** 하위 폴더로 내린다 — 정본(`foods.csv`·`recommendation.csv`
 # ·`microbes.csv`·`eval_*`)은 코드 167 곳·문서 85 곳이 가리키므로 그대로 둔다.
 # 규칙은 **여기 한 자리**이고 `check.py` 도 이 표로 경로를 찾는다.
+# **루트에는 최종 산출물만 둔다.** 평평한 폴더에 97 개가 쌓여 무엇을 봐야
+# 하는지 알 수 없었다. 규칙은 **여기 한 표**이고 순서대로 첫 일치를 쓴다.
+# 쓰는 쪽·읽는 쪽이 모두 `outp(name)` 을 지나므로 표만 고치면 배치가 바뀐다.
+#
+# 루트에 남는 것: ourkg.nt · recommendation.csv/png · kg_stats.csv ·
+#                provenance.json · README.md
 OUT_SUB = (
-    ('_comparison.csv', 'sweep'),        # 쓸기 민감도표 22 개
-    ('complication_', 'complication'),   # 합병증 추론 10 개
-    ('consensus_', 'consensus'),         # 설정 합의 6 개
-    ('metabolome_check_', 'metabolome'),  # 코호트별 상관 2 개
+    (r'_comparison\.csv$', 'sweep'),          # 쓸기 민감도표
+    (r'^complication_', 'complication'),      # 합병증 추론
+    (r'^consensus_', 'consensus'),             # 설정 합의
+    (r'^metabolome_check_', 'metabolome'),     # 코호트별 상관
+    # --- 평가·외부 기준 (eval_sparql.json 포함)
+    (r'^(eval_|modimed_|bootstrap_ci|disagreement_by_group|group_comparison)',
+     'eval'),
+    # --- 미생물 축 (compound_microbe* 는 compound 가 아니라 여기다)
+    (r'^(microbes?|compound_microbe|microbe_disease|microbe_neurotransmitter'
+     r'|neurotransmitter_disease)', 'microbe'),
+    # --- E 층 (compound 별 효과·근거)
+    (r'^(compound_|promenda_records)', 'compound'),
+    # --- F 층 (음식·성분 구성)
+    (r'^(foods?|food_|group_composition|kegg_class|category_ontology)', 'food'),
+    # --- 분석·검정 (추천 점수 자체가 아닌 것)
+    (r'^(e_microbe|e_autism|power_bound|learned_|diet_intervention)',
+     'analysis'),
+    # --- KG 구축 부산물
+    (r'^(disease_tree|mikg_xref|neurotransmitter_pathway|linking_stats'
+     r'|gutbrain_compounds)', 'kg'),
 )
 
 
 def out_sub(name):
-    """산출물 이름 -> 하위 폴더 (없으면 '')."""
+    """산출물 이름 -> 하위 폴더 (없으면 '' = 루트의 최종 산출물)."""
     b = os.path.basename(name)
     for pat, sub in OUT_SUB:
-        if (b.endswith(pat) if pat.startswith('_') else b.startswith(pat)):
+        if re.search(pat, b):
             return sub
     return ''
 
@@ -455,7 +477,7 @@ def compound_microbe(sources=('kegg', 'vmh'), rank=None):
     out = []
     files = {'kegg': 'compound_microbe.csv', 'vmh': 'compound_microbe_vmh.csv'}
     for src in sources:
-        path = os.path.join(OUT, files[src])
+        path = outp(files[src])
         if not os.path.exists(path):
             continue
         df = pd.read_csv(path, dtype={'taxid': str})
@@ -736,7 +758,7 @@ def depression_e(col=None):
     """
     import sys
     import pandas as pd
-    p = os.path.join(OUT, 'compound_depression.csv')
+    p = outp('compound_depression.csv')
     if not os.path.exists(p):
         sys.exit('compound_depression.csv 가 없다. '
                  'python3 ourkg/build.py promenda')
@@ -759,7 +781,7 @@ def taxid_alias():
     그래서 **정체성은 정본 id 로 모으고 원 id 는 별칭으로 남긴다.**
     """
     import pandas as pd
-    p = os.path.join(OUT, 'microbes.csv')
+    p = outp('microbes.csv')
     if not os.path.exists(p):
         return {}
     m = pd.read_csv(p, dtype={'taxid': str, 'taxid_current': str})
@@ -892,12 +914,12 @@ def measured_links():
     맞추는지** 적어 뒀다.
     """
     import pandas as pd
-    p = os.path.join(OUT, 'compound_microbe_measured.csv')
+    p = outp('compound_microbe_measured.csv')
     if not os.path.exists(p):
         return pd.DataFrame(columns=['taxid', 'kegg'])
     m = pd.read_csv(p)
     m['_gk'] = m['genus'].map(genus_key)
-    mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'),
+    mic = pd.read_csv(outp('microbes.csv'),
                       dtype={'taxid': str}).fillna('')
     mic['_gk'] = mic['name'].map(genus_key)
     m, mic = m[m._gk != ''], mic[mic._gk != '']
@@ -916,7 +938,7 @@ def mental_mesh():
     KG 경로가 어긋난다 (§38).
     """
     import pandas as pd
-    p = os.path.join(OUT, 'microbe_disease.csv')
+    p = outp('microbe_disease.csv')
     if not os.path.exists(p):
         return set()
     md = pd.read_csv(p, dtype={'taxid': str})
@@ -939,7 +961,7 @@ def mental_taxids(mesh=None):
     out = set()
     for fn in ('microbe_disease.csv', 'microbe_disease_disbiome.csv',
                'microbe_disease_gutmdisorder.csv'):
-        p = os.path.join(OUT, fn)
+        p = outp(fn)
         if not os.path.exists(p):
             continue
         d = pd.read_csv(p, dtype={'taxid': str})
@@ -986,7 +1008,7 @@ def microbe_disease_direction():
     parts = []
     for fn, src in (('microbe_disease_disbiome.csv', 'Disbiome'),
                     ('microbe_disease_gutmdisorder.csv', 'gutMDisorder')):
-        path = os.path.join(OUT, fn)
+        path = outp(fn)
         if not os.path.exists(path):
             continue
         d = pd.read_csv(path, dtype={'taxid': str})

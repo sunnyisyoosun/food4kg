@@ -199,7 +199,7 @@ class _OutFixture(unittest.TestCase):
         self._dir.cleanup()
 
     def write(self, name, df):
-        df.to_csv(os.path.join(common.OUT, name), index=False)
+        df.to_csv(common.outp(name), index=False)
 
 
 class CanonTest(_OutFixture):
@@ -566,14 +566,24 @@ class OutLayoutTest(unittest.TestCase):
             self.assertTrue(common.outp(name, mkdir=False)
                             .endswith(os.path.join(sub, name)))
 
-    def test_canonical_stays_flat(self):
-        # 정본은 코드 167 곳·문서 85 곳이 가리킨다 — 움직이면 안 된다.
-        for name in ('recommendation.csv', 'foods.csv', 'microbes.csv',
-                     'compound_microbe_measured.csv', 'eval_method1.csv',
-                     'power_bound.csv'):
+    def test_only_final_outputs_stay_flat(self):
+        # **루트에는 최종 산출물만.** 처음엔 정본 전부를 루트에 뒀는데(코드
+        # 167 곳이 가리켜서) `outp()` 로 모은 뒤에는 표 한 줄로 옮길 수 있어
+        # 단계별로 내렸다 — 루트는 사람이 찾는 6 개다 (§56).
+        for name in ('ourkg.nt', 'recommendation.csv', 'recommendation.png',
+                     'kg_stats.csv', 'provenance.json', 'README.md'):
             self.assertEqual(common.out_sub(name), '', name)
             self.assertEqual(common.outp(name, mkdir=False),
                              os.path.join(common.OUT, name))
+
+    def test_stage_folders(self):
+        for name, sub in (('foods.csv', 'food'), ('microbes.csv', 'microbe'),
+                          ('compound_depression.csv', 'compound'),
+                          ('compound_microbe_measured.csv', 'microbe'),
+                          ('eval_method1.csv', 'eval'),
+                          ('power_bound.csv', 'analysis'),
+                          ('disease_tree.csv', 'kg')):
+            self.assertEqual(common.out_sub(name), sub, name)
 
     def test_no_raw_out_join_left(self):
         # OUT 을 직접 join 하면 파생물이 평평한 자리에 떨어진다.
@@ -723,7 +733,7 @@ class FoodSourceTest(unittest.TestCase):
 
     def setUp(self):
         import os
-        p = os.path.join(common.OUT, 'foods.csv')
+        p = common.outp('foods.csv')
         if not os.path.exists(p):
             self.skipTest('foods.csv 없음')
         self.f = pd.read_csv(p)
@@ -787,8 +797,7 @@ class DiseaseKeyTest(unittest.TestCase):
         # mikg 경로가 이름 그대로 묶으면 질환이 11 개가 된다.
         import os
         import complication
-        if not os.path.exists(os.path.join(common.OUT,
-                                           'microbe_disease_mikg.csv')):
+        if not os.path.exists(common.outp('microbe_disease_mikg.csv')):
             self.skipTest('microbe_disease_mikg.csv 없음')
         sets, src = complication.disease_sets('mikg')
         self.assertEqual(src, 'mikg')
@@ -838,11 +847,10 @@ class GenusKeyTest(unittest.TestCase):
     def test_links_are_additive_not_lossy(self):
         # 정규화는 **순증**이어야 한다. 사라진 쌍이 있으면 키가 뭉갠 것이다.
         import pandas as pd, os
-        if not os.path.exists(os.path.join(common.OUT,
-                                           'compound_microbe_measured.csv')):
+        if not os.path.exists(common.outp('compound_microbe_measured.csv')):
             self.skipTest('측정 표 없음')
-        m = pd.read_csv(os.path.join(common.OUT, 'compound_microbe_measured.csv'))
-        mic = pd.read_csv(os.path.join(common.OUT, 'microbes.csv'),
+        m = pd.read_csv(common.outp('compound_microbe_measured.csv'))
+        mic = pd.read_csv(common.outp('microbes.csv'),
                           dtype={'taxid': str}).fillna('')
         mic['genus'] = mic['name'].astype(str).str.split().str[0]
         old = m.merge(mic[['taxid', 'genus']], on='genus')[['taxid', 'kegg']]
@@ -889,7 +897,7 @@ class MdesTest(unittest.TestCase):
         # **처음에 틀린 자리.** 세 주장 전부에 alpha/28 을 걸었다. 28 은
         # 미생물 축에서 잰 칸 수고, 나머지 둘은 단일 검정이다.
         import pandas as pd, os
-        f = os.path.join(self.e.OUT, 'power_bound.csv')
+        f = common.outp('power_bound.csv')
         if not os.path.exists(f):
             self.skipTest('power_bound.csv 없음')
         t = pd.read_csv(f)
@@ -904,7 +912,7 @@ class MdesTest(unittest.TestCase):
     def test_detected_effect_is_not_called_excluded(self):
         # 유의한 관측에 "배제된다" 를 붙이면 거짓말이 된다. lift 는 p=0.0068 이다.
         import pandas as pd, os
-        f = os.path.join(self.e.OUT, 'power_bound.csv')
+        f = common.outp('power_bound.csv')
         if not os.path.exists(f):
             self.skipTest('power_bound.csv 없음')
         t = pd.read_csv(f)
@@ -915,7 +923,7 @@ class MdesTest(unittest.TestCase):
         # **처음에 틀린 자리.** 부호일치가 가장 큰 행을 골라 0.77 이라는 느슨한
         # 경계를 냈다. 경계는 MDES 가 가장 작은 행에서 읽어야 한다.
         import pandas as pd, os
-        f = os.path.join(self.e.OUT, 'power_bound.csv')
+        f = common.outp('power_bound.csv')
         if not os.path.exists(f):
             self.skipTest('power_bound.csv 없음')
         t = pd.read_csv(f)
@@ -936,7 +944,7 @@ class MdesTest(unittest.TestCase):
     def test_null_is_not_hardcoded_half(self):
         # 0.5 를 박아 두고 p=4.9e-5 를 신호로 읽을 뻔했다 (§48).
         import pandas as pd, os
-        f = os.path.join(self.e.OUT, 'power_bound.csv')
+        f = common.outp('power_bound.csv')
         if not os.path.exists(f):
             self.skipTest('power_bound.csv 없음')
         t = pd.read_csv(f)
@@ -1066,7 +1074,7 @@ class _CheckFixture(unittest.TestCase):
         self._dir.cleanup()
 
     def w(self, name, df):
-        df.to_csv(os.path.join(_chk.OUT, name), index=False)
+        df.to_csv(common.outp(name), index=False)
 
     def good(self):
         """모든 검사가 통과하는 최소 fixture."""
@@ -1125,7 +1133,7 @@ class MetaSchemaTest(_CheckFixture):
         self.assertPasses(_chk.check_schema)
 
     def test_fails_on_missing_column(self):
-        m = pd.read_csv(os.path.join(_chk.OUT, 'microbes.csv'))
+        m = pd.read_csv(common.outp('microbes.csv'))
         self.w('microbes.csv', m.drop(columns=['taxid_current']))
         self.assertFails(_chk.check_schema)
 
@@ -1136,7 +1144,7 @@ class MetaMicrobeTest(_CheckFixture):
 
     def test_fails_when_disease_taxid_absent_from_axis(self):
         # 질환 관계가 축에 없는 균을 가리킨다 — 병합 taxid 버그의 모양.
-        md = pd.read_csv(os.path.join(_chk.OUT, 'microbe_disease_disbiome.csv'),
+        md = pd.read_csv(common.outp('microbe_disease_disbiome.csv'),
                          dtype={'taxid': str})
         md.loc[0, 'taxid'] = '999'
         self.w('microbe_disease_disbiome.csv', md)
@@ -1148,7 +1156,7 @@ class MetaLinksTest(_CheckFixture):
         self.assertPasses(_chk.check_links)
 
     def test_fails_on_duplicate_pair(self):
-        cm = pd.read_csv(os.path.join(_chk.OUT, 'compound_microbe.csv'),
+        cm = pd.read_csv(common.outp('compound_microbe.csv'),
                          dtype={'taxid': str, 'taxid_current': str})
         self.w('compound_microbe.csv', pd.concat([cm, cm]))
         self.assertFails(_chk.check_links)
@@ -1159,14 +1167,14 @@ class MetaAgreementTest(_CheckFixture):
         self.assertPasses(_chk.check_agreement)
 
     def test_fails_when_conflict_has_direction(self):
-        a = pd.read_csv(os.path.join(_chk.OUT, 'microbe_disease_agreement.csv'),
+        a = pd.read_csv(common.outp('microbe_disease_agreement.csv'),
                         dtype={'taxid': str})
         a.loc[0, 'status'] = 'conflict'          # 방향은 그대로 남겨 둔다
         self.w('microbe_disease_agreement.csv', a)
         self.assertFails(_chk.check_agreement)
 
     def test_fails_on_unknown_status(self):
-        a = pd.read_csv(os.path.join(_chk.OUT, 'microbe_disease_agreement.csv'),
+        a = pd.read_csv(common.outp('microbe_disease_agreement.csv'),
                         dtype={'taxid': str})
         a.loc[0, 'status'] = 'maybe'
         self.w('microbe_disease_agreement.csv', a)
@@ -1178,13 +1186,13 @@ class MetaRecommendTest(_CheckFixture):
         self.assertPasses(_chk.check_recommend)
 
     def test_fails_on_broken_rank(self):
-        r = pd.read_csv(os.path.join(_chk.OUT, 'recommendation.csv'))
+        r = pd.read_csv(common.outp('recommendation.csv'))
         r.loc[1, 'rank'] = 5
         self.w('recommendation.csv', r)
         self.assertFails(_chk.check_recommend)
 
     def test_fails_on_non_monotone_score(self):
-        r = pd.read_csv(os.path.join(_chk.OUT, 'recommendation.csv'))
+        r = pd.read_csv(common.outp('recommendation.csv'))
         r.loc[1, 'score'] = 9.0                  # rank 2 가 rank 1 보다 높다
         self.w('recommendation.csv', r)
         self.assertFails(_chk.check_recommend)
@@ -1195,13 +1203,13 @@ class MetaKgStatsTest(_CheckFixture):
         self.assertPasses(_chk.check_kg)
 
     def test_fails_when_source_sum_mismatches(self):
-        k = pd.read_csv(os.path.join(_chk.OUT, 'kg_stats.csv'))
+        k = pd.read_csv(common.outp('kg_stats.csv'))
         k.loc[0, 'triples'] = 999
         self.w('kg_stats.csv', k)
         self.assertFails(_chk.check_kg)
 
     def test_fails_when_unique_exceeds_claims(self):
-        k = pd.read_csv(os.path.join(_chk.OUT, 'kg_stats.csv'))
+        k = pd.read_csv(common.outp('kg_stats.csv'))
         k.loc[2, 'triples'] = 99                 # 고유 > Σ 주장 은 불가능하다
         self.w('kg_stats.csv', k)
         self.assertFails(_chk.check_kg)
@@ -1210,7 +1218,7 @@ class MetaKgStatsTest(_CheckFixture):
 class MetaPathcheckTest(_CheckFixture):
     def _write(self, d):
         import json
-        json.dump(d, open(os.path.join(_chk.OUT, 'gutbrain_compounds.json'), 'w'))
+        json.dump(d, open(common.outp('gutbrain_compounds.json'), 'w'))
 
     def test_passes_when_agree(self):
         self._write({'kegg': ['C1'], 'agree': True, 'n_csv': 1, 'n_kg': 1,
@@ -1227,21 +1235,21 @@ class MetaProvenanceTest(_CheckFixture):
     def test_passes_when_good(self):
         import json
         json.dump({'recommendation.csv': {'at': 'x', 'argv': 'y', 'env': {}}},
-                  open(os.path.join(_chk.OUT, 'provenance.json'), 'w'))
+                  open(common.outp('provenance.json'), 'w'))
         self.assertPasses(_chk.check_provenance)
 
     def test_fails_on_nondefault_env_for_canonical(self):
         import json
         json.dump({'recommendation.csv':
                    {'at': 'x', 'argv': 'y', 'env': {'E_MODE': 'binary'}}},
-                  open(os.path.join(_chk.OUT, 'provenance.json'), 'w'))
+                  open(common.outp('provenance.json'), 'w'))
         self.assertFails(_chk.check_provenance)
 
     def test_fails_when_output_older_than_input(self):
         import json
         import time
-        json.dump({}, open(os.path.join(_chk.OUT, 'provenance.json'), 'w'))
-        rec = os.path.join(_chk.OUT, 'recommendation.csv')
+        json.dump({}, open(common.outp('provenance.json'), 'w'))
+        rec = common.outp('recommendation.csv')
         old = time.time() - 600
         os.utime(rec, (old, old))                # 입력보다 오래된 산출물
         self.assertFails(_chk.check_provenance)
@@ -1265,9 +1273,7 @@ class MetaOutputsTest(_CheckFixture):
     def test_passes_when_producer_exists(self):
         self._code("import os\nx = outp('alpha.csv')\n")
         self.w('alpha.csv', pd.DataFrame([{'a': 1}]))
-        for f in os.listdir(_chk.OUT):          # fixture 산출물은 치운다
-            if f.endswith('.csv') and f != 'alpha.csv':
-                os.remove(os.path.join(_chk.OUT, f))
+        self._only('alpha.csv')
         self._doc('`out/alpha.csv`')
         self.assertPasses(_chk.check_outputs)
 
@@ -1279,12 +1285,10 @@ class MetaOutputsTest(_CheckFixture):
 
     def test_fstring_pattern_covers_variants(self):
         # `learned_{FEATURES}.csv` 가 learned_form.csv 를 덮어야 한다.
-        self._code("n = 'form'\nx = f'learned_{n}.csv'\n")
-        for f in os.listdir(_chk.OUT):
-            if f.endswith('.csv'):
-                os.remove(os.path.join(_chk.OUT, f))
-        self.w('learned_form.csv', pd.DataFrame([{'a': 1}]))
-        self._doc('`out/learned_form.csv`')
+        self._code("n = 'form'\nx = f'zz_learned_{n}.csv'\n")
+        self._only()
+        self.w('zz_learned_form.csv', pd.DataFrame([{'a': 1}]))
+        self._doc('`out/zz_learned_form.csv`')
         self.assertPasses(_chk.check_outputs)
 
     def test_declared_outputs_reads_fstrings(self):
@@ -1298,9 +1302,12 @@ class MetaOutputsTest(_CheckFixture):
             f.write(text)
 
     def _only(self, *names):
-        for f in os.listdir(_chk.OUT):
-            if f.endswith('.csv') and f not in names:
-                os.remove(os.path.join(_chk.OUT, f))
+        # **하위 폴더까지 비운다.** 평평한 자리만 비웠더니 fixture 가 하위
+        # 폴더에 남겨 둔 파일을 검사가(재귀로 훑으므로) 보고 FAIL 했다.
+        for root, dirs, files in os.walk(_chk.OUT):
+            for f in files:
+                if f.endswith('.csv') and f not in names:
+                    os.remove(os.path.join(root, f))
 
     def test_fails_on_undocumented_output(self):
         self._code("x = 'alpha.csv'\ny = 'beta.csv'\n")
@@ -1321,21 +1328,19 @@ class MetaOutputsTest(_CheckFixture):
 
     def test_doc_placeholder_covers_variants(self):
         # `complication_hypergeom_{소스}.csv` 가 _curated 를 덮어야 한다.
-        self._code("s = 'curated'\nx = f'comp_{s}.csv'\n")
+        self._code("s = 'curated'\nx = f'zzcomp_{s}.csv'\n")
         self._only()
-        self.w('comp_curated.csv', pd.DataFrame([{'a': 1}]))
-        self._doc('| `out/comp_{소스}.csv` | 소스별 |')
+        self.w('zzcomp_curated.csv', pd.DataFrame([{'a': 1}]))
+        self._doc('| `out/zzcomp_{소스}.csv` | 소스별 |')
         self.assertPasses(_chk.check_outputs)
 
     def test_missing_provenance_is_not_a_failure(self):
         # **일부러 통과시키는 자리.** 기본값 아닌 환경에서만 나오는 산출물은
         # 기본 실행에 기록이 안 남는다. 그걸 FAIL 로 하면 검사가 거짓말을 한다.
         self._code("x = 'alpha.csv'\n")
-        for f in os.listdir(_chk.OUT):
-            if f.endswith('.csv'):
-                os.remove(os.path.join(_chk.OUT, f))
+        self._only()
         self.w('alpha.csv', pd.DataFrame([{'a': 1}]))
-        pv = os.path.join(_chk.OUT, 'provenance.json')
+        pv = common.outp('provenance.json')
         if os.path.exists(pv):
             os.remove(pv)
         self._doc('`out/alpha.csv`')
@@ -1533,7 +1538,7 @@ class MetaRobustnessTest(_CheckFixture):
 
     def test_main_reports_fail_instead_of_crashing(self):
         # 열을 지워 검사 안에서 AttributeError 가 나게 한다.
-        m = pd.read_csv(os.path.join(_chk.OUT, 'microbes.csv'))
+        m = pd.read_csv(common.outp('microbes.csv'))
         self.w('microbes.csv', m.drop(columns=['taxid_current']))
         import contextlib
         import io as _io

@@ -25,7 +25,7 @@
 > 각 절의 갱신 주석이나 README 를 본다.
 
 <details>
-<summary><b>절 목록</b> — 65 개 절. ★ 는 결론이 바뀐 절, ★★ 는 전제가 바뀐 절 (펼치기)</summary>
+<summary><b>절 목록</b> — 66 개 절. ★ 는 결론이 바뀐 절, ★★ 는 전제가 바뀐 절 (펼치기)</summary>
 
 - **§1** 한눈에
 - **§2** KG 규모 (논문 Table 1 대응)
@@ -90,6 +90,7 @@
 - **§53** 단위 환산의 조용한 기본값을 막았다
 - **§54** `out/` 을 나눴다 — 파생물만, 규칙은 코드에
 - **§55** 열 이름을 영어로 바꿨다
+- **§56** `out/` 루트를 6 개로 줄였다 — `outp()` 가 생겨서 가능해졌다
 - **§42** 한계
 - **§43** 산출물
 
@@ -503,7 +504,7 @@ brite triple    3,506  -> 6,413
 ### 엔티티 링킹 (논문 §3.2) — 우리가 수행한 것
 
 재현 트랙의 `eval/paper_kg_stats.linking()` 이 **논문 수치를 검증**한다면, 여기서는
-우리가 **직접 수행한** 링킹을 집계한다. `ourkg/out/linking_stats.csv`
+우리가 **직접 수행한** 링킹을 집계한다. `ourkg/out/kg/linking_stats.csv`
 (`build.py food` 가 `food_link.json` 에 중간 수치를 남기고 `build.py kg` 가 표로 합친다).
 
 | 축 | 항목 | 값 | 논문 대응 |
@@ -751,7 +752,7 @@ MiKG 원본(2,465 triple)에서 우리는 `hasGutMicrobiota`·`hasNeurotransmitt
 
 `hasMapID` 는 처음에 0 건이 나왔다 — statement 가 아니라 별도 `KEGG_pathway`
 노드에 달려 신경전달물질과 이어지기 때문이다. 고쳐서 **90 링크 · 경로 56 종**을
-얻었다(`out/neurotransmitter_pathway.csv`).
+얻었다(`out/kg/neurotransmitter_pathway.csv`).
 
 **SNOMED 축이 열린다.** 통계의 `SNOMED CT 링크` 는 줄곧 **1** 이었고 "배포본에
 라벨·계층 없음" 이라 적어 두었다. 그런데 MiKG 가 자기 엔티티에 SCT id 를 **63 개**
@@ -900,7 +901,7 @@ D001321 Autism                      F03.625.164.113.500
 (`ourkg/cache/mesh_tree.json`, 트리 번호 1,227 개). FoodOn 때와 같은 '공개 API +
 캐시' 방식이다. 우리는 번호만 들고 **이름으로 펼치지 않고** 있었다.
 
-결과: `out/disease_tree.csv` 2,351 행 · 질환 **242 종**, KG 에 **4,702 triple**
+결과: `out/kg/disease_tree.csv` 2,351 행 · 질환 **242 종**, KG 에 **4,702 triple**
 (`mesh:Dxxxxxx rdfs:subClassOf mesh:Dyyyyyy` + 상위 라벨). KG 총계 3,459,231 →
 **3,463,933**.
 
@@ -956,7 +957,7 @@ EBI OLS 에서 FOODON 클래스 **28,685** 개와 매칭된 클래스의 조상 
 통과시켰다.
 
 결과: **음식 8,165 / 14,886 (54.9%) · 클래스 1,096 · 조상 포함 링크 117,554**
-(`out/food_foodon.csv`). 꼬리 쪽 소수 클래스도 표본 검수했다 — `Tahini→tahini`,
+(`out/food/food_foodon.csv`). 꼬리 쪽 소수 클래스도 표본 검수했다 — `Tahini→tahini`,
 `Tofu→tofu (raw)`, `Papad→poppadum`, `Sugar-apples→custard apple fruit`.
 
 **질의도 어휘 중립으로 고쳤다.** `_beverage_subclass` 가 상위군을 `'Beverages' in c`
@@ -1196,7 +1197,7 @@ long 표에 없어 축이 7/8 이다.
 ### 방법 2 (문헌 논증) — 추론 15건 PubMed 검증
 
 논문은 수작업 검색으로 11 confirmed / 3 unknown / 1 contradicted 를 보고한다.
-여기서는 E-utilities 로 자동화한다. `ourkg/out/eval_method2.csv`
+여기서는 E-utilities 로 자동화한다. `ourkg/out/eval/eval_method2.csv`
 
 #### 2026-11-09 — 자가 달랐다
 
@@ -1557,7 +1558,7 @@ AUC 가 가장 높은 설정의 Top 30 이 처방 0 / extras 18 이고 1 위가 
 
 논문은 MENDA 한 소스로 E 를 만들었다(§3.1·§4.2.1). ProMENDA 하나만 쓰면
 130 compound 중 66 개만 방향이 정해진다. 네 근거를 각각 부호 있는 점수로 환산해
-함께 두고, 결합 방식 세 가지를 비교했다. `ourkg/out/compound_evidence.csv`
+함께 두고, 결합 방식 세 가지를 비교했다. `ourkg/out/compound/compound_evidence.csv`
 
 ### 근거 네 가지
 
@@ -1845,7 +1846,7 @@ sugary drinks, 그리고 spirits/beer. 합쳐 **≤ 3 / week**.
 처방이 조건부인 것들(`low-fat`·`unsweetened`·`raw`·`unsalted`·`lean`·`whole`·`olive`)은
 카테고리만으로 가를 수 없어 이름 규칙을 뒀다. 규칙은 전부 위 처방 문구에서 그대로
 가져왔고, 어느 쪽에도 걸리지 않는 음식은 **집계에서 뺀다**. 성인 RCT 이므로 이유식도
-뺀다. 라벨 전수는 `ourkg/out/modimed_labels.csv` 에 규칙 출처와 함께 있다.
+뺀다. 라벨 전수는 `ourkg/out/eval/modimed_labels.csv` 에 규칙 출처와 함께 있다.
 
 추천 코호트 12,574 중 **처방군 5,360 / extras 3,328 / 해당 없음 3,886**.
 
@@ -2675,7 +2676,7 @@ KG 자체는 FDC 전체를 담고, 추천 코호트만 제한한다 (`DATA_TYPES
 빼놓고 있었다.** 이것은 §4.2.3 이 추천 결과의 **근거로 쓰는 그림**이다 — compound 를
 생물학적 역할로 6 군으로 묶어 추천군과 비추천군의 조성을 비교한다.
 
-재료는 이미 있었다(`out/compound_class.csv` 의 KEGG brite, FDC 영양소 이름).
+재료는 이미 있었다(`out/compound/compound_class.csv` 의 KEGG brite, FDC 영양소 이름).
 `python3 ourkg/analyze.py groups` → `out/group_comparison.{csv,png}`.
 
 ### 정규화 기준이 두 가지로 읽힌다
@@ -4619,7 +4620,7 @@ microbe_disease_direction()` 이 쌍마다 판정하고 `kg()` 이 그 결과만
 것이고, 버리면 그 사실이 KG 에서 사라진다. `증가2:감소1|Disbiome+gutMDisorder`
 처럼 어긋난 내용을 적어 감사 가능하게 둔다. `mpq:hasAssociation` 은 출처별로
 그대로 남으므로 출처 추적은 잃지 않는다.
-산출물 `out/microbe_disease_agreement.csv` (쌍 1,682).
+산출물 `out/microbe/microbe_disease_agreement.csv` (쌍 1,682).
 
 ### ★ 그래서 신호가 있나 — 가장 엄격한 부분집합에서 사라진다
 
@@ -4735,8 +4736,8 @@ microbe_disease_direction()` 이 쌍마다 판정하고 `kg()` 이 그 결과만
 > 중재는 거의 전부 FDC 가 다루지 않는 것들이다.** `음식 → 미생물` 간선은
 > 음식 2 개 · 58 행으로는 KG 에 올릴 의미가 없다.
 
-산출물: `out/diet_intervention.csv`(318) · `out/diet_intervention_score.csv`(29)
-· `out/diet_intervention_map.csv`(58). 코드 `ourkg/diet_intervention.py`,
+산출물: `out/analysis/diet_intervention.csv`(318) · `out/analysis/diet_intervention_score.csv`(29)
+· `out/analysis/diet_intervention_map.csv`(58). 코드 `ourkg/diet_intervention.py`,
 `run_all.py` 의 `diet_iv` 단계.
 
 ---
@@ -4827,7 +4828,7 @@ microbe_disease_direction()` 이 쌍마다 판정하고 `kg()` 이 그 결과만
 
 부호일치 검정은 이항검정이다. 그러면 주어진 `n` 에서 80% 검정력으로 잡히는
 가장 작은 부호일치(MDES)가 닫힌 식으로 나온다. 우리가 돌린 **52 개** 부호일치
-검정 전부에 대해 계산했다 (`e_autism.power_report`, `out/power_bound.csv`).
+검정 전부에 대해 계산했다 (`e_autism.power_report`, `out/analysis/power_bound.csv`).
 
 | | 값 |
 |---|---:|
@@ -4855,8 +4856,8 @@ microbe_disease_direction()` 이 쌍마다 판정하고 `kg()` 이 그 결과만
 `E` 가 넓은 질환이 공개 데이터에 없다 (§30 과 같은 종류의 한계다). 다만 그
 공백의 크기를 이제 숫자로 적는다.
 
-산출물: `out/compound_autism.csv`(57) · `out/e_autism_microbe.csv`(24) ·
-`out/power_bound.csv`(52).
+산출물: `out/compound/compound_autism.csv`(57) · `out/analysis/e_autism_microbe.csv`(24) ·
+`out/analysis/power_bound.csv`(52).
 `analyze._measured_links` 를 `common.measured_links` 로 옮겼다 — 두 모듈이
 쓰게 되면서 복사하면 또 갈라진다.
 
@@ -5098,7 +5099,7 @@ CSV  52종 / KG 71종 / 일치 52 / KG 에만 19
 ⚠ 어긋난다.
 ```
 
-`out/gutbrain_compounds.json` 은 **11-05 산출물**이었다 — 그 뒤 미생물 축이
+`out/kg/gutbrain_compounds.json` 은 **11-05 산출물**이었다 — 그 뒤 미생물 축이
 162 → 791 종이 됐고 소스가 둘 늘었는데, **경고가 화면에만 찍혀서 20 일간
 아무에게도 안 보였다.**
 
@@ -5654,7 +5655,7 @@ lift 는 각각 단일 검정이라 보정할 것이 없다. 일괄 적용하면
 
 `mdes` 를 `e_autism.py` 에서 `common.py` 로 올리고 `mdes_auc` 를 옆에 뒀다.
 세 주장이 같은 식을 쓰므로 복사하면 갈라진다 — `measured_links` 를 올린 것과
-같은 이유다. 산출물은 `out/power_bound.csv` 하나로 유지하고 `주장` 열로 가른다.
+같은 이유다. 산출물은 `out/analysis/power_bound.csv` 하나로 유지하고 `주장` 열로 가른다.
 
 검사 32 개 · 시험 **113** 개다.
 
@@ -6172,6 +6173,56 @@ csv 를 만들어 FAIL 을 확인했다. §54 의 `산출물 이름 ASCII`(파�
 
 ---
 
+## 56. `out/` 루트를 6 개로 줄였다 — `outp()` 가 생겨서 가능해졌다 (2026-11-27)
+
+§54 에서 **파생물만** 내리고 정본 56 개를 루트에 뒀다. 이유는 "코드 167 곳·문서
+85 곳이 가리킨다" 였다. **그 판단이 §54 자체 때문에 낡았다** — 모든 경로가
+`outp(name)` 을 지나게 되면서 배치는 `common.OUT_SUB` **표 한 줄**이 됐다.
+
+| 어디 | 무엇 | 수 |
+|---|---|---:|
+| `out/` | **최종** — `ourkg.nt` · `recommendation.csv/png` · `kg_stats.csv` · `provenance.json` · `README.md` | **6** |
+| `food/` · `compound/` · `microbe/` | F 층 · E 층 · 미생물 축 | 9 · 9 · 11 |
+| `eval/` · `analysis/` · `kg/` | 평가 · 검정 · KG 부산물 | 8 · 9 · 5 |
+| `sweep/` · `complication/` · `consensus/` · `metabolome/` | §54 에서 내린 파생물 | 22 · 10 · 6 · 2 |
+| `legacy/` | 생산 코드 없는 기록 | 5 |
+
+51 개를 옮겼고 `mtime` 을 보존했다(신선도 검사의 선후).
+
+### 옮기자 네 군데가 깨졌다 — 전부 "평평함" 가정
+
+| 깨진 곳 | 왜 |
+|---|---|
+| `common.py` 의 읽기 10 곳 | §54 의 기계적 치환에서 **`common.py` 를 일부러 제외**했다. 거기 읽기가 원시 경로로 남아 `compound_microbe()` 가 0 쌍을 읽었다 |
+| 시험 fixture 쓰기 | `os.path.join(_chk.OUT, name)` 으로 평평하게 깔아 코드가 하위 폴더에서 못 찾았다 |
+| fixture 정리 `_only()` | 평평한 자리만 비워 하위 폴더 잔여물이 남았고, 재귀로 훑는 검사가 그걸 보고 FAIL 했다 |
+| 같은 정리 루프 3 개 | `_only()` 를 쓰지 않고 각자 평평하게 돌고 있었다 — 중복이 이렇게 갈라진다 |
+
+그리고 시험 하나는 **옛 정책을 주장**하고 있었다 —
+`test_canonical_stays_flat`("정본은 루트에 남는다")이 이제 사실이 아니다.
+`test_only_final_outputs_stay_flat` 와 `test_stage_folders` 로 바꿨다.
+
+> 고치다 하나 더 당했다: §55 의 열 이름 치환이 **그 시험 안의 비교식까지**
+> `os.path.join(common.OUT, name)` → `common.outp(name)` 으로 바꿔 동어반복으로
+> 만들어 뒀다. 기계적 치환은 시험의 **의도**를 모른다.
+
+### 푸시가 거부됐다 — `.gitignore` 가 경로를 못 박고 있었다
+
+커밋은 됐는데 GitHub 가 거부했다. `ourkg/out/food_compound_kg.csv`(118 MB)가
+**원래 `.gitignore` 에 있었는데** 파일이 `out/food/` 로 내려가자 패턴에 안
+걸려 추적으로 들어온 것이다. 셋이 그랬다 — 118 MB · 46 MB · 10 MB.
+
+이름으로 받게 고쳤다(`ourkg/out/**/food_compound_kg.csv`). 그리고 **커밋
+시점에 알도록** 검사를 넣었다 — `git 추적 파일 크기` 가 90 MB 를 넘는 추적
+파일을 FAIL 한다. 푸시는 커밋 뒤라 거기서 알면 늦다.
+
+> 여기서도 같은 모양이다 — **경로를 못 박은 설정은 파일을 옮기면 조용히
+> 빗나간다.** §56 에서 깨진 네 군데(평평함 가정)와 같은 종류다.
+
+검사 39 개 · 시험 149 개다.
+
+---
+
 ## 42. 한계
 
 - **식품 온톨로지를 넣어도 분류 질문이 풀리지 않는다** (2026-11-09 통합 완료).
@@ -6213,41 +6264,41 @@ csv 를 만들어 FAIL 을 확인했다. §54 의 `산출물 이름 ASCII`(파�
 |---|---|
 | `out/ourkg.nt` | RDF N-Triples 3,459,231 |
 | `out/kg_stats.csv` | 논문 Table 1 대응 통계 |
-| `out/foods.csv` | 음식 14,719 (fdc_id, 카테고리, 측정 compound 수) |
-| `out/food_compound_long.csv` | 음식 × compound 중량 768,157 (g/100g) |
-| `out/compound_depression.csv` | ProMENDA 극성 E (binary / shrunk / BH q) |
-| `out/compound_depression_menda.csv` | MENDA 2020 극성 |
-| `out/compound_evidence.csv` | 근거 4종 점수 + 결합 6가지 |
+| `out/food/foods.csv` | 음식 14,719 (fdc_id, 카테고리, 측정 compound 수) |
+| `out/food/food_compound_long.csv` | 음식 × compound 중량 768,157 (g/100g) |
+| `out/compound/compound_depression.csv` | ProMENDA 극성 E (binary / shrunk / BH q) |
+| `out/compound/compound_depression_menda.csv` | MENDA 2020 극성 |
+| `out/compound/compound_evidence.csv` | 근거 4종 점수 + 결합 6가지 |
 | `out/sweep/e_mode_comparison.csv` | E 구성 방식 비교표 (§4.2.3 + ModiMedDiet 두 기준) |
-| `out/modimed_labels.csv` | ModiMedDiet 정답셋 라벨과 규칙 출처 |
-| `out/compound_learned.csv` | ModiMedDiet 로 역추정한 E |
+| `out/eval/modimed_labels.csv` | ModiMedDiet 정답셋 라벨과 규칙 출처 |
+| `out/compound/compound_learned.csv` | ModiMedDiet 로 역추정한 E |
 | `out/sweep/invert_comparison.csv` | 역추정 E vs 공개 소스 E 부호 대조 (전수) |
-| `out/compound_depression_stype.csv` | 연구 설계별 E 7변형 |
+| `out/compound/compound_depression_stype.csv` | 연구 설계별 E 7변형 |
 | `out/sweep/stype_comparison.csv` | 설계별 E 채점표 |
-| `out/food_form.csv` | 구조·가공 축 19 (FDC 측정값) |
-| `out/learned_form.csv`, `out/learned_both.csv` | 그 축으로 역추정한 가중치 |
-| `out/disagreement_by_group.csv` | 두 기준이 갈리는 지점의 음식군별 분해 |
+| `out/food/food_form.csv` | 구조·가공 축 19 (FDC 측정값) |
+| `out/analysis/learned_form.csv`, `out/analysis/learned_both.csv` | 그 축으로 역추정한 가중치 |
+| `out/eval/disagreement_by_group.csv` | 두 기준이 갈리는 지점의 음식군별 분해 |
 | `out/legacy/pca_comparison.csv` | PCA 성분 수별 두 기준 채점 — **생산 코드 없음** (§44). 후속 `out/sweep/fcolumns_comparison.csv` |
 | `out/sweep/fcolumns_comparison.csv` | `F` 열 제한 × PCA 조합 채점 (§13) |
 | `out/legacy/threshold_comparison.csv` | Algorithm 1 Threshold 변형 채점 (§14) — **생산 코드 없음** (§44). 후속 `out/sweep/simthr_comparison.csv` |
-| `out/compound_microbe.csv` | KEGG 재계산 compound-미생물 2,124 |
-| `out/microbes.csv` | NCBI 갱신 미생물 127 |
-| `out/microbe_disease.csv`, `out/microbe_disease_mikg.csv` | 미생물-질환 |
+| `out/microbe/compound_microbe.csv` | KEGG 재계산 compound-미생물 2,124 |
+| `out/microbe/microbes.csv` | NCBI 갱신 미생물 127 |
+| `out/microbe/microbe_disease.csv`, `out/microbe/microbe_disease_mikg.csv` | 미생물-질환 |
 | `out/recommendation.csv`, `out/recommendation.png` | 추천 순위·시각화 (Fig.4(b) t-SNE) |
-| `out/group_composition.csv`, `out/sweep/group_comparison.csv`, `out/group_comparison.png` | **Fig.4(c) 대응** — 추천/비추천군 성분군 조성 |
-| `out/microbe_disease_disbiome.csv` | **Disbiome** 미생물-질환 (외부 큐레이션) |
+| `out/food/group_composition.csv`, `out/sweep/group_comparison.csv`, `out/eval/group_comparison.png` | **Fig.4(c) 대응** — 추천/비추천군 성분군 조성 |
+| `out/microbe/microbe_disease_disbiome.csv` | **Disbiome** 미생물-질환 (외부 큐레이션) |
 | `out/sweep/gutbrain_comparison.csv` | **미생물 매개 가중** `ALPHA` 쓸기 (§15c) |
 | `out/sweep/modimed_rho_comparison.csv` | **빈도 가중 순위 상관** vs Top-K (§13b) |
 | `setup/probiotic_rct.csv` | **외부 정답표** — 우울/불안 RCT 에서 시험된 균 25 종 |
 | `out/metabolome/metabolome_check_*.csv` | **측정 분변 대사체** vs 우리 예측 링크 (§15c 검정 ④) |
-| `out/compound_microbe_measured.csv` | **측정 상관 링크** 39,574 — 13 코호트 재현 (§15c 검정 ⑤) |
-| `out/e_microbe.csv`, `out/e_microbe_compare.csv` | **미생물 경로에서 유도한 E** 와 ProMENDA 대조 (§15c 검정 ⑥) |
+| `out/microbe/compound_microbe_measured.csv` | **측정 상관 링크** 39,574 — 13 코호트 재현 (§15c 검정 ⑤) |
+| `out/analysis/e_microbe.csv`, `out/analysis/e_microbe_compare.csv` | **미생물 경로에서 유도한 E** 와 ProMENDA 대조 (§15c 검정 ⑥) |
 | `out/sweep/simthr_comparison.csv` | **유사도 희소화** 쓸기 (§15c 검정 ⑦) |
 | `out/sweep/ezero_comparison.csv` | **에탄올·설탕 제거** 영향 (§15c 검정 ⑧) |
-| `out/compound_depression_nhanes.csv` | **NHANES 섭취-결과 E** (§15d) |
+| `out/compound/compound_depression_nhanes.csv` | **NHANES 섭취-결과 E** (§15d) |
 | `out/sweep/emode_comparison.csv` | E 소스 다섯 비교 (§15d) |
 | `out/sweep/fscale_comparison.csv` | **서빙 기준 F** x E 소스 (§15e) |
-| `out/bootstrap_ci.csv` | **Top-K 지표의 표집 변동** (§17) |
+| `out/eval/bootstrap_ci.csv` | **Top-K 지표의 표집 변동** (§17) |
 | `out/sweep/negw_comparison.csv` | **음수 유사도 가중** 쓸기 (§17b) |
 | `out/sweep/nosim_comparison.csv` | **유사도 제거** ablation (§17c) |
 | `out/sweep/simspace_comparison.csv` | **유사도 공간** 성분 vs 효과 (§17d) |
@@ -6255,10 +6306,10 @@ csv 를 만들어 FAIL 을 확인했다. §54 의 `산출물 이름 ASCII`(파�
 | `out/complication/complication_hypergeom_{소스}.csv` | **합병증 추론**의 초기하 검정, 소스별 (§18·§41). `curated`·`disbiome`·`gutmdisorder`. 구본은 `out/legacy/` (§44) |
 | `out/complication/complication_specificity_{소스}.csv` | 질환 쌍의 **포개짐·Jaccard** — 추론이 구조적으로 자동 통과하는지 보는 게이트 (§41). 소스 4 종 |
 | `out/complication/complication_summary.csv` | 위 둘을 소스별 1 행으로 요약 (§41 표) |
-| `out/kegg_class.csv` | KEGG BRITE compound 분류 2,767 행 — compound 축의 상위 범주 |
-| `out/promenda_records.csv` | ProMENDA 원시 레코드 17,653 행 (`E` 의 문헌 근거. 연구·조직·종까지) |
-| `out/microbe_neurotransmitter.csv` | 균 → 신경전달물질 조절 82 행 (§15b `gutbrain` 가중의 입력) |
-| `out/neurotransmitter_disease.csv` | 신경전달물질 → 질환 41 행 (같은 축의 나머지 절반) |
+| `out/food/kegg_class.csv` | KEGG BRITE compound 분류 2,767 행 — compound 축의 상위 범주 |
+| `out/compound/promenda_records.csv` | ProMENDA 원시 레코드 17,653 행 (`E` 의 문헌 근거. 연구·조직·종까지) |
+| `out/microbe/microbe_neurotransmitter.csv` | 균 → 신경전달물질 조절 82 행 (§15b `gutbrain` 가중의 입력) |
+| `out/microbe/neurotransmitter_disease.csv` | 신경전달물질 → 질환 41 행 (같은 축의 나머지 절반) |
 | `out/sweep/dedup_comparison.csv` | **중복 변종 병합** 두 기준 (§19) |
 | `out/sweep/learned_comparison.csv` | **지도학습 점수** 직접 사용 (§21) |
 | `out/sweep/learned_dedup_comparison.csv` | learned x 중복 병합 (§21b) |
@@ -6268,7 +6319,7 @@ csv 를 만들어 FAIL 을 확인했다. §54 의 `산출물 이름 ASCII`(파�
 | `out/sweep/ensemble_comparison.csv` | **순위 앙상블** vs 벡터 합치기 (§25). `sweep.py ensemble` 로 등록해 생산자를 되돌렸다 (§44) |
 | `out/legacy/ensemble_recommendation.csv` | 그 경로의 식품별 순위 — **생산 코드 없음** (§44) |
 | `out/sweep/toperr_comparison.csv` | **Top-K 명백한 오류** 규칙 채점 (§27) |
-| `out/eval_method1.csv`, `out/eval_method2.csv`, `out/eval_sparql.json` | §5.1·§4.1 평가 |
+| `out/eval/eval_method1.csv`, `out/eval/eval_method2.csv`, `out/eval/eval_sparql.json` | §5.1·§4.1 평가 |
 
 `out/` 의 결과표·평가 결과는 레포에 함께 올라가 있다. 대용량 둘만 제외한다 —
 `ourkg.nt` (470 MB) 와 `food_compound_long.csv` (48 MB). 둘 다 `python3 ourkg/run_all.py`

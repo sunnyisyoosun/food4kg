@@ -1,7 +1,7 @@
 {
  "README.md": {
-  "at": "2026-11-27 11:25:12",
-  "argv": "tests.py",
+  "at": "2026-11-27 11:46:40",
+  "argv": "check.py",
   "env": {}
  },
  "bootstrap_ci.csv": {
@@ -139,6 +139,15 @@
   "at": "2026-11-26 11:54:27",
   "argv": "build.py kg",
   "env": {}
+ },
+ "consensus_current.csv": {
+  "at": "2026-11-27 11:24:04",
+  "argv": "consensus.py",
+  "env": {
+   "BOOT_FRAC": "0.8",
+   "BOOT_SEED": "99",
+   "NO_SIM": "0"
+  }
  },
  "consensus_summary.csv": {
   "at": "2026-11-27 11:24:04",
@@ -511,15 +520,6 @@
   "argv": "sweep.py",
   "env": {
    "E_MODE": "learned"
-  }
- },
- "consensus_current.csv": {
-  "at": "2026-11-27 11:24:04",
-  "argv": "consensus.py",
-  "env": {
-   "BOOT_FRAC": "0.8",
-   "BOOT_SEED": "99",
-   "NO_SIM": "0"
   }
  }
 }

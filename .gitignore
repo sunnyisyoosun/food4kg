@@ -22,13 +22,18 @@ analyse/final.py
 analyse/p5_foodname.txt
 
 # ourkg 산출물
-# 작은 결과표·평가 결과는 올린다(리뷰에 필요). 대용량 둘만 뺀다 —
-# ourkg.nt 470MB, food_compound_long.csv 48MB. `ourkg/run_all.py` 로 재생성한다.
+# 작은 결과표·평가 결과는 올린다(리뷰에 필요). 대용량만 뺀다 —
+# `ourkg/run_all.py` 로 재생성한다.
+#
+# **경로를 못 박지 않는다.** 전에 `ourkg/out/food_compound_kg.csv` 처럼 적어
+# 뒀는데 §56 에서 그 파일이 `out/food/` 로 내려가자 패턴에 안 걸려 118 MB 가
+# 추적으로 들어왔고 GitHub 가 푸시를 거부했다(100 MB 제한). 이름으로 받는다.
+ourkg/out/**/ourkg.nt
 ourkg/out/ourkg.nt
-ourkg/out/food_compound_long.csv
-ourkg/out/food_foodon.csv
+ourkg/out/**/food_compound_kg.csv
+ourkg/out/**/food_compound_long.csv
+ourkg/out/**/food_foodon.csv
 ourkg/cache/
-ourkg/out/food_compound_kg.csv
 ourkg/cache/agora_microbe_metabolite.csv
 
 # 이 레포와 무관한 다른 과제 파일 (CIFAR-10 360MB + 실습 이미지)

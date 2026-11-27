@@ -7,7 +7,7 @@ Food4healthKG (Fu et al., *Artif Intell Med* 2023) 의 방법을 **현재 공개
 - 설계 **결정**과 그 이유는 [`README.md`](README.md)
 - 실험과 **기각 기록**은 [`RESULTS.md`](RESULTS.md)
 
-수치는 2026-11-20 빌드 기준이고 `out/kg_stats.csv` · `out/linking_stats.csv`
+수치는 2026-11-20 빌드 기준이고 `out/kg_stats.csv` · `out/kg/linking_stats.csv`
 가 정본이다.
 
 ---
@@ -237,7 +237,7 @@ Collection](https://www.nature.com/articles/s41522-022-00345-5))로 우리 예�
 id 로 직접 매핑해 변환 없이 붙는다. **두 코호트 모두 음성** — 위 한계 참조.
 
 같은 데이터로 **측정 상관 링크**를 만들어 KG 에 담았다
-(`metabolome_check.py build` → `out/compound_microbe_measured.csv`).
+(`metabolome_check.py build` → `out/microbe/compound_microbe_measured.csv`).
 13 코호트 268 만 쌍에서 **BH q<0.05 + 2 개 이상 코호트 같은 부호 재현**으로
 걸러 **39,574 쌍**. KEGG 추론·VMH 예측과 13% 만 겹치므로 서로 보완한다.
 출처 태그는 `측정 상관` 으로 분리한다 — 추론도 예측도 아닌 **관측**이다.
@@ -611,7 +611,7 @@ B 에서 Reduced 면 양쪽에 한 표씩 들어가 **상쇄된다.** 상쇄를 
 "효과가 없다" 는 증명할 수 없지만 **"이 크기 이상은 없다"** 는 계산된다.
 `common.mdes` (부호검정) · `common.mdes_auc` (Mann-Whitney AUC) 가 주어진 `n` 과
 유의수준에서 80% 검정력으로 잡히는 가장 작은 효과를 낸다. 둘 다 **0.5 가 우연**인
-눈금이라 한 표에서 읽을 수 있다 (`e_autism.power_report` → `out/power_bound.csv`).
+눈금이라 한 표에서 읽을 수 있다 (`e_autism.power_report` → `out/analysis/power_bound.csv`).
 
 | 주장 | n | 관측 | 경계 |
 |---|---:|---:|---:|
