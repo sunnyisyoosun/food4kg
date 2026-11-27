@@ -29,7 +29,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import BASE, CACHE, OUT, depression_e
+from common import outp, BASE, CACHE, OUT, depression_e
 
 CYCLES = {'2017': ('2017', 'J'), '2015': ('2015', 'I'), '2013': ('2013', 'H')}
 URL = 'https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/{yr}/DataFiles/{f}.xpt'
@@ -164,7 +164,7 @@ def build(cycle=None):
     s = t.e_raw.abs().max()
     t['e_nhanes'] = (t.e_raw / s).round(4) if s else 0.0
     t['e_sig'] = np.where(t.q < 0.05, t.e_nhanes, 0.0)
-    t.to_csv(os.path.join(OUT, 'compound_depression_nhanes.csv'), index=False)
+    t.to_csv(outp('compound_depression_nhanes.csv'), index=False)
     print(f'[2/3] compound {len(t)} — q<0.05 {int((t.q < 0.05).sum())}')
     for _, r in t.nsmallest(8, 'q').iterrows():
         print(f'    {r.kegg}  {r.nhanes_var:10s} beta={r.beta:+.4f}  q={r.q:.4f}'

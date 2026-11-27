@@ -46,7 +46,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import (OUT, BASE, gutmdisorder_intervention, compound_microbe,
+from common import (outp, OUT, BASE, gutmdisorder_intervention, compound_microbe,
                     depression_e, enable_provenance)
 
 enable_provenance()   # 산출물 출처 기록 (common.PROV)
@@ -86,7 +86,7 @@ def test():
     iv = gutmdisorder_intervention()
     iv = iv[iv.alteration.isin(('increase', 'decrease'))]
     iv = iv[iv.taxid.isin(me.index)]
-    iv.to_csv(os.path.join(OUT, 'diet_intervention.csv'), index=False)
+    iv.to_csv(outp('diet_intervention.csv'), index=False)
     print(f'[1/3] 쓸 수 있는 행 {len(iv)} / 중재 {iv.intervention.nunique()} '
           f'/ 균 {iv.taxid.nunique()} (compound 링크 있는 균만)')
     print(f'      균당 compound 수 중앙값 {int(nc.reindex(iv.taxid.unique()).median())}')
@@ -117,7 +117,7 @@ def test():
     from scipy.stats import false_discovery_control
     if len(t):
         t['q(BH)'] = false_discovery_control(t['p(>)'].clip(1e-6, 1).values).round(3)
-    t.to_csv(os.path.join(OUT, 'diet_intervention_score.csv'), index=False)
+    t.to_csv(outp('diet_intervention_score.csv'), index=False)
 
     print('\n[2/3] 미리 고정한 예측 — 이것이 주검정이다')
     hit = 0
@@ -150,7 +150,7 @@ def map_foods():
     from common import normkey
     iv = gutmdisorder_intervention()
     terms = sorted(set(iv.intervention))
-    foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
+    foods = pd.read_csv(outp('foods.csv'))
     fk = {}
     for _, r in foods.iterrows():
         fk.setdefault(normkey(str(r['food_name'])), r['food_key'])
@@ -176,7 +176,7 @@ def map_foods():
         m.loc[i, 'substr_n'] = len(hit)
         m.loc[i, 'substr_example'] = hit.iloc[0] if len(hit) else ''
     m['substr_n'] = m['substr_n'].fillna(0).astype(int)
-    m.to_csv(os.path.join(OUT, 'diet_intervention_map.csv'), index=False)
+    m.to_csv(outp('diet_intervention_map.csv'), index=False)
     print(f'중재 표기 {len(m)}')
     print(f'  FDC 음식 이름과 **정확** 일치 {int((m.food_key != "").sum())}')
     print(f'  F 층 compound 이름과 정확 일치 {int((m.kegg != "").sum())}')

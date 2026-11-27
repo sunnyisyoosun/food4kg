@@ -1,7 +1,7 @@
 """Top-K 의 **명백한 오류**를 센다 -> out/toperr_comparison.csv
 
     python3 ourkg/toperr.py            # 후보 전부
-    python3 ourkg/toperr.py 현행
+    python3 ourkg/toperr.py current
 
 왜 — §24·§25 에서 기본값을 두 번 바꿨는데 **둘 다 수치가 아니라 목록을 보고**
 정했다("캐러멜 딥이 상위에 있는 건 오류"). 이 프로젝트의 다른 결정은 전부
@@ -31,7 +31,7 @@ warnings.filterwarnings('ignore')
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import pandas as pd  # noqa: E402
-from common import (BASE, CACHE, OUT, recommend_under,  # noqa: E402
+from common import (outp, BASE, CACHE, OUT, recommend_under,  # noqa: E402
                     enable_provenance)
 
 enable_provenance()   # 산출물 출처 기록 (common.PROV)
@@ -73,7 +73,7 @@ def flag(res, K=30):
 if __name__ == '__main__':
     import importlib
     from bootstrap import BASE as B, CANDIDATES
-    want = sys.argv[1:] or ['현행', 'union_all', 'ensemble', 'learned-name2',
+    want = sys.argv[1:] or ['current', 'union_all', 'ensemble', 'learned-name2',
                             'effect+nhanes']
     rows = []
     for name in want:
@@ -85,7 +85,7 @@ if __name__ == '__main__':
             env.update(CANDIDATES.get(name, {'E_MODE': name}))
         res, _ = recommend_under(env)
         if 'fdc_id' not in res:
-            foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
+            foods = pd.read_csv(outp('foods.csv'))
             res = res.merge(foods[['food_key', 'fdc_id']], on='food_key', how='left')
         _, n = flag(res)
         n['설정'] = name
@@ -94,5 +94,5 @@ if __name__ == '__main__':
         print(f"  {name:14s} 오류 {n['합계(중복 제외)']:2d}/30  "
               f"(extras {n['extras']} · 섭취량 {n['작은섭취량']} · "
               f"분말 {n['분말']} · 시럽 {n['시럽']})  {n['Top1']}", flush=True)
-    pd.DataFrame(rows).to_csv(os.path.join(OUT, 'toperr_comparison.csv'), index=False)
+    pd.DataFrame(rows).to_csv(outp('toperr_comparison.csv'), index=False)
     print('\n  -> out/toperr_comparison.csv')

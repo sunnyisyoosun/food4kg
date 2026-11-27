@@ -10,8 +10,8 @@ food_key,food_name,food_group,top_rate,bot_rate,n_seen,설정
 "mustard spinach, raw","Mustard spinach, (tendergreen), raw",Vegetables and Vegetable Products,0.8,0.0,80,현행
 jam,Jam,"Soups, Sauces, and Gravies",0.8,0.0,80,현행
 "balsam-pear , leafy tip, cooked, boiled, drained, without salt","Balsam-pear (bitter gourd), leafy tips, cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.7848101265822784,0.0,79,현행
-"fruit juice blend, citrus, 100% juice","Fruit juice blend, citrus, 100% juice",Fruits and Fruit Juices,0.775,0.0,80,현행
 "orange juice, 100%, canned, bottled or in a carton","Orange juice, 100%, canned, bottled or in a carton",Fruits and Fruit Juices,0.775,0.0,80,현행
+"fruit juice blend, citrus, 100% juice","Fruit juice blend, citrus, 100% juice",Fruits and Fruit Juices,0.775,0.0,80,현행
 "mustard green, frozen, cooked, no added fat","Mustard greens, frozen, cooked, no added fat",Vegetables and Vegetable Products,0.7692307692307693,0.0,78,현행
 fruit juice drink,Fruit juice drink,Beverages,0.7674418604651163,0.0,86,현행
 imitation crab meat,Imitation crab meat,Finfish and Shellfish Products,0.7654320987654321,0.0,81,현행
@@ -45,13 +45,13 @@ corn syrup,Corn syrup,"Soups, Sauces, and Gravies",0.4024390243902439,0.0,82,현
 "beverage, orange drink, canned, with added vitamin c","Beverages, orange drink, canned, with added vitamin C",Beverages,0.25316455696202533,0.0,79,현행
 "babyfood, gerber, 2nd food, apple, carrot and squash, organic","Babyfood, GERBER, 2nd Foods, apple, carrot and squash, organic",Baby Foods,0.24705882352941178,0.0,85,현행
 "beverage, vegetable and fruit juice drink, reduced calorie, with low-calorie sweetener, added vitamin c","Beverages, Vegetable and fruit juice drink, reduced calorie, with low-calorie sweetener, added vitamin C",Beverages,0.24675324675324675,0.0,77,현행
-cape cod,Cape Cod,Beverages,0.2413793103448276,0.0,87,현행
 fuzzy navel,Fuzzy Navel,Beverages,0.2413793103448276,0.0,87,현행
+cape cod,Cape Cod,Beverages,0.2413793103448276,0.0,87,현행
 "vegetable and fruit juice, 100% juice, with high vitamin c","Vegetable and fruit juice, 100% juice, with high vitamin C",Fruits and Fruit Juices,0.23076923076923078,0.0,78,현행
 applesauce,"Applesauce, regular",Fruits and Fruit Juices,0.225,0.0,80,현행
 "vegetable and fruit juice drink, with high vitamin c, diet","Vegetable and fruit juice drink, with high vitamin C, diet",Beverages,0.21794871794871795,0.0,78,현행
-michelada,Michelada,Beverages,0.20987654320987653,0.0,81,현행
 "beverage, vegetable and fruit juice blend, 100% juice, with added vitamin a, c, e","Beverages, vegetable and fruit juice blend, 100% juice, with added vitamins A, C, E",Beverages,0.20987654320987653,0.0,81,현행
+michelada,Michelada,Beverages,0.20987654320987653,0.0,81,현행
 "fruit punch, alcoholic","Fruit punch, alcoholic",Beverages,0.20930232558139536,0.0,86,현행
 black russian,Black Russian,Beverages,0.2073170731707317,0.0,82,현행
 "vegetable and fruit juice drink, with high vitamin c, light","Vegetable and fruit juice drink, with high vitamin C, light",Beverages,0.20512820512820512,0.0,78,현행
@@ -101,91 +101,91 @@ daiquiri,Daiquiri,Beverages,0.0136986301369863,0.0,73,현행
 "chrysanthemum, garland, cooked, boiled, drained, without salt","Chrysanthemum, garland, cooked, boiled, drained, without salt",Vegetables and Vegetable Products,0.013513513513513514,0.0,74,현행
 "coconut water, unsweetened","Coconut water, unsweetened",Beverages,0.013157894736842105,0.0,76,현행
 "orange, raw","Orange, raw",Fruits and Fruit Juices,0.012987012987012988,0.0,77,현행
-"cowpea, leafy tip, cooked, boiled, drained, with salt","Cowpeas, leafy tips, cooked, boiled, drained, with salt",Vegetables and Vegetable Products,0.012658227848101266,0.0,79,현행
 "brussel sprout, frozen, cooked, no added fat","Brussels sprouts, frozen, cooked, no added fat",Vegetables and Vegetable Products,0.012658227848101266,0.0,79,현행
 "beverage, lemonade fruit juice drink light, fortified with vitamin e and c","Beverages, Lemonade fruit juice drink light, fortified with vitamin E and C",Beverages,0.012658227848101266,0.0,79,현행
-"alcoholic beverage, liqueur, coffee, 63 proof","Alcoholic beverage, liqueur, coffee, 63 proof",Beverages,0.0125,0.0,80,현행
+"cowpea, leafy tip, cooked, boiled, drained, with salt","Cowpeas, leafy tips, cooked, boiled, drained, with salt",Vegetables and Vegetable Products,0.012658227848101266,0.0,79,현행
 "broccoli, cooked, as ingredient","Broccoli, cooked, as ingredient",Vegetables and Vegetable Products,0.0125,0.0,80,현행
-champagne punch,Champagne punch,Beverages,0.012195121951219513,0.0,82,현행
+"alcoholic beverage, liqueur, coffee, 63 proof","Alcoholic beverage, liqueur, coffee, 63 proof",Beverages,0.0125,0.0,80,현행
 "brussel sprout, fresh, cooked, no added fat","Brussels sprouts, fresh, cooked, no added fat",Vegetables and Vegetable Products,0.012195121951219513,0.0,82,현행
-jam or jelly,"Jam or jelly, NFS","Soups, Sauces, and Gravies",0.012048192771084338,0.0,83,현행
+champagne punch,Champagne punch,Beverages,0.012195121951219513,0.0,82,현행
 singapore sling,Singapore Sling,Beverages,0.012048192771084338,0.0,83,현행
+jam or jelly,"Jam or jelly, NFS","Soups, Sauces, and Gravies",0.012048192771084338,0.0,83,현행
 "beverage, ocean spray, cran cherry","Beverages, OCEAN SPRAY, Cran Cherry",Beverages,0.011904761904761904,0.0,84,현행
 "broccoli, fresh, cooked, no added fat","Broccoli, fresh, cooked, no added fat",Vegetables and Vegetable Products,0.011764705882352941,0.0,85,현행
-"veal, breast, whole, boneless, separable lean and fat, raw","Veal, breast, whole, boneless, separable lean and fat, raw","Lamb, Veal, and Game Products",0.0,0.49382716049382713,81,현행
-"beef, rib, small end , separable lean and fat, trimmed to 0"" fat, choice, cooked, broiled","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 0"" fat, choice, cooked, broiled",Beef Products,0.0,0.5131578947368421,76,현행
-"babyfood, meat, meat stick, junior","Babyfood, meat, meat sticks, junior",Baby Foods,0.0,0.8795180722891566,83,현행
-"beef, carcass, separable lean and fat, select, raw","Beef, carcass, separable lean and fat, select, raw",Beef Products,0.0,0.01282051282051282,78,현행
-ham and cheese loaf or roll,Ham and cheese loaf or roll,Sausages and Luncheon Meats,0.0,0.7294117647058823,85,현행
-"bologna, turkey","Bologna, turkey",Sausages and Luncheon Meats,0.0,0.013888888888888888,72,현행
-"beef, brisket, whole, separable lean and fat, trimmed to 1/8"" fat, all grade, raw","Beef, brisket, whole, separable lean and fat, trimmed to 1/8"" fat, all grades, raw",Beef Products,0.0,0.039473684210526314,76,현행
-"lamb, new zealand, imported, frozen, loin, separable lean and fat, cooked, broiled","Lamb, New Zealand, imported, frozen, loin, separable lean and fat, cooked, broiled","Lamb, Veal, and Game Products",0.0,0.047058823529411764,85,현행
-"pork, fresh, shoulder, arm picnic, separable lean and fat, cooked, roasted","Pork, fresh, shoulder, arm picnic, separable lean and fat, cooked, roasted",Pork Products,0.0,0.926829268292683,82,현행
-"beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted","Beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted",Beef Products,0.0,0.9864864864864865,74,현행
-"beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, select, raw","Beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, select, raw",Beef Products,0.0,0.03614457831325301,83,현행
-"bologna, beef and pork","Bologna, beef and pork",Sausages and Luncheon Meats,0.0,0.975,80,현행
-"pork, fresh, shoulder, whole, separable lean and fat, cooked, roasted","Pork, fresh, shoulder, whole, separable lean and fat, cooked, roasted",Pork Products,0.0,0.32142857142857145,84,현행
-"beef, rib, back rib, bone-in, separable lean and fat, trimmed to 0"" fat, select, cooked, braised","Beef, rib, back ribs, bone-in, separable lean and fat, trimmed to 0"" fat, select, cooked, braised",Beef Products,0.0,0.15,80,현행
-"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted",Beef Products,0.0,0.9726027397260274,73,현행
-"beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, roasted","Beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, roasted",Beef Products,0.0,1.0,82,현행
-"lamb, rib, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted","Lamb, rib, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted","Lamb, Veal, and Game Products",0.0,0.0759493670886076,79,현행
-"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled",Beef Products,0.0,0.9864864864864865,74,현행
-"bratwurst, pork, cooked","Bratwurst, pork, cooked",Sausages and Luncheon Meats,0.0,1.0,79,현행
-"beerwurst, pork and beef","Beerwurst, pork and beef",Sausages and Luncheon Meats,0.0,0.875,80,현행
-"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, choice, cooked, broiled","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, choice, cooked, broiled",Beef Products,0.0,0.6153846153846154,78,현행
-"beef, top sirloin, steak, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, pan-fried","Beef, top sirloin, steak, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, pan-fried",Beef Products,0.0,0.14457831325301204,83,현행
-"mother's loaf, pork","Mother's loaf, pork",Sausages and Luncheon Meats,0.0,0.19047619047619047,84,현행
-"beef, tenderloin, steak, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled","Beef, tenderloin, steak, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled",Beef Products,0.0,0.09090909090909091,77,현행
-"turkey, mechanically deboned, from turkey frame, raw","Turkey, mechanically deboned, from turkey frames, raw",Poultry Products,0.0,0.023809523809523808,84,현행
-"beef, rib, small end , separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled",Beef Products,0.0,1.0,84,현행
-"chicken, broiler or fryer, wing, meat and skin, cooked, fried, batter","Chicken, broilers or fryers, wing, meat and skin, cooked, fried, batter",Poultry Products,0.0,0.631578947368421,76,현행
-"duck, wild, meat and skin, raw","Duck, wild, meat and skin, raw",Poultry Products,0.0,0.25925925925925924,81,현행
-"lamb, new zealand, imported, frozen, shoulder, whole , separable lean and fat, cooked, braised","Lamb, New Zealand, imported, frozen, shoulder, whole (arm and blade), separable lean and fat, cooked, braised","Lamb, Veal, and Game Products",0.0,0.05063291139240506,79,현행
-"lamb, loin, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, roasted","Lamb, loin, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, roasted","Lamb, Veal, and Game Products",0.0,0.04878048780487805,82,현행
-"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,0.9876543209876543,81,현행
-"chicken, capon, meat and skin, raw","Chicken, capons, meat and skin, raw",Poultry Products,0.0,0.07407407407407407,81,현행
-"pork, cured, shoulder, blade roll, separable lean and fat, unheated","Pork, cured, shoulder, blade roll, separable lean and fat, unheated",Pork Products,0.0,0.8,80,현행
-"ham, chopped, canned","Ham, chopped, canned",Sausages and Luncheon Meats,0.0,0.782051282051282,78,현행
-"beef, brisket, point half, separable lean and fat, trimmed to 0"" fat, all grade, cooked, braised","Beef, brisket, point half, separable lean and fat, trimmed to 0"" fat, all grades, cooked, braised",Beef Products,0.0,0.569620253164557,79,현행
-"chicken, broiler or fryer, back, meat and skin, cooked, fried, batter","Chicken, broilers or fryers, back, meat and skin, cooked, fried, batter",Poultry Products,0.0,0.10126582278481013,79,현행
-"picnic loaf, pork, beef","Picnic loaf, pork, beef",Sausages and Luncheon Meats,0.0,0.47435897435897434,78,현행
-"beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, braised","Beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, braised",Beef Products,0.0,0.9878048780487805,82,현행
-"pork, cured, shoulder, blade roll, separable lean and fat, roasted","Pork, cured, shoulder, blade roll, separable lean and fat, roasted",Pork Products,0.0,0.8,75,현행
-"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, broiled","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, broiled",Beef Products,0.0,0.9605263157894737,76,현행
-"beef, short loin, top loin, steak, separable lean and fat, trimmed to 1/8"" fat, prime, raw","Beef, short loin, top loin, steak, separable lean and fat, trimmed to 1/8"" fat, prime, raw",Beef Products,0.0,0.2597402597402597,77,현행
-"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,1.0,80,현행
-"goose, domesticated, meat and skin, cooked, roasted","Goose, domesticated, meat and skin, cooked, roasted",Poultry Products,0.0,0.6219512195121951,82,현행
-"beef, short loin, top loin, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled","Beef, short loin, top loin, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled",Beef Products,0.0,0.046511627906976744,86,현행
-"beef, tenderloin, separable lean and fat, trimmed to 1/8"" fat, prime, raw","Beef, tenderloin, separable lean and fat, trimmed to 1/8"" fat, prime, raw",Beef Products,0.0,0.13580246913580246,81,현행
-"beef, rib, eye, small end , separable lean and fat, trimmed to 0"" fat, choice, raw","Beef, rib, eye, small end (ribs 10-12), separable lean and fat, trimmed to 0"" fat, choice, raw",Beef Products,0.0,0.012345679012345678,81,현행
-"lamb, new zealand, imported, frozen, shoulder, whole , separable lean and fat, trimmed to 1/8"" fat, raw","Lamb, New Zealand, imported, frozen, shoulder, whole (arm and blade), separable lean and fat, trimmed to 1/8"" fat, raw","Lamb, Veal, and Game Products",0.0,0.09333333333333334,75,현행
-"beef, rib, large end , separable lean and fat, trimmed to 0"" fat, select, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 0"" fat, select, cooked, roasted",Beef Products,0.0,1.0,83,현행
-"beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, braised","Beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, braised",Beef Products,0.0,1.0,79,현행
-"beef, brisket, whole, separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, braised","Beef, brisket, whole, separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, braised",Beef Products,0.0,1.0,81,현행
-"beef, rib, small end , separable lean and fat, trimmed to 0"" fat, select, cooked, broiled","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 0"" fat, select, cooked, broiled",Beef Products,0.0,0.0125,80,현행
-"beef, brisket, point half, separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, braised","Beef, brisket, point half, separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, braised",Beef Products,0.0,0.7283950617283951,81,현행
-"beef, rib, small end , separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted",Beef Products,0.0,0.0945945945945946,74,현행
-"beef, rib, back rib, bone-in, separable lean and fat, trimmed to 0"" fat, all grade, cooked, braised","Beef, rib, back ribs, bone-in, separable lean and fat, trimmed to 0"" fat, all grades, cooked, braised",Beef Products,0.0,0.25,84,현행
-"dutch brand loaf, chicken, pork and beef","Dutch brand loaf, chicken, pork and beef",Sausages and Luncheon Meats,0.0,0.42857142857142855,84,현행
-"beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, all grade, raw","Beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, all grades, raw",Beef Products,0.0,0.0625,80,현행
-"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled",Beef Products,0.0,1.0,85,현행
-"beef, rib, small end , separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,0.9873417721518988,79,현행
-"beef, rib, small end , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,0.8356164383561644,73,현행
-"beef, rib, back rib, bone-in, separable lean only, trimmed to 0"" fat, choice, cooked, braised","Beef, rib, back ribs, bone-in, separable lean only, trimmed to 0"" fat, choice, cooked, braised",Beef Products,0.0,0.04878048780487805,82,현행
-"beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted","Beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,0.5679012345679012,81,현행
-"pork, fresh, sparerib, separable lean and fat, cooked, braised","Pork, fresh, spareribs, separable lean and fat, cooked, braised",Pork Products,0.0,0.76,75,현행
-"lamb, rib, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, roasted","Lamb, rib, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, roasted","Lamb, Veal, and Game Products",0.0,0.03614457831325301,83,현행
-"beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,0.8271604938271605,81,현행
-"lamb, loin, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, broiled","Lamb, loin, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, broiled","Lamb, Veal, and Game Products",0.0,0.012658227848101266,79,현행
-"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, prime, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, prime, cooked, roasted",Beef Products,0.0,0.012987012987012988,77,현행
-"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, broiled","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, broiled",Beef Products,0.0,0.8133333333333334,75,현행
 "beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted",Beef Products,0.0,0.06097560975609756,82,현행
-"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,0.8157894736842105,76,현행
-"lamb, new zealand, imported, frozen, rib, separable lean and fat, trimmed to 1/8"" fat, cooked, roasted","Lamb, New Zealand, imported, frozen, rib, separable lean and fat, trimmed to 1/8"" fat, cooked, roasted","Lamb, Veal, and Game Products",0.0,0.060240963855421686,83,현행
+"beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted","Beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,0.5679012345679012,81,현행
+"beef, rib, back rib, bone-in, separable lean and fat, trimmed to 0"" fat, all grade, cooked, braised","Beef, rib, back ribs, bone-in, separable lean and fat, trimmed to 0"" fat, all grades, cooked, braised",Beef Products,0.0,0.25,84,현행
+"chicken, broiler or fryer, wing, meat and skin, cooked, fried, batter","Chicken, broilers or fryers, wing, meat and skin, cooked, fried, batter",Poultry Products,0.0,0.631578947368421,76,현행
+"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted",Beef Products,0.0,0.9726027397260274,73,현행
+"beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, braised","Beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, braised",Beef Products,0.0,0.9878048780487805,82,현행
+"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, choice, cooked, broiled","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, choice, cooked, broiled",Beef Products,0.0,0.6153846153846154,78,현행
+"beef, brisket, whole, separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, braised","Beef, brisket, whole, separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, braised",Beef Products,0.0,1.0,81,현행
+"beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, select, raw","Beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, select, raw",Beef Products,0.0,0.03614457831325301,83,현행
+"pork, fresh, shoulder, arm picnic, separable lean and fat, cooked, roasted","Pork, fresh, shoulder, arm picnic, separable lean and fat, cooked, roasted",Pork Products,0.0,0.926829268292683,82,현행
+"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, broiled","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, broiled",Beef Products,0.0,0.8133333333333334,75,현행
+"beerwurst, pork and beef","Beerwurst, pork and beef",Sausages and Luncheon Meats,0.0,0.875,80,현행
+"beef, rib, small end , separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,0.9873417721518988,79,현행
+"chicken, broiler or fryer, back, meat and skin, cooked, fried, batter","Chicken, broilers or fryers, back, meat and skin, cooked, fried, batter",Poultry Products,0.0,0.10126582278481013,79,현행
+"beef, rib, small end , separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled",Beef Products,0.0,1.0,84,현행
+"beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, all grade, raw","Beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, all grades, raw",Beef Products,0.0,0.0625,80,현행
+"picnic loaf, pork, beef","Picnic loaf, pork, beef",Sausages and Luncheon Meats,0.0,0.47435897435897434,78,현행
+"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, broiled","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, broiled",Beef Products,0.0,0.9605263157894737,76,현행
+"beef, top sirloin, steak, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, pan-fried","Beef, top sirloin, steak, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, pan-fried",Beef Products,0.0,0.14457831325301204,83,현행
+"beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted","Beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted",Beef Products,0.0,0.9864864864864865,74,현행
+"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled",Beef Products,0.0,0.9864864864864865,74,현행
+"beef, rib, eye, small end , separable lean and fat, trimmed to 0"" fat, choice, raw","Beef, rib, eye, small end (ribs 10-12), separable lean and fat, trimmed to 0"" fat, choice, raw",Beef Products,0.0,0.012345679012345678,81,현행
 "chicken, broiler or fryer, neck, meat and skin, cooked, fried, batter","Chicken, broilers or fryers, neck, meat and skin, cooked, fried, batter",Poultry Products,0.0,0.6867469879518072,83,현행
-"pork, cured, shoulder, arm picnic, separable lean and fat, roasted","Pork, cured, shoulder, arm picnic, separable lean and fat, roasted",Pork Products,0.0,0.11392405063291139,79,현행
-"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,1.0,72,현행
-"beef, rib, back rib, bone-in, separable lean and fat, trimmed to 0"" fat, choice, cooked, braised","Beef, rib, back ribs, bone-in, separable lean and fat, trimmed to 0"" fat, choice, cooked, braised",Beef Products,0.0,0.2625,80,현행
-"beef, rib, large end , separable lean and fat, trimmed to 0"" fat, choice, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 0"" fat, choice, cooked, roasted",Beef Products,0.0,0.5128205128205128,78,현행
-"babyfood, meat, chicken stick, junior","Babyfood, meat, chicken sticks, junior",Baby Foods,0.0,0.6144578313253012,83,현행
+"lamb, loin, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, broiled","Lamb, loin, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, broiled","Lamb, Veal, and Game Products",0.0,0.012658227848101266,79,현행
+"beef, short loin, top loin, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled","Beef, short loin, top loin, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled",Beef Products,0.0,0.046511627906976744,86,현행
+"pork, cured, shoulder, blade roll, separable lean and fat, unheated","Pork, cured, shoulder, blade roll, separable lean and fat, unheated",Pork Products,0.0,0.8,80,현행
+"beef, tenderloin, separable lean and fat, trimmed to 1/8"" fat, prime, raw","Beef, tenderloin, separable lean and fat, trimmed to 1/8"" fat, prime, raw",Beef Products,0.0,0.13580246913580246,81,현행
+"bologna, beef and pork","Bologna, beef and pork",Sausages and Luncheon Meats,0.0,0.975,80,현행
+"bratwurst, pork, cooked","Bratwurst, pork, cooked",Sausages and Luncheon Meats,0.0,1.0,79,현행
+"babyfood, meat, meat stick, junior","Babyfood, meat, meat sticks, junior",Baby Foods,0.0,0.8795180722891566,83,현행
+"beef, rib, back rib, bone-in, separable lean and fat, trimmed to 0"" fat, select, cooked, braised","Beef, rib, back ribs, bone-in, separable lean and fat, trimmed to 0"" fat, select, cooked, braised",Beef Products,0.0,0.15,80,현행
+"beef, rib, back rib, bone-in, separable lean only, trimmed to 0"" fat, choice, cooked, braised","Beef, rib, back ribs, bone-in, separable lean only, trimmed to 0"" fat, choice, cooked, braised",Beef Products,0.0,0.04878048780487805,82,현행
+"pork, fresh, shoulder, whole, separable lean and fat, cooked, roasted","Pork, fresh, shoulder, whole, separable lean and fat, cooked, roasted",Pork Products,0.0,0.32142857142857145,84,현행
+"duck, wild, meat and skin, raw","Duck, wild, meat and skin, raw",Poultry Products,0.0,0.25925925925925924,81,현행
+"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, prime, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, prime, cooked, roasted",Beef Products,0.0,0.012987012987012988,77,현행
+"lamb, new zealand, imported, frozen, loin, separable lean and fat, cooked, broiled","Lamb, New Zealand, imported, frozen, loin, separable lean and fat, cooked, broiled","Lamb, Veal, and Game Products",0.0,0.047058823529411764,85,현행
+ham and cheese loaf or roll,Ham and cheese loaf or roll,Sausages and Luncheon Meats,0.0,0.7294117647058823,85,현행
+"goose, domesticated, meat and skin, cooked, roasted","Goose, domesticated, meat and skin, cooked, roasted",Poultry Products,0.0,0.6219512195121951,82,현행
 "pork, fresh, ground, raw","Pork, fresh, ground, raw",Pork Products,0.0,0.4358974358974359,78,현행
+"lamb, rib, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, roasted","Lamb, rib, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, roasted","Lamb, Veal, and Game Products",0.0,0.03614457831325301,83,현행
+"bologna, turkey","Bologna, turkey",Sausages and Luncheon Meats,0.0,0.013888888888888888,72,현행
+"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,0.8157894736842105,76,현행
+"beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,0.8271604938271605,81,현행
+"dutch brand loaf, chicken, pork and beef","Dutch brand loaf, chicken, pork and beef",Sausages and Luncheon Meats,0.0,0.42857142857142855,84,현행
+"pork, cured, shoulder, arm picnic, separable lean and fat, roasted","Pork, cured, shoulder, arm picnic, separable lean and fat, roasted",Pork Products,0.0,0.11392405063291139,79,현행
+"beef, brisket, point half, separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, braised","Beef, brisket, point half, separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, braised",Beef Products,0.0,0.7283950617283951,81,현행
+"beef, tenderloin, steak, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled","Beef, tenderloin, steak, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, broiled",Beef Products,0.0,0.09090909090909091,77,현행
+"pork, cured, shoulder, blade roll, separable lean and fat, roasted","Pork, cured, shoulder, blade roll, separable lean and fat, roasted",Pork Products,0.0,0.8,75,현행
+"veal, breast, whole, boneless, separable lean and fat, raw","Veal, breast, whole, boneless, separable lean and fat, raw","Lamb, Veal, and Game Products",0.0,0.49382716049382713,81,현행
+"beef, rib, small end , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,0.8356164383561644,73,현행
+"lamb, new zealand, imported, frozen, shoulder, whole , separable lean and fat, trimmed to 1/8"" fat, raw","Lamb, New Zealand, imported, frozen, shoulder, whole (arm and blade), separable lean and fat, trimmed to 1/8"" fat, raw","Lamb, Veal, and Game Products",0.0,0.09333333333333334,75,현행
+"beef, carcass, separable lean and fat, select, raw","Beef, carcass, separable lean and fat, select, raw",Beef Products,0.0,0.01282051282051282,78,현행
+"beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, roasted","Beef, tenderloin, roast, separable lean and fat, trimmed to 1/8"" fat, prime, cooked, roasted",Beef Products,0.0,1.0,82,현행
+"beef, brisket, whole, separable lean and fat, trimmed to 1/8"" fat, all grade, raw","Beef, brisket, whole, separable lean and fat, trimmed to 1/8"" fat, all grades, raw",Beef Products,0.0,0.039473684210526314,76,현행
+"pork, fresh, sparerib, separable lean and fat, cooked, braised","Pork, fresh, spareribs, separable lean and fat, cooked, braised",Pork Products,0.0,0.76,75,현행
+"ham, chopped, canned","Ham, chopped, canned",Sausages and Luncheon Meats,0.0,0.782051282051282,78,현행
+"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, select, cooked, broiled",Beef Products,0.0,1.0,85,현행
+"turkey, mechanically deboned, from turkey frame, raw","Turkey, mechanically deboned, from turkey frames, raw",Poultry Products,0.0,0.023809523809523808,84,현행
+"lamb, loin, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, roasted","Lamb, loin, separable lean and fat, trimmed to 1/4"" fat, choice, cooked, roasted","Lamb, Veal, and Game Products",0.0,0.04878048780487805,82,현행
+"babyfood, meat, chicken stick, junior","Babyfood, meat, chicken sticks, junior",Baby Foods,0.0,0.6144578313253012,83,현행
+"beef, brisket, point half, separable lean and fat, trimmed to 0"" fat, all grade, cooked, braised","Beef, brisket, point half, separable lean and fat, trimmed to 0"" fat, all grades, cooked, braised",Beef Products,0.0,0.569620253164557,79,현행
+"beef, rib, back rib, bone-in, separable lean and fat, trimmed to 0"" fat, choice, cooked, braised","Beef, rib, back ribs, bone-in, separable lean and fat, trimmed to 0"" fat, choice, cooked, braised",Beef Products,0.0,0.2625,80,현행
+"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, all grade, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, all grades, cooked, roasted",Beef Products,0.0,1.0,80,현행
+"beef, rib, small end , separable lean and fat, trimmed to 0"" fat, choice, cooked, broiled","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 0"" fat, choice, cooked, broiled",Beef Products,0.0,0.5131578947368421,76,현행
+"beef, rib, large end , separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,1.0,72,현행
+"beef, rib, small end , separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted",Beef Products,0.0,0.0945945945945946,74,현행
+"chicken, capon, meat and skin, raw","Chicken, capons, meat and skin, raw",Poultry Products,0.0,0.07407407407407407,81,현행
+"beef, rib, small end , separable lean and fat, trimmed to 0"" fat, select, cooked, broiled","Beef, rib, small end (ribs 10-12), separable lean and fat, trimmed to 0"" fat, select, cooked, broiled",Beef Products,0.0,0.0125,80,현행
+"mother's loaf, pork","Mother's loaf, pork",Sausages and Luncheon Meats,0.0,0.19047619047619047,84,현행
+"lamb, new zealand, imported, frozen, rib, separable lean and fat, trimmed to 1/8"" fat, cooked, roasted","Lamb, New Zealand, imported, frozen, rib, separable lean and fat, trimmed to 1/8"" fat, cooked, roasted","Lamb, Veal, and Game Products",0.0,0.060240963855421686,83,현행
+"lamb, new zealand, imported, frozen, shoulder, whole , separable lean and fat, cooked, braised","Lamb, New Zealand, imported, frozen, shoulder, whole (arm and blade), separable lean and fat, cooked, braised","Lamb, Veal, and Game Products",0.0,0.05063291139240506,79,현행
+"beef, rib, large end , separable lean and fat, trimmed to 0"" fat, select, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 0"" fat, select, cooked, roasted",Beef Products,0.0,1.0,83,현행
+"lamb, rib, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted","Lamb, rib, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, roasted","Lamb, Veal, and Game Products",0.0,0.0759493670886076,79,현행
+"beef, short loin, top loin, steak, separable lean and fat, trimmed to 1/8"" fat, prime, raw","Beef, short loin, top loin, steak, separable lean and fat, trimmed to 1/8"" fat, prime, raw",Beef Products,0.0,0.2597402597402597,77,현행
+"beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, braised","Beef, chuck, blade roast, separable lean and fat, trimmed to 1/8"" fat, choice, cooked, braised",Beef Products,0.0,1.0,79,현행
+"beef, rib, whole , separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted","Beef, rib, whole (ribs 6-12), separable lean and fat, trimmed to 1/8"" fat, select, cooked, roasted",Beef Products,0.0,0.9876543209876543,81,현행
+"beef, rib, large end , separable lean and fat, trimmed to 0"" fat, choice, cooked, roasted","Beef, rib, large end (ribs 6-9), separable lean and fat, trimmed to 0"" fat, choice, cooked, roasted",Beef Products,0.0,0.5128205128205128,78,현행

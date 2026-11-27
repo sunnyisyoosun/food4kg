@@ -41,7 +41,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import (OUT, CACHE, compound_microbe, microbe_disease_direction,
+from common import (outp, OUT, CACHE, compound_microbe, microbe_disease_direction,
                     measured_links, depression_e, enable_provenance,
                     mdes, mdes_auc, direction_votes, sign_agree)
 
@@ -100,7 +100,7 @@ def build_e(cohort=None):
              .reset_index())
     t['q'] = false_discovery_control(t['p'].values).round(4)
     t = t.sort_values('e_autism', ascending=False)
-    t.to_csv(os.path.join(OUT, 'compound_autism.csv'), index=False)
+    t.to_csv(outp('compound_autism.csv'), index=False)
     print(f'      compound {len(t)} / q<0.05 {int((t.q < 0.05).sum())}'
           f' / |e|>0.3 {int((t.e_autism.abs() > 0.3).sum())}'
           f'  -> out/compound_autism.csv')
@@ -144,7 +144,7 @@ def test_microbe(ea, n_perm=None):
     srcs = {}
     for fn, nm in (('microbe_disease_disbiome.csv', 'Disbiome'),
                    ('microbe_disease_gutmdisorder.csv', 'gutMDisorder')):
-        p = os.path.join(OUT, fn)
+        p = outp(fn)
         if not os.path.exists(p):
             continue
         d = pd.read_csv(p, dtype={'taxid': str})
@@ -195,7 +195,7 @@ def test_microbe(ea, n_perm=None):
     t = pd.DataFrame(rows)
     if len(t):
         t['q(BH)'] = false_discovery_control(t['p'].values).round(3)
-    t.to_csv(os.path.join(OUT, 'e_autism_microbe.csv'), index=False)
+    t.to_csv(outp('e_autism_microbe.csv'), index=False)
     print(t.to_string(index=False) if len(t) else '  쌍이 부족하다.')
     if len(t):
         print(f'\n  BH 보정 후 q<0.05 {int((t["q(BH)"] < 0.05).sum())}/{len(t)}')
@@ -221,7 +221,7 @@ def power_report(n_tests=28, alpha=0.05, power=0.80):
     rows = []
     for fn, col_q in (('e_microbe_compare.csv', 'q'),
                       ('e_autism_microbe.csv', 'q(BH)')):
-        p = os.path.join(OUT, fn)
+        p = outp(fn)
         if not os.path.exists(p):
             continue
         # **귀무 중심을 행마다 가져온다.** 0.5 를 박아 두고 경계를 내서
@@ -237,7 +237,7 @@ def power_report(n_tests=28, alpha=0.05, power=0.80):
                          '경계(보정후)': mdes(n, alpha / n_tests, power, p0)})
 
     # ② 두 큐레이션 소스의 방향 일치 (§32). "우연 수준" 으로만 적어 뒀다.
-    ap = os.path.join(OUT, 'microbe_disease_agreement.csv')
+    ap = outp('microbe_disease_agreement.csv')
     if os.path.exists(ap):
         a = pd.read_csv(ap)
         sh = a[a.n_sources == 2]
@@ -254,7 +254,7 @@ def power_report(n_tests=28, alpha=0.05, power=0.80):
                          '경계(보정후)': mdes(n, alpha, power)})
 
     # ③ 합병증 비통과 쌍의 문헌 lift (§41). "AUC 0.574 는 약하다" 로만 적었다.
-    lp = os.path.join(OUT, 'complication_literature_curated.csv')
+    lp = outp('complication_literature_curated.csv')
     if os.path.exists(lp):
         d = pd.read_csv(lp).dropna(subset=['lift'])
         g1 = d[d['통과'] == True]['lift']
@@ -282,7 +282,7 @@ def power_report(n_tests=28, alpha=0.05, power=0.80):
     # 행과 나란히 적고 있었다. 비교 가능한 양은 **귀무 위 초과분**이다.
     t['경계-귀무'] = (t[bh] - t['귀무']).round(3)
     t = t.sort_values(['주장', 'n'], ascending=[True, False])
-    t.to_csv(os.path.join(OUT, 'power_bound.csv'), index=False)
+    t.to_csv(outp('power_bound.csv'), index=False)
 
     for claim, g in t.groupby('주장', sort=False):
         # **경계는 n 이 가장 큰 검정에서 가장 조여진다.** 관측이 가장 큰 행을
@@ -319,7 +319,7 @@ def main():
     compare_depression(ea)
     t = test_microbe(ea)
     print('\n[4/4] 검정력 비교 — 이게 이 스크립트의 요점이다')
-    g = pd.read_csv(os.path.join(OUT, 'microbe_disease_gutmdisorder.csv'),
+    g = pd.read_csv(outp('microbe_disease_gutmdisorder.csv'),
                     dtype={'taxid': str})
     g = g[g.outcome.isin(('Elevated', 'Reduced'))]
     for nm, pat in (('우울증', r'[Dd]epressive'), ('자폐', r'Autism')):

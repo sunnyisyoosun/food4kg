@@ -32,7 +32,7 @@ import pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from common import OUT, BASE, taxid_alias, canon          # noqa: E402
+from common import outp, OUT, BASE, taxid_alias, canon          # noqa: E402
 
 RESULT = []            # (상태, 이름, 메시지)
 
@@ -47,7 +47,7 @@ def _need(*names):
     """산출물이 다 있으면 DataFrame 들을, 하나라도 없으면 None 을 돌려준다."""
     out = []
     for n in names:
-        p = os.path.join(OUT, n)
+        p = outp(n)
         if not os.path.exists(p):
             return None, n
         out.append(p)
@@ -294,11 +294,36 @@ def check_outputs():
     pats = declared_outputs()
     rx = [(re.compile('^' + re.escape(k).replace('\\*', '.*') + '$'), k)
           for k in pats]
-    have = sorted(f for f in os.listdir(OUT) if f.endswith('.csv'))
+    # **하위 폴더까지 본다.** 파생물을 `out/sweep/` 등으로 내린 뒤 이 검사가
+    # csv 89 -> 49 만 보고 **조용히 통과했다** — 옮긴 40 개가 생산자·문서 언급
+    # 보장 밖으로 나간 것이다. `legacy/` 는 생산 코드가 없는 기록이라 뺀다.
+    have = []
+    for root, dirs, files in os.walk(OUT):
+        dirs[:] = [d for d in dirs if d != 'legacy']
+        have += [f for f in files if f.endswith('.csv')]
+    have = sorted(have)
     if not have:
         return _say('SKIP', '산출물 생산자', 'out/ 에 csv 가 없다')
     orphan = [f for f in have if not any(r.match(f) for r, _ in rx)]
-    pv = os.path.join(OUT, 'provenance.json')
+
+    # **파일명은 ASCII 만.** `consensus_<설정>.csv` 의 설정 키가 `현행` 이라
+    # `consensus_현행.csv` 가 생겼다 — 다른 OS·도구에서 깨져 읽히고 URL 로도
+    # 못 쓴다. 키가 파일명이 되는 구조라 이름만 바꾸면 다시 생긴다 (§54).
+    nonascii = [f for f in have if not f.isascii()]
+    _say('FAIL' if nonascii else 'PASS', '산출물 이름 ASCII',
+         f'ASCII 가 아닌 파일명 {nonascii[:5]}' if nonascii else
+         f'csv {len(have)} 전부 ASCII')
+
+    # **파생물이 하위 폴더에 있는지.** `common.OUT_SUB` 가 규칙이고 쓰는 쪽은
+    # `outp()` 를 쓴다. 누가 `os.path.join(OUT, …)` 로 되돌리면 평평한 자리에
+    # 떨어지는데, 그걸 사람이 눈으로 볼 수는 없다.
+    import common as _c
+    misplaced = [f for f in os.listdir(OUT)
+                 if f.endswith('.csv') and _c.out_sub(f)]
+    _say('FAIL' if misplaced else 'PASS', '파생물 폴더 배치',
+         f'하위 폴더로 가야 하는데 out/ 에 있다 {misplaced[:5]}' if misplaced else
+         f'하위 폴더 {len(_c.OUT_SUB)} 개 규칙대로 놓여 있다')
+    pv = outp('provenance.json')
     rec = json.load(open(pv)) if os.path.exists(pv) else {}
     # 고아의 **마지막 생산자**를 출처 기록에서 찾아 준다. 지워진 모듈 이름이
     # 남아 있으면 git 이력을 뒤질 자리를 바로 가리킨다.
@@ -500,7 +525,7 @@ def check_kg():
          f'고유 {uniq:,} ≤ Σ 주장 {int(claim.triples.iloc[0]):,}'
          if not claim.empty else f'고유 {uniq:,}')
 
-    nt = os.path.join(OUT, 'ourkg.nt')
+    nt = outp('ourkg.nt')
     if not os.path.exists(nt):
         return _say('SKIP', 'KG 파일', 'ourkg.nt 없다 (gitignore)')
     # IRI 에 들어가면 안 되는 문자 — 공백·꺾쇠·따옴표·파이프·역따옴표 등.
@@ -553,8 +578,8 @@ def check_pathcheck():
     전에는 경고를 화면에만 찍어서 어긋난 상태가 20 일간 안 보였다 (§38).
     """
     import json
-    p = os.path.join(OUT, 'gutbrain_compounds.json')
-    nt = os.path.join(OUT, 'ourkg.nt')
+    p = outp('gutbrain_compounds.json')
+    nt = outp('ourkg.nt')
     if not os.path.exists(p):
         return _say('SKIP', 'gut-brain 경로 일관', 'json 없다 (analyze.py pathcheck)')
     d = json.load(open(p))
@@ -689,11 +714,11 @@ def check_provenance():
         edges.setdefault(k, set()).update(v)
     stale = []
     for out_f, deps in edges.items():
-        p = os.path.join(OUT, out_f)
+        p = outp(out_f)
         if not os.path.exists(p):
             continue
         for d in sorted(deps):
-            dp = os.path.join(OUT, d)
+            dp = outp(d)
             if os.path.exists(dp) and os.path.getmtime(p) < os.path.getmtime(dp) - 1:
                 src = '손' if d in DEPENDS.get(out_f, ()) else '코드'
                 stale.append(f'{out_f} < {d}({src})')
@@ -705,14 +730,14 @@ def check_provenance():
          f'— 손 목록 {sum(len(v) for v in DEPENDS.values())} · 코드에서 뽑은 것 '
          f'{sum(len(v) for v in derived.values())}')
 
-    pv = os.path.join(OUT, 'provenance.json')
+    pv = outp('provenance.json')
     if not os.path.exists(pv):
         return _say('SKIP', '정본 산출물 출처', 'provenance.json 없다 — 한 단계 돌려라')
     rec = json.load(open(pv))
     bad = {f: r['env'] for f, r in rec.items()
            if f in CANONICAL and r.get('env')}
     unknown = [f for f in CANONICAL
-               if os.path.exists(os.path.join(OUT, f)) and f not in rec]
+               if os.path.exists(outp(f)) and f not in rec]
     msg = []
     if bad:
         msg.append(f'기본값 아닌 환경으로 만들어진 정본 {bad}')
@@ -734,7 +759,7 @@ def check_provenance():
 # 마크다운에서 HTML 주석은 렌더링되지 않아 읽는 사람에게는 안 보인다.
 def facts():
     import pandas as pd
-    g = lambda n: os.path.join(OUT, n)
+    g = lambda n: outp(n)
     out = {}
     if os.path.exists(g('kg_stats.csv')):
         k = pd.read_csv(g('kg_stats.csv'))

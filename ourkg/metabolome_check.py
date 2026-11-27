@@ -28,7 +28,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import CACHE, OUT, compound_microbe, enable_provenance
+from common import outp, CACHE, OUT, compound_microbe, enable_provenance
 
 BASE_URL = ('https://raw.githubusercontent.com/borenstein-lab/'
             'microbiome-metabolome-curated-data/main/data/processed_data')
@@ -60,7 +60,7 @@ def _load(cohort):
 
 def _our_links():
     """우리가 예측한 (속, KEGG) 쌍. 코호트가 속 수준이라 속으로 올린다."""
-    mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str}).fillna('')
+    mic = pd.read_csv(outp('microbes.csv'), dtype={'taxid': str}).fillna('')
     genus = {r.taxid: str(r['name']).split()[0] for _, r in mic.iterrows() if r['name']}
     cm = compound_microbe()
     cm['genus'] = cm.taxid.map(genus)
@@ -112,7 +112,7 @@ def check(cohort, n_perm=2000):
     print(f'  |rho| 평균 — 예측 {obs:.4f} / 나머지 {b.rho.abs().mean():.4f}')
     print(f'    Mann-Whitney p = {u.pvalue:.4f}   순열 p = {float((null >= obs).mean()):.4f}')
     print(f'  p<0.05 쌍 비율 — 예측 {(a.p < .05).mean():.3f} / 나머지 {(b.p < .05).mean():.3f}')
-    t.to_csv(os.path.join(OUT, f'metabolome_check_{cohort}.csv'), index=False)
+    t.to_csv(outp(f'metabolome_check_{cohort}.csv'), index=False)
     return t
 
 
@@ -177,7 +177,7 @@ def build_links(q_max=0.05, min_cohorts=2):
         cohorts=('cohort', lambda x: ';'.join(sorted(set(x))))).reset_index()
     out = g[g.n_cohorts >= min_cohorts].sort_values(
         ['n_cohorts', 'median_rho'], ascending=[False, False])
-    path = os.path.join(OUT, 'compound_microbe_measured.csv')
+    path = outp('compound_microbe_measured.csv')
     out.to_csv(path, index=False)
     print(f'\n  전체 쌍 {len(allt):,} / q<{q_max} {len(sig):,} / '
           f'{min_cohorts}+ 코호트 재현 **{len(out):,}**')

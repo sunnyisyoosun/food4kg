@@ -41,7 +41,7 @@ import sys
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import (OUT, canon, disease_key, enable_provenance,   # noqa: E402
+from common import (outp, OUT, canon, disease_key, enable_provenance,   # noqa: E402
                     taxid_alias)
 
 enable_provenance()   # 산출물 출처 기록 (common.PROV)
@@ -63,7 +63,7 @@ def disease_sets(source=None):
     if source == 'mikg':
         # **조인을 다시 하지 않는다.** `build.py` 가 같은 조인을 해서
         # `microbe_disease_mikg.csv` 로 이미 저장한다 — 여기서 또 하면 갈라진다.
-        p = os.path.join(OUT, 'microbe_disease_mikg.csv')
+        p = outp('microbe_disease_mikg.csv')
         if not os.path.exists(p):
             sys.exit('microbe_disease_mikg.csv 가 없다. python3 ourkg/build.py microbe')
         j = pd.read_csv(p)
@@ -84,7 +84,7 @@ def disease_sets(source=None):
         alias = taxid_alias()
         parts = []
         for fn in files:
-            p = os.path.join(OUT, fn)
+            p = outp(fn)
             if not os.path.exists(p):
                 continue
             d = pd.read_csv(p, dtype={'taxid': str})
@@ -161,7 +161,7 @@ def one(source):
     """소스 하나에 대해 특이성 → (통과하면) 검정. 한 줄 요약을 돌려준다."""
     sets, source = disease_sets(source)
     t, s = specificity(sets)
-    t.to_csv(os.path.join(OUT, f'complication_specificity_{source}.csv'), index=False)
+    t.to_csv(outp(f'complication_specificity_{source}.csv'), index=False)
     print(f'\n== {source}')
     for k, v in s.items():
         print(f'  {k:24s} {v}')
@@ -178,7 +178,7 @@ def one(source):
         row.update({'검정': '거부', 'q<0.05': '', '통과율': ''})
         return row
     h = hypergeom(sets)
-    h.to_csv(os.path.join(OUT, f'complication_hypergeom_{source}.csv'), index=False)
+    h.to_csv(outp(f'complication_hypergeom_{source}.csv'), index=False)
     n = int((h.q < 0.05).sum())
     print(f'  판정: 검정 통과 — q<0.05 {n}/{len(h)} ({n / len(h):.1%})')
     print(h.head(5)[['a', 'b', '공유', '기대', 'q']].to_string(index=False))
@@ -295,7 +295,7 @@ def literature(source='curated'):
     from scipy.stats import mannwhitneyu
     S = requests.Session()
     S.headers.update({'User-Agent': 'ourkg/1.0 (food4health reconstruction)'})
-    p = os.path.join(OUT, f'complication_hypergeom_{source}.csv')
+    p = outp(f'complication_hypergeom_{source}.csv')
     if not os.path.exists(p):
         sys.exit(f'{os.path.basename(p)} 가 없다. python3 ourkg/complication.py')
     h = pd.read_csv(p)
@@ -327,7 +327,7 @@ def literature(source='curated'):
         print(f'\r  쌍 {i}/{len(h)}', end='', flush=True)
     print()
     t = pd.DataFrame(rows)
-    t.to_csv(os.path.join(OUT, f'complication_literature_{source}.csv'), index=False)
+    t.to_csv(outp(f'complication_literature_{source}.csv'), index=False)
     ok = t[t['통과']].lift.dropna()
     no = t[~t['통과']].lift.dropna()
     print(f'\n  쌍 {len(t)} (통과 {len(ok)} · 비통과 {len(no)})'
@@ -353,13 +353,13 @@ def main():
     only = os.environ.get('COMP_SOURCE')
     rows = [one(s) for s in ([only] if only else SOURCES)]
     t = pd.DataFrame(rows)
-    t.to_csv(os.path.join(OUT, 'complication_summary.csv'), index=False)
+    t.to_csv(outp('complication_summary.csv'), index=False)
     print('\n== 요약  -> out/complication_summary.csv')
     print(t.to_string(index=False))
 
     # 논문 Table 5 합병증 8 문항을 검정이 가능한 소스로 다시 잰다.
     pe, src = paper_eval(os.environ.get('COMP_PAPER_SOURCE', 'curated'))
-    pe.to_csv(os.path.join(OUT, 'complication_paper_eval.csv'), index=False)
+    pe.to_csv(outp('complication_paper_eval.csv'), index=False)
     ok = int((pe['판정'] == '일치').sum())
     na = int((pe['판정'] == '못 잼').sum())
     print(f'\n== 논문 Table 5 합병증 8 문항 ({src})'

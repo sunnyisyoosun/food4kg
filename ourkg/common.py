@@ -8,6 +8,39 @@ import pandas as pd
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OURKG = os.path.join(BASE, 'ourkg')
 OUT = os.path.join(OURKG, 'out')
+
+# `out/` 에 파일이 97 개 쌓여 무엇이 정본이고 무엇이 민감도 기록인지 구분이 안
+# 갔다. **파생물만** 하위 폴더로 내린다 — 정본(`foods.csv`·`recommendation.csv`
+# ·`microbes.csv`·`eval_*`)은 코드 167 곳·문서 85 곳이 가리키므로 그대로 둔다.
+# 규칙은 **여기 한 자리**이고 `check.py` 도 이 표로 경로를 찾는다.
+OUT_SUB = (
+    ('_comparison.csv', 'sweep'),        # 쓸기 민감도표 22 개
+    ('complication_', 'complication'),   # 합병증 추론 10 개
+    ('consensus_', 'consensus'),         # 설정 합의 6 개
+    ('metabolome_check_', 'metabolome'),  # 코호트별 상관 2 개
+)
+
+
+def out_sub(name):
+    """산출물 이름 -> 하위 폴더 (없으면 '')."""
+    b = os.path.basename(name)
+    for pat, sub in OUT_SUB:
+        if (b.endswith(pat) if pat.startswith('_') else b.startswith(pat)):
+            return sub
+    return ''
+
+
+def outp(name, mkdir=True):
+    """산출물의 **전체 경로**. 파생물은 하위 폴더로 내려간다.
+
+    `os.path.join(OUT, name)` 을 그대로 쓰면 파생물이 평평한 폴더에 쌓인다.
+    쓰는 쪽과 읽는 쪽이 **같은 함수**를 써야 갈라지지 않는다.
+    """
+    sub = out_sub(name)
+    d = os.path.join(OUT, sub) if sub else OUT
+    if mkdir and sub:
+        os.makedirs(d, exist_ok=True)
+    return os.path.join(d, os.path.basename(name))
 FDC_RAW = os.path.join(BASE, 'fdc_raw')
 os.makedirs(OUT, exist_ok=True)
 
@@ -105,10 +138,17 @@ def _record_provenance():
     if _PROV_T0 is None or not os.path.isdir(OUT):
         return
     try:
-        touched = sorted(
-            f for f in os.listdir(OUT)
-            if f != os.path.basename(PROV)
-            and os.path.getmtime(os.path.join(OUT, f)) >= _PROV_T0 - 1)
+        # **하위 폴더까지 훑는다.** 파생물을 `out/sweep/` 등으로 내린 뒤
+        # 평평하게 훑으면 그 40 개가 **출처 기록에서 조용히 빠진다**.
+        touched = []
+        for root, dirs, files in os.walk(OUT):
+            dirs[:] = [d for d in dirs if d != 'legacy']
+            for f in files:
+                if f == os.path.basename(PROV):
+                    continue
+                if os.path.getmtime(os.path.join(root, f)) >= _PROV_T0 - 1:
+                    touched.append(f)
+        touched = sorted(set(touched))
         if not touched:
             return
         rec = {}

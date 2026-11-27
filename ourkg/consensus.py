@@ -1,7 +1,7 @@
 """합의 Top-K — 코호트가 흔들려도 상위에 남는 음식만 고른다.
 
     python3 ourkg/consensus.py                 # 기본 설정
-    CONS_R=200 python3 ourkg/consensus.py 현행 learned-name2
+    CONS_R=200 python3 ourkg/consensus.py current learned-name2
 
 §17 이 Top-K 지표의 **표집 변동**을 보였다 — 음식을 5% 만 빼도 추천군이
 21 에서 6 까지 떨어진다. 지금까지는 그것을 **없애려** 했고(중복 병합 §19,
@@ -30,7 +30,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
-from common import OUT, recommend_under, enable_provenance  # noqa: E402
+from common import outp, OUT, recommend_under, enable_provenance  # noqa: E402
 
 enable_provenance()   # 산출물 출처 기록 (common.PROV)
 from bootstrap import BASE, CANDIDATES, REC, NOT  # noqa: E402
@@ -74,12 +74,12 @@ def run(names, R=None, K=30):
               f"{row['합의_비추천군']:2d} · 위반 {row['합의_위반']:2d} · "
               f"선택도중앙 {row['top_rate 중앙값']:.2f} · 1위 {row['1위']}", flush=True)
         t.sort_values('top_rate', ascending=False).to_csv(
-            os.path.join(OUT, f'consensus_{name}.csv'), index=False)
+            outp(f'consensus_{name}.csv'), index=False)
     r = pd.DataFrame(out)
-    r.to_csv(os.path.join(OUT, 'consensus_summary.csv'), index=False)
+    r.to_csv(outp('consensus_summary.csv'), index=False)
     print(f'\n  -> out/consensus_summary.csv · out/consensus_<설정>.csv')
     return r
 
 
 if __name__ == '__main__':
-    run(sys.argv[1:] or ['현행'])
+    run(sys.argv[1:] or ['current'])

@@ -27,7 +27,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'eval'))
-from common import (OUT, BASE, CACHE, adjusted_cosine, compound_microbe, depression_e,
+from common import (outp, OUT, BASE, CACHE, adjusted_cosine, compound_microbe, depression_e,
                     microbe_disease_direction, mental_taxids, mental_mesh,
                     microbe_metabolites,
                     measured_links as _measured_links, enable_provenance,
@@ -74,7 +74,7 @@ def gutbrain_weight(compounds):
         # **복사본이었다.** 같은 속 조인을 여기서 다시 하고 있었고, 그
         # 바람에 `canon()` 이 빠져 정본화한 축과 taxid 가 어긋났다(94 행).
         # 분류체계 정규화(`genus_key`)도 여기엔 없었다 — 한 자리로 모은다.
-        if not os.path.exists(os.path.join(OUT, 'compound_microbe_measured.csv')):
+        if not os.path.exists(outp('compound_microbe_measured.csv')):
             sys.exit('compound_microbe_measured.csv 가 없다. '
                      'python3 ourkg/metabolome_check.py build')
         cm = _measured_links()
@@ -168,21 +168,21 @@ def resolve_e(mode, E_df=None):
         return pd.read_csv(path).set_index('kegg')
 
     if mode.startswith('stype:'):
-        t = _need(os.path.join(OUT, 'compound_depression_stype.csv'),
+        t = _need(outp('compound_depression_stype.csv'),
                   'python3 ourkg/analyze.py stype')
         return t[mode.split(':', 1)[1]]
     if mode == 'learned':
         # 주의: ModiMedDiet 라벨로 학습한 E 다(analyze.py invert).
         # ModiMedDiet 기준으로 잴 때는 held-out 음식만 써야 한다.
-        return _need(os.path.join(OUT, 'compound_learned.csv'),
+        return _need(outp('compound_learned.csv'),
                      'python3 ourkg/analyze.py invert')['e_learned']
     if mode.split('_')[0] in ('weighted', 'priority', 'vote'):
-        return _need(os.path.join(OUT, 'compound_evidence.csv'),
+        return _need(outp('compound_evidence.csv'),
                      'python3 ourkg/build.py evidence')['e_' + mode]
     if mode.startswith(('nhanes', 'union')):
         # 섭취-결과 기반 E (ourkg/nhanes.py). ProMENDA 의 "환자에서 농도가
         # 높다" 와 달리 "먹으면 어떻게 되나" 를 잰다 — RESULTS §9·§15b.
-        nh = _need(os.path.join(OUT, 'compound_depression_nhanes.csv'),
+        nh = _need(outp('compound_depression_nhanes.csv'),
                    'python3 ourkg/nhanes.py')
         #   nhanes = q<0.05 만(보수적) · nhanes_all = 전부
         #   union* = **ProMENDA 와 합친다.** 겹치는 compound 가 11/29 개뿐이라
@@ -268,8 +268,8 @@ def recommend(e_mode=None, path=None, save=True):
                   f'{R.corr(method="spearman").values[0, 1]:.3f} '
                   f'(낮을수록 상보적이다)')
         if save:
-            res.to_csv(os.path.join(OUT, 'recommendation.csv'), index=False)
-            print(f'\n저장: {os.path.join(OUT, "recommendation.csv")}')
+            res.to_csv(outp('recommendation.csv'), index=False)
+            print(f'\n저장: {outp("recommendation.csv")}')
         return res
     return _recommend_one(e_mode=e_mode, path=path, save=save)
 
@@ -329,8 +329,8 @@ def _recommend_one(e_mode=None, path=None, save=True):
     PCA_N = -1 if _pca_opt == 'auto' else int(_pca_opt)
 
     print('[1/5] 행렬 구성')
-    long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
-    foods = pd.read_csv(os.path.join(OUT, 'foods.csv')).set_index('food_key')
+    long = pd.read_csv(outp('food_compound_long.csv'))
+    foods = pd.read_csv(outp('foods.csv')).set_index('food_key')
     E_df = depression_e()
 
     # 추천 대상 음식 범위.
@@ -669,7 +669,7 @@ def _recommend_one(e_mode=None, path=None, save=True):
     res.insert(0, 'rank', res.index + 1)
     if not save:
         return res
-    res.to_csv(os.path.join(OUT, 'recommendation.csv'), index=False)
+    res.to_csv(outp('recommendation.csv'), index=False)
 
     print(f'\n=== Top {K} (추천) ===')
     print(res.head(K)[['rank', 'food_name', 'food_group', 'score']].to_string(index=False))
@@ -702,8 +702,8 @@ def _recommend_one(e_mode=None, path=None, save=True):
     plt.title(f'ourkg food recommendation for depression (o=Top{K}, ^=Bottom{K})')
     plt.legend(fontsize=7, loc='best', ncol=2)
     plt.tight_layout()
-    plt.savefig(os.path.join(OUT, 'recommendation.png'), dpi=140)
-    print(f'\n저장: {os.path.join(OUT, "recommendation.csv")}, recommendation.png')
+    plt.savefig(outp('recommendation.png'), dpi=140)
+    print(f'\n저장: {outp("recommendation.csv")}, recommendation.png')
     return res
 
 
@@ -733,7 +733,7 @@ def evaluate():
         print('[A] ourkg.nt 적재 (3M triple, 수 분 소요)', flush=True)
         t0 = time.time()
         g = Graph()
-        g.parse(os.path.join(OUT, 'ourkg.nt'), format='nt')
+        g.parse(outp('ourkg.nt'), format='nt')
         print(f'  triple {len(g):,}  {time.time()-t0:.0f}s', flush=True)
 
         PREFIX = """
@@ -812,7 +812,7 @@ def evaluate():
         for r in rows[:12]:
             print(f'      {r[0][:26]:26s} {r[1][:34]:34s} {r[2]}', flush=True)
 
-        json.dump(res, open(os.path.join(OUT, 'eval_sparql.json'), 'w'),
+        json.dump(res, open(outp('eval_sparql.json'), 'w'),
                   ensure_ascii=False, indent=1)
 
     # ======================================================================
@@ -838,9 +838,9 @@ def evaluate():
         class OurKG(m1.KG):
             def __init__(self):
                 dd = collections.defaultdict
-                foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
-                mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str})
-                md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'),
+                foods = pd.read_csv(outp('foods.csv'))
+                mic = pd.read_csv(outp('microbes.csv'), dtype={'taxid': str})
+                md = pd.read_csv(outp('microbe_disease.csv'),
                                  dtype={'taxid': str})
                 # compound-미생물은 **두 출처를 합쳐** 본다. KEGG 추론 경로만 보면
                 # metabolizes() 가 VMH/AGORA2 의 경로를 놓친다 (#6 의 Adlercreutzia
@@ -860,7 +860,7 @@ def evaluate():
                 # nut2kegg 와 같은 뜻(FDC nutrient id -> KEGG)이 되도록 nutrient_id
                 # 를 키로 쓴다 — 전에는 인덱스를 키로 둬 이름만 같고 뜻이 달랐다.
                 self.w = dd(dict)
-                _kg = pd.read_csv(os.path.join(OUT, 'food_compound_kg.csv'))
+                _kg = pd.read_csv(outp('food_compound_kg.csv'))
                 # KG 층은 F 코호트(MIN_COV>=20) 밖 음식도 담는다. 그 음식들도
                 # 질의 대상이므로 self.food 에 등록한다 — 안 하면 KG 에 넣어 놓고
                 # 질의가 못 본다 (방법 1 #6 의 grape juice 가 그 경우였다).
@@ -895,7 +895,7 @@ def evaluate():
 
                 # 온톨로지(FoodOn·중국)가 붙은 카테고리·음식에는 그쪽 라벨도
                 # 카테고리로 달아 준다. 안 그러면 통합해 놓고 질의가 못 본다.
-                ol = os.path.join(OUT, 'category_ontology.csv')
+                ol = outp('category_ontology.csv')
                 if os.path.exists(ol):
                     o = pd.read_csv(ol)
                     label2fine = {k: v for k, v in fine_uri_lbl.items()}
@@ -914,7 +914,7 @@ def evaluate():
 
                 # 질환 상위 분류 (out/disease_tree.csv) — #12 가 쓰는 축.
                 self.dtree = {}
-                _dt = os.path.join(OUT, 'disease_tree.csv')
+                _dt = outp('disease_tree.csv')
                 if os.path.exists(_dt):
                     for _d, _a in pd.read_csv(_dt)[['disease', 'ancestor']].dropna().values:
                         self.dtree.setdefault(str(_d), set()).add(str(_a))
@@ -938,8 +938,8 @@ def evaluate():
                 KEGG_URI = 'https://www.kegg.jp/entry/'
                 self.klab = {}
                 self.ksub, self.ktype = dd(set), dd(set)
-                kc = os.path.join(OUT, 'kegg_class.csv')
-                cc = os.path.join(OUT, 'compound_class.csv')
+                kc = outp('kegg_class.csv')
+                cc = outp('compound_class.csv')
                 if os.path.exists(kc):
                     k1 = pd.read_csv(kc)
                     # KEGG 원 라벨이 먼저다. 우리 ProMENDA 이름("Thiamine")은 KEGG 라벨
@@ -970,7 +970,7 @@ def evaluate():
 
                 # MiKG 유래 정신질환 목록 — 우리 산출물에서 직접 준다.
                 # 이게 없으면 q13 이 MiKG 원본 TTL 을 읽어 공개 KG 의 답을 낸다.
-                mikg = pd.read_csv(os.path.join(OUT, 'microbe_disease_mikg.csv'))
+                mikg = pd.read_csv(outp('microbe_disease_mikg.csv'))
                 self._mental = sorted(set(mikg.disease.dropna()))
 
                 # 계통: microbes.csv 의 lineage 로 부모 사슬을 만든다.
@@ -1007,7 +1007,7 @@ def evaluate():
                          'ourkg_reproduced': rep, 'ourkg_valid': val, 'note': why,
                          'expert_consensus': int(t['consensus'])})
         b = pd.DataFrame(rows)
-        b.to_csv(os.path.join(OUT, 'eval_method1.csv'), index=False)
+        b.to_csv(outp('eval_method1.csv'), index=False)
         n = int((b.ourkg_reproduced != '-').sum())
         rep = int((b.ourkg_reproduced == 'O').sum())
         both = int(((b.ourkg_reproduced == 'O') & (b.ourkg_valid == 'O')).sum())
@@ -1025,14 +1025,14 @@ def evaluate():
     # ======================================================================
     if 'C' in PART:
         print('\n[C] §5.1 방법 2 — 추론 15건 PubMed 검증')
-        md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
-        mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str}
+        md = pd.read_csv(outp('microbe_disease.csv'), dtype={'taxid': str})
+        mic = pd.read_csv(outp('microbes.csv'), dtype={'taxid': str}
                           ).set_index('taxid')['name'].to_dict()
-        mdis = pd.read_csv(os.path.join(OUT, 'microbe_disease_mikg.csv'))
-        rec = pd.read_csv(os.path.join(OUT, 'recommendation.csv'))
+        mdis = pd.read_csv(outp('microbe_disease_mikg.csv'))
+        rec = pd.read_csv(outp('recommendation.csv'))
         E = depression_e()
-        long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
-        foods = pd.read_csv(os.path.join(OUT, 'foods.csv')).set_index('food_key')
+        long = pd.read_csv(outp('food_compound_long.csv'))
+        foods = pd.read_csv(outp('foods.csv')).set_index('food_key')
 
         random.seed(0)
         infs = []
@@ -1386,7 +1386,7 @@ def evaluate():
         def dump(who, name):
             d = all_rows[all_rows.who == who].reset_index(drop=True)
             d.insert(0, 'no', d.index)
-            d.to_csv(os.path.join(OUT, name), index=False)
+            d.to_csv(outp(name), index=False)
             return d
 
         t5 = dump('ourkg', 'eval_method2.csv')
@@ -1465,10 +1465,10 @@ def compare():
         })
 
     # 모드별로 실제로 몇 개 compound 가 0 이 아닌지
-    ev_path = os.path.join(OUT, 'compound_evidence.csv')
+    ev_path = outp('compound_evidence.csv')
     dep = depression_e()
     ev = pd.read_csv(ev_path).set_index('kegg') if os.path.exists(ev_path) else None
-    long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    long = pd.read_csv(outp('food_compound_long.csv'))
     cpds = sorted(long['kegg'].unique())
     for row in rows:
         m = row['e_mode']
@@ -1476,13 +1476,13 @@ def compare():
         sel = cpds
         if row['path'] == 'gutbrain':
             cm = compound_microbe(sources=('kegg',))
-            md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
+            md = pd.read_csv(outp('microbe_disease.csv'), dtype={'taxid': str})
             gut = set(cm[cm['taxid'].isin(set(md[md['is_mental']]['taxid']))]['kegg'])
             sel = [c for c in cpds if c in gut]
         row['n_compound_nonzero'] = sum(1 for c in sel if col.get(c, 0))
 
     tab = pd.DataFrame(rows)
-    tab.to_csv(os.path.join(OUT, 'e_mode_comparison.csv'), index=False)
+    tab.to_csv(outp('e_mode_comparison.csv'), index=False)
 
     print('\n' + '=' * 78)
     print('E 구성 방식 비교')
@@ -1519,8 +1519,8 @@ def gutbrain_from_kg():
     정신질환(MeSH F03)과 연관된 경우. 결과는 out/gutbrain_compounds.json 에
     캐시한다(3M triple 적재가 60초 걸린다).
     """
-    cache = os.path.join(OUT, 'gutbrain_compounds.json')
-    nt = os.path.join(OUT, 'ourkg.nt')
+    cache = outp('gutbrain_compounds.json')
+    nt = outp('ourkg.nt')
     if os.path.exists(cache) and os.path.exists(nt) and \
             os.path.getmtime(cache) >= os.path.getmtime(nt):
         return set(json.load(open(cache))['kegg'])
@@ -1558,7 +1558,7 @@ def pathcheck():
     출력
       out/gutbrain_compounds.json   KG 에서 뽑은 집합과 쿼리 원문
     """
-    long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    long = pd.read_csv(outp('food_compound_long.csv'))
     fdc = set(long['kegg'].unique())
 
     csv_set = gutbrain_from_csv() & fdc
@@ -1580,7 +1580,7 @@ def pathcheck():
     # **판정을 파일에 적는다.** 전에는 경고를 화면에만 찍었고, 어긋난 상태가
     # 20 일간 아무에게도 안 보였다 (§38). check.py 가 이 줄을 읽어 실패로
     # 잡는다 — pathcheck 자체는 KG 적재에 80 초가 걸려 매번 돌릴 수 없다.
-    _p = os.path.join(OUT, 'gutbrain_compounds.json')
+    _p = outp('gutbrain_compounds.json')
     _d = json.load(open(_p)) if os.path.exists(_p) else {}
     _d.update({'n_csv': len(csv_set), 'n_kg': len(kg_set),
                'only_csv': only_csv, 'only_kg': only_kg,
@@ -1804,13 +1804,13 @@ def external():
     출력
       out/modimed_labels.csv
     """
-    foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
+    foods = pd.read_csv(outp('foods.csv'))
     CURATED = ('foundation_food', 'sr_legacy_food', 'survey_fndds_food')
     foods = foods[foods['data_type'].isin(CURATED)].reset_index(drop=True)
     lab, why = modimed_labels(foods)
     foods['modimed'] = lab
     foods['modimed_rule'] = why
-    foods.to_csv(os.path.join(OUT, 'modimed_labels.csv'), index=False)
+    foods.to_csv(outp('modimed_labels.csv'), index=False)
 
     print(f'  추천 코호트 {len(foods):,}')
     print(f'  처방군(+1) {int((lab == 1).sum()):,} / '
@@ -1867,11 +1867,11 @@ def invert():
     FEATURES = os.environ.get('FEATURES', 'compound')
 
     print('[1/5] 코호트와 라벨')
-    foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
+    foods = pd.read_csv(outp('foods.csv'))
     CURATED = ('foundation_food', 'sr_legacy_food', 'survey_fndds_food')
     foods = foods[foods['data_type'].isin(CURATED)].reset_index(drop=True)
     lab, _ = modimed_labels(foods)
-    long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    long = pd.read_csv(outp('food_compound_long.csv'))
     F = (long.pivot_table(index='food_key', columns='kegg', values='amount_g',
                           fill_value=0.0)
          .reindex(foods['food_key']).fillna(0.0))
@@ -1881,7 +1881,7 @@ def invert():
     X = np.divide(X, colmax, out=np.zeros_like(X), where=colmax > 0)
 
     if FEATURES in ('form', 'both'):
-        fp = os.path.join(OUT, 'food_form.csv')
+        fp = outp('food_form.csv')
         if not os.path.exists(fp):
             sys.exit('food_form.csv 가 없다. python3 ourkg/build.py form')
         Ff = (pd.read_csv(fp).set_index('food_key')
@@ -1926,7 +1926,7 @@ def invert():
     # form/both 는 compound 가 아닌 특징이 섞여 있어 E 로 쓸 수 없다.
     lname = ('compound_learned.csv' if FEATURES == 'compound'
              else f'learned_{FEATURES}.csv')
-    learned.to_csv(os.path.join(OUT, lname), index=False)
+    learned.to_csv(outp(lname), index=False)
     print(f'  저장: {lname}')
     if FEATURES != 'compound':
         print('  상위 가중치:')
@@ -1941,7 +1941,7 @@ def invert():
 
     print('[4/5] 공개 소스 E 와 부호 대조')
     dep = depression_e()
-    ev = pd.read_csv(os.path.join(OUT, 'compound_evidence.csv')).set_index('kegg')
+    ev = pd.read_csv(outp('compound_evidence.csv')).set_index('kegg')
     # 이름은 ProMENDA/evidence 에 없을 수 있다 — FDC 영양소 이름으로 보충한다.
     nmap = pd.read_csv(os.path.join(BASE, 'setup', 'nutrient_kegg_map.csv'))
     fdc_name = (nmap.drop_duplicates('nutrient_kegg')
@@ -1971,7 +1971,7 @@ def invert():
     cmp_tab = pd.DataFrame(rows)
     cmp_tab['abs'] = cmp_tab['e_learned'].abs()
     cmp_tab = cmp_tab.sort_values('abs', ascending=False).drop(columns='abs')
-    cmp_tab.to_csv(os.path.join(OUT, 'invert_comparison.csv'), index=False)
+    cmp_tab.to_csv(outp('invert_comparison.csv'), index=False)
 
     both = cmp_tab[cmp_tab['sign_vs_promenda'] != '']
     same = int((both['sign_vs_promenda'] == 'same').sum())
@@ -1998,7 +1998,7 @@ def invert():
     print(f'  held-out 음식 {len(sub):,} 에서 전체 파이프라인 AUC {auc_pipe:.3f}')
     # 참고값을 하드코딩하면 데이터가 바뀔 때마다 낡는다 (0.665/0.491 로 박혀
     # 있었다). 비교표에서 읽어 오고, 표가 없으면 그 사실을 적는다.
-    _cmp = os.path.join(OUT, 'e_mode_comparison.csv')
+    _cmp = outp('e_mode_comparison.csv')
     if os.path.exists(_cmp):
         _c = pd.read_csv(_cmp)
         _col = next((c for c in ('modimed_AUC(참고)', 'modimed_AUC')
@@ -2096,11 +2096,11 @@ def stype():
     E['paper'] = dep['e_shrunk'].to_dict()
 
     print('[2/4] 음식 행렬과 ModiMedDiet 라벨')
-    foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
+    foods = pd.read_csv(outp('foods.csv'))
     foods = foods[foods['data_type'].isin(
         ('foundation_food', 'sr_legacy_food', 'survey_fndds_food'))].reset_index(drop=True)
     lab, _ = modimed_labels(foods)
-    long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    long = pd.read_csv(outp('food_compound_long.csv'))
     F = (long.pivot_table(index='food_key', columns='kegg', values='amount_g',
                           fill_value=0.0).reindex(foods['food_key']).fillna(0.0))
     compounds = list(F.columns)
@@ -2112,7 +2112,7 @@ def stype():
     Xs = X[m]
     print(f'  라벨 있는 음식 {len(y):,}')
 
-    lp = os.path.join(OUT, 'compound_learned.csv')
+    lp = outp('compound_learned.csv')
     learned = (pd.read_csv(lp).set_index('kegg')['e_learned'].to_dict()
                if os.path.exists(lp) else {})
 
@@ -2135,8 +2135,8 @@ def stype():
                      'agree_pct': round(agree * 100) if both else None})
     tab = pd.DataFrame(rows)
     pd.DataFrame(out_e).to_csv(
-        os.path.join(OUT, 'compound_depression_stype.csv'), index=False)
-    tab.to_csv(os.path.join(OUT, 'stype_comparison.csv'), index=False)
+        outp('compound_depression_stype.csv'), index=False)
+    tab.to_csv(outp('stype_comparison.csv'), index=False)
 
     print()
     print('=' * 70)
@@ -2236,7 +2236,7 @@ def disagree():
             'drop_dAUC_learned': round(d_l, 4),
         })
     tab = pd.DataFrame(rows).sort_values('n', ascending=False)
-    tab.to_csv(os.path.join(OUT, 'disagreement_by_group.csv'), index=False)
+    tab.to_csv(outp('disagreement_by_group.csv'), index=False)
 
     print('\n  두 기준이 충돌하는 음식군 (논문은 비추천인데 ModiMedDiet 은 처방 우세)')
     conf = tab[tab['conflict'] == 'O']
@@ -2344,8 +2344,8 @@ def groups():
     from scipy.stats import mannwhitneyu
 
     K = int(os.environ.get('TOP_K', '30'))
-    rec = pd.read_csv(os.path.join(OUT, 'recommendation.csv'))
-    long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    rec = pd.read_csv(outp('recommendation.csv'))
+    long = pd.read_csv(outp('food_compound_long.csv'))
     nmap = pd.read_csv(os.path.join(BASE, 'setup', 'nutrient_kegg_map.csv'), dtype=str)
     nmap = nmap[nmap.nutrient_kegg.str.startswith('C', na=False)]
     kname = dict(zip(nmap.nutrient_kegg, nmap.nutrient_name))
@@ -2372,7 +2372,7 @@ def groups():
     piv['name'] = [kname.get(k, k) for k in piv.index]
     piv['group'] = piv['name'].map(compound_group)
     piv = piv.sort_values(['group', 'rec'], ascending=[True, False])
-    piv.to_csv(os.path.join(OUT, 'group_composition.csv'))
+    piv.to_csv(outp('group_composition.csv'))
 
     print('[2/3] 성분군별 조성 — 논문 Fig.4(c)')
     rows = []
@@ -2388,7 +2388,7 @@ def groups():
         print(f'  {g:14s} {len(sub):4d} {sub["rec"].mean():8.3f} '
               f'{sub["not"].mean():9.3f} {rows[-1]["diff"]:+8.3f} {p:8.3g}')
     tab = pd.DataFrame(rows).sort_values('diff', ascending=False)
-    tab.to_csv(os.path.join(OUT, 'group_comparison.csv'), index=False)
+    tab.to_csv(outp('group_comparison.csv'), index=False)
 
     print('[3/3] 히트맵')
     import matplotlib
@@ -2424,8 +2424,8 @@ def groups():
     fig.suptitle(f'Fig.4(c) 대응 — 추천/비추천군의 성분 조성 ({NORM} 정규화)',
                  fontsize=11, y=1.02)
     fig.tight_layout()
-    fig.savefig(os.path.join(OUT, 'group_comparison.png'), dpi=150, bbox_inches='tight')
-    print(f'  저장: {os.path.join(OUT, "group_comparison.png")}')
+    fig.savefig(outp('group_comparison.png'), dpi=150, bbox_inches='tight')
+    print(f'  저장: {outp("group_comparison.png")}')
 
 
 
@@ -2453,12 +2453,12 @@ def emicrobe():
 
     K = float(os.environ.get('SHRINK_K', '10'))
     E = depression_e()
-    db = pd.read_csv(os.path.join(OUT, 'microbe_disease_disbiome.csv'),
+    db = pd.read_csv(outp('microbe_disease_disbiome.csv'),
                      dtype={'taxid': str})
     # gutMDisorder v3 — Disbiome 과 맞먹는 두 번째 큐레이션 소스. 우울증 관계가
     # 배포 KG 1 건 · Disbiome 소수에서 23 건으로 늘어, **같은 검정을 독립된
     # 소스로 한 번 더** 할 수 있다. 한 소스의 우연을 두 소스가 같이 낼 확률은 낮다.
-    _gp = os.path.join(OUT, 'microbe_disease_gutmdisorder.csv')
+    _gp = outp('microbe_disease_gutmdisorder.csv')
     gmd = (pd.read_csv(_gp, dtype={'taxid': str}) if os.path.exists(_gp)
            else pd.DataFrame(columns=db.columns))
     gmd = gmd[gmd.outcome.isin(('Elevated', 'Reduced'))]
@@ -2518,13 +2518,13 @@ def emicrobe():
                     pd.DataFrame({'kegg': e.index, 'e_microbe': e.values,
                                   'n_reduced': dn.reindex(e.index).values,
                                   'n_elevated': up.reindex(e.index).values}
-                                 ).to_csv(os.path.join(OUT, 'e_microbe.csv'), index=False)
+                                 ).to_csv(outp('e_microbe.csv'), index=False)
     t = pd.DataFrame(rows)
     # 20 칸을 뒤지고 그중 가장 작은 p 를 집는 것은 검정이 아니다 — BH 로 보정한다.
     from scipy.stats import false_discovery_control
     if len(t):
         t['q'] = false_discovery_control(t['p'].values).round(3)
-    t.to_csv(os.path.join(OUT, 'e_microbe_compare.csv'), index=False)
+    t.to_csv(outp('e_microbe_compare.csv'), index=False)
     print(t.to_string(index=False))
     print('\n  **우연 수준은 0.5 가 아니다** — 열 `귀무(순열)` 을 봐라. 양쪽 부호가')
     print('  치우쳐 있으면 무작위로 짝지어도 많이 맞는다(여기선 0.42~0.59).')

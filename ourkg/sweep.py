@@ -26,7 +26,7 @@ warnings.filterwarnings('ignore')
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import pandas as pd  # noqa: E402
-from common import OUT, recommend_under, enable_provenance  # noqa: E402
+from common import outp, OUT, recommend_under, enable_provenance  # noqa: E402
 
 enable_provenance()   # 산출물 출처 기록 (common.PROV)
 
@@ -230,7 +230,7 @@ def run(name):
             'rho_상위': sc.get(f"modimed_rho_상위{os.environ.get('MODIMED_RHO_TOP', '0')}"),
             'top1': str(top.iloc[0].food_name)[:38]})
     t = pd.DataFrame(rows).dropna(axis=1, how='all')
-    t.to_csv(os.path.join(OUT, path), index=False)
+    t.to_csv(outp(path), index=False)
     print(f'\n== {name}  ->  out/{path}')
     print(t.to_string(index=False))
     return t

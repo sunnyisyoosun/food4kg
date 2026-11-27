@@ -13,7 +13,7 @@
 """
 import json, os, re
 import pandas as pd
-from common import OUT, BASE, enable_provenance, normkey as base
+from common import outp, OUT, BASE, enable_provenance, normkey as base
 
 enable_provenance()   # 산출물 출처 기록 (common.PROV)
 SING=lambda b: ' '.join(re.sub(r'(?<=[a-z]{2})s$','',w) for w in b.split())
@@ -64,7 +64,7 @@ def link_table(meta):
 
 def labels_by_food():
     """food_key -> FoodOn 라벨 집합 (analyze.py 의 카테고리 축)."""
-    p = os.path.join(OUT, 'food_foodon.csv')
+    p = outp('food_foodon.csv')
     if not os.path.exists(p):
         return {}
     d = pd.read_csv(p).dropna(subset=['foodon_label'])

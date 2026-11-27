@@ -28,7 +28,7 @@ import hashlib
 
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import (BASE, OUT, FDC_RAW, UNIT_TO_G, FDC_CATEGORY, cached_get, kegg_rest,
+from common import (outp, BASE, OUT, FDC_RAW, UNIT_TO_G, FDC_CATEGORY, cached_get, kegg_rest,
                     normalize_label, normalize_category, kegg_map, normkey,
                     mesh_lookup, cached_covering, gutmdisorder,
                     microbe_disease_direction, taxid_alias, depression_e, enable_provenance)
@@ -284,7 +284,7 @@ def food():
     if _fo is None:
         print('  ⚠ FoodOn 캐시 없음 — ourkg/cache/foodon_*.json')
     else:
-        _fo.to_csv(os.path.join(OUT, 'food_foodon.csv'), index=False)
+        _fo.to_csv(outp('food_foodon.csv'), index=False)
         _cls = _fo[_fo.rel == 'class']
         _link['foodon_food'] = int(_cls.food_key.nunique())
         _link['foodon_class'] = int(_cls.foodon.nunique())
@@ -302,9 +302,9 @@ def food():
           f"소수인 음식 {_link['food_label_minority']:,}")
     _link['food_after_mincov'] = int(long['food_key'].nunique())
     _link['compound_after_mincov'] = int(long['kegg'].nunique())
-    with open(os.path.join(OUT, 'food_link.json'), 'w') as _fh:
+    with open(outp('food_link.json'), 'w') as _fh:
         json.dump(_link, _fh, indent=1)
-    long.to_csv(os.path.join(OUT, 'food_compound_long.csv'), index=False)
+    long.to_csv(outp('food_compound_long.csv'), index=False)
     # KG 층은 **대표 항목의 값**을 쓴다. foods.csv 는 큐레이션 순위(_PRIORITY)로
     # 대표 fdc_id 를 고르는데 값만 라벨 전체 평균이면 둘이 어긋난다 — 'Pie, peach'
     # 는 대표가 SR legacy(DFE 46 µg)인데 FNDDS(42)와 평균 내 44 가 됐다(방법 1 #4).
@@ -325,14 +325,14 @@ def food():
     _kg_fn = _kg_fn[_kg_fn['fdc_id'] == _kg_fn['food_key'].map(_rep)]
     _kgc = (_kg_fn.groupby(['food_key', 'fdc_id', 'food_name', 'nutrient_id',
                             'nutrient_name', 'kegg'], as_index=False)['amount_g'].mean())
-    _kgc.to_csv(os.path.join(OUT, 'food_compound_kg.csv'), index=False)
+    _kgc.to_csv(outp('food_compound_kg.csv'), index=False)
     _link['kg_food'] = int(_kgc['food_key'].nunique())
     _link['kg_compound'] = int(_kgc['kegg'].nunique())
     _link['kg_nutrient'] = int(_kgc['nutrient_id'].nunique())
     print(f'  KG 층: 음식 {_link["kg_food"]:,} · compound {_link["kg_compound"]} '
           f'· nutrient {_link["kg_nutrient"]} · 값 {len(_kgc):,}  '
           f'(F 층 음식 {len(meta):,} · compound {long["kegg"].nunique()})')
-    meta.to_csv(os.path.join(OUT, 'foods.csv'), index=False)
+    meta.to_csv(outp('foods.csv'), index=False)
     print(f'  음식 {len(meta):,} / compound {long["kegg"].nunique()} / 값 {len(long):,}')
     print(f'  음식당 compound 중앙값 {meta["n_compound"].median():.1f} '
           f'(논문 heatmap 원본 33.0)')
@@ -430,7 +430,7 @@ def promenda():
         _prev = min(_prev, pv[i] * len(pv) / (len(pv) - rank + 1))
         _q[i] = _prev
     E['q'] = _q
-    E.to_csv(os.path.join(OUT, 'compound_depression.csv'), index=False)
+    E.to_csv(outp('compound_depression.csv'), index=False)
     print(f'  근거 축소 K={SHRINK_K}: |e_shrunk| 중앙값 {E.e_shrunk.abs().median():.3f}, '
           f'BH q<0.05 {int((E.q < 0.05).sum())} compound')
 
@@ -439,12 +439,12 @@ def promenda():
     df[cols].rename(columns={'M_Study_ID': 'study_id', STYPE_COL: 'study_type',
                              'M_Tissue_Metabolite_level_1': 'tissue',
                              'M_Organism_Metabolite_level_1': 'organism'}
-                    ).to_csv(os.path.join(OUT, 'promenda_records.csv'), index=False)
+                    ).to_csv(outp('promenda_records.csv'), index=False)
 
     print(f'  compound {len(E):,}  (+ {int((E.direction == 1).sum())} / '
           f'- {int((E.direction == -1).sum())} / tie {int((E.direction == 0).sum())})')
 
-    food = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    food = pd.read_csv(outp('food_compound_long.csv'))
     fk = set(food['kegg'].unique())
     ov = fk & set(E[E.direction != 0]['kegg'])
     print(f'  FDC compound {len(fk)} 중 depression 방향 확정 {len(ov)} '
@@ -609,7 +609,7 @@ def microbe():
     md['is_neuro'] = md['mesh_id'].isin(neuro)
     disb['is_mental'] = disb['mesh_id'].isin(mental)
     disb['is_neuro'] = disb['mesh_id'].isin(neuro)
-    disb.to_csv(os.path.join(OUT, 'microbe_disease_disbiome.csv'), index=False)
+    disb.to_csv(outp('microbe_disease_disbiome.csv'), index=False)
     gmd['is_mental'] = gmd['mesh_id'].isin(mental)
     gmd['is_neuro'] = gmd['mesh_id'].isin(neuro)
     # MeSH 라벨을 우리 쪽 표기로 덮는다 — gutMDisorder 의 Condition1 은
@@ -617,7 +617,7 @@ def microbe():
     gmd['disease'] = gmd['mesh_id'].map(
         lambda d: labels.get(f'http://id.nlm.nih.gov/mesh/{d}', '')
     ).replace('', pd.NA).fillna(gmd['disease_name'])
-    gmd.to_csv(os.path.join(OUT, 'microbe_disease_gutmdisorder.csv'), index=False)
+    gmd.to_csv(outp('microbe_disease_gutmdisorder.csv'), index=False)
     _gsel = gmd[gmd.is_mental | gmd.is_neuro]
     print(f'  gutMDisorder 정신·신경 관계 {len(_gsel):,} '
           f'(미생물 {_gsel.taxid.nunique()} 종, 질환 {_gsel.mesh_id.nunique()} 종)')
@@ -753,15 +753,15 @@ def microbe():
     # 옛 id 와 새 id 가 **둘 다** focus 에 있으면 같은 균이 두 행이다. 소스마다
     # 다른 id 를 들고 있어서 생기는 일이라 지우지 않고 센다 — 집계할 때 알아야 한다.
     _dupn = int(micro.taxid_current.duplicated().sum()) if 'taxid_current' in micro else 0
-    micro.to_csv(os.path.join(OUT, 'microbes.csv'), index=False)
+    micro.to_csv(outp('microbes.csv'), index=False)
     print(f'  microbes.csv {len(micro)} 행 (focus {len(focus)}) = '
           f'고유 균 {micro.taxid_current.nunique() if "taxid_current" in micro else len(micro)} 종'
           + (f' + 같은 균이 두 id 로 들어온 것 {_dupn} 쌍' if _dupn else ''))
-    md.to_csv(os.path.join(OUT, 'microbe_disease.csv'), index=False)
+    md.to_csv(outp('microbe_disease.csv'), index=False)
 
     # ------------------------------------------------------------------
     print('[5/5] KEGG compound → EC → KO → organism')
-    cpds = set(pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))['kegg'].unique())
+    cpds = set(pd.read_csv(outp('food_compound_long.csv'))['kegg'].unique())
 
     c2ec = collections.defaultdict(set)
     for line in kegg('link/enzyme/compound').strip().split('\n'):
@@ -804,7 +804,7 @@ def microbe():
         print(f'\r  organism {i}/{len(orgcodes)}  링크 {len(rows):,}', end='', flush=True)
     print()
     cm = pd.DataFrame(rows)
-    cm.to_csv(os.path.join(OUT, 'compound_microbe.csv'), index=False)
+    cm.to_csv(outp('compound_microbe.csv'), index=False)
     print(f'  그중 속 수준 매칭 {int((cm["match_rank"] == "genus").sum()):,} 링크 '
           f'— "이 속의 어떤 유전체가" 라는 더 약한 주장이다')
     # **고유 쌍을 같이 낸다.** 병합 id 를 요청 id 로도 유지하므로 행 수는 같은
@@ -912,7 +912,7 @@ def microbe():
            for _lb in list(g.objects(_s, RDFS.label)) or ['']]
     if _pw:
         _pwdf = pd.DataFrame(_pw).drop_duplicates()
-        _pwdf.to_csv(os.path.join(OUT, 'neurotransmitter_pathway.csv'), index=False)
+        _pwdf.to_csv(outp('neurotransmitter_pathway.csv'), index=False)
         print(f'  MiKG KEGG pathway 축: {len(_pwdf)} 링크 · '
               f'경로 {_pwdf.kegg_pathway.nunique()} · '
               f'신경전달물질 {_pwdf.neurotransmitter.nunique()}')
@@ -928,16 +928,16 @@ def microbe():
             _xref.append({'entity': _local(_s), 'source': _src,
                           'id': _u.rsplit('/', 1)[-1], 'uri': _u})
     _xdf = pd.DataFrame(_xref).drop_duplicates()
-    _xdf.to_csv(os.path.join(OUT, 'mikg_xref.csv'), index=False)
+    _xdf.to_csv(outp('mikg_xref.csv'), index=False)
     print(f'  MiKG 외부 식별자: 엔티티 {_xdf.entity.nunique()} · '
           f'{dict(_xdf.source.value_counts())}')
 
-    mn.to_csv(os.path.join(OUT, 'microbe_neurotransmitter.csv'), index=False)
-    nd.to_csv(os.path.join(OUT, 'neurotransmitter_disease.csv'), index=False)
+    mn.to_csv(outp('microbe_neurotransmitter.csv'), index=False)
+    nd.to_csv(outp('neurotransmitter_disease.csv'), index=False)
 
     joined = mn.merge(nd[['neurotransmitter', 'disease']], on='neurotransmitter')
     joined[['microbe', 'neurotransmitter', 'disease']].drop_duplicates().to_csv(
-        os.path.join(OUT, 'microbe_disease_mikg.csv'), index=False)
+        outp('microbe_disease_mikg.csv'), index=False)
     print(f'  미생물-신경전달물질 {len(mn)} / 신경전달물질-정신질환 {len(nd)} '
           f'/ 이어 붙인 미생물-정신질환 {len(joined.drop_duplicates(["microbe", "disease"])):,}')
     print(f'  미생물 {mn.microbe.nunique()} 종 / 정신질환 {nd.disease.nunique()} 종 '
@@ -977,7 +977,7 @@ def kg():
         'xsd': 'http://www.w3.org/2001/XMLSchema#',
     }
 
-    OUT_NT = os.path.join(OUT, 'ourkg.nt')
+    OUT_NT = outp('ourkg.nt')
     stats = collections.defaultdict(lambda: {'triples': 0, 'relations': set(), 'entities': set()})
 
 
@@ -1047,8 +1047,8 @@ def kg():
     VALUE = NS['rdf'] + 'value'
 
     print('[1/6] Food · Category (FDC)')
-    foods = pd.read_csv(os.path.join(OUT, 'foods.csv'))
-    long = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    foods = pd.read_csv(outp('foods.csv'))
+    long = pd.read_csv(outp('food_compound_long.csv'))
     food_uri = {k: NS['our'] + 'food/' + slug(k) for k in foods['food_key']}
     cat_uri, fine_uri, fine_parent = {}, {}, {}
     for _, r in foods.iterrows():
@@ -1133,7 +1133,7 @@ def kg():
     # 소스마다 근거 노드를 하나 두고(논문이 중량에 쓰는 reification 과 같은 꼴:
     # npq:hasNutrientWeights -> 노드 -> rdf:value) 점수와 출처를 단다.
     # 결합값 여섯 가지는 compound 에 직접 리터럴로 붙인다.
-    ev_path = os.path.join(OUT, 'compound_evidence.csv')
+    ev_path = outp('compound_evidence.csv')
     if os.path.exists(ev_path):
         ev = pd.read_csv(ev_path)
         SOURCES = ['promenda', 'menda', 'rules', 'afs']
@@ -1187,7 +1187,7 @@ def kg():
               '(python3 ourkg/build.py evidence)')
 
     print('[4/6] Microbe (NCBI) · compound-microbe (KEGG) · microbe-disease')
-    mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'),
+    mic = pd.read_csv(outp('microbes.csv'),
                       dtype={'taxid': str, 'taxid_current': str})
     # **미생물 노드는 정본 taxid 로 만든다.** 외부 소스가 폐기된 id 를 들고 있어
     # 요청 id 로도 적재하는데, 그 id 를 그대로 URI 로 쓰면 같은 균이 두 노드가
@@ -1211,7 +1211,7 @@ def kg():
             W.t(u, SAMEAS, f'https://www.kegg.jp/entry/gn:{r["kegg_org"]}', 'NCBI taxonomy')
     print(f'  미생물 노드 {len(_seen_mic)} (행 {len(mic)} — 병합 id 는 정본으로 모았다)')
 
-    cm = pd.read_csv(os.path.join(OUT, 'compound_microbe.csv'), dtype={'taxid': str})
+    cm = pd.read_csv(outp('compound_microbe.csv'), dtype={'taxid': str})
     # 속 수준 매칭은 **출처를 갈라서** 담는다. 버리지 않는다 — 실재하는 정보다.
     # 다만 "이 종이 대사한다" 가 아니라 "이 속의 어떤 유전체가" 이므로 KEGG 종
     # 수준 추론과 같은 태그를 달면 SPARQL 로 거를 수 없다 (DATA.md §6·§7).
@@ -1263,7 +1263,7 @@ def kg():
         if len(_vl) != _n_before:
             print(f'  VMH KEGG 매핑 정리: 링크 {_n_before:,} -> {len(_vl):,} '
                   f'(복합 값 쪼개기 · 표기 씻기)')
-        _vl.to_csv(os.path.join(OUT, 'compound_microbe_vmh.csv'), index=False)
+        _vl.to_csv(outp('compound_microbe_vmh.csv'), index=False)
         _known = set(cm[['taxid', 'kegg']].itertuples(index=False, name=None))
         for _t, _k in _vl.itertuples(index=False, name=None):
             W.t(NS['mic'] + _alias.get(_t, _t), NS['mpq'] + 'hasMetabolites',
@@ -1281,7 +1281,7 @@ def kg():
     # 담는다. 코호트가 속 수준이라 우리 taxid 로 펼친다.
     # 상관의 **부호**는 소비(음)/생산(양)이라 속성으로 남긴다 — 술어로 바꾸면
     # hasPositive/NegativeAssociation(이로움/해로움)과 뜻이 섞인다.
-    _mp = os.path.join(OUT, 'compound_microbe_measured.csv')
+    _mp = outp('compound_microbe_measured.csv')
     n_meas = 0
     if os.path.exists(_mp):
         # 속 조인 키는 `common.genus_key` 하나만 쓴다 — 여기서 split()[0] 을
@@ -1305,7 +1305,7 @@ def kg():
 
     print(f'  미생물 {len(mic)} / compound-미생물 {len(cm):,}')
 
-    md = pd.read_csv(os.path.join(OUT, 'microbe_disease.csv'), dtype={'taxid': str})
+    md = pd.read_csv(outp('microbe_disease.csv'), dtype={'taxid': str})
     for _, r in md.iterrows():
         du = NS['mesh'] + r['mesh_id']
         W.t(NS['mic'] + _alias.get(r['taxid'], r['taxid']), NS['mpq'] + 'hasAssociation', du, 'MiKG')
@@ -1322,7 +1322,7 @@ def kg():
     # Elevated/Reduced 는 그 질환에서 그 균의 **존재비 변화**이지 이로움/해로움이
     # 아니다. hasPositive/NegativeAssociation 으로 바꾸면 뜻이 달라지므로
     # 중립 hasAssociation 에 abundance 속성으로 붙인다.
-    _dbp = os.path.join(OUT, 'microbe_disease_disbiome.csv')
+    _dbp = outp('microbe_disease_disbiome.csv')
     n_disb = 0
     if os.path.exists(_dbp):
         _db = pd.read_csv(_dbp, dtype={'taxid': str})
@@ -1336,7 +1336,7 @@ def kg():
 
     # gutMDisorder v3 — Disbiome 과 같은 취급. 출처만 분리한다.
     # present/absent 는 검출 여부라 존재비 방향이 아니므로 abundanceIn 에 안 올린다.
-    _gp = os.path.join(OUT, 'microbe_disease_gutmdisorder.csv')
+    _gp = outp('microbe_disease_gutmdisorder.csv')
     n_gmd = 0
     _gm = pd.DataFrame(columns=['taxid', 'mesh_id'])
     if os.path.exists(_gp):
@@ -1363,7 +1363,7 @@ def kg():
     _ag = microbe_disease_direction()
     n_dir = n_conf = 0
     if len(_ag):
-        _ag.to_csv(os.path.join(OUT, 'microbe_disease_agreement.csv'), index=False)
+        _ag.to_csv(outp('microbe_disease_agreement.csv'), index=False)
         for _, r in _ag.iterrows():
             mu, du = NS['mic'] + _alias.get(r['taxid'], r['taxid']), NS['mesh'] + r['mesh_id']
             if r['status'] == 'agreed':
@@ -1388,8 +1388,8 @@ def kg():
                   f'({(_sh.status == "agreed").mean():.1%}) — 우연이 50% 다')
 
     print('[5/6] 신경전달물질 경로 (MiKG)')
-    mn = pd.read_csv(os.path.join(OUT, 'microbe_neurotransmitter.csv'))
-    nd = pd.read_csv(os.path.join(OUT, 'neurotransmitter_disease.csv'))
+    mn = pd.read_csv(outp('microbe_neurotransmitter.csv'))
+    nd = pd.read_csv(outp('neurotransmitter_disease.csv'))
     for _, r in mn.iterrows():
         mu = NS['mikg'] + str(r['microbe']).replace(' ', '-')
         nu = NS['mikg'] + str(r['neurotransmitter']).replace(' ', '-')
@@ -1418,7 +1418,7 @@ def kg():
 
     # MiKG 가 자기 엔티티에 달아 둔 MeSH·SNOMED CT 식별자. 우리는 이름 문자열로
     # 잇고 있었다 — 배포본에 라벨·계층이 없어 포기했던 SNOMED 축이 여기서 열린다.
-    _xp = os.path.join(OUT, 'mikg_xref.csv')
+    _xp = outp('mikg_xref.csv')
     n_mikg_x = 0
     if os.path.exists(_xp):
         for _, r in pd.read_csv(_xp).iterrows():
@@ -1426,7 +1426,7 @@ def kg():
                 str(r['uri']), 'MiKG')
             n_mikg_x += 1
     # 미생물 -> 신경전달물질 -> KEGG 대사 경로 (별도 노드에 hasMapID 로 달려 있다)
-    _pp = os.path.join(OUT, 'neurotransmitter_pathway.csv')
+    _pp = outp('neurotransmitter_pathway.csv')
     n_mikg_pw = 0
     if os.path.exists(_pp):
         for _, r in pd.read_csv(_pp).iterrows():
@@ -1584,9 +1584,9 @@ def kg():
                   for u, ps in cls_parent.items() for pu in ps]
                  + [{'class_uri': u, 'label': l, 'parent_uri': ''}
                     for u, l in cls_label.items() if u not in cls_parent]
-                 ).to_csv(os.path.join(OUT, 'kegg_class.csv'), index=False)
+                 ).to_csv(outp('kegg_class.csv'), index=False)
     pd.DataFrame([{'kegg': k, 'class_uri': c} for k, cs in cmp_cls.items() for c in cs]
-                 ).to_csv(os.path.join(OUT, 'compound_class.csv'), index=False)
+                 ).to_csv(outp('compound_class.csv'), index=False)
     print(f'  KEGG brite {n_br:,} triple — 분류 {len(cls_label):,}, '
           f'분류된 compound {len(cmp_cls)}/{len(ours_kegg)} '
           f'(KEGG_ALIAS 로 해소 {alias_hit})')
@@ -1677,13 +1677,13 @@ def kg():
                                   'tree_number': _t.strip(), 'ancestor_tree': '.'.join(_p[:_i]),
                                   'ancestor_mesh': _a['mesh_id'], 'ancestor': _a['label']})
         pd.DataFrame(_rows).drop_duplicates().to_csv(
-            os.path.join(OUT, 'disease_tree.csv'), index=False)
+            outp('disease_tree.csv'), index=False)
         print(f'  MeSH 트리 상위 분류: {n_tree:,} triple '
               f'(질환 {len({r["mesh_id"] for r in _rows})}종)')
 
     # OLS 로 받은 FoodOn 축(out/food_foodon.csv)도 KG 에 쓴다. CSV 에만 두면
     # §4.1 SPARQL 평가가 못 본다 — 배포 subset 은 soy milk 가 없고 계층도 끊겨 있다.
-    _fop = os.path.join(OUT, 'food_foodon.csv')
+    _fop = outp('food_foodon.csv')
     n_fo_ols = 0
     if os.path.exists(_fop):
         _d = pd.read_csv(_fop)
@@ -1742,7 +1742,7 @@ def kg():
     print(f'  중국 식품 온톨로지 {n_cn:,} triple, '
           f'카테고리 연결 {n_cn_cat} / 음식 연결 {n_cn_food}')
 
-    pd.DataFrame(onto_link).to_csv(os.path.join(OUT, 'category_ontology.csv'), index=False)
+    pd.DataFrame(onto_link).to_csv(outp('category_ontology.csv'), index=False)
     print(f'  온톨로지 ↔ 카테고리/음식 매핑 {len(onto_link)} 건 → category_ontology.csv')
 
     # --- SNOMED CT
@@ -1771,13 +1771,13 @@ def kg():
     # ------------------------------------------------------------------
     # 논문 §3.2 Entity linking 대응표. 재현 트랙의 eval/paper_kg_stats.linking()
     # 이 논문 수치를 **검증**한다면, 여기서는 우리가 **수행한** 링킹을 집계한다.
-    _xp2 = os.path.join(OUT, 'mikg_xref.csv')
+    _xp2 = outp('mikg_xref.csv')
     _n_sct_mikg = _n_mesh_mikg = 0
     if os.path.exists(_xp2):
         _xd = pd.read_csv(_xp2)
         _n_sct_mikg = int((_xd.source == 'SNOMED CT').sum())
         _n_mesh_mikg = int((_xd.source == 'MeSH').sum())
-    _mnp = os.path.join(OUT, 'microbe_neurotransmitter.csv')
+    _mnp = outp('microbe_neurotransmitter.csv')
     _n_mikg_ev = 0
     if os.path.exists(_mnp):
         _mnd = pd.read_csv(_mnp)
@@ -1785,7 +1785,7 @@ def kg():
             _n_mikg_ev = int(_mnd.evidence_level.notna().sum())
 
     fl = {}
-    _flp = os.path.join(OUT, 'food_link.json')
+    _flp = outp('food_link.json')
     if os.path.exists(_flp):
         with open(_flp) as _fh:
             fl = json.load(_fh)
@@ -1837,7 +1837,7 @@ def kg():
         ('ontology', '중국 온톨로지 ↔ 음식', n_cn_food, ''),
     ]
     ls = pd.DataFrame(rows, columns=['axis', 'item', 'value', 'paper'])
-    ls.to_csv(os.path.join(OUT, 'linking_stats.csv'), index=False)
+    ls.to_csv(outp('linking_stats.csv'), index=False)
     print('\n[링킹] 논문 §3.2 대응 — out/linking_stats.csv')
     for _, r in ls.iterrows():
         v = '-' if pd.isna(r['value']) else f'{int(r["value"]):,}'
@@ -1862,7 +1862,7 @@ def kg():
     rows.append({'source': 'Total (고유 그래프)', 'relation': len(all_rel),
                  'entity': len(all_ent), 'triples': W.n})
     st = pd.DataFrame(rows)
-    st.to_csv(os.path.join(OUT, 'kg_stats.csv'), index=False)
+    st.to_csv(outp('kg_stats.csv'), index=False)
     print()
     print(st.to_string(index=False))
 
@@ -1905,7 +1905,7 @@ def evidence():
         W.update(ast.literal_eval(os.environ['SOURCE_WEIGHTS']))
     PRIORITY = os.environ.get('PRIORITY', 'rules,promenda,menda,afs').split(',')
 
-    food = pd.read_csv(os.path.join(OUT, 'food_compound_long.csv'))
+    food = pd.read_csv(outp('food_compound_long.csv'))
     cpds = sorted(food['kegg'].unique())
     print(f'  대상 compound {len(cpds)} (FDC 영양소에 매핑된 KEGG)')
 
@@ -1928,7 +1928,7 @@ def evidence():
         src['menda'] = dict(zip(tab['kegg'], tab['e_shrunk']))
         for k, n in zip(tab['kegg'], tab['name']):
             meta.setdefault(k, n)
-        tab.to_csv(os.path.join(OUT, 'compound_depression_menda.csv'), index=False)
+        tab.to_csv(outp('compound_depression_menda.csv'), index=False)
     else:
         src['menda'] = {}
         print('  ⚠ menda.xlsx 없음 — menda 근거 생략')
@@ -2016,7 +2016,7 @@ def evidence():
             'e_vote_norules': round(e_v2, 4),
         })
     ev = pd.DataFrame(rows).sort_values('n_source', ascending=False)
-    ev.to_csv(os.path.join(OUT, 'compound_evidence.csv'), index=False)
+    ev.to_csv(outp('compound_evidence.csv'), index=False)
 
     nz_w = int((ev['e_weighted'] != 0).sum())
     nz_p = int((ev['e_priority'] != 0).sum())
@@ -2089,7 +2089,7 @@ def form():
     food = pd.read_csv(os.path.join(FDC_RAW, 'food.csv'), low_memory=False,
                        usecols=['fdc_id', 'description'])
     food['food_key'] = normalize_label(food['description'])
-    keep_keys = set(pd.read_csv(os.path.join(OUT, 'foods.csv'))['food_key'])
+    keep_keys = set(pd.read_csv(outp('foods.csv'))['food_key'])
     food = food[food['food_key'].isin(keep_keys)]
     key_of = dict(zip(food['fdc_id'], food['food_key']))
     print(f'  대상 FDC 항목 {len(food):,} -> 음식 {food["food_key"].nunique():,}')
@@ -2137,7 +2137,7 @@ def form():
     tab['carb_share'] = ratio('carb_g', 'energy_kcal')
     tab['fat_energy_share'] = ratio('fat_g', 'energy_kcal')
     tab = tab.replace([np.inf, -np.inf], 0.0).fillna(0.0)
-    tab.to_csv(os.path.join(OUT, 'food_form.csv'))
+    tab.to_csv(outp('food_form.csv'))
     print(f'  저장: food_form.csv  {tab.shape[0]:,} x {tab.shape[1]}')
     nz = (tab != 0).mean().sort_values(ascending=False)
     print('  비영 비율 상위:')

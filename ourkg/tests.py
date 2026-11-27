@@ -554,6 +554,49 @@ class SignAgreeTest(unittest.TestCase):
                            common.mdes(209, 0.05, p0=0.5))
 
 
+class OutLayoutTest(unittest.TestCase):
+    """산출물 배치 (`common.OUT_SUB` · `outp`) — §54."""
+
+    def test_derived_goes_to_subfolder(self):
+        for name, sub in (('simmask_comparison.csv', 'sweep'),
+                          ('complication_summary.csv', 'complication'),
+                          ('consensus_current.csv', 'consensus'),
+                          ('metabolome_check_X.csv', 'metabolome')):
+            self.assertEqual(common.out_sub(name), sub, name)
+            self.assertTrue(common.outp(name, mkdir=False)
+                            .endswith(os.path.join(sub, name)))
+
+    def test_canonical_stays_flat(self):
+        # 정본은 코드 167 곳·문서 85 곳이 가리킨다 — 움직이면 안 된다.
+        for name in ('recommendation.csv', 'foods.csv', 'microbes.csv',
+                     'compound_microbe_measured.csv', 'eval_method1.csv',
+                     'power_bound.csv'):
+            self.assertEqual(common.out_sub(name), '', name)
+            self.assertEqual(common.outp(name, mkdir=False),
+                             os.path.join(common.OUT, name))
+
+    def test_no_raw_out_join_left(self):
+        # OUT 을 직접 join 하면 파생물이 평평한 자리에 떨어진다.
+        # **문자열로 찾으면 안 된다** — 이 시험과 check.py 의 주석이 그 표현을
+        # 설명으로 담고 있어 자기 자신을 잡았다. AST 로 실제 호출만 본다.
+        import ast
+        import glob
+        bad = []
+        for f in sorted(glob.glob(os.path.join(_chk.HERE, '*.py'))):
+            if os.path.basename(f) == 'common.py':
+                continue
+            for n in ast.walk(ast.parse(open(f, encoding='utf-8').read())):
+                if (isinstance(n, ast.Call) and n.args
+                        and getattr(n.func, 'attr', '') == 'join'
+                        and getattr(n.args[0], 'id', '') == 'OUT'):
+                    bad.append(f'{os.path.basename(f)}:{n.lineno}')
+        self.assertEqual(bad, [])
+
+    def test_names_are_ascii(self):
+        self.assertTrue(all(k.isascii() for k in
+                            __import__('bootstrap').CANDIDATES))
+
+
 class UnitGuardTest(unittest.TestCase):
     """단위 환산의 **조용한 기본값**을 막았는지 (§53).
 
@@ -1220,7 +1263,7 @@ class MetaOutputsTest(_CheckFixture):
         _chk.HERE = src
 
     def test_passes_when_producer_exists(self):
-        self._code("import os\nx = os.path.join(OUT, 'alpha.csv')\n")
+        self._code("import os\nx = outp('alpha.csv')\n")
         self.w('alpha.csv', pd.DataFrame([{'a': 1}]))
         for f in os.listdir(_chk.OUT):          # fixture 산출물은 치운다
             if f.endswith('.csv') and f != 'alpha.csv':

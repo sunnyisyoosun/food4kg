@@ -18,7 +18,7 @@ import collections, json, os, re, sys, time, urllib.parse, urllib.request
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 import pandas as pd
-from common import (BASE, OUT, cached_get, compound_microbe, depression_e,
+from common import (outp, BASE, OUT, cached_get, compound_microbe, depression_e,
                     enable_provenance)
 
 UA = {'User-Agent': 'ourkg/1.0 (food4health reproduction+extension)'}
@@ -133,7 +133,7 @@ def build():
 
 def test(n_perm=2000):
     rct = pd.read_csv(os.path.join(BASE, 'setup', 'probiotic_rct.csv'), dtype={'taxid': str})
-    mic = pd.read_csv(os.path.join(OUT, 'microbes.csv'), dtype={'taxid': str}).fillna('')
+    mic = pd.read_csv(outp('microbes.csv'), dtype={'taxid': str}).fillna('')
     print('[1/2] 커버리지 — RCT 종이 우리 미생물 축에 있는가')
     have = set(rct.taxid) & set(mic.taxid)
     print(f'  {len(have)}/{len(rct)} 종 '

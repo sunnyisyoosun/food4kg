@@ -7,10 +7,10 @@
 
 | 파일 | 왜 고아가 됐나 | 지금 봐야 할 것 |
 |---|---|---|
-| `pca_comparison.csv` | 생산 코드가 **커밋된 적이 없다** (`git log -S` 0 건). 일회성 스크립트 산물 | `out/fcolumns_comparison.csv` — `PCA_COMPONENTS` 축을 `F_COLUMNS` 와 교차해 다시 잰다 |
-| `threshold_comparison.csv` | 같음, 0 건 | `out/simthr_comparison.csv` — 같은 `SIM_THRESHOLD` 축에 `GUTBRAIN_ALPHA` 를 더해 잰다 (§15b) |
-| `complication_hypergeom.csv` | 소스별 접미사판(`_curated` 등)으로 갈라진 뒤 남은 구본. 질환을 **이름**으로 묶던 때의 값이다 (§41 에서 `mesh_id` 로 고쳤다) | `out/complication_hypergeom_curated.csv` |
-| `ensemble_recommendation.csv` | §25 앙상블 경로의 식품별 순위. 그 경로는 §27 에서 기각됐고(Top-K 오류 6/30) 비교표만 쓸기로 되살렸다 (`sweep.py ensemble`) | `out/consensus_현행.csv` · `out/ensemble_comparison.csv` |
+| `pca_comparison.csv` | 생산 코드가 **커밋된 적이 없다** (`git log -S` 0 건). 일회성 스크립트 산물 | `out/sweep/fcolumns_comparison.csv` — `PCA_COMPONENTS` 축을 `F_COLUMNS` 와 교차해 다시 잰다 |
+| `threshold_comparison.csv` | 같음, 0 건 | `out/sweep/simthr_comparison.csv` — 같은 `SIM_THRESHOLD` 축에 `GUTBRAIN_ALPHA` 를 더해 잰다 (§15b) |
+| `complication_hypergeom.csv` | 소스별 접미사판(`_curated` 등)으로 갈라진 뒤 남은 구본. 질환을 **이름**으로 묶던 때의 값이다 (§41 에서 `mesh_id` 로 고쳤다) | `out/complication/complication_hypergeom_curated.csv` |
+| `ensemble_recommendation.csv` | §25 앙상블 경로의 식품별 순위. 그 경로는 §27 에서 기각됐고(Top-K 오류 6/30) 비교표만 쓸기로 되살렸다 (`sweep.py ensemble`) | `out/consensus/consensus_current.csv` · `out/sweep/ensemble_comparison.csv` |
 
 | `emicrobe_vote_sensitivity.csv` | 투표 규약 3 × §47 전후 × 28 칸 민감도 (§48). 일회성 스크립트 산물이고, **올바른 귀무로는 세 규약 어디서도 통과하지 않아** 본문에 쓸 말이 없다 — 기록으로만 둔다 | `out/e_microbe_compare.csv` (정본, `귀무(순열)` 열 포함) |
 

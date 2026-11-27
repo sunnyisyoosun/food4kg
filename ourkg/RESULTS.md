@@ -25,7 +25,7 @@
 > 각 절의 갱신 주석이나 README 를 본다.
 
 <details>
-<summary><b>절 목록</b> — 63 개 절. ★ 는 결론이 바뀐 절, ★★ 는 전제가 바뀐 절 (펼치기)</summary>
+<summary><b>절 목록</b> — 64 개 절. ★ 는 결론이 바뀐 절, ★★ 는 전제가 바뀐 절 (펼치기)</summary>
 
 - **§1** 한눈에
 - **§2** KG 규모 (논문 Table 1 대응)
@@ -88,6 +88,7 @@
 - **§51** 같은 스위치에 기본값이 둘이었다 — 한쪽만 되돌아갔다
 - **§52** 유사도 마스크가 "측정된 0" 을 "미측정" 으로 취급한다 — 고치면 나빠진다 ★
 - **§53** 단위 환산의 조용한 기본값을 막았다
+- **§54** `out/` 을 나눴다 — 파생물만, 규칙은 코드에
 - **§42** 한계
 - **§43** 산출물
 
@@ -1596,7 +1597,7 @@ ProMENDA 와 MENDA 는 같은 큐레이션 계보라 82% 일치한다. 반면 **
 
 추천군 = 어패류·과일·채소, 비추천군 = 소시지·베이커리·과자·소고기·돼지고기·양고기.
 `위반` 은 교차 위반(비추천군이 Top 에, 추천군이 Bottom 에 들어간 수)이다.
-`ourkg/out/e_mode_comparison.csv`
+`ourkg/out/sweep/e_mode_comparison.csv`
 
 | E 모드 | 방향 확정 compound | Top30 추천군 | Bottom30 비추천군 | Top30 주류 | Top30 위반 | shrunk 과의 ρ |
 |---|---:|---:|---:|---:|---:|---:|
@@ -1732,7 +1733,7 @@ select distinct ?c where {
 
 ### 결과 (8 모드 × 2 경로)
 
-`ourkg/out/e_mode_comparison.csv`
+`ourkg/out/sweep/e_mode_comparison.csv`
 
 | E 모드 | 경로 | 방향 확정 compound | Top30 추천군 | Bottom30 비추천군 | Top30 주류 | Top30 위반 |
 |---|---|---:|---:|---:|---:|---:|
@@ -1963,7 +1964,7 @@ ModiMedDiet 라벨 8,688개(처방군 5,360 / extras 3,328)에 성분 중량 130
 ### 어디서 갈리는가 — biomarker 방향 ≠ 식이 방향
 
 둘 다 비영인 66종 중 **부호 일치 32 (48%)**. 동전 던지기다.
-`ourkg/out/invert_comparison.csv` 에 전수가 있다.
+`ourkg/out/sweep/invert_comparison.csv` 에 전수가 있다.
 
 | kegg | name | 역추정 | ProMENDA | MENDA | rules | AFS |
 |---|---|---:|---:|---:|---:|---:|
@@ -2397,7 +2398,7 @@ ModiMedDiet 은 빈도 반영(`MODIMED_POSITIVES=high_freq`, §11 D) 기준이�
 논문은 같은 문장에서 숫자(5)와 규칙(분산 80%)을 함께 적는다. 논문 데이터에서는
 둘이 같지만 우리 `F` 에서는 5 성분이 74.1% 라 어긋난다. **기본값은 논문이 명시한
 숫자를 따르고**, 규칙 적용판(10 성분)은 `PCA_COMPONENTS=auto` 로 함께 낸다.
-전체 대조는 `ourkg/out/legacy/pca_comparison.csv` 에 있다 — **생산 코드가 커밋된 적이 없는 파일**이라 `legacy/` 로 옮겼다(§44). 같은 축을 다시 재는 것은 `out/fcolumns_comparison.csv` 다.
+전체 대조는 `ourkg/out/legacy/pca_comparison.csv` 에 있다 — **생산 코드가 커밋된 적이 없는 파일**이라 `legacy/` 로 옮겼다(§44). 같은 축을 다시 재는 것은 `out/sweep/fcolumns_comparison.csv` 다.
 
 | PCA | ModiMedDiet AUC | §4.2.3 Top30 추천군 | Bottom30 비추천군 | Top30 위반 |
 |---|---:|---:|---:|---:|
@@ -2440,7 +2441,7 @@ ModiMedDiet 은 빈도 반영(`MODIMED_POSITIVES=high_freq`, §11 D) 기준이�
 
 ### B. 조합을 전부 재 보니 AUC 와 Top-30 이 반대를 가리켰다
 
-`ourkg/out/fcolumns_comparison.csv`. ModiMedDiet 은 빈도 반영 기준(§11 D)이다.
+`ourkg/out/sweep/fcolumns_comparison.csv`. ModiMedDiet 은 빈도 반영 기준(§11 D)이다.
 
 | `F` 열 | PCA | AUC | §4.2.3 추천군 | §4.2.3 비추천군 | 위반 | **MMD Top30 처방** | **MMD Top30 extras** | Top 1 |
 |---|---|---:|---:|---:|---:|---:|---:|---|
@@ -2510,7 +2511,7 @@ SMILES 는 빈도 처방이므로 그 기울기를 그대로 쓰는 것이 맞�
 ### 결과 ① — 전역 순위 상관은 AUC 와 똑같이 실패한다
 
 §13 에서 AUC 가 Top-K 와 어긋났던 설정 넷으로 쟀다
-(`python3 ourkg/sweep.py modimed_rho` → `out/modimed_rho_comparison.csv`).
+(`python3 ourkg/sweep.py modimed_rho` → `out/sweep/modimed_rho_comparison.csv`).
 
 | 설정 | Top30 추천군 | Bot30 비추천군 | AUC(참고) | ρ 처방군 | ρ 전체 | **ρ 상위200** |
 |---|---:|---:|---:|---:|---:|---:|
@@ -2574,7 +2575,7 @@ SMILES 는 빈도 처방이므로 그 기울기를 그대로 쓰는 것이 맞�
 
 ### 결과 — 어떤 방식으로 잘라도 상위가 무너진다
 
-`ourkg/out/legacy/threshold_comparison.csv` (생산 코드 없음 → §44; 같은 축의 후속은 `out/simthr_comparison.csv`)
+`ourkg/out/legacy/threshold_comparison.csv` (생산 코드 없음 → §44; 같은 축의 후속은 `out/sweep/simthr_comparison.csv`)
 
 | Threshold | §4.2.3 추천군 | 비추천군 | **MMD Top30 처방** | **extras** | Top 1 |
 |---|---:|---:|---:|---:|---|
@@ -2752,7 +2753,7 @@ D    = e' × Fᵀ                 (이후는 논문 식 그대로)
 
 ### 결과 — 네 지표 모두 단조 악화
 
-`python3 ourkg/sweep.py gutbrain` → `out/gutbrain_comparison.csv`
+`python3 ourkg/sweep.py gutbrain` → `out/sweep/gutbrain_comparison.csv`
 
 | `ALPHA` | Top30 추천군 | Bot30 비추천군 | Top30 위반 | MMD 처방군 | MMD extras | AUC(참고) |
 |---:|---:|---:|---:|---:|---:|---:|
@@ -5429,7 +5430,7 @@ MiKG 경로로는 **8/8 을 통과**시켰다. 즉 논문이 0 으로 둔 둘이
 gutMDisorder 의 정신·신경 집합에 없다. 지어내지 않고 `못 잼` 으로 적는다.
 
 `ourkg/complication.py` 의 `PAPER_PAIRS` · `paper_eval()` 이 이 표를 만든다
-(`out/complication_paper_eval.csv`). 시험 셋으로 고정했다 — 문항 수 8 과 음성 2,
+(`out/complication/complication_paper_eval.csv`). 시험 셋으로 고정했다 — 문항 수 8 과 음성 2,
 잴 수 있는 6 개의 전원 일치, **#6 이 0 으로 기각되는지**.
 
 ### 비통과 336 쌍을 문헌으로 점검했다 — 약하게, 그러나 맞는 방향으로
@@ -5454,7 +5455,7 @@ Mann-Whitney (통과 > 비통과): **AUC 0.574 · p 0.0068**.
 > 정도**다. 연구되지 않은 실재 동반이환과 실재하지 않는 비동반이환이 같은 낮은
 > lift 로 들어온다. 이 수치를 넘겨 읽지 않는다.
 
-`out/complication_literature_curated.csv` · `complication.py literature`.
+`out/complication/complication_literature_curated.csv` · `complication.py literature`.
 
 ### 남은 것
 
@@ -5520,8 +5521,8 @@ HR ≈ 1 (CI 가 1 포함)로 보고하는 쌍. 지금 `curated` 에 신체질�
 ### 같은 검사에 "문서가 언급하는지" 를 붙였다 — 내 첫 측정이 틀렸다
 
 산출물 92 개 중 **어느 문서에도 안 나오는 것이 20 개**라고 셌다. **그 측정이
-틀렸다.** basename 을 literal 로 grep 해서 `out/consensus_*.csv` ·
-`out/metabolome_check_*.csv` 처럼 **패턴 행으로 이미 적힌 것을 못 봤다.**
+틀렸다.** basename 을 literal 로 grep 해서 `out/consensus/consensus_*.csv` ·
+`out/metabolome/metabolome_check_*.csv` 처럼 **패턴 행으로 이미 적힌 것을 못 봤다.**
 문서 쪽 토큰도 `*` 와 `{소스}` 를 와일드카드로 받아야 한다. 다시 재니 **11 개**다.
 
 그걸 검사로 옮기면서 같은 함정을 **또** 밟았다 — 문서에 `out/*.csv` 라는 말이
@@ -6003,7 +6004,7 @@ FDC 는 열을 넓혀도 대부분의 compound 를 보고한다. 그래서 보�
 모양이 어긋나 터졌다(12,420×66 vs 12,513×130) — DataFrame 으로 들고 `F` 와
 나란히 자르게 고쳤다.
 
-산출물: `out/simmask_comparison.csv`(8 칸) · `sweep.py simmask`.
+산출물: `out/sweep/simmask_comparison.csv`(8 칸) · `sweep.py simmask`.
 
 ---
 
@@ -6046,6 +6047,63 @@ fn['amount_g'] = pd.to_numeric(fn['amount']) * fn['unit'].map(UNIT_TO_G).fillna(
 그 네 개 외에는 들어오지 못하게 시험으로 고정했다.
 
 검사 34 개 · 시험 144 개다.
+
+---
+
+## 54. `out/` 을 나눴다 — 파생물만, 규칙은 코드에 (2026-11-27)
+
+산출물이 97 개 쌓여 **무엇이 정본이고 무엇이 민감도 기록인지 구분이 안 갔다.**
+
+### 전부 나누지 않았다 — 비용을 먼저 쟀다
+
+| | 수 |
+|---|---:|
+| `os.path.join(OUT, …)` 호출 | **167** |
+| 문서의 `out/…` 경로 언급 | **85** |
+
+정본(`foods.csv`·`recommendation.csv`·`microbes.csv`·`eval_*`)은 그 167·85 가
+가리킨다. 반면 쓸기 22 개는 `sweep.py` 의 **단일 저장 지점**을 지난다. 그래서
+**파생물만** 내렸다.
+
+| 어디 | 무엇 | 수 |
+|---|---|---:|
+| `out/` | 정본 | **56** |
+| `out/sweep/` | `*_comparison.csv` | 22 |
+| `out/complication/` | 합병증 추론 | 10 |
+| `out/consensus/` | 부트스트랩 합의 | 6 |
+| `out/metabolome/` | 코호트별 상관 | 2 |
+
+규칙은 `common.OUT_SUB` **한 자리**이고 쓰는 쪽·읽는 쪽이 모두 `outp(name)` 을
+쓴다. `os.path.join(OUT, X)` 169 곳을 기계적으로 `outp(X)` 로 바꿨다 — 정본
+이름에는 동작이 같고 파생물만 달라지므로 안전한 치환이다(3 인수 join 이 0 개인
+것을 먼저 확인했다).
+
+### 옮기자마자 **검사 둘이 눈을 감았다**
+
+- `outputs` 가 `os.listdir(OUT)` 로 평평하게 훑어 csv **89 → 49** 만 보고
+  **조용히 통과했다.** 옮긴 40 개가 생산자·문서 언급 보장 밖으로 나간 것이다.
+- `_record_provenance` 도 같은 이유로 파생물을 **출처 기록에서 빠뜨렸다.**
+
+둘 다 `os.walk` 로 고쳤다(`legacy/` 는 제외 — 생산 코드가 없는 기록이다).
+**폴더를 나누는 작업이 검사를 무력화한다**는 것을 미리 생각하지 못했다.
+
+### 한국어 파일명 — 이름만 고치면 다시 생긴다
+
+`consensus_현행.csv` 가 있었다. `consensus_<설정>.csv` 라 **설정 키가 그대로
+파일명이 되는 구조**이고 그 키가 `현행` 이었다. 키를 `current` 로 바꾸고
+(`bootstrap.CANDIDATES`), 검사 둘을 붙였다.
+
+| 검사 | 무엇을 막나 |
+|---|---|
+| `산출물 이름 ASCII` | 비ASCII 파일명 — 다른 OS·도구에서 깨져 읽힌다 |
+| `파생물 폴더 배치` | `outp()` 를 안 쓰고 평평한 자리에 떨어진 파생물 |
+
+둘 다 오류 주입으로 FAIL 을 확인했다. 그리고 `os.path.join(OUT, …)` 이 되돌아
+오는 것을 막는 시험도 넣었는데, **문자열로 찾았더니 자기 자신을 잡았다** —
+이 시험과 `check.py` 의 주석이 그 표현을 설명으로 담고 있다. AST 로 실제 호출만
+보게 고쳤다(§44 의 f-string 사고와 같은 종류다).
+
+`out/README.md` 에 배치와 그 이유를 적었다. 검사 37 개 · 시험 148 개다.
 
 ---
 
@@ -6095,56 +6153,56 @@ fn['amount_g'] = pd.to_numeric(fn['amount']) * fn['unit'].map(UNIT_TO_G).fillna(
 | `out/compound_depression.csv` | ProMENDA 극성 E (binary / shrunk / BH q) |
 | `out/compound_depression_menda.csv` | MENDA 2020 극성 |
 | `out/compound_evidence.csv` | 근거 4종 점수 + 결합 6가지 |
-| `out/e_mode_comparison.csv` | E 구성 방식 비교표 (§4.2.3 + ModiMedDiet 두 기준) |
+| `out/sweep/e_mode_comparison.csv` | E 구성 방식 비교표 (§4.2.3 + ModiMedDiet 두 기준) |
 | `out/modimed_labels.csv` | ModiMedDiet 정답셋 라벨과 규칙 출처 |
 | `out/compound_learned.csv` | ModiMedDiet 로 역추정한 E |
-| `out/invert_comparison.csv` | 역추정 E vs 공개 소스 E 부호 대조 (전수) |
+| `out/sweep/invert_comparison.csv` | 역추정 E vs 공개 소스 E 부호 대조 (전수) |
 | `out/compound_depression_stype.csv` | 연구 설계별 E 7변형 |
-| `out/stype_comparison.csv` | 설계별 E 채점표 |
+| `out/sweep/stype_comparison.csv` | 설계별 E 채점표 |
 | `out/food_form.csv` | 구조·가공 축 19 (FDC 측정값) |
 | `out/learned_form.csv`, `out/learned_both.csv` | 그 축으로 역추정한 가중치 |
 | `out/disagreement_by_group.csv` | 두 기준이 갈리는 지점의 음식군별 분해 |
-| `out/legacy/pca_comparison.csv` | PCA 성분 수별 두 기준 채점 — **생산 코드 없음** (§44). 후속 `out/fcolumns_comparison.csv` |
-| `out/fcolumns_comparison.csv` | `F` 열 제한 × PCA 조합 채점 (§13) |
-| `out/legacy/threshold_comparison.csv` | Algorithm 1 Threshold 변형 채점 (§14) — **생산 코드 없음** (§44). 후속 `out/simthr_comparison.csv` |
+| `out/legacy/pca_comparison.csv` | PCA 성분 수별 두 기준 채점 — **생산 코드 없음** (§44). 후속 `out/sweep/fcolumns_comparison.csv` |
+| `out/sweep/fcolumns_comparison.csv` | `F` 열 제한 × PCA 조합 채점 (§13) |
+| `out/legacy/threshold_comparison.csv` | Algorithm 1 Threshold 변형 채점 (§14) — **생산 코드 없음** (§44). 후속 `out/sweep/simthr_comparison.csv` |
 | `out/compound_microbe.csv` | KEGG 재계산 compound-미생물 2,124 |
 | `out/microbes.csv` | NCBI 갱신 미생물 127 |
 | `out/microbe_disease.csv`, `out/microbe_disease_mikg.csv` | 미생물-질환 |
 | `out/recommendation.csv`, `out/recommendation.png` | 추천 순위·시각화 (Fig.4(b) t-SNE) |
-| `out/group_composition.csv`, `out/group_comparison.csv`, `out/group_comparison.png` | **Fig.4(c) 대응** — 추천/비추천군 성분군 조성 |
+| `out/group_composition.csv`, `out/sweep/group_comparison.csv`, `out/group_comparison.png` | **Fig.4(c) 대응** — 추천/비추천군 성분군 조성 |
 | `out/microbe_disease_disbiome.csv` | **Disbiome** 미생물-질환 (외부 큐레이션) |
-| `out/gutbrain_comparison.csv` | **미생물 매개 가중** `ALPHA` 쓸기 (§15c) |
-| `out/modimed_rho_comparison.csv` | **빈도 가중 순위 상관** vs Top-K (§13b) |
+| `out/sweep/gutbrain_comparison.csv` | **미생물 매개 가중** `ALPHA` 쓸기 (§15c) |
+| `out/sweep/modimed_rho_comparison.csv` | **빈도 가중 순위 상관** vs Top-K (§13b) |
 | `setup/probiotic_rct.csv` | **외부 정답표** — 우울/불안 RCT 에서 시험된 균 25 종 |
-| `out/metabolome_check_*.csv` | **측정 분변 대사체** vs 우리 예측 링크 (§15c 검정 ④) |
+| `out/metabolome/metabolome_check_*.csv` | **측정 분변 대사체** vs 우리 예측 링크 (§15c 검정 ④) |
 | `out/compound_microbe_measured.csv` | **측정 상관 링크** 39,574 — 13 코호트 재현 (§15c 검정 ⑤) |
 | `out/e_microbe.csv`, `out/e_microbe_compare.csv` | **미생물 경로에서 유도한 E** 와 ProMENDA 대조 (§15c 검정 ⑥) |
-| `out/simthr_comparison.csv` | **유사도 희소화** 쓸기 (§15c 검정 ⑦) |
-| `out/ezero_comparison.csv` | **에탄올·설탕 제거** 영향 (§15c 검정 ⑧) |
+| `out/sweep/simthr_comparison.csv` | **유사도 희소화** 쓸기 (§15c 검정 ⑦) |
+| `out/sweep/ezero_comparison.csv` | **에탄올·설탕 제거** 영향 (§15c 검정 ⑧) |
 | `out/compound_depression_nhanes.csv` | **NHANES 섭취-결과 E** (§15d) |
-| `out/emode_comparison.csv` | E 소스 다섯 비교 (§15d) |
-| `out/fscale_comparison.csv` | **서빙 기준 F** x E 소스 (§15e) |
+| `out/sweep/emode_comparison.csv` | E 소스 다섯 비교 (§15d) |
+| `out/sweep/fscale_comparison.csv` | **서빙 기준 F** x E 소스 (§15e) |
 | `out/bootstrap_ci.csv` | **Top-K 지표의 표집 변동** (§17) |
-| `out/negw_comparison.csv` | **음수 유사도 가중** 쓸기 (§17b) |
-| `out/nosim_comparison.csv` | **유사도 제거** ablation (§17c) |
-| `out/simspace_comparison.csv` | **유사도 공간** 성분 vs 효과 (§17d) |
-| `out/simsign_comparison.csv` | **나쁜 음식 기여 묶기** x 공간 x E (§17e) |
-| `out/complication_hypergeom_{소스}.csv` | **합병증 추론**의 초기하 검정, 소스별 (§18·§41). `curated`·`disbiome`·`gutmdisorder`. 구본은 `out/legacy/` (§44) |
-| `out/complication_specificity_{소스}.csv` | 질환 쌍의 **포개짐·Jaccard** — 추론이 구조적으로 자동 통과하는지 보는 게이트 (§41). 소스 4 종 |
-| `out/complication_summary.csv` | 위 둘을 소스별 1 행으로 요약 (§41 표) |
+| `out/sweep/negw_comparison.csv` | **음수 유사도 가중** 쓸기 (§17b) |
+| `out/sweep/nosim_comparison.csv` | **유사도 제거** ablation (§17c) |
+| `out/sweep/simspace_comparison.csv` | **유사도 공간** 성분 vs 효과 (§17d) |
+| `out/sweep/simsign_comparison.csv` | **나쁜 음식 기여 묶기** x 공간 x E (§17e) |
+| `out/complication/complication_hypergeom_{소스}.csv` | **합병증 추론**의 초기하 검정, 소스별 (§18·§41). `curated`·`disbiome`·`gutmdisorder`. 구본은 `out/legacy/` (§44) |
+| `out/complication/complication_specificity_{소스}.csv` | 질환 쌍의 **포개짐·Jaccard** — 추론이 구조적으로 자동 통과하는지 보는 게이트 (§41). 소스 4 종 |
+| `out/complication/complication_summary.csv` | 위 둘을 소스별 1 행으로 요약 (§41 표) |
 | `out/kegg_class.csv` | KEGG BRITE compound 분류 2,767 행 — compound 축의 상위 범주 |
 | `out/promenda_records.csv` | ProMENDA 원시 레코드 17,653 행 (`E` 의 문헌 근거. 연구·조직·종까지) |
 | `out/microbe_neurotransmitter.csv` | 균 → 신경전달물질 조절 82 행 (§15b `gutbrain` 가중의 입력) |
 | `out/neurotransmitter_disease.csv` | 신경전달물질 → 질환 41 행 (같은 축의 나머지 절반) |
-| `out/dedup_comparison.csv` | **중복 변종 병합** 두 기준 (§19) |
-| `out/learned_comparison.csv` | **지도학습 점수** 직접 사용 (§21) |
-| `out/learned_dedup_comparison.csv` | learned x 중복 병합 (§21b) |
-| `out/union_comparison.csv` | **두 E 소스 합치기** (§22) |
-| `out/consensus_summary.csv`, `out/consensus_*.csv` | **합의 Top-K** (§23) |
-| `out/simmask_comparison.csv` | **공통 성분 마스크** 2 × 유사도 공간 2 × F 열 2 (§52) |
-| `out/ensemble_comparison.csv` | **순위 앙상블** vs 벡터 합치기 (§25). `sweep.py ensemble` 로 등록해 생산자를 되돌렸다 (§44) |
+| `out/sweep/dedup_comparison.csv` | **중복 변종 병합** 두 기준 (§19) |
+| `out/sweep/learned_comparison.csv` | **지도학습 점수** 직접 사용 (§21) |
+| `out/sweep/learned_dedup_comparison.csv` | learned x 중복 병합 (§21b) |
+| `out/sweep/union_comparison.csv` | **두 E 소스 합치기** (§22) |
+| `out/consensus/consensus_summary.csv`, `out/consensus/consensus_*.csv` | **합의 Top-K** (§23) |
+| `out/sweep/simmask_comparison.csv` | **공통 성분 마스크** 2 × 유사도 공간 2 × F 열 2 (§52) |
+| `out/sweep/ensemble_comparison.csv` | **순위 앙상블** vs 벡터 합치기 (§25). `sweep.py ensemble` 로 등록해 생산자를 되돌렸다 (§44) |
 | `out/legacy/ensemble_recommendation.csv` | 그 경로의 식품별 순위 — **생산 코드 없음** (§44) |
-| `out/toperr_comparison.csv` | **Top-K 명백한 오류** 규칙 채점 (§27) |
+| `out/sweep/toperr_comparison.csv` | **Top-K 명백한 오류** 규칙 채점 (§27) |
 | `out/eval_method1.csv`, `out/eval_method2.csv`, `out/eval_sparql.json` | §5.1·§4.1 평가 |
 
 `out/` 의 결과표·평가 결과는 레포에 함께 올라가 있다. 대용량 둘만 제외한다 —

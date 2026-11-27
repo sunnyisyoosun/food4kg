@@ -24,7 +24,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
-from common import OUT, recommend_under, enable_provenance  # noqa: E402
+from common import outp, OUT, recommend_under, enable_provenance  # noqa: E402
 
 enable_provenance()   # 산출물 출처 기록 (common.PROV)
 
@@ -59,7 +59,7 @@ def run(configs, R=None, frac=None):
         print(f'  {lab:18s} ' + '  '.join(f'{k} {r[k]}' for k in
                                           ('추천군', '비추천군', '위반')), flush=True)
     t = pd.DataFrame(rows)
-    t.to_csv(os.path.join(OUT, 'bootstrap_ci.csv'), index=False)
+    t.to_csv(outp('bootstrap_ci.csv'), index=False)
     print(f'\n  -> out/bootstrap_ci.csv  (값 = 전체 코호트 [95% 구간])')
     return t
 
@@ -69,7 +69,9 @@ BASE = {'SIM_THRESHOLD': 'none', 'GUTBRAIN_ALPHA': '0', 'E_ZERO': '',
         'F_SCALE': 'per100g', 'F_COLUMNS': 'linked', 'PCA_COMPONENTS': '0',
         'NO_SIM': '0', 'SIM_SIGN': 'none', 'DEDUP': 'none'}
 CANDIDATES = {
-    '현행': {'E_MODE': 'shrunk', 'SIM_SPACE': 'composition'},
+    # 키가 **파일명이 된다**(`consensus_<키>.csv`). ASCII 만 쓴다 — `현행` 이라
+    # 두었더니 `consensus_현행.csv` 가 생겼다(§54).
+    'current': {'E_MODE': 'shrunk', 'SIM_SPACE': 'composition'},
     'effect+nhanes': {'E_MODE': 'nhanes_all', 'SIM_SPACE': 'effect'},
     'effect+shrunk': {'E_MODE': 'shrunk', 'SIM_SPACE': 'effect'},
     'comp+nhanes': {'E_MODE': 'nhanes_all', 'SIM_SPACE': 'composition'},
