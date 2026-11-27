@@ -149,15 +149,6 @@
    "NO_SIM": "0"
   }
  },
- "consensus_현행.csv": {
-  "at": "2026-11-27 11:24:04",
-  "argv": "consensus.py",
-  "env": {
-   "BOOT_FRAC": "0.8",
-   "BOOT_SEED": "99",
-   "NO_SIM": "0"
-  }
- },
  "dedup_comparison.csv": {
   "at": "2026-11-25 15:28:50",
   "argv": "sweep.py",
@@ -520,6 +511,15 @@
   "argv": "sweep.py",
   "env": {
    "E_MODE": "learned"
+  }
+ },
+ "consensus_current.csv": {
+  "at": "2026-11-27 11:24:04",
+  "argv": "consensus.py",
+  "env": {
+   "BOOT_FRAC": "0.8",
+   "BOOT_SEED": "99",
+   "NO_SIM": "0"
   }
  }
 }
