@@ -24,6 +24,7 @@ Fu et al. (2023) *Food4healthKG* 의 **구축 방식과 평가 방식을 그대�
 | [`METHODS.md`](METHODS.md) | 전제 · 구축 · 추천 · **평가 자 9 개** · 정합 검사 | "어떻게 쟀나" |
 | [`RESULTS.md`](RESULTS.md) | 실험 §1~§42 과 **기각 기록** (시간순) | "왜 그렇게 정했나" |
 | [`PROCESS.md`](PROCESS.md) | **절차에서 틀린 것들** — 무엇이 틀렸고 어떻게 드러났고 무엇으로 막았나 | "이거 믿을 수 있나" |
+| [`PERSONALIZE.md`](PERSONALIZE.md) | **개별 추천 계획** — KNHANES × ourkg. 아직 측정 전이다 | "다음에 뭐 하나" |
 
 ---
 
